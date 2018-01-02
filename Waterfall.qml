@@ -52,24 +52,12 @@ Item {
             }
         }
 
-        function clearCanvas() {
-                var ctx = getContext("2d");
-                ctx.reset();
-            }
-
         Timer {
+            id: testTimer
             interval: 100; running: true; repeat: true
             onTriggered: {
                 graph.draw()
             }
-        }
-
-        onHeightChanged: {
-            clearCanvas()
-        }
-
-        onWidthChanged: {
-            clearCanvas()
         }
     }
 }
