@@ -1,6 +1,8 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.3
+import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
 import "."
 
@@ -8,17 +10,36 @@ ApplicationWindow {
     id: window
     title: "Ping Interface"
 
-    RowLayout{
-        anchors.fill : parent
-        Waterfall {
-            id: waterfall
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+    menuBar: MenuBar {
+        Menu {
+            title: qsTr("File")
+            MenuItem {
+                text: qsTr("Exit")
+                onTriggered: Qt.quit();
+            }
         }
-        Chart {
-            id: c
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+
+        QC1.SplitView {
             Layout.fillHeight: true
             Layout.fillWidth: true
+            orientation: Qt.Horizontal
+
+            Waterfall {
+                id: waterfall
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
+
+            Chart {
+                id: chart
+                Layout.fillHeight: true
+                Layout.preferredWidth: 350
+                Layout.minimumWidth: 350
+            }
         }
     }
 
@@ -27,49 +48,16 @@ ApplicationWindow {
         property alias y: window.y
         property alias width: window.width
         property alias height: window.height
+
+        property alias chartWidth: chart.width
     }
 
-    RowLayout {
-        id: buttonLayout
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        opacity: 0.5
-
-        PingButton {
-            id: bt1
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            text: "-----"
-            onClicked: {
-            }
-        }
-
-        PingButton {
-            id: bt2
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            text: "-----"
-            onClicked: {
-            }
-        }
-
-        PingButton {
-            id: bt3
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            text: "-----"
-            onClicked: {
-            }
-        }
-
-        PingButton {
-            id: bt4
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            text: "-----"
-            onClicked: {
-            }
+    LinearGradient {
+        anchors.fill: parent
+        z: parent.z-1
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#200000FF" }
+            GradientStop { position: 1.0; color: "transparent" }
         }
     }
 }
