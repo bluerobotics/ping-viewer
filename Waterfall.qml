@@ -25,19 +25,16 @@ Item {
             // Set some values
             var scaleW = 50
             var scaleH = 200
-            var stepH = height/scaleH
+            var stepH = graph.canvasSize.height/scaleH
             var radius = Math.pow(stepH*stepH, 0.5)
             var stepW = radius/2 < 1 ? 1 : radius/2
             var posX = width-stepW
-            print(stepW)
 
             // Move everything to left
             var ctx = graph.getContext("2d")
             ctx.fillStyle = 'transparent'
-            var img = ctx.getImageData(0, 0, graph.width, graph.height)
-            ctx.drawImage(img, -stepW, 0, graph.width, graph.height)
-            ctx.save()
-            var ctx = graph.getContext("2d")
+            var img = ctx.getImageData(0, 0, graph.canvasSize.width, graph.canvasSize.height)
+            ctx.drawImage(img, -stepW, 0, graph.canvasSize.width, graph.canvasSize.height)
 
             // Draw new column
             for(var j=0; j<scaleH; j++) {
