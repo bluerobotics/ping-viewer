@@ -6,10 +6,12 @@ Item {
 
     ChartView {
         id: chart
-        title: 'Ping'
-        antialiasing: true
         width: root.height
         height: root.width
+
+        title: ' '
+        antialiasing: true
+        legend.visible: false
         backgroundColor: 'transparent'
         plotAreaColor: 'transparent'
         anchors {
