@@ -10,17 +10,61 @@ ApplicationWindow {
     id: window
     title: "Ping Interface"
 
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("File")
-            MenuItem {
-                text: qsTr("Exit")
-                onTriggered: Qt.quit();
+    RowLayout {
+        z: mainLayout.z+1
+        anchors.top: menubar.bottom
+        anchors.left: parent.left
+
+        PingButton {
+            text: "Menu"
+        }
+
+        PingButton {
+            text: "Single"
+        }
+
+        Slider {
+            from: 1
+            value: 25
+            to: 100
+        }
+
+        Text {
+            text: "ping/s"
+        }
+    }
+
+    RowLayout {
+        z: mainLayout.z+1
+        anchors.top: menubar.bottom
+        anchors.right: parent.right
+
+        Text {
+            text: "Range/Gain"
+        }
+
+        PingButton {
+            text: "Auto"
+        }
+
+        Slider {
+            from: 1
+            value: 25
+            to: 100
+
+            onValueChanged: {
+                gainText.text = value.toString() + " dB"
             }
+        }
+
+        Text {
+            id: gainText
+            text: "0 dB"
         }
     }
 
     ColumnLayout {
+        id: mainLayout
         anchors.fill: parent
 
         QC1.SplitView {
