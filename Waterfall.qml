@@ -10,12 +10,6 @@ Item {
         anchors.top: parent.top
         property var graphType: 'thermal'
 
-        Rectangle {
-            z: -1
-            anchors.fill : parent
-            color: 'black'
-        }
-
         function dot(x, y, r, color1, color2) {
             var ctx = getContext("2d")
             ctx.beginPath()
