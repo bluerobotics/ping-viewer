@@ -1,11 +1,12 @@
 import QtQuick 2.4
-import QtQuick.Window 2.2
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import "."
 
-Window {
+ApplicationWindow {
     id: window
+    title: "Ping Interface"
 
     RowLayout{
         anchors.fill : parent
