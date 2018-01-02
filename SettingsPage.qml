@@ -31,75 +31,76 @@ Item {
                 // label.anchors.horizontalCenter: horizontalCenter
                 // Hack
                 label.x: width/2 - label.contentWidth/2
-                ColumnLayout {
+                GridLayout {
                     anchors.fill: parent
-                    ColumnLayout {
-                        RowLayout {
-                            Text {
-                                text: "Sonar Type:"
-                            }
+                    columns: 5
+                    rowSpacing: 5
+                    columnSpacing: 5
 
-                            ComboBox {
-                                displayText: "Ping Echosounder"
-                            }
-                        }
+                    Text {
+                        text: "Sonar Type:"
                     }
 
-                    ColumnLayout {
-                        RowLayout {
-                            Text {
-                                text: "Communication:"
-                            }
-
-                            ComboBox {
-                                displayText: "Serial (default)"
-                            }
-                        }
+                    ComboBox {
+                        displayText: "Ping Echosounder"
+                        Layout.columnSpan:  4
+                        Layout.fillWidth: true
                     }
 
-                    ColumnLayout {
-                        RowLayout {
-                            Text {
-                                text: "Serial Port / Baud:"
-                            }
 
-                            ComboBox {
-                                displayText: ""
-                            }
-
-                            ComboBox {
-                                displayText: "921600"
-                            }
-                        }
+                    Text {
+                        text: "Communication:"
                     }
 
-                    ColumnLayout {
-                        RowLayout {
-                            Text {
-                                text: "UDP Host/Port:"
-                            }
-
-                            TextField {
-                            }
-
-                            TextField {
-                            }
-                        }
+                    ComboBox {
+                        displayText: "Serial (default)"
+                        Layout.columnSpan:  4
+                        Layout.fillWidth: true
                     }
 
-                    ColumnLayout {
-                        RowLayout {
-                            Text {
-                                text: "Save Path:"
-                            }
+                    Text {
+                        text: "Serial Port / Baud:"
+                    }
 
-                            TextField {
-                            }
+                    ComboBox {
+                        displayText: ""
+                        Layout.columnSpan:  3
+                        Layout.fillWidth: true
+                    }
 
-                            PingButton {
-                                text: "Browse..."
-                            }
-                        }
+                    ComboBox {
+                        id: baudrateBox
+                        displayText: "921600"
+                    }
+
+                    Text {
+                        text: "UDP Host/Port:"
+                    }
+
+                    TextField {
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
+                    }
+
+                    TextField {
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
+                    }
+
+                    Text {
+                        text: "Save Path:"
+                    }
+
+                    TextField {
+                        id: pathField
+                        Layout.columnSpan:  3
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        text: "Browse..."
+                        // hack
+                        implicitWidth: baudrateBox.width
                     }
                 }
             }
@@ -110,46 +111,54 @@ Item {
                 // Hack
                 label.x: width/2 - label.contentWidth/2
 
-                ColumnLayout {
-                    RowLayout {
-                        Text {
-                            text: "Units:"
-                        }
+                GridLayout {
+                    anchors.fill: parent
+                    columns: 3
+                    rowSpacing: 5
+                    columnSpacing: 5
 
-                        ComboBox {
-                            displayText: "Meters"
-                        }
+                    Text {
+                        text: "Units:"
                     }
 
-
-                    RowLayout {
-                        Text {
-                            text: "Plot Theme:"
-                        }
-
-                        ComboBox {
-                            displayText: "Thermal"
-                        }
+                    ComboBox {
+                        displayText: "Meters"
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
                     }
 
-                    RowLayout {
-                        Text {
-                            text: "Theme:"
-                        }
+                    Text {
+                        text: "Plot Theme:"
+                    }
 
-                        ComboBox {
-                            displayText: "Dark"
-                        }
+                    ComboBox {
+                        displayText: "Thermal"
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
+                    }
+
+                    Text {
+                        text: "Theme:"
+                    }
+
+                    ComboBox {
+                        displayText: "Dark"
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
                     }
 
                     CheckBox {
-                        checked: false
                         text: "Enable Advanced Mode"
+                        checked: false
+                        Layout.columnSpan:  3
+                        Layout.fillWidth: true
                     }
 
                     CheckBox {
-                        checked: true
                         text: "Smooth Data"
+                        checked: true
+                        Layout.columnSpan:  3
+                        Layout.fillWidth: true
                     }
                 }
             }
@@ -162,53 +171,51 @@ Item {
             label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
 
-            ColumnLayout {
-            RowLayout {
+            GridLayout {
+                anchors.fill: parent
+                columns: 5
+                rowSpacing: 5
+                columnSpacing: 5
+
                 Text {
                     text: "Current Firmware:"
                 }
 
                 TextField {
+                    Layout.columnSpan:  4
+                    Layout.fillWidth: true
                 }
-            }
 
-            RowLayout {
                 Text {
-                    text: "Current Firmware:"
-                }
-
-                TextField {
-                }
-            }
-
-            RowLayout {
-                Text {
+                    id: firmwareLabel
                     text: "Firmware File:"
                 }
 
                 TextField {
+                    Layout.columnSpan:  3
+                    Layout.fillWidth: true
                 }
 
                 PingButton {
                     text: "Browse.."
                 }
-            }
 
-            PingButton {
-                text: "Firmware Update"
-            }
+                PingButton {
+                    text: "Firmware Update"
+                    Layout.columnSpan:  5
+                    Layout.fillWidth: true
+                }
 
-            RowLayout {
                 Text {
                     text: "Progress:"
                 }
 
                 ProgressBar {
                     indeterminate: true
+                    Layout.columnSpan:  4
+                    Layout.fillWidth: true
                 }
             }
-            }
-
         }
     }
 
