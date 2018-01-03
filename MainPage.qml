@@ -7,7 +7,7 @@ import Qt.labs.settings 1.0
 
 Item {
     id: mainPage
-    visible: false
+    visible: true
 
     RowLayout {
         id: menu
