@@ -8,6 +8,9 @@ import Qt.labs.settings 1.0
 ApplicationWindow {
     id: window
     title: "Ping Interface"
+    visible: true
+    height: 600
+    width: 800
 
     StackView {
         id: stack
