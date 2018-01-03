@@ -4,6 +4,7 @@
         <file alias="main.qml">main.qml</file>
         <file alias="MainPage.qml">MainPage.qml</file>
         <file alias="PingButton.qml">PingButton.qml</file>
+        <file alias="PingLogger.qml">PingLogger.qml</file>
         <file alias="SettingsPage.qml">SettingsPage.qml</file>
         <file alias="Waterfall.qml">Waterfall.qml</file>
     </qresource>

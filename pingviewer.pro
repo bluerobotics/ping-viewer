@@ -6,7 +6,11 @@ CONFIG += \
 
 QT += core gui qml quick widgets
 
+HEADERS += \
+    src/logger.h
+
 SOURCES += \
+    src/logger.cpp \
     src/main.cpp
 
 RESOURCES += \

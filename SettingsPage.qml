@@ -23,6 +23,8 @@ Item {
 
     ColumnLayout {
         anchors.top: confMenu.bottom
+        anchors.bottom: parent.bottom
+
         RowLayout {
             GroupBox {
                 id: syncGroup
@@ -215,6 +217,14 @@ Item {
                     Layout.columnSpan:  4
                     Layout.fillWidth: true
                 }
+            }
+        }
+        PingLogger {
+            id: log
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Component.onCompleted: {
+                print(height, width)
             }
         }
     }
