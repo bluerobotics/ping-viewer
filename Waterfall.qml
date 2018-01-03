@@ -6,7 +6,8 @@ Item {
     Canvas {
         id: graph
         anchors.fill : parent
-        anchors.left: parent.right
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.top: parent.top
         property var graphType: 'thermal'
 
