@@ -23,6 +23,10 @@ Item {
 
         function draw(points)
         {
+            if(!graph.canvasSize.width || !graph.canvasSize.height) {
+                print("No space to draw waterfall: ", graph.canvasSize.width, graph.canvasSize.height)
+                return
+            }
             // Set some values
             var scaleW = 50
             var scaleH = 200
