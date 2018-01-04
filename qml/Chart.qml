@@ -67,21 +67,28 @@ Item {
             axisY: axisY
         }
 
-        Timer {
-            interval: 500; running: true; repeat: true
-            onTriggered: {
+        function draw(points) {
+            serie.clear()
+            serieInv.clear()
+
+            if (points) {
+                for (var i=0; points.length; i++) {
+                    serie.append(i, points[i])
+                    serieInv.append(i, points[i])
+                }
+            } else {
                 for (var i=0; i<200; i++) {
                     var pt = 255*Math.random()
                     serie.append(i, pt)
                     serieInv.append(i, -pt)
                 }
+            }
+        }
 
-                if(serie.count > 200) {
-                    serie.removePoints(0, serie.count - 200)
-                }
-                if(serieInv.count > 200) {
-                    serieInv.removePoints(0, serieInv.count - 200)
-                }
+        Timer {
+            interval: 100; running: true; repeat: true
+            onTriggered: {
+                chart.draw()
             }
         }
     }
