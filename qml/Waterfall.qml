@@ -20,9 +20,10 @@ Item {
             ctx.fillStyle = rad
             ctx.fillRect(x, y, 2*r, 2*r)
         }
-
+        property var counter: 0
         function draw(points)
         {
+            counter = counter + 1
             if(!graph.canvasSize.width || !graph.canvasSize.height) {
                 print("No space to draw waterfall: ", graph.canvasSize.width, graph.canvasSize.height)
                 return
@@ -30,6 +31,8 @@ Item {
             // Set some values
             var scaleW = 50
             var scaleH = 200
+            var stop1 = scaleH / 2.0 + 3*Math.sin(counter/10.0)
+            var stop2 = 2 * scaleH / 3.0 + 4*Math.cos(counter/6.0)
             var stepH = graph.canvasSize.height/scaleH
             var radius = Math.pow(stepH*stepH, 0.5)
             var stepW = radius/2 < 1 ? 1 : radius/2
@@ -44,6 +47,17 @@ Item {
             // Draw new column
             for(var j=0; j<scaleH; j++) {
                 var perc = points == undefined ? Math.random()/*0*/ : points[j]
+
+                if (points == undefined) {
+                    if (j < stop1) {
+                        perc = Math.random() * 0.1;
+                    } else if (j < stop2) {
+                        perc = -0.003 * Math.pow((j - stop1 - ((stop2-stop1) / 2.0)), 2)  + 1
+                    } else {
+                        perc = 0.45*Math.random();
+                    }
+                }
+
                 var posY = j*stepH
                 //TODO: test this approach with:
                 //  Append a series of 200 addColorStop and draw a rectangle
