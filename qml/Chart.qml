@@ -4,6 +4,10 @@ import QtCharts 2.2
 Item {
     id: root
 
+    function draw(points) {
+        chart.draw(points)
+    }
+
     ChartView {
         id: chart
         width: root.height
@@ -57,6 +61,7 @@ Item {
             pointsVisible: false
             axisX: axisX
             axisY: axisY
+            color: 'lime'
         }
 
         LineSeries {
@@ -65,16 +70,17 @@ Item {
             pointsVisible: false
             axisX: axisX
             axisY: axisY
+            color: 'lime'
         }
 
         function draw(points) {
             serie.clear()
             serieInv.clear()
-
             if (points) {
-                for (var i=0; points.length; i++) {
-                    serie.append(i, points[i])
-                    serieInv.append(i, points[i])
+                for (var i=0; i < points.length; i++) {
+                    var pt = points[i]*255
+                    serie.append(i, pt)
+                    serieInv.append(i, -pt)
                 }
             } else {
                 for (var i=0; i<200; i++) {
@@ -82,13 +88,6 @@ Item {
                     serie.append(i, pt)
                     serieInv.append(i, -pt)
                 }
-            }
-        }
-
-        Timer {
-            interval: 100; running: true; repeat: true
-            onTriggered: {
-                chart.draw()
             }
         }
     }

@@ -102,31 +102,13 @@ Item {
             }
         }
 
-        QC1.SplitView {
-            id: visualizer
+        Ping1DVisualizer {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            orientation: Qt.Horizontal
-
-            Waterfall {
-                id: waterfall
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.minimumWidth: 150
-            }
-
-            Chart {
-                id: chart
-                Layout.fillHeight: true
-                Layout.preferredWidth: 350
-                Layout.minimumWidth: 350
-            }
         }
     }
 
-    Settings {
-        property alias chartWidth: chart.width
-    }
+
 
     LinearGradient {
         anchors.fill: parent
