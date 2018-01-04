@@ -24,6 +24,39 @@ ApplicationWindow {
         SettingsPage {
             id: settingsPage
         }
+
+        pushEnter: Transition {
+            PropertyAnimation {
+                property: "y"
+                from: -window.height
+                to: 0
+                duration: 200
+            }
+        }
+        pushExit: Transition {
+            PropertyAnimation {
+                property: "y"
+                from: 0
+                to: window.height
+                duration: 200
+            }
+        }
+        popEnter: Transition {
+            PropertyAnimation {
+                property: "y"
+                from: window.height
+                to: 0
+                duration: 200
+            }
+        }
+        popExit: Transition {
+            PropertyAnimation {
+                property: "y"
+                from: 0
+                to: -window.height
+                duration: 200
+            }
+        }
     }
 
     // Save windows position and size

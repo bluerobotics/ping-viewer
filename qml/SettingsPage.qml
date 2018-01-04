@@ -7,24 +7,8 @@ Item {
     id: settingsPage
     visible: false
 
-    RowLayout {
-        id: confMenu
-        anchors.top: parent.top
-        anchors.left: parent.left
-
-        PingButton {
-            text: "Menu"
-
-            onClicked: {
-                stack.pop()
-            }
-        }
-    }
-
     ColumnLayout {
-        anchors.top: confMenu.bottom
-        anchors.bottom: parent.bottom
-
+        anchors.fill: parent
         RowLayout {
             GroupBox {
                 id: syncGroup
@@ -227,14 +211,29 @@ Item {
                 print(height, width)
             }
         }
+
+        RowLayout {
+            id: confMenu
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            PingButton {
+                anchors.right: parent.right
+                text: "/\\"
+
+                onClicked: {
+                    stack.pop()
+                }
+            }
+        }
     }
 
     LinearGradient {
         anchors.fill: parent
         z: parent.z-1
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#200000FF" }
-            GradientStop { position: 1.0; color: "transparent" }
+            GradientStop { position: 0.0; color: "#FF11b3ff" }
+            GradientStop { position: 1.0; color: "#FF111363" }
         }
     }
 }
