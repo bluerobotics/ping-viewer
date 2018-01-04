@@ -47,7 +47,7 @@ Item {
             labelFormat: "%.1f"
             //labelFormat: " "
             tickCount: 2
-            min: 0
+            min: -255
             max: 255
         }
 
@@ -59,15 +59,28 @@ Item {
             axisY: axisY
         }
 
+        LineSeries {
+            id: serieInv
+            pointLabelsVisible: false
+            pointsVisible: false
+            axisX: axisX
+            axisY: axisY
+        }
+
         Timer {
             interval: 500; running: true; repeat: true
             onTriggered: {
                 for (var i=0; i<200; i++) {
-                    serie.append(i, 255*Math.random())
+                    var pt = 255*Math.random()
+                    serie.append(i, pt)
+                    serieInv.append(i, -pt)
                 }
 
                 if(serie.count > 200) {
                     serie.removePoints(0, serie.count - 200)
+                }
+                if(serieInv.count > 200) {
+                    serieInv.removePoints(0, serieInv.count - 200)
                 }
             }
         }
