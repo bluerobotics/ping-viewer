@@ -3,6 +3,10 @@ import QtQuick 2.0
 Item {
     id: root
 
+    function draw(points) {
+        graph.draw(points)
+    }
+
     Canvas {
         id: graph
         anchors.fill : parent
@@ -21,8 +25,7 @@ Item {
             ctx.fillRect(x, y, 2*r, 2*r)
         }
 
-        function draw(points)
-        {
+        function draw(points) {
             if(!graph.canvasSize.width || !graph.canvasSize.height) {
                 print("No space to draw waterfall: ", graph.canvasSize.width, graph.canvasSize.height)
                 return
@@ -54,14 +57,6 @@ Item {
                 var r = Math.max(0, (ratio - 1))
                 var g = 1 - b - r
                 dot(posX, posY, stepW, Qt.rgba(r, g, b, 1), Qt.rgba(r, g, b, 0))
-            }
-        }
-
-        Timer {
-            id: testTimer
-            interval: 100; running: true; repeat: true
-            onTriggered: {
-                graph.draw()
             }
         }
     }

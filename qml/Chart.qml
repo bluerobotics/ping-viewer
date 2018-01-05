@@ -4,6 +4,10 @@ import QtCharts 2.2
 Item {
     id: root
 
+    function draw(points) {
+        chart.draw(points)
+    }
+
     ChartView {
         id: chart
         width: root.height
@@ -47,7 +51,7 @@ Item {
             labelFormat: "%.1f"
             //labelFormat: " "
             tickCount: 2
-            min: 0
+            min: -255
             max: 255
         }
 
@@ -57,17 +61,32 @@ Item {
             pointsVisible: false
             axisX: axisX
             axisY: axisY
+            color: 'lime'
         }
 
-        Timer {
-            interval: 500; running: true; repeat: true
-            onTriggered: {
-                for (var i=0; i<200; i++) {
-                    serie.append(i, 255*Math.random())
-                }
+        LineSeries {
+            id: serieInv
+            pointLabelsVisible: false
+            pointsVisible: false
+            axisX: axisX
+            axisY: axisY
+            color: 'lime'
+        }
 
-                if(serie.count > 200) {
-                    serie.removePoints(0, serie.count - 200)
+        function draw(points) {
+            serie.clear()
+            serieInv.clear()
+            if (points) {
+                for (var i=0; i < points.length; i++) {
+                    var pt = points[i]*255
+                    serie.append(i, pt)
+                    serieInv.append(i, -pt)
+                }
+            } else {
+                for (var i=0; i<200; i++) {
+                    var pt = 255*Math.random()
+                    serie.append(i, pt)
+                    serieInv.append(i, -pt)
                 }
             }
         }
