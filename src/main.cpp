@@ -26,7 +26,10 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // Load the QML and set the Context
+    // Logo
+    engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
+    app.exec();
+    // Main app
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
     return app.exec();
 }

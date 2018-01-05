@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="Chart.qml">qml/Chart.qml</file>
+        <file alias="Logo.qml">qml/Logo.qml</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="MainPage.qml">qml/MainPage.qml</file>
         <file alias="Ping1DVisualizer.qml">qml/Ping1DVisualizer.qml</file>
@@ -13,5 +14,8 @@
     <qresource prefix="/icons/">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
         <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
+    </qresource>
+    <qresource prefix="/imgs/">
+        <file alias="br_logo.png">qml/imgs/br_logo.png</file>
     </qresource>
 </RCC>
