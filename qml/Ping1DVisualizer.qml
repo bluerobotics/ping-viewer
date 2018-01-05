@@ -42,9 +42,6 @@ Item {
 
     ValueReadout {
         id: readout
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.margins: 10
     }
 
     Timer {
