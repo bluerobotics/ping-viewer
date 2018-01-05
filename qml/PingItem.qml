@@ -23,7 +23,7 @@ Item {
     onItemChanged: {
         item.parent = itemRect
         item.visible = true
-        item.enabled = true
+        item.enabled = false
         item.z = 1
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
