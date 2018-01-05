@@ -4,6 +4,7 @@ import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
+import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
     id: window
@@ -11,6 +12,10 @@ ApplicationWindow {
     visible: true
     height: 600
     width: 800
+
+    Material.theme: Material.Dark
+    Material.accent: Material.Blue
+    Material.foreground: Material.Blue
 
     StackView {
         id: stack

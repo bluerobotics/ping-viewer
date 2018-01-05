@@ -4,7 +4,7 @@ CONFIG += \
     c++14 \
     static
 
-QT += core gui qml quick widgets
+QT += core gui qml quick widgets quickcontrols2
 
 HEADERS += \
     src/logger.h

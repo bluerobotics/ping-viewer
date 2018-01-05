@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlEngine>
+#include <QQuickStyle>
 
 #include "logger.h"
 
@@ -15,6 +16,8 @@ QObject *loggerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(Logger::self()->messageHandle);
+
+    QQuickStyle::setStyle("Material");
 
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
 
