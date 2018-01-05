@@ -23,6 +23,7 @@ Item {
     onItemChanged: {
         item.parent = itemRect
         item.visible = true
+        item.enabled = true
         item.z = 1
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
@@ -126,6 +127,7 @@ Item {
         }
 
         onHideChanged: {
+            item.enabled = !hide
             rectOpa.from = rectOpa.to
             rectOpa.to = hide ? 0 : 1
             rectOpa.running = true
