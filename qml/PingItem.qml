@@ -98,8 +98,8 @@ Item {
         anchors.left: iconRect.right
         anchors.top: iconRect.top
 
-        height: item.height
-        width: item.width
+        height: item.height*1.05
+        width: item.width*1.05
 
         color: pingItem.color
         property var hide: true
