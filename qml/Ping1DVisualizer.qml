@@ -5,32 +5,46 @@ import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
-QC1.SplitView {
-
+Item {
     id: visualizer
-    orientation: Qt.Horizontal
-
-    Waterfall {
-        id: waterfall
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        Layout.minimumWidth: 150
-    }
-
-    Chart {
-        id: chart
-        Layout.fillHeight: true
-        Layout.preferredWidth: 350
-        Layout.minimumWidth: 350
-    }
 
     function draw(points) {
         waterfall.draw(points)
         chart.draw(points)
     }
 
-    Settings {
-        property alias chartWidth: chart.width
+    function setDepth(depth) {
+        readout.value = depth
+    }
+
+    QC1.SplitView {
+        orientation: Qt.Horizontal
+        anchors.fill: parent
+
+        Waterfall {
+            id: waterfall
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.minimumWidth: 150
+        }
+
+        Chart {
+            id: chart
+            Layout.fillHeight: true
+            Layout.preferredWidth: 350
+            Layout.minimumWidth: 350
+        }
+
+        Settings {
+            property alias chartWidth: chart.width
+        }
+    }
+
+    ValueReadout {
+        id: readout
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.margins: 10
     }
 
     Timer {
@@ -55,6 +69,7 @@ QC1.SplitView {
                 points.push(point)
             }
             visualizer.draw(points)
+            visualizer.setDepth(stop1 + (stop2-stop1) / 2.0)
         }
     }
 }
