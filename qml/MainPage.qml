@@ -70,6 +70,13 @@ Item {
             item: SettingsPage {
             }
         }
+
+        PingItem {
+            id: infoMenu
+            icon: "/icons/info_white.svg"
+            item: InfoPage {
+            }
+        }
     }
 
     ColumnLayout {
