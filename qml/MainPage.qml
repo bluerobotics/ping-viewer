@@ -16,47 +16,50 @@ Item {
 
         PingItem {
             id: menuContainer
-            item:  ColumnLayout {
-                RowLayout {
-                    PingButton {
-                        text: "Emit Ping"
-                    }
+            item:  GridLayout {
+                columns: 5
+                rowSpacing: 5
+                columnSpacing: 5
 
-                    Slider {
-                        from: 0
-                        value: 0
-                        to: 100
-                        onValueChanged: {
-                            pingPerSecond.text = Math.floor(value).toString() + " ping/s"
-                        }
-                    }
+                PingButton {
+                    text: "Auto Gain"
+                }
 
-                    Text {
-                        id: pingPerSecond
-                        text: "0 ping/s"
-                        color: 'linen'
+                Slider {
+                    from: 0
+                    value: 0
+                    to: 100
+                    Layout.columnSpan:  3
+                    onValueChanged: {
+                        gainText.text = Math.floor(value).toString() + " dB"
                     }
                 }
-                RowLayout {
-                    PingButton {
-                        text: "Auto Gain"
-                    }
 
-                    Slider {
-                        from: 0
-                        value: 0
-                        to: 100
+                Text {
+                    id: gainText
+                    text: "0 dB"
+                    color: 'linen'
+                }
 
-                        onValueChanged: {
-                            gainText.text = Math.floor(value).toString() + " dB"
-                        }
-                    }
 
-                    Text {
-                        id: gainText
-                        text: "0 dB"
-                        color: 'linen'
+                PingButton {
+                    text: "Emit Ping"
+                }
+
+                Slider {
+                    from: 0
+                    value: 0
+                    to: 100
+                    Layout.columnSpan:  3
+                    onValueChanged: {
+                        pingPerSecond.text = Math.floor(value).toString() + " ping/s"
                     }
+                }
+
+                Text {
+                    id: pingPerSecond
+                    text: "0 ping/s"
+                    color: 'linen'
                 }
             }
         }
