@@ -9,26 +9,16 @@ Item {
     id: mainPage
     visible: true
 
-    RowLayout {
-        id: mainLayout
-        z: mainColumn.z + 1
+    PingItem {
+        id: menuContainer
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
-
-        Rectangle {
-            id: menuContainer
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: menu.width
-            Layout.preferredHeight: menu.height
-            visible: false
-            color: 'white'
-
-            Column {
-                id: menu
-
+        anchors.top: parent.top
+        item:  ColumnLayout {
+            id: menu
+            RowLayout {
+            visible: true
                 PingButton {
-                    text: "Single"
+                    text: "Emit Ping"
                 }
 
                 Slider {
@@ -44,12 +34,11 @@ Item {
                     id: pingPerSecond
                     text: "0 ping/s"
                 }
-                Text {
-                    text: "Range/Gain"
-                }
+            }
+            RowLayout {
 
                 PingButton {
-                    text: "Auto"
+                    text: "Auto Gain"
                 }
 
                 Slider {
@@ -66,15 +55,6 @@ Item {
                     id: gainText
                     text: "0 dB"
                 }
-            }
-        }
-
-        PingButton {
-            id: pingButton
-            anchors.bottom: parent.bottom
-            text: menuContainer.visible ? "<" : ">"
-            onClicked: {
-                menuContainer.visible = !menuContainer.visible
             }
         }
     }
