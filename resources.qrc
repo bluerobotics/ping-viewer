@@ -12,5 +12,6 @@
     </qresource>
     <qresource prefix="/icons/">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
+        <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
     </qresource>
 </RCC>

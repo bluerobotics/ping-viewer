@@ -3,7 +3,9 @@ import QtQuick.Controls             1.2
 
 Item {
     id: pingItem
-
+    z: 1
+    height: iconRect.height
+    width: iconRect.width
     signal  activated()
 
     property bool inPopup: false
@@ -12,9 +14,16 @@ Item {
     property var item: null
     property var hideItem: true
     property var hoverParent: undefined
+    property var startAngle: 0
+    property var icon: undefined
+    property var colorUnselected: Qt.rgba(0,0,0,0.5)
+    property var colorSelected: Qt.rgba(0,0,0,0.75)
+    property var color: hideItem ? colorUnselected : colorSelected
 
     onItemChanged: {
         item.parent = itemRect
+        item.visible = true
+        item.z = 1
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
         item.anchors.verticalCenter = itemRect.verticalCenter
@@ -44,11 +53,11 @@ Item {
 
         visible: iconVisible
 
-        color: Qt.rgba(0,0,0,0.4)
+        color: pingItem.color
 
         Image {
             id: openIcon
-            source:         "/icons/arrow_right_white.svg"
+            source:         icon == undefined ? "/icons/arrow_right_white.svg" : icon
             fillMode:       Image.PreserveAspectFit
             mipmap:         true
             anchors.horizontalCenter: parent.horizontalCenter
@@ -58,15 +67,15 @@ Item {
 
             RotationAnimator on rotation {
                 id: rotateIcon
-                from: 0
-                to: 0
+                from: startAngle
+                to: startAngle
                 duration: 200
                 running: true
             }
 
             onFlipChanged: {
                 rotateIcon.from = rotateIcon.to
-                rotateIcon.to = flip ? 180 : 0
+                rotateIcon.to = flip ? 180 + startAngle : 0 + startAngle
                 rotateIcon.running = true
             }
         }
@@ -77,6 +86,7 @@ Item {
             hoverEnabled: true
             onClicked: {
                 itemRect.hide = !itemRect.hide
+                hideItem = itemRect.hide
             }
         }
     }
@@ -90,7 +100,7 @@ Item {
         height: item.height
         width: item.width
 
-        color: Qt.rgba(0,0,0,0.4)
+        color: pingItem.color
         property var hide: true
 
         onOpacityChanged: {

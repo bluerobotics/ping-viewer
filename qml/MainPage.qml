@@ -9,52 +9,62 @@ Item {
     id: mainPage
     visible: true
 
-    PingItem {
-        id: menuContainer
+    Column {
+        z: 1
         anchors.left: parent.left
         anchors.top: parent.top
-        item:  ColumnLayout {
-            id: menu
-            RowLayout {
-            visible: true
-                PingButton {
-                    text: "Emit Ping"
-                }
 
-                Slider {
-                    from: 0
-                    value: 0
-                    to: 100
-                    onValueChanged: {
-                        pingPerSecond.text = Math.floor(value).toString() + " ping/s"
+        PingItem {
+            id: menuContainer
+            item:  ColumnLayout {
+                RowLayout {
+                    PingButton {
+                        text: "Emit Ping"
+                    }
+
+                    Slider {
+                        from: 0
+                        value: 0
+                        to: 100
+                        onValueChanged: {
+                            pingPerSecond.text = Math.floor(value).toString() + " ping/s"
+                        }
+                    }
+
+                    Text {
+                        id: pingPerSecond
+                        text: "0 ping/s"
+                        color: 'linen'
                     }
                 }
+                RowLayout {
+                    PingButton {
+                        text: "Auto Gain"
+                    }
 
-                Text {
-                    id: pingPerSecond
-                    text: "0 ping/s"
+                    Slider {
+                        from: 0
+                        value: 0
+                        to: 100
+
+                        onValueChanged: {
+                            gainText.text = Math.floor(value).toString() + " dB"
+                        }
+                    }
+
+                    Text {
+                        id: gainText
+                        text: "0 dB"
+                        color: 'linen'
+                    }
                 }
             }
-            RowLayout {
+        }
 
-                PingButton {
-                    text: "Auto Gain"
-                }
-
-                Slider {
-                    from: 0.5
-                    value: 0.5
-                    to: 100
-
-                    onValueChanged: {
-                        gainText.text = Math.floor(value).toString() + " dB"
-                    }
-                }
-
-                Text {
-                    id: gainText
-                    text: "0 dB"
-                }
+        PingItem {
+            id: settingsMenu
+            icon: "/icons/settings_white.svg"
+            item: SettingsPage {
             }
         }
     }
@@ -63,32 +73,11 @@ Item {
         id: mainColumn
         anchors.fill: parent
         spacing: 0
-        RowLayout {
-            id: topMenuBar
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Text {
-                anchors.centerIn: parent
-                text: "Blue Robotics Ping Viewer"
-            }
-
-            PingButton {
-                anchors.right: parent.right
-                text: "\\/"
-                onClicked: {
-                    stack.push(settingsPage)
-                }
-            }
-        }
-
         Ping1DVisualizer {
             Layout.fillHeight: true
             Layout.fillWidth: true
         }
     }
-
-
 
     LinearGradient {
         anchors.fill: parent

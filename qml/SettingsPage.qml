@@ -2,13 +2,16 @@ import QtGraphicalEffects 1.0
 import QtQuick 2.7
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
 
 Item {
     id: settingsPage
     visible: false
+    height: settingsLayout.height
+    width: settingsLayout.width
 
     ColumnLayout {
-        anchors.fill: parent
+        id: settingsLayout
         RowLayout {
             GroupBox {
                 id: syncGroup
@@ -25,6 +28,7 @@ Item {
 
                     Text {
                         text: "Sonar Type:"
+                        color: 'linen'
                     }
 
                     ComboBox {
@@ -33,9 +37,9 @@ Item {
                         Layout.fillWidth: true
                     }
 
-
                     Text {
                         text: "Communication:"
+                        color: 'linen'
                     }
 
                     ComboBox {
@@ -46,6 +50,7 @@ Item {
 
                     Text {
                         text: "Serial Port / Baud:"
+                        color: 'linen'
                     }
 
                     ComboBox {
@@ -61,6 +66,7 @@ Item {
 
                     Text {
                         text: "UDP Host/Port:"
+                        color: 'linen'
                     }
 
                     TextField {
@@ -75,6 +81,7 @@ Item {
 
                     Text {
                         text: "Save Path:"
+                        color: 'linen'
                     }
 
                     TextField {
@@ -105,6 +112,7 @@ Item {
 
                     Text {
                         text: "Units:"
+                        color: 'linen'
                     }
 
                     ComboBox {
@@ -115,6 +123,7 @@ Item {
 
                     Text {
                         text: "Plot Theme:"
+                        color: 'linen'
                     }
 
                     ComboBox {
@@ -125,6 +134,7 @@ Item {
 
                     Text {
                         text: "Theme:"
+                        color: 'linen'
                     }
 
                     ComboBox {
@@ -165,6 +175,7 @@ Item {
 
                 Text {
                     text: "Current Firmware:"
+                    color: 'linen'
                 }
 
                 TextField {
@@ -175,6 +186,7 @@ Item {
                 Text {
                     id: firmwareLabel
                     text: "Firmware File:"
+                    color: 'linen'
                 }
 
                 TextField {
@@ -194,6 +206,7 @@ Item {
 
                 Text {
                     text: "Progress:"
+                    color: 'linen'
                 }
 
                 ProgressBar {
@@ -210,30 +223,6 @@ Item {
             Component.onCompleted: {
                 print(height, width)
             }
-        }
-
-        RowLayout {
-            id: confMenu
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-
-            PingButton {
-                anchors.right: parent.right
-                text: "/\\"
-
-                onClicked: {
-                    stack.pop()
-                }
-            }
-        }
-    }
-
-    LinearGradient {
-        anchors.fill: parent
-        z: parent.z-1
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "#FF11b3ff" }
-            GradientStop { position: 1.0; color: "#FF111363" }
         }
     }
 }
