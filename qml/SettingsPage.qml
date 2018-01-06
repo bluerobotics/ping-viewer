@@ -215,13 +215,5 @@ Item {
                 }
             }
         }
-        PingLogger {
-            id: log
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Component.onCompleted: {
-                print(height, width)
-            }
-        }
     }
 }

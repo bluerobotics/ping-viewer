@@ -119,6 +119,21 @@ Item {
                 }
             }
         }
+
+        Rectangle {
+            height: 2
+            Layout.fillWidth: true
+            color: "linen"
+        }
+
+        PingLogger {
+            id: log
+            height: 300
+            Layout.fillWidth: true
+            Component.onCompleted: {
+                print(height, width)
+            }
+        }
     }
 
     property var repository: GitUrl.split('.git')[0]
