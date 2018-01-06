@@ -17,6 +17,7 @@ Item {
         id: view
         anchors.fill: parent
         clip: true
+        ScrollBar.horizontal.interactive: true
 
         Flickable {
             id: flickable
@@ -26,7 +27,10 @@ Item {
                 readOnly: true
                 selectByMouse: true
                 textFormat: TextEdit.RichText
+                renderType: TextEdit.NativeRendering
+                wrapMode: TextEdit.WrapAnywhere
                 text: content
+                color: "linen"
 
                 onTextChanged: {
                     // scroll when text is bigger than height
