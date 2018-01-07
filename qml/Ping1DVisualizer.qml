@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
+import Waterfall 1.0
 
 Item {
     id: visualizer
@@ -24,8 +25,8 @@ Item {
         Waterfall {
             id: waterfall
             Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.minimumWidth: 150
+            Layout.preferredWidth: 350
+            Layout.minimumWidth: 350
         }
 
         Chart {
@@ -36,7 +37,7 @@ Item {
         }
 
         Settings {
-            property alias chartWidth: chart.width
+            property alias waterfallWidth: waterfall.width
         }
     }
 

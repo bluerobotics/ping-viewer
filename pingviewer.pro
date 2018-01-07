@@ -7,9 +7,11 @@ CONFIG += \
 QT += core gui qml quick widgets quickcontrols2
 
 HEADERS += \
+    src/waterfall.h \
     src/logger.h
 
 SOURCES += \
+    src/waterfall.cpp \
     src/logger.cpp \
     src/main.cpp
 

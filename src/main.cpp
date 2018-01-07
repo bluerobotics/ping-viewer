@@ -5,6 +5,7 @@
 #include <QQuickStyle>
 #include <QDebug>
 
+#include "waterfall.h"
 #include "logger.h"
 
 QObject *loggerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
+    qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
 
     QApplication app(argc, argv);
 
