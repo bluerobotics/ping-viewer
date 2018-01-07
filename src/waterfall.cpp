@@ -8,8 +8,12 @@
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
     _image(1000, 200, QImage::Format_RGBA8888),
-    _painter(nullptr)
+    _painter(nullptr),
+    _mouseDepth(0),
+    _mouseStrength(0)
 {
+    setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
 }
 
@@ -43,6 +47,13 @@ QColor Waterfall::valueToRGB(float point)
     g *= 255;
     b *= 255;
     return QColor(r, g, b);
+}
+
+float Waterfall::RGBToValue(QColor color)
+{
+    if(color == QColor(0, 0, 0, 0))
+        return 0.0f;
+    return ((color.red()/255.f-color.blue()/255.f) + 1.0f)/2.0f;
 }
 
 void Waterfall::draw(QList<double> points)
@@ -82,4 +93,25 @@ void Waterfall::randomUpdate()
         points.append(point);
     }
     draw(points);
+}
+
+void Waterfall::hoverMoveEvent(QHoverEvent *event)
+{
+    event->accept();
+    auto pos = event->pos();
+    pos.setX(pos.x()*_image.width()/width());
+    pos.setY(pos.y()*_image.height()/height());
+
+    // signal strength
+    _mouseStrength = RGBToValue(_image.pixelColor(pos));
+    // depth
+    _mouseDepth = pos.y();
+}
+
+void Waterfall::hoverLeaveEvent(QHoverEvent *event)
+{
+    Q_UNUSED(event)
+    emit mouseLeave();
+    _mouseStrength = -1;
+    _mouseDepth = -1;
 }

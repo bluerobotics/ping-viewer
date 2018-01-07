@@ -16,6 +16,8 @@ Item {
 
     function setDepth(depth) {
         readout.value = depth
+        readout.depth = waterfall.mouseDepth < 0 ? '-' : waterfall.mouseDepth
+        readout.strength = waterfall.mouseStrength  < 0 ? '-' : waterfall.mouseStrength
     }
 
     QC1.SplitView {
