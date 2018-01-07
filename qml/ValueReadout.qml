@@ -8,10 +8,9 @@ Item {
     property var precision: 1
     property var margin: 10
     x: margin
-    y: parent.height - height - margin
 
-    width: readout.width
-    height: readout.height
+    width: mainLayout.width
+    height: mainLayout.height
 
     Text {
         id: readout
@@ -52,8 +51,16 @@ Item {
     }
 
     Settings {
+        id: settings
         property alias valueReadoutX: root.x
         property alias valueReadoutY: root.y
         property alias readoutFontSize: readout.font.pointSize
+    }
+
+
+    Component.onCompleted: {
+        if(root.y == 0) {
+            root.y = parent.height - height - margin
+        }
     }
 }
