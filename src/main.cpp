@@ -20,6 +20,10 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(Logger::self()->messageHandle);
 
+    QCoreApplication::setOrganizationName("Blue Robotics Inc.");
+    QCoreApplication::setOrganizationDomain("bluerobotics.com");
+    QCoreApplication::setApplicationName("Ping Viewer");
+
     QQuickStyle::setStyle("Material");
 
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
