@@ -68,6 +68,8 @@ Item {
             id: settingsMenu
             icon: "/icons/settings_white.svg"
             item: SettingsPage {
+                id: settingsPage
+                plotThemes: ping1DVisualizer.waterfallItem.themes
             }
         }
 
@@ -84,8 +86,10 @@ Item {
         anchors.fill: parent
         spacing: 0
         Ping1DVisualizer {
+            id: ping1DVisualizer
             Layout.fillHeight: true
             Layout.fillWidth: true
+            plotTheme: settingsPage.plotTheme
         }
     }
 

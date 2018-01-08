@@ -15,6 +15,104 @@ Waterfall::Waterfall(QQuickItem *parent):
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
+    setGradients();
+    setTheme("Thermal 5");
+}
+
+void Waterfall::setGradients()
+{
+    WaterfallGradient thermal5Grad(QStringLiteral("Thermal 5"), {
+        Qt::blue,
+        Qt::cyan,
+        Qt::green,
+        Qt::yellow,
+        Qt::red,
+    });
+    _gradients.append(thermal5Grad);
+
+    WaterfallGradient thermal6Grad(QStringLiteral("Thermal 6"), {
+        Qt::black,
+        Qt::blue,
+        Qt::cyan,
+        Qt::green,
+        Qt::yellow,
+        Qt::red,
+    });
+    _gradients.append(thermal6Grad);
+
+    WaterfallGradient thermal7Grad(QStringLiteral("Thermal 7"), {
+        Qt::black,
+        Qt::blue,
+        Qt::cyan,
+        Qt::green,
+        Qt::yellow,
+        Qt::red,
+        Qt::white,
+    });
+    _gradients.append(thermal7Grad);
+
+    WaterfallGradient monochrome(QStringLiteral("Monochrome"), {
+        Qt::black,
+        Qt::white,
+    });
+    _gradients.append(monochrome);
+
+    WaterfallGradient ocean(QStringLiteral("Ocean"), {
+        QColor(48,12,64),
+		QColor(86,30,111),
+		QColor(124,85,135),
+		QColor(167,114,130),
+		QColor(206,154,132),
+    });
+    _gradients.append(ocean);
+
+    WaterfallGradient transparent(QStringLiteral("Transparent"), {
+        QColor(20, 0, 120),
+		QColor(200, 30, 140),
+		QColor(255, 100, 0),
+		QColor(255, 255, 40),
+		QColor(255, 255, 255),
+    });
+    _gradients.append(transparent);
+
+    WaterfallGradient fishfinder(QStringLiteral("Fishfinder"), {
+        QColor(0, 0, 60),
+        QColor(61, 6, 124),
+        QColor(212, 45, 107),
+        QColor(255, 102, 0),
+        QColor(255, 227, 32),
+        Qt::white,
+    });
+    _gradients.append(fishfinder);
+
+    WaterfallGradient rainbow(QStringLiteral("Rainbow"), {
+        Qt::black,
+        Qt::magenta,
+        Qt::blue,
+        Qt::cyan,
+        Qt::darkGreen,
+        Qt::yellow,
+        Qt::red,
+        Qt::white,
+    });
+    _gradients.append(rainbow);
+
+    for(auto &gradient : _gradients) {
+        _themes.append(gradient.name());
+    }
+
+    emit themesChanged();
+}
+
+void Waterfall::setTheme(QString theme)
+{
+    _theme = theme;
+    for(auto &gradient : _gradients) {
+        if(gradient.name() == theme) {
+            _gradient = gradient;
+            break;
+        }
+    }
 }
 
 void Waterfall::paint(QPainter *painter)
@@ -37,23 +135,12 @@ void Waterfall::setImage(const QImage &image)
 
 QColor Waterfall::valueToRGB(float point)
 {
-    static const float minimum = 0.0f;
-    static const float maximum = 1.0f;
-    float ratio = 2 * (point - minimum) / (maximum - minimum);
-    float r = qMax(0.0f, (ratio - 1.0f));
-    float b = qMax(0.0f, (1.0f - ratio));
-    float g = (1.0f - b - r);
-    r *= 255;
-    g *= 255;
-    b *= 255;
-    return QColor(r, g, b);
+    return _gradient.getColor(point);
 }
 
 float Waterfall::RGBToValue(QColor color)
 {
-    if(color == QColor(0, 0, 0, 0))
-        return 0.0f;
-    return ((color.red()/255.f-color.blue()/255.f) + 1.0f)/2.0f;
+    return _gradient.getValue(color);
 }
 
 void Waterfall::draw(QList<double> points)

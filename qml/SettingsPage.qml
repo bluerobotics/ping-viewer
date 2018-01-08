@@ -2,12 +2,16 @@ import QtGraphicalEffects 1.0
 import QtQuick 2.7
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import Qt.labs.settings 1.0
 
 Item {
     id: settingsPage
     visible: false
     height: settingsLayout.height
     width: settingsLayout.width
+
+    property var plotThemes
+    property var plotTheme: plotThemeCB.displayText
 
     ColumnLayout {
         id: settingsLayout
@@ -102,10 +106,11 @@ Item {
                 title: "Display"
                 // Hack
                 label.x: width/2 - label.contentWidth/2
+                Layout.fillWidth: true
 
                 GridLayout {
                     anchors.fill: parent
-                    columns: 3
+                    columns: 5
                     rowSpacing: 5
                     columnSpacing: 5
 
@@ -116,7 +121,7 @@ Item {
 
                     ComboBox {
                         displayText: "Meters"
-                        Layout.columnSpan:  2
+                        Layout.columnSpan:  4
                         Layout.fillWidth: true
                     }
 
@@ -126,9 +131,11 @@ Item {
                     }
 
                     ComboBox {
-                        displayText: "Thermal"
-                        Layout.columnSpan:  2
+                        id: plotThemeCB
+                        Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        Layout.minimumWidth: 200
+                        model: plotThemes
                     }
 
                     Text {
@@ -138,21 +145,21 @@ Item {
 
                     ComboBox {
                         displayText: "Dark"
-                        Layout.columnSpan:  2
+                        Layout.columnSpan:  4
                         Layout.fillWidth: true
                     }
 
                     CheckBox {
                         text: "Enable Advanced Mode"
                         checked: false
-                        Layout.columnSpan:  3
+                        Layout.columnSpan:  5
                         Layout.fillWidth: true
                     }
 
                     CheckBox {
                         text: "Smooth Data"
                         checked: true
-                        Layout.columnSpan:  3
+                        Layout.columnSpan:  5
                         Layout.fillWidth: true
                     }
                 }
@@ -216,4 +223,9 @@ Item {
             }
         }
     }
+
+    Settings {
+        property alias plotThemeIndex: plotThemeCB.currentIndex
+    }
+
 }

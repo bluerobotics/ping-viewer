@@ -26,10 +26,6 @@ ApplicationWindow {
             id: mainPage
         }
 
-        SettingsPage {
-            id: settingsPage
-        }
-
         pushEnter: Transition {
             PropertyAnimation {
                 property: "y"
