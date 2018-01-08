@@ -23,7 +23,8 @@ void Logger::messageHandle(QtMsgType type, const QMessageLogContext& context, co
 {
     Q_UNUSED(context)
 
-    QString msgCopy = QString(context.category) + QStringLiteral(": ") + msg;
+    QString msgCopy = QString("%1 at %2:%3 - %4").arg(context.category).arg(context.file).arg(context.line).arg(msg);
+
     QString txt = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz] "));
     switch (type) {
         case QtDebugMsg:
