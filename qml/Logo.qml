@@ -1,5 +1,6 @@
-import QtQuick.Controls 2.3
 import QtQuick 2.7
+import QtQuick.Controls 2.3
+import QtQuick.Window 2.2
 
 ApplicationWindow {
     id: window
@@ -28,5 +29,10 @@ ApplicationWindow {
         duration: 1750
         running: true
         easing.type: Easing.OutCubic
+    }
+
+    Component.onCompleted: {
+        window.x = Screen.width / 2 - width / 2
+        window.y = Screen.height / 2 - height / 2
     }
 }
