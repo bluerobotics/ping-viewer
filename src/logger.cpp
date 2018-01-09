@@ -26,24 +26,25 @@ void Logger::messageHandle(QtMsgType type, const QMessageLogContext& context, co
 {
     Q_UNUSED(context)
 
-    QString msgCopy = QString("%1 at %2:%3 - %4").arg(context.category).arg(context.file).arg(context.line).arg(msg);
+    const QString file = QString(context.file).split('/').last();
+    const QString info = QString("%1 at %2(%3)").arg(context.category).arg(file).arg(context.line);
 
     QString txt = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz] "));
     switch (type) {
         case QtDebugMsg:
-            txt.append(QStringLiteral("<font color=\"%1\">Debug: %2</font>").arg("gray", msgCopy));
+            txt.append(QStringLiteral("<font color=\"%1\">Debug %2: %3</font>").arg("gray", info, msg));
             break;
 
         case QtWarningMsg:
-            txt.append(QStringLiteral("<font color=\"%1\">Warning: %2</font>").arg("yellow", msgCopy));
+            txt.append(QStringLiteral("<font color=\"%1\">Warning %2: %3</font>").arg("yellow", info, msg));
             break;
 
         case QtCriticalMsg:
-            txt.append(QStringLiteral("<font color=\"%1\">Critical: %2</font>").arg("red", msgCopy));
+            txt.append(QStringLiteral("<font color=\"%1\">Critical %2: %3</font>").arg("red", info, msg));
             break;
 
         case QtFatalMsg:
-            txt.append(QStringLiteral("<font color=\"%1\">Fatal: %2</font>").arg("red", msgCopy));
+            txt.append(QStringLiteral("<font color=\"%1\">Fatal %2: %3</font>").arg("red", info, msg));
             abort();
             break;
 
