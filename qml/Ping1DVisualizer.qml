@@ -9,6 +9,11 @@ import Waterfall 1.0
 Item {
     id: visualizer
     property var waterfallItem: waterfall
+    onWidthChanged: {
+        if(chart.Layout.minimumWidth == chart.width) {
+            waterfall.width = width - chart.width
+        }
+    }
 
     function draw(points) {
         waterfall.draw(points)
@@ -28,6 +33,7 @@ Item {
         Waterfall {
             id: waterfall
             Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
         }
@@ -40,7 +46,7 @@ Item {
         }
 
         Settings {
-            property alias waterfallWidth: waterfall.width
+            property alias chartWidth: chart.width
         }
     }
 
