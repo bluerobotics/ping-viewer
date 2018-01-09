@@ -10,8 +10,10 @@ Waterfall::Waterfall(QQuickItem *parent):
     _image(1000, 200, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
-    _mouseStrength(0)
+    _mouseStrength(0),
+    _smooth(true)
 {
+    setAntialiasing(true);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
@@ -146,13 +148,26 @@ float Waterfall::RGBToValue(QColor color)
 void Waterfall::draw(QList<double> points)
 {
     static QImage old;
+    static QList<double> oldPoints = points;
     old = _image.copy(1, 0, _image.width() - 1, _image.height());
     QPainter painter(&_image);
     painter.drawImage(0, 0, old);
     painter.end();
 
-    for(int i(0); i < _image.height(); i++) {
-        _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
+    if(smooth()) {
+        for(int i(0); i < points.length(); i++) {
+            oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
+        }
+
+        for(int i(0); i < _image.height(); i++) {
+            _image.setPixelColor(_image.width() - 1, i, valueToRGB(oldPoints[i]));
+
+        }
+    } else {
+        for(int i(0); i < _image.height(); i++) {
+            _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
+
+        }
     }
 
     update();

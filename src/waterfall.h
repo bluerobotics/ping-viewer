@@ -20,12 +20,17 @@ class Waterfall : public QQuickPaintedItem
     Q_PROPERTY(QStringList themes READ themes NOTIFY themesChanged)
     const QStringList themes() {return _themes;}
 
+    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
+    bool smooth() {return _smooth;}
+    void setSmooth(bool smooth) {_smooth = smooth; emit smoothChanged();}
+
     QList<WaterfallGradient> _gradients;
     WaterfallGradient _gradient;
     QImage _image;
     QPainter *_painter;
     float _mouseDepth;
     float _mouseStrength;
+    bool _smooth;
     QString _theme;
     QList<QString> _themes;
 
@@ -36,6 +41,7 @@ class Waterfall : public QQuickPaintedItem
     void mouseLeave();
     void themeChanged();
     void themesChanged();
+    void smoothChanged();
 
 public:
     Waterfall(QQuickItem *parent = 0);

@@ -159,10 +159,14 @@ Item {
                     }
 
                     CheckBox {
+                        id: smoothDataChB
                         text: "Smooth Data"
                         checked: true
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
+                        onCheckStateChanged: {
+                            waterfallItem.smooth = checkState
+                        }
                     }
                 }
             }
@@ -228,6 +232,7 @@ Item {
 
     Settings {
         property alias plotThemeIndex: plotThemeCB.currentIndex
+        property alias smoothDataState: smoothDataChB.checkState
     }
 
 }
