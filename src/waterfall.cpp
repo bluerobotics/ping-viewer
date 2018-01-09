@@ -1,7 +1,6 @@
 #include "waterfall.h"
 
 #include <QPainter>
-#include <QTimer>
 #include <QtMath>
 #include <QList>
 
