@@ -8,6 +8,10 @@
 #include "waterfall.h"
 #include "logger.h"
 
+Q_DECLARE_LOGGING_CATEGORY(mainCategory)
+
+PING_LOGGING_CATEGORY(mainCategory, "ping.main")
+
 QObject *loggerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
@@ -38,10 +42,10 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
     app.exec();
     // Main app
-    qDebug() << GIT_VERSION;
-    qDebug() << GIT_VERSION_DATE;
-    qDebug() << GIT_TAG;
-    qDebug() << GIT_URL;
+    qCDebug(mainCategory) << GIT_VERSION;
+    qCDebug(mainCategory) << GIT_VERSION_DATE;
+    qCDebug(mainCategory) << GIT_TAG;
+    qCDebug(mainCategory) << GIT_URL;
     engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
     engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
     engine.rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));

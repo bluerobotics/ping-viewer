@@ -1,6 +1,10 @@
 #include <QLinearGradient>
 #include <QtDebug>
 
+#include "logger.h"
+
+Q_DECLARE_LOGGING_CATEGORY(waterfallGradient)
+
 class WaterfallGradient : public QLinearGradient
 {
     QString _name;

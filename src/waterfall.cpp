@@ -4,6 +4,8 @@
 #include <QtMath>
 #include <QList>
 
+PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
+
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
     _image(1000, 200, QImage::Format_RGBA8888),
@@ -101,7 +103,7 @@ void Waterfall::setGradients()
     for(auto &gradient : _gradients) {
         _themes.append(gradient.name());
     }
-
+    qCDebug(waterfall) << "Gradients:" << _themes;
     emit themesChanged();
 }
 

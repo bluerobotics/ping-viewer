@@ -1,7 +1,10 @@
 #include <QQuickPaintedItem>
 #include <QImage>
 
+#include "logger.h"
 #include "waterfallgradient.h"
+
+Q_DECLARE_LOGGING_CATEGORY(waterfall)
 
 class Waterfall : public QQuickPaintedItem
 {

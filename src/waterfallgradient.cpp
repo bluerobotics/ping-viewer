@@ -3,6 +3,8 @@
 
 #include "waterfallgradient.h"
 
+PING_LOGGING_CATEGORY(waterfallGradient, "ping.waterfallGradient")
+
 WaterfallGradient::WaterfallGradient(QString name, QList<QColor> colors):
     _name(name)
 {
@@ -27,13 +29,13 @@ QString WaterfallGradient::name() {
 
 QColor WaterfallGradient::getColor(float value) {
     if((value < 0 || value > 1) && !qIsNaN(value)) {
-        qWarning() << "Color position must be specified in the range 0 to 1.";
+        qCWarning(waterfallGradient) << "Color position must be specified in the range 0 to 1.";
         return QColor();
     }
 
     auto stopsValues = stops();
     if(stopsValues.length() < 2) {
-        qWarning() << "Need more than one stop value.";
+        qCWarning(waterfallGradient) << "Need more than one stop value.";
         return QColor();
     }
 
@@ -48,7 +50,7 @@ QColor WaterfallGradient::getColor(float value) {
 
 float WaterfallGradient::getValue(QColor color) {
     if(color.spec() == QColor::Invalid) {
-        qWarning() << "Invalid color.";
+        qCWarning(waterfallGradient) << "Invalid color.";
         return 0.0f;
     }
 
