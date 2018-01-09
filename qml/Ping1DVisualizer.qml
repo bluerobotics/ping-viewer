@@ -9,7 +9,6 @@ import Waterfall 1.0
 Item {
     id: visualizer
     property var waterfallItem: waterfall
-    property var plotTheme
 
     function draw(points) {
         waterfall.draw(points)
@@ -31,7 +30,6 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
-            theme: plotTheme
         }
 
         Chart {
@@ -43,7 +41,6 @@ Item {
 
         Settings {
             property alias waterfallWidth: waterfall.width
-            property alias waterfallThemes: waterfall.themes
         }
     }
 

@@ -69,7 +69,7 @@ Item {
             icon: "/icons/settings_white.svg"
             item: SettingsPage {
                 id: settingsPage
-                plotThemes: ping1DVisualizer.waterfallItem.themes
+                waterfallItem: ping1DVisualizer.waterfallItem
             }
         }
 
@@ -89,7 +89,6 @@ Item {
             id: ping1DVisualizer
             Layout.fillHeight: true
             Layout.fillWidth: true
-            plotTheme: settingsPage.plotTheme
         }
     }
 

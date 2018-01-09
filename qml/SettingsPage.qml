@@ -10,8 +10,7 @@ Item {
     height: settingsLayout.height
     width: settingsLayout.width
 
-    property var plotThemes
-    property var plotTheme: plotThemeCB.displayText
+    property var waterfallItem
 
     ColumnLayout {
         id: settingsLayout
@@ -135,7 +134,10 @@ Item {
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                         Layout.minimumWidth: 200
-                        model: plotThemes
+                        model: waterfallItem.themes
+                        onCurrentTextChanged: {
+                            waterfallItem.theme = currentText
+                        }
                     }
 
                     Text {
