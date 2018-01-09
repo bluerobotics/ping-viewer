@@ -5,8 +5,11 @@
 #include <QTime>
 #include <QTimer>
 
+PING_LOGGING_CATEGORY(logger, "ping.logger")
+
 Logger::Logger()
 {
+    qCDebug(logger) << "Starting Logger.";
 }
 
 void Logger::writeMessage(const QString& msg)
