@@ -22,8 +22,6 @@ QObject *loggerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
 
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(Logger::self()->messageHandle);
-
     QCoreApplication::setOrganizationName("Blue Robotics Inc.");
     QCoreApplication::setOrganizationDomain("bluerobotics.com");
     QCoreApplication::setApplicationName("Ping Viewer");

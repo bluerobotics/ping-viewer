@@ -5,7 +5,7 @@ CONFIG += \
     static \
     debug
 
-QT += core gui qml quick widgets quickcontrols2
+QT += core gui qml quick widgets quickcontrols2 concurrent
 
 HEADERS += \
     src/waterfallgradient.h \

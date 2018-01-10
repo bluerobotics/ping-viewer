@@ -3,13 +3,18 @@
 #include <QDebug>
 #include <QString>
 #include <QTime>
-#include <QTimer>
+#include <QtConcurrent>
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
 
 Logger::Logger()
 {
-    qCDebug(logger) << "Starting Logger.";
+    /*
+        Logger is a singleton, to Install the message handler
+        the Logger construct need to finish,
+        and that's why QtConcurrent is necessary
+    */
+    QtConcurrent::run([=](){qInstallMessageHandler(messageHandle);});
 }
 
 void Logger::writeMessage(const QString& msg)
