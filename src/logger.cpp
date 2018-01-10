@@ -7,14 +7,22 @@
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
 
-Logger::Logger()
+Logger::Logger():
+    _settings("Blue Robotics Inc.", "Ping Viewer")
 {
+    if(_settings.contains("filter")) {
+        QString filter = _settings.value("filter").toString();
+        QLoggingCategory::setFilterRules(filter);
+    }
+
     /*
         Logger is a singleton, to Install the message handler
         the Logger construct need to finish,
         and that's why QtConcurrent is necessary
     */
     QtConcurrent::run([=](){qInstallMessageHandler(messageHandle);});
+
+    registerCategory("qml");
 }
 
 void Logger::writeMessage(const QString& msg)
@@ -60,6 +68,34 @@ void Logger::messageHandle(QtMsgType type, const QMessageLogContext& context, co
     Logger::self()->writeMessage(txt);
 }
 
+void Logger::registerCategory(const char* category)
+{
+    _registeredCategories << category;
+    qCDebug(logger) << category << _settings.value(category).toBool();
+    emit registeredCategoryChanged();
+}
+
+void Logger::setCategory(QString category, bool enable)
+{
+    qCDebug(logger) << category << enable;
+    _settings.setValue(category, enable);
+
+    QString filter;
+    for(const auto ourCategory : _registeredCategories) {
+        filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
+    }
+
+    qCDebug(logger) << "filter" << filter;
+    QLoggingCategory::setFilterRules(filter);
+    _settings.setValue("filter", filter);
+}
+
+bool Logger::getCategory(QString category)
+{
+    qCDebug(logger) << category << _settings.value(category).toBool();
+    return _settings.value(category).toBool();
+};
+
 Logger* Logger::self()
 {
     static Logger* self = new Logger();
@@ -68,4 +104,9 @@ Logger* Logger::self()
 
 Logger::~Logger()
 {
+    QString filter;
+    for(const auto ourCategory : _registeredCategories) {
+        filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
+    }
+    _settings.setValue("filter", filter);
 }

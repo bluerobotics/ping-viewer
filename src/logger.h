@@ -2,6 +2,7 @@
 
 #include <QLoggingCategory>
 #include <QObject>
+#include <QSettings>
 #include <QTextEdit>
 
 enum QtMsgType;
@@ -26,13 +27,18 @@ public:
     void setLogText(QString text) { _logText = text;};
     Q_INVOKABLE QString consumeLogText() {QString tmp = _logText; _logText.clear(); return tmp;};
 
-    void registerCategory(const char* category) {_registeredCategories << category;}
+    void registerCategory(const char* category);
+    Q_PROPERTY(QStringList registeredCategory READ registeredCategory NOTIFY registeredCategoryChanged)
+    QStringList registeredCategory() { return _registeredCategories; };
+    Q_INVOKABLE void setCategory(QString category, bool enable);
+    Q_INVOKABLE bool getCategory(QString category);
 
     ~Logger();
     static Logger* self();
 
     signals:
         void logTextChanged();
+        void registeredCategoryChanged();
 
 private:
     Logger* operator = (Logger& other) = delete;
@@ -41,6 +47,7 @@ private:
 
     QString _logText;
     QStringList _registeredCategories;
+    QSettings _settings;
 };
 
 class PingLoggingCategory

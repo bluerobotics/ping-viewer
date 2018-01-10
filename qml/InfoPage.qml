@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
+import Logger 1.0
+
 Item {
     id: root
     height: mainLayout.height
@@ -132,6 +134,24 @@ Item {
             Layout.fillWidth: true
             Component.onCompleted: {
                 print(height, width)
+            }
+        }
+
+        GridLayout {
+            columns: 4
+            rowSpacing: 5
+            columnSpacing: 5
+            Repeater {
+                Layout.fillWidth: true
+                model: Logger.registeredCategory
+                CheckBox {
+                    text: modelData
+                    checked: Logger.getCategory(modelData)
+                    Layout.columnSpan: 1
+                    onCheckedChanged: {
+                        Logger.setCategory(modelData.toString(), checked)
+                    }
+                }
             }
         }
     }
