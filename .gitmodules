@@ -1,0 +1,3 @@
+[submodule "lib/ping-protocol-cpp"]
+	path = lib/ping-protocol-cpp
+	url = https://github.com/patrickelectric/ping-protocol-cpp/
