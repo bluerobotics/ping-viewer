@@ -21,8 +21,10 @@ Item {
                 rowSpacing: 5
                 columnSpacing: 5
 
-                PingButton {
+                CheckBox {
+                    id: autoGainChB
                     text: "Auto Gain"
+                    checked: true
                 }
 
                 Slider {
@@ -40,7 +42,6 @@ Item {
                     text: "0 dB"
                     color: 'linen'
                 }
-
 
                 PingButton {
                     text: "Emit Ping"
