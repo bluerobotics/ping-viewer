@@ -35,17 +35,20 @@ Item {
 
                     ComboBox {
                         displayText: "Ping Echosounder"
+                        enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                     }
 
                     Text {
                         text: "Communication:"
+                        enabled: false
                         color: 'linen'
                     }
 
                     ComboBox {
                         displayText: "Serial (default)"
+                        enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                     }
@@ -72,11 +75,13 @@ Item {
                     }
 
                     TextField {
+                        enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
                     }
 
                     TextField {
+                        enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
                     }
@@ -88,12 +93,14 @@ Item {
 
                     TextField {
                         id: pathField
+                        enabled: false
                         Layout.columnSpan:  3
                         Layout.fillWidth: true
                     }
 
                     Button {
                         text: "Browse..."
+                        enabled: false
                         // hack
                         implicitWidth: baudrateBox.width
                     }
@@ -120,6 +127,7 @@ Item {
 
                     ComboBox {
                         displayText: "Meters"
+                        enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                     }
@@ -147,12 +155,14 @@ Item {
 
                     ComboBox {
                         displayText: "Dark"
+                        enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                     }
 
                     CheckBox {
                         text: "Enable Advanced Mode"
+                        enabled: false
                         checked: false
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
@@ -175,6 +185,7 @@ Item {
         GroupBox {
             id: firmwareGroup
             title: "Firmware Update"
+            enabled: false
             // Hack
             label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
