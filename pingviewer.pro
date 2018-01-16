@@ -21,6 +21,8 @@ SOURCES += \
 RESOURCES += \
     resources.qrc
 
+include(lib/ping-protocol-cpp/ping.pri)
+
 # https://git-scm.com/docs/git-log placeholders
 # Get git info
 exists ($$_PRO_FILE_PWD_/.git) {

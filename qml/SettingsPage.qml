@@ -10,7 +10,13 @@ Item {
     height: settingsLayout.height
     width: settingsLayout.width
 
+    property var ping
     property var waterfallItem
+
+    function connect() {
+        var connString = serialPortsCB.currentText + ":" + baudrateBox.currentText
+        ping.connectLink(connString)
+    }
 
     ColumnLayout {
         id: settingsLayout
@@ -59,14 +65,21 @@ Item {
                     }
 
                     ComboBox {
-                        displayText: ""
+                        id: serialPortsCB
+                        model: ping.link.listAvailableConnections
                         Layout.columnSpan:  3
                         Layout.fillWidth: true
+                        onCurrentTextChanged: {
+                            connect()
+                        }
                     }
 
                     ComboBox {
                         id: baudrateBox
-                        displayText: "921600"
+                        model: [115200, 921600]
+                        onCurrentTextChanged: {
+                            connect()
+                        }
                     }
 
                     Text {

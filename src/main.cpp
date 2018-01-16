@@ -7,6 +7,7 @@
 
 #include "waterfall.h"
 #include "logger.h"
+#include "ping.h"
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
@@ -30,6 +31,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
+    qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
+    qmlRegisterType<Protocol>("Protocol", 1, 0, "Protocol");
 
     QApplication app(argc, argv);
 
