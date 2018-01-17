@@ -71,6 +71,12 @@ Item {
                     }
                 }
             }
+            onHideItemChanged: {
+                if(hideItem == false) {
+                    settingsMenu.hideItem = true
+                    infoMenu.hideItem = true
+                }
+            }
         }
 
         PingItem {
@@ -81,12 +87,23 @@ Item {
                 ping: ping
                 waterfallItem: ping1DVisualizer.waterfallItem
             }
+            onHideItemChanged: {
+                if(hideItem == false) {
+                    menuContainer.hideItem = true
+                    infoMenu.hideItem = true
+                }
+            }
         }
 
         PingItem {
             id: infoMenu
             icon: "/icons/info_white.svg"
-            item: InfoPage {
+            item: InfoPage {}
+            onHideItemChanged: {
+                if(hideItem == false) {
+                    menuContainer.hideItem = true
+                    settingsMenu.hideItem = true
+                }
             }
         }
     }
