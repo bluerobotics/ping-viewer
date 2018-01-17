@@ -40,7 +40,7 @@ QColor WaterfallGradient::getColor(float value) {
     }
 
     for(int i(0); i < stopsValues.length() - 1; i++) {
-        if(stopsValues[i].first < value && stopsValues[i+1].first >= value) {
+        if(stopsValues[i].first <= value && stopsValues[i+1].first >= value) {
             return colorLinearInterpolation(value, stopsValues[i], stopsValues[i+1]);
         }
     }
