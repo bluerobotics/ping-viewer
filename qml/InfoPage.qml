@@ -22,12 +22,22 @@ Item {
                 mipmap: true
             }
 
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
+            }
+
             Image {
                 id: pingName
                 Layout.preferredHeight: 50
                 source: "/imgs/ping_name.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
             }
 
             Image {
