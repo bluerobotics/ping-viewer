@@ -54,7 +54,6 @@ Item {
                 CheckBox {
                     id: autoGainChB
                     text: "Auto Gain"
-                    checked: true
                     onCheckedChanged: {
                         ping.protocol.setEchosounderAuto(checked)
                     }
@@ -94,6 +93,10 @@ Item {
 
     Ping {
         id: ping
+        onConnectionOpen: {
+            ping.protocol.requestEchosounderMode()
+            ping.protocol.requestEchosounderProfile()
+        }
     }
 
     Connections {
@@ -108,6 +111,10 @@ Item {
 
         onEchosounderGain: {
             gainCB.currentIndex = gain
+        }
+
+        onEchosounderAuto: {
+            autoGainChB.checked = mode
         }
     }
 
