@@ -16,7 +16,6 @@ class Waterfall : public QQuickPaintedItem
     float mouseDepth() {return _mouseDepth;}
     Q_PROPERTY(float mouseStrength READ mouseStrength NOTIFY mouseStrengthChanged)
     float mouseStrength() {return _mouseStrength;}
-    Q_PROPERTY(NOTIFY mouseLeave);
 
     Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)
     const QString theme() {return _theme;}
