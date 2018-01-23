@@ -1,6 +1,7 @@
 import QtGraphicalEffects 1.0
 import QtQuick 2.7
 import QtQuick.Controls 2.3
+import QtQuick.Dialogs 1.3
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import Ping 1.0
@@ -107,6 +108,83 @@ Item {
                     settingsMenu.hideItem = true
                 }
             }
+        }
+    }
+
+    PingItem {
+        id: replayMenu
+        visible: settingsPage.replayItem
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        state: "bottom-left"
+        spin: true
+        icon: "/icons/save_white.svg"
+        item: RowLayout {
+            PingButton {
+                id: replayStartBt
+                text: "▮▮"
+                enabled: !ping.link.isOnline()
+                onClicked: {
+                    if(text == "▶") {
+                        text = "▮▮"
+                        ping.link.start()
+                    } else {
+                        text = "▶"
+                        ping.link.pause()
+                    }
+                }
+            }
+
+            Text {
+                id: timeText
+                text: "Time:"
+                color: 'linen'
+            }
+
+            Slider {
+                id: replaySlider
+                enabled: !ping.link.isOnline()
+                from: 0
+                value: ping.link.packageIndex
+                stepSize: 1
+                to: ping.link.packageSize
+                onValueChanged: {
+                    if(ping.link.packageIndex != value) {
+                        ping.link.packageIndex = value
+                        ping.link.start()
+                    }
+                }
+            }
+
+            Text {
+                id: replayElapsed
+                text: ping.link.isOnline() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
+                color: 'linen'
+            }
+
+            Text {
+                id: replayFileName
+                text: "File:"
+                color: 'linen'
+            }
+
+            PingButton {
+                text: "Replay Data"
+                onClicked: replayFileDialog.visible = true
+            }
+        }
+    }
+
+    FileDialog {
+        id: replayFileDialog
+        title: "Please choose a log file"
+        folder: shortcuts.home
+        nameFilters: ["Binary files (*.bin)"]
+        onAccepted: {
+            var sizeToRemove = replayFileDialog.folder.toString().length - replayFileDialog.fileUrl.toString().length + 1
+            // 1 (File) : File (remove file://) : format
+            ping.connectLink("1:"+replayFileDialog.fileUrl.toString().slice(7)+":r")
+            replayFileName.text = "File: " + replayFileDialog.fileUrl.toString().slice(sizeToRemove)
         }
     }
 

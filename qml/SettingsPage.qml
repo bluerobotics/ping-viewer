@@ -12,6 +12,7 @@ Item {
 
     property var ping
     property var waterfallItem
+    property var replayItem: replayChB.checked
 
     function connect(first, second) {
         // Do not connect if no type selected
@@ -211,8 +212,8 @@ Item {
                     }
 
                     CheckBox {
-                        text: "Enable Advanced Mode"
-                        enabled: false
+                        id: replayChB
+                        text: "Enable replay menu"
                         checked: false
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
@@ -293,6 +294,7 @@ Item {
 
     Settings {
         property alias plotThemeIndex: plotThemeCB.currentIndex
+        property alias replayItemChecked: replayChB.checked
         property alias smoothDataState: smoothDataChB.checkState
     }
 
