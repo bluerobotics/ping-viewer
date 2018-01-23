@@ -17,6 +17,7 @@
         <file alias="chat_white.svg">qml/icons/chat_white.svg</file>
         <file alias="info_white.svg">qml/icons/info_white.svg</file>
         <file alias="report_white.svg">qml/icons/report_white.svg</file>
+        <file alias="save_white.svg">qml/icons/save_white.svg</file>
         <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
     </qresource>
     <qresource prefix="/imgs/">
