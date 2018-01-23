@@ -16,6 +16,7 @@ Item {
     property var hoverParent: undefined
     property var startAngle: 0
     property var icon: undefined
+    property var clicked: false
     property var colorUnselected: Qt.rgba(0,0,0,0.5)
     property var colorSelected: Qt.rgba(0,0,0,0.75)
     property var color: hideItem ? colorUnselected : colorSelected
@@ -73,7 +74,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             visible: parent.visible
-            property var flip: !itemRect.hide
+            property var flip: pingItem.clicked
 
             RotationAnimator on rotation {
                 id: rotateIcon
@@ -99,6 +100,8 @@ Item {
                     itemRect.hide = !itemRect.hide
                     hideItem = itemRect.hide
                 }
+
+                pingItem.clicked = !pingItem.clicked
             }
         }
     }
