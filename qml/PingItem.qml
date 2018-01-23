@@ -20,6 +20,7 @@ Item {
     property var colorUnselected: Qt.rgba(0,0,0,0.5)
     property var colorSelected: Qt.rgba(0,0,0,0.75)
     property var color: hideItem ? colorUnselected : colorSelected
+    property var spin: false
 
     onItemChanged: {
         if(item == null) {
@@ -75,18 +76,24 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             visible: parent.visible
             property var flip: pingItem.clicked
+            property var finalAngle: pingItem.spin ? 360 : 180
 
             RotationAnimator on rotation {
                 id: rotateIcon
                 from: startAngle
                 to: startAngle
-                duration: 200
+                duration: pingItem.spin ? 1000 : 200
                 running: true
+                onRunningChanged: {
+                    if(pingItem.spin && pingItem.clicked) {
+                        openIcon.flip = !openIcon.flip
+                    }
+                }
             }
 
             onFlipChanged: {
                 rotateIcon.from = rotateIcon.to
-                rotateIcon.to = flip ? 180 + startAngle : 0 + startAngle
+                rotateIcon.to = flip ? finalAngle + startAngle : 0 + startAngle
                 rotateIcon.running = true
             }
         }
