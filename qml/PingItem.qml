@@ -21,6 +21,9 @@ Item {
     property var color: hideItem ? colorUnselected : colorSelected
 
     onItemChanged: {
+        if(item == null) {
+            return
+        }
         item.parent = itemRect
         item.visible = true
         item.enabled = false
@@ -30,13 +33,19 @@ Item {
         item.anchors.verticalCenter = itemRect.verticalCenter
     }
 
+    onClickedChanged: {
+        openIcon.flip = clicked
+    }
+
     MouseArea {
         id: pingItemMouseArea
         anchors.fill: parent
         enabled: smartVisibility
         hoverEnabled: true
         onClicked: {
-            hideItem: true
+            if(item != null) {
+                hideItem = true
+            }
         }
     }
 
@@ -86,8 +95,10 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onClicked: {
-                itemRect.hide = !itemRect.hide
-                hideItem = itemRect.hide
+                if(item != null) {
+                    itemRect.hide = !itemRect.hide
+                    hideItem = itemRect.hide
+                }
             }
         }
     }
@@ -98,8 +109,8 @@ Item {
         anchors.left: iconRect.right
         anchors.top: iconRect.top
 
-        height: item.height*1.05
-        width: item.width*1.05
+        height: item != null ? item.height*1.05 : 0
+        width: item != null ? item.width*1.05 : 0
 
         color: pingItem.color
         property var hide: true
