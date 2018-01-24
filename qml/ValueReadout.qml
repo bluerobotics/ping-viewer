@@ -6,7 +6,7 @@ Item {
     id: root
     property var value: 0
     property var units: "m"
-    property var precision: 1
+    property var precision: 2
     property var margin: 10
     property var depth: -1
     property var strength: -1
