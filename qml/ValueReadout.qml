@@ -10,6 +10,7 @@ Item {
     property var margin: 10
     property var depth: -1
     property var strength: -1
+    property var confidence: 0
     x: margin
 
     width: mainLayout.width
@@ -44,6 +45,21 @@ Item {
             Text {
                 id: strengthText
                 text: transformValue(strength, 2) + 'dB'
+                visible: typeof(strength) == "number"
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: 14
+                font.bold: true
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
+            }
+
+            Text {
+                id: confidenceText
+                text: transformValue(confidence) + '%'
                 visible: typeof(strength) == "number"
                 color: 'white'
                 font.family: "Arial"

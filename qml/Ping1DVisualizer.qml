@@ -28,6 +28,10 @@ Item {
         readout.strength = waterfall.mouseStrength  < 0 ? '-' : waterfall.mouseStrength
     }
 
+    function setConfidence(perc) {
+        readout.confidence = perc
+    }
+
     QC1.SplitView {
         orientation: Qt.Horizontal
         anchors.fill: parent
