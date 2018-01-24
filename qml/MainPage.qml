@@ -98,7 +98,9 @@ Item {
         PingItem {
             id: infoMenu
             icon: "/icons/info_white.svg"
-            item: InfoPage {}
+            item: InfoPage {
+                id: infoPage
+            }
             onHideItemChanged: {
                 if(hideItem == false) {
                     menuContainer.hideItem = true
@@ -113,6 +115,10 @@ Item {
         onConnectionOpen: {
             ping.protocol.requestEchosounderMode()
             ping.protocol.requestEchosounderProfile()
+            ping.protocol.requestEchosounderProfile()
+            ping.protocol.requestVersion()
+            ping.protocol.requestDeviceID()
+            ping.protocol.requestNewData()
         }
     }
 
@@ -132,6 +138,27 @@ Item {
 
         onEchosounderAuto: {
             autoGainChB.checked = mode
+        }
+
+        onEchosounderConfidence: {
+            ping1DVisualizer.setConfidence(perc)
+        }
+
+        onDeviceType: {
+            print(devType)
+            infoPage.deviceType = devType
+        }
+
+        onDeviceModel: {
+            infoPage.deviceModel = devModel
+        }
+
+        onFirmwareVersion: {
+            infoPage.deviceFirmware = fwVersion
+        }
+
+        onDeviceID: {
+            infoPage.deviceID = ID
         }
     }
 

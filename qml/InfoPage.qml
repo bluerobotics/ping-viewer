@@ -8,6 +8,10 @@ Item {
     id: root
     height: mainLayout.height
     width: mainLayout.width
+    property var deviceType: 'No device'
+    property var deviceModel: 'No device'
+    property var deviceFirmware: 'No device'
+    property var deviceID: 'No device'
 
     ColumnLayout {
         id: mainLayout
@@ -48,37 +52,76 @@ Item {
                 mipmap: true
             }
         }
-        Text {
-            z: 1
-            text: 'Version: <b>' + (GitTag == "" ? "No tags!" : GitTag)
-            color: 'linen'
-            textFormat: Text.RichText
-        }
-        Text {
-            z: 1
-            text: 'Repository: <b>' + createHyperLink(repository, repository.split('/')[4].toUpperCase())
-            color: 'linen'
-            textFormat: Text.RichText
-            onLinkActivated: {
-                print('Open link ', link)
-                Qt.openUrlExternally(link)
+        RowLayout {
+            ColumnLayout {
+                Text {
+                    z: 1
+                    text: 'Version: <b>' + (GitTag == "" ? "No tags!" : GitTag)
+                    color: 'linen'
+                    textFormat: Text.RichText
+                }
+                Text {
+                    z: 1
+                    text: 'Repository: <b>' + createHyperLink(repository, repository.split('/')[4].toUpperCase())
+                    color: 'linen'
+                    textFormat: Text.RichText
+                    onLinkActivated: {
+                        print('Open link ', link)
+                        Qt.openUrlExternally(link)
+                    }
+                }
+                Text {
+                    z: 1
+                    text: 'Git commit: <b>' + commitIdToLink(GitVersion)
+                    color: 'linen'
+                    textFormat: Text.RichText
+                    onLinkActivated: {
+                        print('Open link ', link)
+                        Qt.openUrlExternally(link)
+                    }
+                }
+                Text {
+                    z: 1
+                    text: " From: " + GitVersionDate
+                    color: 'linen'
+                    textFormat: Text.RichText
+                }
             }
-        }
-        Text {
-            z: 1
-            text: 'Git commit: <b>' + commitIdToLink(GitVersion)
-            color: 'linen'
-            textFormat: Text.RichText
-            onLinkActivated: {
-                print('Open link ', link)
-                Qt.openUrlExternally(link)
+
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
             }
-        }
-        Text {
-            z: 1
-            text: " From: " + GitVersionDate
-            color: 'linen'
-            textFormat: Text.RichText
+
+            ColumnLayout {
+                Text {
+                    z: 1
+                    // Add link to store device
+                    text: 'Device: <b>' + deviceType
+                    color: 'linen'
+                    textFormat: Text.RichText
+                }
+                Text {
+                    z: 1
+                    // Add link to model in store
+                    text: 'Model: <b>' + deviceModel
+                    color: 'linen'
+                    textFormat: Text.RichText
+                }
+                Text {
+                    z: 1
+                    text: 'Firmware Version: ' + deviceFirmware
+                    color: 'linen'
+                    textFormat: Text.RichText
+                }
+                Text {
+                    z: 1
+                    text: "ID: " + deviceID
+                    color: 'linen'
+                    textFormat: Text.RichText
+                }
+            }
+
         }
         RowLayout {
             id: btLayout
