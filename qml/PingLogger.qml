@@ -11,6 +11,11 @@ Item {
         target: Logger
         onLogTextChanged: {
             content = textEdit.text + Logger.consumeLogText()
+            if(textEdit.lineCount > 100) {
+                var lines = textEdit.text.split('\n');
+                lines.splice(0, textEdit.lineCount - 100);
+                content = lines.join('\n');
+            }
         }
     }
     ScrollView {
