@@ -13,8 +13,15 @@ Item {
     property var ping
     property var waterfallItem
 
-    function connect() {
-        var connString = serialPortsCB.currentText + ":" + baudrateBox.currentText
+    function connect(first, second) {
+        // Do not connect if no type selected
+        if(conntype.currentIndex < 0) {
+            return;
+        }
+
+        // None = 0, File, Serial, Udp, Tcp
+        // Enum Type : arg[0] : arg[1s]
+        var connString = (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
         ping.connectLink(connString)
     }
 
@@ -48,15 +55,35 @@ Item {
 
                     Text {
                         text: "Communication:"
-                        enabled: false
+                        enabled: true
                         color: 'linen'
                     }
 
                     ComboBox {
-                        displayText: "Serial (default)"
-                        enabled: false
+                        id: conntype
+                        enabled: true
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        model: ["Serial (default)", "UDP"]
+                        onActivated: {
+                            switch(index) {
+                                case 0: // Serial
+                                    udpIp.enabled = false
+                                    udpPort.enabled = false
+                                    serialPortsCB.enabled = true
+                                    baudrateBox.enabled = true
+                                    connect(serialPortsCB.currentText, baudrateBox.currentText)
+                                    break
+
+                                case 1: // UDP
+                                    udpIp.enabled = true
+                                    udpPort.enabled = true
+                                    serialPortsCB.enabled = false
+                                    baudrateBox.enabled = false
+                                    connect(udpIp.text, udpPort.text)
+                                    break
+                            }
+                        }
                     }
 
                     Text {
@@ -70,7 +97,7 @@ Item {
                         Layout.columnSpan:  3
                         Layout.fillWidth: true
                         onCurrentTextChanged: {
-                            connect()
+                            connect(serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
 
@@ -78,7 +105,7 @@ Item {
                         id: baudrateBox
                         model: [115200, 921600]
                         onCurrentTextChanged: {
-                            connect()
+                            connect(serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
 
@@ -88,15 +115,25 @@ Item {
                     }
 
                     TextField {
+                        id: udpIp
+                        text: "192.168.2.2"
                         enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
+                        onTextChanged: {
+                            connect(udpIp.text, udpPort.text)
+                        }
                     }
 
                     TextField {
+                        id: udpPort
+                        text: "1234"
                         enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
+                        onTextChanged: {
+                            connect(udpIp.text, udpPort.text)
+                        }
                     }
 
                     Text {
