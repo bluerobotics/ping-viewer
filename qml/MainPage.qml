@@ -117,6 +117,12 @@ Item {
             firstRequest()
         }
 
+        onLinkUpdate: {
+            if(ping.link.isOpen()) {
+                firstRequest()
+            }
+        }
+
         Component.onCompleted: {
             if(ping.link.isOpen()) {
                 firstRequest()
