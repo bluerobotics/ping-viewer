@@ -112,7 +112,18 @@ Item {
 
     Ping {
         id: ping
+
         onConnectionOpen: {
+            firstRequest()
+        }
+
+        Component.onCompleted: {
+            if(ping.link.isOpen()) {
+                firstRequest()
+            }
+        }
+
+        function firstRequest() {
             ping.protocol.requestEchosounderMode()
             ping.protocol.requestEchosounderProfile()
             ping.protocol.requestEchosounderProfile()
