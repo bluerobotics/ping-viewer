@@ -5,6 +5,7 @@
 #include <QQuickStyle>
 #include <QDebug>
 
+#include "abstractlink.h"
 #include "waterfall.h"
 #include "logger.h"
 #include "ping.h"
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<Protocol>("Protocol", 1, 0, "Protocol");
+    qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
 
     QApplication app(argc, argv);
 
