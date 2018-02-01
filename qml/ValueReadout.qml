@@ -11,10 +11,39 @@ Item {
     property var depth: -1
     property var strength: -1
     property var confidence: 0
+    property var parentWidth: 0
+    property var parentHeight: 0
     x: margin
 
     width: mainLayout.width
     height: mainLayout.height
+
+    // Take care of the item position while resizing parent
+    Connections {
+        target: parent
+        onWidthChanged: {
+            if (parentWidth) {
+                var scaleW = parent.width/parentWidth
+                if (scaleW) {
+                    root.x *= scaleW
+                    parentWidth = parent.width
+                }
+                return
+            }
+            parentWidth = parent.width
+        }
+        onHeightChanged: {
+            if (parentHeight) {
+                var scaleH = parent.height/parentHeight
+                if (scaleH) {
+                    root.y *= scaleH
+                    parentHeight = parent.height
+                }
+                return
+            }
+            parentHeight = parent.height
+        }
+    }
 
     ColumnLayout {
         id: mainLayout
