@@ -6,6 +6,8 @@ Item {
     z: 1
     height: iconRect.height
     width: iconRect.width
+    // Default state
+    state: "top-left"
     signal  activated()
 
     property bool inPopup: false
@@ -113,11 +115,28 @@ Item {
         }
     }
 
+    states: [
+        State {
+            name: "top-left"
+            AnchorChanges {
+                target: itemRect
+                anchors.top: iconRect.top
+                anchors.left: iconRect.right
+            }
+        },
+        State {
+            name: "bottom-left"
+            AnchorChanges {
+                target: itemRect
+                anchors.bottom: iconRect.bottom
+                anchors.left: iconRect.right
+            }
+        }
+    ]
+
     Rectangle {
         id: itemRect
         opacity: 0
-        anchors.left: iconRect.right
-        anchors.top: iconRect.top
 
         height: item != null ? item.height*1.05 : 0
         width: item != null ? item.width*1.05 : 0
