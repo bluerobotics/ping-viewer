@@ -98,7 +98,9 @@ Item {
                         Layout.columnSpan:  3
                         Layout.fillWidth: true
                         onCurrentTextChanged: {
-                            connect(serialPortsCB.currentText, baudrateBox.currentText)
+                            if(ping.link.listAvailableConnections.length) {
+                                connect(serialPortsCB.currentText, baudrateBox.currentText)
+                            }
                         }
                     }
 
