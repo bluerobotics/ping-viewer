@@ -1,5 +1,6 @@
 #include "logger.h"
 
+#include <iostream>
 #include <QDebug>
 #include <QString>
 #include <QTime>
@@ -58,6 +59,7 @@ void Logger::messageHandle(QtMsgType type, const QMessageLogContext& context, co
 
         case QtFatalMsg:
             txt.append(QStringLiteral("<font color=\"%1\">Fatal %2: %3</font>").arg("red", info, msg));
+            std::cout << txt.toStdString() << std::endl;
             abort();
             break;
 
