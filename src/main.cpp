@@ -9,6 +9,7 @@
 #include "waterfall.h"
 #include "logger.h"
 #include "ping.h"
+#include "util.h"
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
@@ -22,6 +23,14 @@ QObject *loggerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
     return Logger::self();
 }
 
+QObject *utilRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return Util::self();
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("Blue Robotics Inc.");
@@ -31,6 +40,7 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
+    qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<Protocol>("Protocol", 1, 0, "Protocol");
