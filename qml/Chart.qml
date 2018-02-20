@@ -3,38 +3,55 @@ import QtCharts 2.2
 
 Item {
     id: root
+    anchors.margins: 0
+    transform: Rotation { origin.x: width/2; origin.y: height/2; angle: 90}
+
+    function correctChartSize() {
+        chart.height = width
+        // plotArea.x is a private margin in ChartView
+        // it's not possible to set as 0
+        chart.width = height + 2*chart.plotArea.x
+    }
 
     function draw(points) {
         chart.draw(points)
+        correctChartSize()
     }
+    onWidthChanged: correctChartSize()
+    onHeightChanged: correctChartSize()
 
     ChartView {
         id: chart
         width: root.height
         height: root.width
 
-        title: ' '
         antialiasing: true
         legend.visible: false
         backgroundColor: 'transparent'
         plotAreaColor: 'transparent'
+
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
         }
 
-        transform: Rotation { origin.x: height/2; origin.y: width/2; angle: 90}
+        backgroundRoundness: 0
+
+        margins.top: 0
+        margins.bottom: 0
+        margins.left: 0
+        margins.right: 0
+        anchors.margins: 0
 
         ValueAxis {
             id: axisX
-            titleText: qsTr("Distance [m]")
-            visible: true
-            lineVisible: true
-            gridVisible: true
+            //titleText: qsTr("Distance [m]")
+            visible: false
+            lineVisible: false
+            gridVisible: false
             labelsAngle: -90
-            labelsVisible: true
+            labelsVisible: false
             labelFormat: "%.1f"
-            //labelFormat: " "
             tickCount: 3
             min: 0
             max: 200
@@ -42,14 +59,13 @@ Item {
 
         ValueAxis {
             id: axisY
-            titleText: qsTr("Intensity [dB]")
-            visible: true
-            lineVisible: true
-            gridVisible: true
+            //titleText: qsTr("Intensity [dB]")
+            visible: false
+            lineVisible: false
+            gridVisible: false
             labelsAngle: -90
-            labelsVisible: true
+            labelsVisible: false
             labelFormat: "%.1f"
-            //labelFormat: " "
             tickCount: 2
             min: -255
             max: 255
