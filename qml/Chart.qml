@@ -74,6 +74,7 @@ Item {
 
         LineSeries {
             id: serie
+            useOpenGL: true
             pointLabelsVisible: false
             pointsVisible: false
             axisX: axisX
@@ -83,6 +84,7 @@ Item {
 
         LineSeries {
             id: serieInv
+            useOpenGL: true
             pointLabelsVisible: false
             pointsVisible: false
             axisX: axisX
