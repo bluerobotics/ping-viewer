@@ -5,17 +5,19 @@ CONFIG += \
     static \
     debug
 
-QT += core gui qml quick widgets quickcontrols2 concurrent
+QT += core charts gui qml quick widgets quickcontrols2 concurrent
 
 HEADERS += \
     src/waterfallgradient.h \
     src/waterfall.h \
-    src/logger.h
+    src/logger.h \
+    src/util.h
 
 SOURCES += \
     src/waterfallgradient.cpp \
     src/waterfall.cpp \
     src/logger.cpp \
+    src/util.cpp \
     src/main.cpp
 
 RESOURCES += \
