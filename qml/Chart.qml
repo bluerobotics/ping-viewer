@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtCharts 2.2
+import Util 1.0
 
 Item {
     id: root
@@ -90,17 +91,14 @@ Item {
         }
 
         function draw(points) {
-            serie.clear()
-            serieInv.clear()
             if (points) {
-                for (var i=0; i < points.length; i++) {
-                    var pt = points[i]*255
-                    serie.append(i, pt)
-                    serieInv.append(i, -pt)
-                }
+                Util.update(serie, points)
+                Util.update(serieInv, points, true)
                 return
             }
 
+            serie.clear()
+            serieInv.clear()
             for (var i=0; i<200; i++) {
                 var pt = 255*Math.random()
                 serie.append(i, pt)
