@@ -98,12 +98,19 @@ Item {
                     serie.append(i, pt)
                     serieInv.append(i, -pt)
                 }
-            } else {
-                for (var i=0; i<200; i++) {
-                    var pt = 255*Math.random()
-                    serie.append(i, pt)
-                    serieInv.append(i, -pt)
-                }
+                return
+            }
+
+            for (var i=0; i<200; i++) {
+                var pt = 255*Math.random()
+                serie.append(i, pt)
+                serieInv.append(i, -pt)
+            }
+        }
+
+        Component.onCompleted: {
+            for(var id in axes) {
+                axes[id].visible = false
             }
         }
     }
