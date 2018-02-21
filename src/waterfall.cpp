@@ -156,16 +156,18 @@ void Waterfall::draw(QList<double> points)
     painter.end();
 
     if(smooth()) {
-        for(int i(0); i < points.length(); i++) {
+        #pragma omp parallel for
+        for(int i = 0; i < points.length(); i++) {
             oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
         }
-
-        for(int i(0); i < _image.height(); i++) {
+        #pragma omp for
+        for(int i = 0; i < _image.height(); i++) {
             _image.setPixelColor(_image.width() - 1, i, valueToRGB(oldPoints[i]));
 
         }
     } else {
-        for(int i(0); i < _image.height(); i++) {
+        #pragma omp for
+        for(int i = 0; i < _image.height(); i++) {
             _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
 
         }
@@ -180,10 +182,11 @@ void Waterfall::randomUpdate()
     counter++;
     QList <double> points;
     points.reserve(_image.height());
-    const float numPoints = _image.height();
+    const int numPoints = _image.height();
     const float stop1 = numPoints / 2.0 - 10 * qSin(counter / 10.0);
     const float stop2 = 3 * numPoints / 5.0 + 6 * qCos(counter / 5.5);
-    for (int i(0); i < numPoints; i++) {
+    #pragma omp parallel for private(points)
+    for (int i = 0; i < numPoints; i++) {
         float point;
         if (i < stop1) {
             point = 0.1 * (qrand()%256)/255;

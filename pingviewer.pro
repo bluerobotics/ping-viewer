@@ -23,6 +23,9 @@ SOURCES += \
 RESOURCES += \
     resources.qrc
 
+QMAKE_CXXFLAGS += -fopenmp
+QMAKE_LFLAGS += -fopenmp
+
 include(lib/ping-protocol-cpp/ping.pri)
 
 # https://git-scm.com/docs/git-log placeholders
