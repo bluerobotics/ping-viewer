@@ -29,8 +29,8 @@ Item {
             return
         }
         item.parent = itemRect
-        item.visible = true
         item.enabled = false
+        item.visible = false
         item.z = 1
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
@@ -146,6 +146,7 @@ Item {
 
         onOpacityChanged: {
             item.opacity = itemRect.opacity
+            item.visible = itemRect.opacity != 0
         }
 
         OpacityAnimator {
