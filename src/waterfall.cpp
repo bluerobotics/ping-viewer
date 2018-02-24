@@ -14,7 +14,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     _mouseStrength(0),
     _smooth(true)
 {
-    setAntialiasing(true);
+    setAntialiasing(false);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
