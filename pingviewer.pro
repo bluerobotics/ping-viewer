@@ -2,8 +2,7 @@ TARGET = pingviewer
 
 CONFIG += \
     c++14 \
-    static \
-    debug
+    static
 
 QT += core charts gui qml quick widgets quickcontrols2 concurrent
 
