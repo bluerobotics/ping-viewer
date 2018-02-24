@@ -3,7 +3,7 @@
 #include <QLoggingCategory>
 #include <QObject>
 #include <QSettings>
-#include <QTextEdit>
+#include <QStringListModel>
 
 enum QtMsgType;
 class QMessageLogContext;
@@ -19,13 +19,9 @@ class Logger : public QObject
 {
     Q_OBJECT
 public:
-    void writeMessage(const QString& msg);
-
-    static void messageHandle(QtMsgType type, const QMessageLogContext& context, const QString &msg);
-    Q_PROPERTY(QString logText READ logText WRITE setLogText NOTIFY logTextChanged)
-    QString logText() { return _logText; };
-    void setLogText(QString text) { _logText = text;};
-    Q_INVOKABLE QString consumeLogText() {QString tmp = _logText; _logText.clear(); return tmp;};
+    static void handleMessage(QtMsgType type, const QMessageLogContext& context, const QString &msg);
+    Q_PROPERTY(QStringListModel* logModel READ logModel CONSTANT)
+    QStringListModel* logModel() { return &_logModel; };
 
     void registerCategory(const char* category);
     Q_PROPERTY(QStringList registeredCategory READ registeredCategory NOTIFY registeredCategoryChanged)
@@ -35,9 +31,9 @@ public:
 
     ~Logger();
     static Logger* self();
+    static void installHandler();
 
     signals:
-        void logTextChanged();
         void registeredCategoryChanged();
 
 private:
@@ -45,9 +41,11 @@ private:
     Logger(const Logger& other) = delete;
     Logger();
 
-    QString _logText;
+    void logMessage(const QString msg);
+
     QStringList _registeredCategories;
     QSettings _settings;
+    QStringListModel _logModel;
 };
 
 class PingLoggingCategory

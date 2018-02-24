@@ -8,6 +8,8 @@
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
 
+static QtMessageHandler originalHandler = nullptr;
+
 Logger::Logger():
     _settings("Blue Robotics Inc.", "Ping Viewer")
 {
@@ -16,29 +18,26 @@ Logger::Logger():
         QLoggingCategory::setFilterRules(filter);
     }
 
-    /*
-        Logger is a singleton, to Install the message handler
-        the Logger construct need to finish,
-        and that's why QtConcurrent is necessary
-    */
-    QtConcurrent::run([=](){qInstallMessageHandler(messageHandle);});
-
     registerCategory("qml");
 }
 
-void Logger::writeMessage(const QString& msg)
+void Logger::installHandler()
 {
-    QString debugMsg = msg;
-    qDebug().noquote() << debugMsg.remove(QRegExp("<[^>]*>"));
-    QString text = msg;
-    _logText = _logText + msg + "<br/>";
-
-    emit(Logger::self()->logTextChanged());
+    originalHandler = qInstallMessageHandler(handleMessage); // This function returns the previous message handler
 }
 
-void Logger::messageHandle(QtMsgType type, const QMessageLogContext& context, const QString &msg)
+void Logger::logMessage(const QString msg)
 {
-    Q_UNUSED(context)
+    const int line = _logModel.rowCount();
+    _logModel.insertRows(line, 1);
+    _logModel.setData(_logModel.index(line), msg, Qt::DisplayRole);
+}
+
+void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    if (originalHandler) {
+        originalHandler(type, context, msg);
+    }
 
     const QString file = QString(context.file).split('/').last();
     const QString info = QString("%1 at %2(%3)").arg(context.category).arg(file).arg(context.line);
@@ -67,7 +66,7 @@ void Logger::messageHandle(QtMsgType type, const QMessageLogContext& context, co
             return;
     }
 
-    Logger::self()->writeMessage(txt);
+    Logger::self()->logMessage(txt);
 }
 
 void Logger::registerCategory(const char* category)

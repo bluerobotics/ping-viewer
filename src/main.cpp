@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Protocol>("Protocol", 1, 0, "Protocol");
     qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
 
+
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
@@ -55,14 +56,16 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
     app.exec();
     // Main app
-    qCDebug(mainCategory) << GIT_VERSION;
-    qCDebug(mainCategory) << GIT_VERSION_DATE;
-    qCDebug(mainCategory) << GIT_TAG;
-    qCDebug(mainCategory) << GIT_URL;
     engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
     engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
     engine.rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
     engine.rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    Logger::installHandler();
+    qCInfo(mainCategory) << GIT_VERSION;
+    qCInfo(mainCategory) << GIT_VERSION_DATE;
+    qCInfo(mainCategory) << GIT_TAG;
+    qCInfo(mainCategory) << GIT_URL;
     return app.exec();
 }
