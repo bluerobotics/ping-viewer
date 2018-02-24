@@ -44,6 +44,10 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
 
     QString txt = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz] "));
     switch (type) {
+        case QtInfoMsg:
+            txt.append(QStringLiteral("<font color=\"%1\">Info %2: %3</font>").arg("blue", info, msg));
+            break;
+
         case QtDebugMsg:
             txt.append(QStringLiteral("<font color=\"%1\">Debug %2: %3</font>").arg("gray", info, msg));
             break;
