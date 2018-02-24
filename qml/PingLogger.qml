@@ -6,6 +6,8 @@ import Logger 1.0
 Item {
     id: root
 
+    property var scrollLockEnabled: false
+
     ListView {
         property bool loadComplete: false
 
@@ -25,8 +27,8 @@ Item {
 
         Connections {
             target: Logger.logModel
-            onDataChanged: { // TODO make this an option
-                if (logView.loadComplete) {
+            onDataChanged: {
+                if (scrollLockEnabled && logView.loadComplete) {
                     logView.positionViewAtEnd();
                 }
             }

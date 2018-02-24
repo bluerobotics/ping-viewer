@@ -147,9 +147,33 @@ Item {
                 }
             }
 
-            Rectangle {
+            Image {
+                id: scrollLock
+                height: parent.height
+                width: height
                 Layout.fillWidth: true
-                color: "transparent"
+                source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                sourceSize.height: issue.height * 0.75 // meh +/-
+                sourceSize.width: sourceSize.height
+
+                MouseArea {
+                    id: mouseAreaScrollLock
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: toolTipScrollLock.visible = true
+                    onExited: toolTipScrollLock.visible = false
+                    onClicked:
+                    {
+                        log.scrollLockEnabled = !log.scrollLockEnabled
+                    }
+                }
+
+                ToolTip {
+                    id: toolTipScrollLock
+                    text: "Scroll Lock"
+                }
             }
 
             Image {
