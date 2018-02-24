@@ -1,5 +1,6 @@
 #include "waterfall.h"
 
+#include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
 #include <QList>
@@ -154,26 +155,25 @@ void Waterfall::draw(QList<double> points)
     QPainter painter(&_image);
     painter.drawImage(0, 0, old);
     painter.end();
+    QtConcurrent::run([=]{
+        if(smooth()) {
+            #pragma omp for
+            for(int i = 0; i < points.length(); i++) {
+                oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
+            }
+            #pragma omp for
+            for(int i = 0; i < _image.height(); i++) {
+                _image.setPixelColor(_image.width() - 1, i, valueToRGB(oldPoints[i]));
 
-    if(smooth()) {
-        #pragma omp parallel for
-        for(int i = 0; i < points.length(); i++) {
-            oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
+            }
+        } else {
+            #pragma omp for
+            for(int i = 0; i < _image.height(); i++) {
+                _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
+
+            }
         }
-        #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(_image.width() - 1, i, valueToRGB(oldPoints[i]));
-
-        }
-    } else {
-        #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
-
-        }
-    }
-
-    update();
+    });
 }
 
 void Waterfall::randomUpdate()
