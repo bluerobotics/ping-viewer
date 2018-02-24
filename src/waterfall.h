@@ -33,6 +33,7 @@ class Waterfall : public QQuickPaintedItem
     float _mouseDepth;
     float _mouseStrength;
     bool _smooth;
+    bool _update;
     QString _theme;
     QList<QString> _themes;
 

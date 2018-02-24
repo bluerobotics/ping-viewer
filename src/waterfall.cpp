@@ -13,7 +13,8 @@ Waterfall::Waterfall(QQuickItem *parent):
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
-    _smooth(true)
+    _smooth(true),
+    _update(true)
 {
     setAntialiasing(false);
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -21,6 +22,10 @@ Waterfall::Waterfall(QQuickItem *parent):
     _image.fill(QColor(Qt::transparent));
     setGradients();
     setTheme("Thermal 5");
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, [&]{if(_update) update(); _update = false;});
+    timer->start(100);
 }
 
 void Waterfall::setGradients()
@@ -134,7 +139,6 @@ void Waterfall::setImage(const QImage &image)
     emit imageChanged();
     setImplicitWidth(image.width());
     setImplicitHeight(image.height());
-    update();
 }
 
 QColor Waterfall::valueToRGB(float point)
@@ -173,6 +177,7 @@ void Waterfall::draw(QList<double> points)
 
             }
         }
+        _update = true;
     });
 }
 
