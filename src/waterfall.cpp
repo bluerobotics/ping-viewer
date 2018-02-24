@@ -7,14 +7,18 @@
 
 PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 
+// Number of samples to display
+uint16_t Waterfall::displayWidth = 500;
+
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(1000, 200, QImage::Format_RGBA8888),
+    _image(2048, 200, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
     _smooth(true),
-    _update(true)
+    _update(true),
+    currentDrawIndex(displayWidth)
 {
     setAntialiasing(false);
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -126,11 +130,22 @@ void Waterfall::setTheme(QString theme)
 
 void Waterfall::paint(QPainter *painter)
 {
+    static QPixmap pix;
     if(painter != _painter) {
         _painter = painter;
     }
 
-    _painter->drawImage(0, 0, _image.scaled(width(), height()));
+    static uint16_t first;
+
+    if (currentDrawIndex < displayWidth) {
+        first = 0;
+    } else {
+        first = currentDrawIndex - displayWidth;
+    }
+
+    // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
+    pix = QPixmap::fromImage(_image);
+    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _image.height()));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -155,10 +170,17 @@ void Waterfall::draw(QList<double> points)
 {
     static QImage old;
     static QList<double> oldPoints = points;
-    old = _image.copy(1, 0, _image.width() - 1, _image.height());
-    QPainter painter(&_image);
-    painter.drawImage(0, 0, old);
-    painter.end();
+
+    // Copy tail to head
+    // TODO can we get even better and allocate just once at initialization? ie circular buffering
+    if (currentDrawIndex >= _image.width()) {
+            old = _image.copy(_image.width() - displayWidth, 0, displayWidth, _image.height());
+            QPainter painter(&_image);
+            painter.drawImage(0, 0, old);
+            painter.end();
+            currentDrawIndex = displayWidth;
+    }
+
     QtConcurrent::run([=]{
         if(smooth()) {
             #pragma omp for
@@ -167,16 +189,17 @@ void Waterfall::draw(QList<double> points)
             }
             #pragma omp for
             for(int i = 0; i < _image.height(); i++) {
-                _image.setPixelColor(_image.width() - 1, i, valueToRGB(oldPoints[i]));
+                _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
 
             }
         } else {
             #pragma omp for
             for(int i = 0; i < _image.height(); i++) {
-                _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
+                _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
 
             }
         }
+        currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
         _update = true;
     });
 }

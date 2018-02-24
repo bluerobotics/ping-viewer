@@ -36,6 +36,8 @@ class Waterfall : public QQuickPaintedItem
     bool _update;
     QString _theme;
     QList<QString> _themes;
+    static uint16_t displayWidth;
+    uint16_t currentDrawIndex;
 
     signals:
     void imageChanged();
