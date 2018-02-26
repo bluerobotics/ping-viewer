@@ -11,7 +11,7 @@ WaterfallGradient::WaterfallGradient(QString name, QList<QColor> colors):
     setColors(colors);
 }
 
-void WaterfallGradient::setColors(QList<QColor> colors) {
+void WaterfallGradient::setColors(const QList<QColor>& colors) {
     float stepSize = 1.0/(colors.length() - 1);
     float step = 0;
     for(const auto color : colors) {
@@ -19,7 +19,7 @@ void WaterfallGradient::setColors(QList<QColor> colors) {
     }
 }
 
-void WaterfallGradient::setName(QString name) {
+void WaterfallGradient::setName(const QString& name) {
     _name = name;
 }
 
@@ -48,7 +48,7 @@ QColor WaterfallGradient::getColor(float value) {
     return QColor(0, 0, 0);
 }
 
-float WaterfallGradient::getValue(QColor color) {
+float WaterfallGradient::getValue(const QColor& color) {
     if(color.spec() == QColor::Invalid) {
         qCWarning(waterfallGradient) << "Invalid color.";
         return 0.0f;
@@ -64,7 +64,7 @@ float WaterfallGradient::getValue(QColor color) {
     return 0.0f;
 }
 
-bool WaterfallGradient::colorsInRange(QColor color, QColor color1, QColor color2) {
+bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1, const QColor& color2) {
     QColor maxColor;
     maxColor.setRed(color1.red() < color2.red() ? color2.red() : color1.red());
     maxColor.setGreen(color1.green() < color2.green() ? color2.green() : color1.green());
@@ -81,7 +81,7 @@ bool WaterfallGradient::colorsInRange(QColor color, QColor color1, QColor color2
     return rOk && gOk && bOk;
 }
 
-QColor WaterfallGradient::colorLinearInterpolation(float value, QGradientStop color1, QGradientStop color2)
+QColor WaterfallGradient::colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2)
 {
     float minimum = color1.first;
     float maximum = color2.first;
@@ -93,7 +93,7 @@ QColor WaterfallGradient::colorLinearInterpolation(float value, QGradientStop co
     return QColor(r, g, b);
 }
 
-float WaterfallGradient::valueLinearInterpolation(QColor color, QGradientStop color1, QGradientStop color2) {
+float WaterfallGradient::valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2) {
     float ratio = 0;
     float value = 0;
     float minimum = 0;

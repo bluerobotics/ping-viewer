@@ -12,12 +12,12 @@ public:
 
     WaterfallGradient(QString name = "", QList<QColor> colors = QList<QColor>());
 
-    void setColors(QList<QColor> colors);
-    void setName(QString name) ;
+    void setColors(const QList<QColor>& colors);
+    void setName(const QString& name) ;
     QString name();
     QColor getColor(float value);
-    float getValue(QColor color);
-    bool colorsInRange(QColor color, QColor color1, QColor color2);
-    QColor colorLinearInterpolation(float value, QGradientStop color1, QGradientStop color2);
-    float valueLinearInterpolation(QColor color, QGradientStop color1, QGradientStop color2);
+    float getValue(const QColor& color);
+    bool colorsInRange(const QColor& color, const QColor& color1, const QColor& color2);
+    QColor colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2);
+    float valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2);
 };
