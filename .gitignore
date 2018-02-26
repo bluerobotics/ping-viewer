@@ -2,3 +2,5 @@ build
 *.qmlc
 .qmake.stash
 *.pro.user
+html/
+latex/
