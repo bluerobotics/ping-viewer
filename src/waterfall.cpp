@@ -117,7 +117,7 @@ void Waterfall::setGradients()
     emit themesChanged();
 }
 
-void Waterfall::setTheme(QString theme)
+void Waterfall::setTheme(const QString& theme)
 {
     _theme = theme;
     for(auto &gradient : _gradients) {
@@ -161,12 +161,12 @@ QColor Waterfall::valueToRGB(float point)
     return _gradient.getColor(point);
 }
 
-float Waterfall::RGBToValue(QColor color)
+float Waterfall::RGBToValue(const QColor& color)
 {
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(QList<double> points)
+void Waterfall::draw(const QList<double>& points)
 {
     static QImage old;
     static QList<double> oldPoints = points;

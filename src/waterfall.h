@@ -54,10 +54,10 @@ public:
     void setImage(const QImage &image);
     void randomUpdate();
     void setGradients();
-    void setTheme(QString theme);
+    void setTheme(const QString& theme);
     QColor valueToRGB(float point);
-    float RGBToValue(QColor color);
-    Q_INVOKABLE void draw(QList<double> points);
+    float RGBToValue(const QColor& color);
+    Q_INVOKABLE void draw(const QList<double>& points);
     void hoverMoveEvent(QHoverEvent *event);
     void hoverLeaveEvent(QHoverEvent *event);
 };
