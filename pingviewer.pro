@@ -2,8 +2,7 @@ TARGET = pingviewer
 
 CONFIG += \
     c++14 \
-    static \
-    debug
+    static
 
 QT += core charts gui qml quick widgets quickcontrols2 concurrent
 
@@ -22,6 +21,9 @@ SOURCES += \
 
 RESOURCES += \
     resources.qrc
+
+QMAKE_CXXFLAGS += -fopenmp
+QMAKE_LFLAGS += -fopenmp
 
 include(lib/ping-protocol-cpp/ping.pri)
 

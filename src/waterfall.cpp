@@ -1,25 +1,35 @@
 #include "waterfall.h"
 
+#include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
 #include <QList>
 
 PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 
+// Number of samples to display
+uint16_t Waterfall::displayWidth = 500;
+
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(1000, 200, QImage::Format_RGBA8888),
+    _image(2048, 200, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
-    _smooth(true)
+    _smooth(true),
+    _update(true),
+    currentDrawIndex(displayWidth)
 {
-    setAntialiasing(true);
+    setAntialiasing(false);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
     setGradients();
     setTheme("Thermal 5");
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, [&]{if(_update) update(); _update = false;});
+    timer->start(50);
 }
 
 void Waterfall::setGradients()
@@ -120,11 +130,22 @@ void Waterfall::setTheme(QString theme)
 
 void Waterfall::paint(QPainter *painter)
 {
+    static QPixmap pix;
     if(painter != _painter) {
         _painter = painter;
     }
 
-    _painter->drawImage(0, 0, _image.scaled(width(), height()));
+    static uint16_t first;
+
+    if (currentDrawIndex < displayWidth) {
+        first = 0;
+    } else {
+        first = currentDrawIndex - displayWidth;
+    }
+
+    // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
+    pix = QPixmap::fromImage(_image);
+    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _image.height()));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -133,7 +154,6 @@ void Waterfall::setImage(const QImage &image)
     emit imageChanged();
     setImplicitWidth(image.width());
     setImplicitHeight(image.height());
-    update();
 }
 
 QColor Waterfall::valueToRGB(float point)
@@ -150,28 +170,36 @@ void Waterfall::draw(QList<double> points)
 {
     static QImage old;
     static QList<double> oldPoints = points;
-    old = _image.copy(1, 0, _image.width() - 1, _image.height());
-    QPainter painter(&_image);
-    painter.drawImage(0, 0, old);
-    painter.end();
+
+    // Copy tail to head
+    // TODO can we get even better and allocate just once at initialization? ie circular buffering
+    if (currentDrawIndex >= _image.width()) {
+            old = _image.copy(_image.width() - displayWidth, 0, displayWidth, _image.height());
+            QPainter painter(&_image);
+            painter.drawImage(0, 0, old);
+            painter.end();
+            currentDrawIndex = displayWidth;
+    }
 
     if(smooth()) {
-        for(int i(0); i < points.length(); i++) {
+        #pragma omp for
+        for(int i = 0; i < points.length(); i++) {
             oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
         }
-
-        for(int i(0); i < _image.height(); i++) {
-            _image.setPixelColor(_image.width() - 1, i, valueToRGB(oldPoints[i]));
+        #pragma omp for
+        for(int i = 0; i < _image.height(); i++) {
+            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
 
         }
     } else {
-        for(int i(0); i < _image.height(); i++) {
-            _image.setPixelColor(_image.width() - 1, i, valueToRGB(points[i]));
+        #pragma omp for
+        for(int i = 0; i < _image.height(); i++) {
+            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
 
         }
     }
-
-    update();
+    currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
+    _update = true;
 }
 
 void Waterfall::randomUpdate()
@@ -180,10 +208,11 @@ void Waterfall::randomUpdate()
     counter++;
     QList <double> points;
     points.reserve(_image.height());
-    const float numPoints = _image.height();
+    const int numPoints = _image.height();
     const float stop1 = numPoints / 2.0 - 10 * qSin(counter / 10.0);
     const float stop2 = 3 * numPoints / 5.0 + 6 * qCos(counter / 5.5);
-    for (int i(0); i < numPoints; i++) {
+    #pragma omp parallel for private(points)
+    for (int i = 0; i < numPoints; i++) {
         float point;
         if (i < stop1) {
             point = 0.1 * (qrand()%256)/255;

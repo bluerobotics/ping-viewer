@@ -21,7 +21,8 @@ void Util::update(QAbstractSeries* series, const QList<double>& points, const bo
     QVector<QPointF> realPoints;
     float signal = invert ? -1 : 1;
     float mult = 255*signal;
-    for(int i(0); i < points.size(); i++) {
+    #pragma omp for
+    for(int i = 0; i < points.size(); i++) {
         realPoints << QPointF(i, mult*points[i]);
     }
     xySeries->replace(realPoints);
