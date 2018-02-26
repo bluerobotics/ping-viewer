@@ -29,7 +29,7 @@ Waterfall::Waterfall(QQuickItem *parent):
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, [&]{if(_update) update(); _update = false;});
-    timer->start(100);
+    timer->start(50);
 }
 
 void Waterfall::setGradients()
