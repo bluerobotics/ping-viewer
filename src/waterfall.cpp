@@ -181,27 +181,25 @@ void Waterfall::draw(QList<double> points)
             currentDrawIndex = displayWidth;
     }
 
-    QtConcurrent::run([=]{
-        if(smooth()) {
-            #pragma omp for
-            for(int i = 0; i < points.length(); i++) {
-                oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
-            }
-            #pragma omp for
-            for(int i = 0; i < _image.height(); i++) {
-                _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
-
-            }
-        } else {
-            #pragma omp for
-            for(int i = 0; i < _image.height(); i++) {
-                _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
-
-            }
+    if(smooth()) {
+        #pragma omp for
+        for(int i = 0; i < points.length(); i++) {
+            oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
         }
-        currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
-        _update = true;
-    });
+        #pragma omp for
+        for(int i = 0; i < _image.height(); i++) {
+            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
+
+        }
+    } else {
+        #pragma omp for
+        for(int i = 0; i < _image.height(); i++) {
+            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
+
+        }
+    }
+    currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
+    _update = true;
 }
 
 void Waterfall::randomUpdate()
