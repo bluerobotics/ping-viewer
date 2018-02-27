@@ -27,6 +27,11 @@ QMAKE_LFLAGS += -fopenmp
 
 include(lib/ping-protocol-cpp/ping.pri)
 
+CONFIG(debug, debug|release) {
+    # Windows debug
+    CONFIG += console
+}
+
 # https://git-scm.com/docs/git-log placeholders
 # Get git info
 exists ($$_PRO_FILE_PWD_/.git) {
