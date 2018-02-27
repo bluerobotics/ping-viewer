@@ -12,7 +12,7 @@ uint16_t Waterfall::displayWidth = 500;
 
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(2048, 200, QImage::Format_RGBA8888),
+    _image(1000, 1000, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
@@ -130,22 +130,10 @@ void Waterfall::setTheme(const QString& theme)
 
 void Waterfall::paint(QPainter *painter)
 {
-    static QPixmap pix;
     if(painter != _painter) {
         _painter = painter;
     }
-
-    static uint16_t first;
-
-    if (currentDrawIndex < displayWidth) {
-        first = 0;
-    } else {
-        first = currentDrawIndex - displayWidth;
-    }
-
-    // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
-    pix = QPixmap::fromImage(_image);
-    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _image.height()));
+    _painter->drawImage(0, 0, _image.scaled(width(), height()));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -168,37 +156,23 @@ float Waterfall::RGBToValue(const QColor& color)
 
 void Waterfall::draw(const QList<double>& points)
 {
-    static QImage old;
-    static QList<double> oldPoints = points;
+    QPainter painter(&_image);
 
-    // Copy tail to head
-    // TODO can we get even better and allocate just once at initialization? ie circular buffering
-    if (currentDrawIndex >= _image.width()) {
-            old = _image.copy(_image.width() - displayWidth, 0, displayWidth, _image.height());
-            QPainter painter(&_image);
-            painter.drawImage(0, 0, old);
-            painter.end();
-            currentDrawIndex = displayWidth;
+    static QPainterPath paths[200];
+    static float angle = 0;
+    int centerX = 500;
+    int centerY = 500;
+    int _r = 500;
+    for (int i = 0; i < 200; i++) {
+        int r = i * _r/200.0;
+        paths[i] = QPainterPath(); // clear the path
+        paths[i].arcMoveTo(centerX- r, centerY- r, 2*r, 2*r, angle); // move to start of arc
+        paths[i].arcTo(centerX- r, centerY- r, 2*r, 2*r, angle, 2); // draw the arc
+        painter.setPen(QPen(valueToRGB(points[i]), 3)); // pen size 3 = ensure some overlap between each layer
+        painter.drawPath(paths[i]);
     }
-
-    if(smooth()) {
-        #pragma omp for
-        for(int i = 0; i < points.length(); i++) {
-            oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
-        }
-        #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
-
-        }
-    } else {
-        #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
-
-        }
-    }
-    currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
+    painter.end();
+    angle += 1.0;
     _update = true;
 }
 
