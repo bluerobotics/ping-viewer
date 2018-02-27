@@ -18,6 +18,7 @@ environment:
 
 configuration:
   - release
+  - debug
 
 install:
   # Set some vars
@@ -53,14 +54,14 @@ after_build:
   - dir /b /s *.exe
   - mkdir deploy
   - copy %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\pingviewer.exe deploy\pingviewer.exe
-  - windeployqt --qmldir %APPVEYOR_BUILD_FOLDER%/qml --release deploy/pingviewer.exe --verbose=2
+  - windeployqt --qmldir %APPVEYOR_BUILD_FOLDER%/qml --%CONFIGURATION% deploy/pingviewer.exe --verbose=2
   - for %%I in (%VCLIBS%) do copy %VCLIBDIR%\%%I deploy\
-  - 7z a -tzip pingviewer_%commit%.zip deploy -r
-  - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%commit%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%commit%.zip
+  - 7z a -tzip pingviewer_%CONFIGURATION%_%commit%.zip deploy -r
+  - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%CONFIGURATION%_%commit%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%CONFIGURATION%_%commit%.zip
   - dir /b /s *.zip
 
 artifacts:
-  - path: pingviewer_%commit%.zip
+  - path: pingviewer_%CONFIGURATION%_%commit%.zip
     name: PingViewer
 
 on_finish:
