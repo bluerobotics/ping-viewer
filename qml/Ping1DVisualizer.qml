@@ -47,8 +47,9 @@ Item {
         Chart {
             id: chart
             Layout.fillHeight: true
-            Layout.preferredWidth: 350
-            Layout.minimumWidth: 350
+            Layout.maximumWidth: 250
+            Layout.preferredWidth: 100
+            Layout.minimumWidth: 75
         }
 
         Settings {
