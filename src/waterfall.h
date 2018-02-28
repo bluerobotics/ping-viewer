@@ -38,8 +38,10 @@ class Waterfall : public QQuickPaintedItem
     QList<QString> _themes;
     static uint16_t displayWidth;
     uint16_t currentDrawIndex;
-    static const int numSamples = 200;
-    static const int numSlices = 360;
+    static const int numSamples = 1200;
+    static const int numSlices = 720;
+    static const int imgWidth = numSamples * 4;
+    static const int imgHeight = numSamples * 4;
     QPainterPath paths[numSlices][numSamples];
     signals:
     void imageChanged();

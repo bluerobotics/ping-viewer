@@ -10,9 +10,10 @@ PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 // Number of samples to display
 uint16_t Waterfall::displayWidth = 500;
 
+
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(1000, 1000, QImage::Format_RGBA8888),
+    _image(imgWidth, imgHeight, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
@@ -32,13 +33,13 @@ Waterfall::Waterfall(QQuickItem *parent):
     timer->start(50);
 
     float angle = 0;
-    int centerX = 500;
-    int centerY = 500;
-    int _r = 500;
+    int centerX = imgWidth/2;
+    int centerY = imgHeight/2;
+    float _r = imgWidth/2;
 
     for (int i = 0; i < numSlices; i++) {
         for (int j = 0; j < numSamples; j++) {
-            int r = j * _r/200.0;
+            int r = j * _r/numSamples;
             paths[i][j] = QPainterPath(); // clear the path
             paths[i][j].arcMoveTo(centerX- r, centerY- r, 2*r, 2*r, angle); // move to start of arc
             paths[i][j].arcTo(centerX- r, centerY- r, 2*r, 2*r, angle, 2); // draw the arc
@@ -178,13 +179,12 @@ float Waterfall::RGBToValue(const QColor& color)
 
 void Waterfall::draw(const QList<double>& points)
 {
-    static QPainter painter(&_image);
-    painter.begin(&_image);
+    QPainter painter(&_image);
     static uint slice = 0;
 
     #pragma omp for
-    for (uint i = 0; i < 200; i++) {
-        painter.setPen(QPen(valueToRGB(points[i]), 3)); // pen size 3 = ensure some overlap between each layer
+    for (uint i = 0; i < numSamples; i++) {
+        painter.setPen(QPen(valueToRGB(points[i%200]), 2)); // pen size 3 = ensure some overlap between each layer
         painter.drawPath(paths[slice][i]);
     }
     painter.end();
