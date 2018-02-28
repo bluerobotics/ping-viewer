@@ -130,10 +130,17 @@ void Waterfall::setTheme(const QString& theme)
 
 void Waterfall::paint(QPainter *painter)
 {
-    if(painter != _painter) {
-        _painter = painter;
-    }
-    _painter->drawImage(0, 0, _image.scaled(width(), height()));
+
+        static QPixmap pix;
+         if(painter != _painter) {
+             _painter = painter;
+         }
+
+        // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
+        pix = QPixmap::fromImage(_image);
+        _painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
+
+//    _painter->drawImage(0, 0, _image.scaled(width(), height()));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -163,6 +170,7 @@ void Waterfall::draw(const QList<double>& points)
     int centerX = 500;
     int centerY = 500;
     int _r = 500;
+    #pragma omp for
     for (int i = 0; i < 200; i++) {
         int r = i * _r/200.0;
         paths[i] = QPainterPath(); // clear the path
