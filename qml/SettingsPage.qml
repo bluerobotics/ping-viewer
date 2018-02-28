@@ -94,20 +94,21 @@ Item {
 
                     ComboBox {
                         id: serialPortsCB
-                        model: ping.link.listAvailableConnections
-                        Layout.columnSpan:  3
+                        Layout.columnSpan:  2
                         Layout.fillWidth: true
-                        onCurrentTextChanged: {
-                            if(ping.link.listAvailableConnections.length) {
-                                connect(serialPortsCB.currentText, baudrateBox.currentText)
-                            }
-                        }
+                        model: ping.link.listAvailableConnections
                     }
 
                     ComboBox {
                         id: baudrateBox
                         model: [115200, 921600]
-                        onCurrentTextChanged: {
+                    }
+
+                     Button {
+                        text: "Ok"
+                        enabled: true
+                        Layout.fillWidth: true
+                        onClicked: {
                             connect(serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
