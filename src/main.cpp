@@ -46,15 +46,16 @@ int main(int argc, char *argv[])
     qmlRegisterType<Protocol>("Protocol", 1, 0, "Protocol");
     qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
 
-
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
 
     // Load the QML and set the Context
     // Logo
-    engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
-    app.exec();
+    #ifdef QT_NO_DEBUG
+        engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
+        app.exec();
+    #endif
     // Main app
     engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
     engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
