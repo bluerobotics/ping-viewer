@@ -180,9 +180,13 @@ void Waterfall::draw(const QList<double>& points)
         }
     } else {*/
         #pragma omp for
+        // For each radius draw an arc
         for(int i = 1; i < center.x(); i++) {
+            // Get all the colors before processing it
             pointColor = valueToRGB(points[i%200]);
+            // Step = radius*(resolution 2 = 0.5º)*d2r*(sobreposition)
             step = ceil(i*2*d2r)*1.15;
+            // Draw the arc with 0.5º window
             for(float u = -0.25; u <= 0.25; u += 1/step) {
                 angleStep = u*d2r+actualAngle;
                 _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
