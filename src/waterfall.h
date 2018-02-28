@@ -38,7 +38,9 @@ class Waterfall : public QQuickPaintedItem
     QList<QString> _themes;
     static uint16_t displayWidth;
     uint16_t currentDrawIndex;
-
+    static const int numSamples = 200;
+    static const int numSlices = 360;
+    QPainterPath paths[numSlices][numSamples];
     signals:
     void imageChanged();
     void mouseDepthChanged();
@@ -47,6 +49,7 @@ class Waterfall : public QQuickPaintedItem
     void themeChanged();
     void themesChanged();
     void smoothChanged();
+
 
 public:
     Waterfall(QQuickItem *parent = 0);

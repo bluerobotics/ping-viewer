@@ -30,6 +30,21 @@ Waterfall::Waterfall(QQuickItem *parent):
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, [&]{if(_update) update(); _update = false;});
     timer->start(50);
+
+    float angle = 0;
+    int centerX = 500;
+    int centerY = 500;
+    int _r = 500;
+
+    for (int i = 0; i < numSlices; i++) {
+        for (int j = 0; j < numSamples; j++) {
+            int r = j * _r/200.0;
+            paths[i][j] = QPainterPath(); // clear the path
+            paths[i][j].arcMoveTo(centerX- r, centerY- r, 2*r, 2*r, angle); // move to start of arc
+            paths[i][j].arcTo(centerX- r, centerY- r, 2*r, 2*r, angle, 2); // draw the arc
+        }
+        angle += 1.0;
+    }
 }
 
 void Waterfall::setGradients()
@@ -163,24 +178,18 @@ float Waterfall::RGBToValue(const QColor& color)
 
 void Waterfall::draw(const QList<double>& points)
 {
-    QPainter painter(&_image);
+    static QPainter painter(&_image);
+    painter.begin(&_image);
+    static uint slice = 0;
 
-    static QPainterPath paths[200];
-    static float angle = 0;
-    int centerX = 500;
-    int centerY = 500;
-    int _r = 500;
     #pragma omp for
-    for (int i = 0; i < 200; i++) {
-        int r = i * _r/200.0;
-        paths[i] = QPainterPath(); // clear the path
-        paths[i].arcMoveTo(centerX- r, centerY- r, 2*r, 2*r, angle); // move to start of arc
-        paths[i].arcTo(centerX- r, centerY- r, 2*r, 2*r, angle, 2); // draw the arc
+    for (uint i = 0; i < 200; i++) {
         painter.setPen(QPen(valueToRGB(points[i]), 3)); // pen size 3 = ensure some overlap between each layer
-        painter.drawPath(paths[i]);
+        painter.drawPath(paths[slice][i]);
     }
     painter.end();
-    angle += 1.0;
+    slice = (slice + 1) % numSlices;
+
     _update = true;
 }
 
