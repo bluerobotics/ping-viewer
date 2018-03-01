@@ -54,6 +54,7 @@ Item {
         // None = 0, File, Serial, Udp, Tcp
         // Enum Type : arg[0] : arg[1s]
         var connString = (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
+        console.log(connString)
         ping.connectLink(connString)
     }
 
@@ -96,7 +97,7 @@ Item {
                         enabled: true
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
-                        model: ["Serial (default)", "UDP"]
+                        model: ["Serial (default)", "UDP", "TCP", "Simulation"]
                         onActivated: {
                             switch(index) {
                                 case 0: // Serial
@@ -114,6 +115,13 @@ Item {
                                     baudrateBox.enabled = false
                                     connect(udpIp.text, udpPort.text)
                                     break
+
+                                case 3:
+                                    udpIp.enabled = false
+                                    udpPort.enabled = false
+                                    serialPortsCB.enabled = false
+                                    baudrateBox.enabled = false
+                                    connect()
                             }
                         }
                     }
