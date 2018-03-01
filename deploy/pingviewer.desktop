@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=pingviewer
+GenericName=Ping Viewer
+Comment=ping viewer interface
+Icon=pingviewer
+Exec=pingviewer
+Terminal=false
+Categories=Utility;
+Keywords=computer;

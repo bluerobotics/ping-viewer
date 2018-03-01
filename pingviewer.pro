@@ -4,7 +4,7 @@ CONFIG += \
     c++14 \
     static
 
-QT += core charts gui qml quick widgets quickcontrols2 concurrent
+QT += core charts gui qml quick widgets quickcontrols2 concurrent svg xml
 
 HEADERS += \
     src/waterfallgradient.h \

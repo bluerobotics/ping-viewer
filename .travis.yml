@@ -1,0 +1,56 @@
+sudo: false
+language: cpp
+matrix:
+  include:
+    # works on Precise and Trusty
+    - os: linux
+      dist: trusty
+      sudo: require
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+install:
+- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
+    sudo apt update -qq;
+    sudo apt search qt510;
+    sudo apt install build-essential qt510-meta-full/trusty qt510charts-no-lgpl/trusty git;
+  fi
+
+script:
+- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    source /opt/qt*/bin/qt*-env.sh;
+    git submodule init;
+    git submodule update;
+    mkdir build;
+    cd build;
+    qmake ..;
+    make;
+    mkdir deploy;
+    ls ../qml/;
+    ls ../qml/imgs;
+    cp ../qml/imgs/pingviewer.png deploy/;
+    cp ../deploy/pingviewer.desktop deploy/;
+    mv pingviewer deploy/;
+    ls deploy;
+    wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
+    chmod a+x linuxdeployqt*.AppImage;
+    unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
+    mkdir -p deploy/usr/plugins/imageformats/;
+    cp /opt/qt510/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
+    ./linuxdeployqt*.AppImage deploy/pingviewer -verbose=2 -qmldir=../qml -bundle-non-qt-libs;
+    ./linuxdeployqt*.AppImage deploy/pingviewer.desktop -verbose=2 -qmldir=../qml -appimage;
+    find . | grep AppImage;
+  fi
+
+after_success:
+- wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    bash ./upload.sh ./pingviewer*.AppImage*;
+  fi
