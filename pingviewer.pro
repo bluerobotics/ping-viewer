@@ -22,7 +22,7 @@ SOURCES += \
 RESOURCES += \
     resources.qrc
 
-unix:!macx {
+*-g++ {
     QMAKE_CXXFLAGS += -fopenmp
     QMAKE_LFLAGS += -fopenmp
 }
