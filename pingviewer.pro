@@ -22,8 +22,10 @@ SOURCES += \
 RESOURCES += \
     resources.qrc
 
-QMAKE_CXXFLAGS += -fopenmp
-QMAKE_LFLAGS += -fopenmp
+unix:!macx {
+    QMAKE_CXXFLAGS += -fopenmp
+    QMAKE_LFLAGS += -fopenmp
+}
 
 include(lib/ping-protocol-cpp/ping.pri)
 

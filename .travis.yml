@@ -2,7 +2,6 @@ sudo: false
 language: cpp
 matrix:
   include:
-    # works on Precise and Trusty
     - os: linux
       dist: trusty
       sudo: require
@@ -15,12 +14,25 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
+    - os: osx
+      osx_image: xcode9.2
+      compiler: clang
+      env:
+        - MATRIX_EVAL="COMPILER=clang++"
+
 install:
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
     sudo apt update -qq;
     sudo apt search qt510;
     sudo apt install build-essential qt510-meta-full/trusty qt510charts-no-lgpl/trusty git;
+  fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    brew update > /dev/null;
+    brew install qt5;
+    chmod -R 755 /usr/local/opt/qt5/*;
+    export QTDIR="/usr/local/opt/qt5";
+    export PATH="$QTDIR/bin:$PATH";
   fi
 
 script:
@@ -48,9 +60,20 @@ script:
     ./linuxdeployqt*.AppImage deploy/pingviewer.desktop -verbose=2 -qmldir=../qml -appimage;
     find . | grep AppImage;
   fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    git submodule init;
+    git submodule update;
+    mkdir build;
+    cd build;
+    qmake ..;
+    make;
+    find .;
+    macdeployqt pingviewer.app/ -qmldir=../qml -dmg;
+  fi
 
 after_success:
 - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     bash ./upload.sh ./pingviewer*.AppImage*;
   fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh pingviewer*.dmg*; fi
