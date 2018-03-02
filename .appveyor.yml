@@ -56,13 +56,18 @@ after_build:
   - copy %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\pingviewer.exe deploy\pingviewer.exe
   - windeployqt --qmldir %APPVEYOR_BUILD_FOLDER%/qml --%CONFIGURATION% deploy/pingviewer.exe --verbose=2
   - for %%I in (%VCLIBS%) do copy %VCLIBDIR%\%%I deploy\
-  - 7z a -tzip pingviewer_%CONFIGURATION%_%commit%.zip deploy -r
-  - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%CONFIGURATION%_%commit%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%CONFIGURATION%_%commit%.zip
+  - 7z a -tzip pingviewer_%CONFIGURATION%.zip deploy -r
+  - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%CONFIGURATION%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%CONFIGURATION%.zip
   - dir /b /s *.zip
 
 artifacts:
-  - path: pingviewer_%CONFIGURATION%_%commit%.zip
+  - path: pingviewer_%CONFIGURATION%.zip
     name: PingViewer
 
-on_finish:
-  - ps: Add-AppveyorMessage -Message "https://ci.appveyor.com/api/buildjobs/$env:APPVEYOR_JOB_ID/artifacts/pingviewer_$env:commit.zip"
+deploy:
+  - provider: GitHub
+    release: continuous
+    artifact: PingViewer
+    prerelease: true
+    auth_token:
+      secure: nDCdC4GpY1RMJ0Nw5rqRnl1Fu6yr4bpD501KE6NxZcnME39NayzOlWmIJaVWgVQF
