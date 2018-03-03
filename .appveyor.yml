@@ -68,6 +68,7 @@ deploy:
   - provider: GitHub
     release: continuous
     artifact: PingViewer
+    draft: false
     prerelease: true
     auth_token:
       secure: nDCdC4GpY1RMJ0Nw5rqRnl1Fu6yr4bpD501KE6NxZcnME39NayzOlWmIJaVWgVQF
