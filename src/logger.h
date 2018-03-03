@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QColor>
 #include <QLoggingCategory>
 #include <QObject>
 #include <QSettings>
@@ -14,6 +15,25 @@ Q_DECLARE_LOGGING_CATEGORY(logger)
 #define PING_LOGGING_CATEGORY(name, ...) \
     static PingLoggingCategory pingCategory ## name (__VA_ARGS__); \
     Q_LOGGING_CATEGORY(name, __VA_ARGS__)
+
+// Thank you very much https://stackoverflow.com/questions/37781426/how-to-change-the-color-of-qstringlistmodel-items
+class LogListModel : public QStringListModel
+{
+public:
+    LogListModel(QObject* parent = nullptr)
+        : QStringListModel(parent)
+    {}
+
+    enum { TimeRole = Qt::UserRole + 0x10 };
+
+    QVariant data(const QModelIndex & index, int role) const override;
+    bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+    QHash<int, QByteArray> roleNames() const override;
+
+private:
+    std::map<int, QColor> _rowColors;
+    std::map<int, QString> _rowTimes;
+};
 
 class Logger : public QObject
 {
@@ -32,6 +52,7 @@ public:
     ~Logger();
     static Logger* self();
     static void installHandler();
+    static void test();
 
     signals:
         void registeredCategoryChanged();
@@ -41,11 +62,11 @@ private:
     Logger(const Logger& other) = delete;
     Logger();
 
-    void logMessage(const QString msg);
+    void logMessage(const QString& msg, QtMsgType type);
 
     QStringList _registeredCategories;
     QSettings _settings;
-    QStringListModel _logModel;
+    LogListModel _logModel;
 };
 
 class PingLoggingCategory

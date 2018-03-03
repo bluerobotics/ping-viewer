@@ -17,11 +17,25 @@ Item {
 
         id: logView
         anchors.fill: parent
-        contentWidth: 1500  // TODO auto-fit
+        contentWidth: parent.width
         clip: true
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         model: Logger.logModel
-        delegate: Text { text: display }
+        delegate: Row {
+            width: parent.width
+            spacing: 10
+            Text {
+                id: leftText
+                text: time
+                color: foreground
+            }
+            Text {
+                width: parent.width - leftText.width
+                wrapMode: Text.WordWrap
+                text: display
+                color: foreground
+            }
+        }
         ScrollBar.horizontal: ScrollBar { }
         ScrollBar.vertical: ScrollBar { }
 
