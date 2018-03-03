@@ -25,7 +25,9 @@ install:
     sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
     sudo apt update -qq;
     sudo apt search qt510;
-    sudo apt install build-essential qt510-meta-full/trusty qt510charts-no-lgpl/trusty git;
+    sudo apt install build-essential qt510-meta-minimal/trusty qt510charts-no-lgpl/trusty
+    qt510quickcontrols/trusty qt510quickcontrols2/trusty qt510serialport/trusty
+    qt510graphicaleffects/trusty qt510svg/trusty qt510scxml/trusty git;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew update > /dev/null;
