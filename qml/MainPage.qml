@@ -68,7 +68,9 @@ Item {
                     Layout.fillWidth: true
                     onCurrentIndexChanged: {
                         displayText = model[currentIndex] + " dB"
-                        ping.protocol.setEchosounderGain(currentIndex)
+                    }
+                    onActivated: {
+                        ping.protocol.setEchosounderGain(index)
                     }
                 }
             }
