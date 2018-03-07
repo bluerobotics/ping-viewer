@@ -155,8 +155,6 @@ Item {
                 source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
-                sourceSize.height: issue.height * 0.75 // meh +/-
-                sourceSize.width: sourceSize.height
 
                 MouseArea {
                     id: mouseAreaScrollLock
