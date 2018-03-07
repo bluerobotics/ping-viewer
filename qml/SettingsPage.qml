@@ -1,8 +1,10 @@
 import QtGraphicalEffects 1.0
+import QtQml 2.2
 import QtQuick 2.7
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
+import Util 1.0
 
 Item {
     id: settingsPage
@@ -13,6 +15,16 @@ Item {
     property var ping
     property var waterfallItem
     property var replayItem: replayChB.checked
+    property var serialPortList
+
+    Timer {
+        interval: 1000
+        running: settingsPage.visible && conntype.currentIndex == 0
+        repeat: true
+        onTriggered: {
+            serialPortList = Util.serialPortList()
+        }
+    }
 
     function connect(first, second) {
         // Only connect from user input
@@ -99,21 +111,20 @@ Item {
 
                     ComboBox {
                         id: serialPortsCB
-                        Layout.columnSpan:  2
+                        Layout.columnSpan:  3
                         Layout.fillWidth: true
-                        model: ping.link.listAvailableConnections
+                        model: serialPortList
+                        onActivated: {
+                            if (currentIndex > -1) {
+                                connect(serialPortsCB.currentText, baudrateBox.currentText)
+                            }
+                        }
                     }
 
                     ComboBox {
                         id: baudrateBox
                         model: [115200, 921600]
-                    }
-
-                     Button {
-                        text: "Ok"
-                        enabled: true
-                        Layout.fillWidth: true
-                        onClicked: {
+                        onActivated: {
                             connect(serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
