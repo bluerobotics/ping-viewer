@@ -15,8 +15,13 @@ Item {
     property var replayItem: replayChB.checked
 
     function connect(first, second) {
-        // Do not connect if no type selected
-        if(conntype.currentIndex < 0) {
+        // Only connect from user input
+        if(!settingsPage.visible) {
+            return;
+        }
+
+        // Do not connect if no valid type or input
+        if(conntype.currentIndex < 0 && first != "" && second != "") {
             return;
         }
 
