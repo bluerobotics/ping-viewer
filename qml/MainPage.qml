@@ -99,6 +99,14 @@ Item {
         }
 
         PingItem {
+            id: linkManagementMenu
+            icon: "/icons/connection_white.svg"
+            item: LinkManagementMenu {
+                id: linkManagementPage
+            }
+        }
+
+        PingItem {
             id: infoMenu
             icon: "/icons/info_white.svg"
             item: InfoPage {

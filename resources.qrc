@@ -3,6 +3,8 @@
         <file alias="Chart.qml">qml/Chart.qml</file>
         <file alias="InfoPage.qml">qml/InfoPage.qml</file>
         <file alias="Logo.qml">qml/Logo.qml</file>
+        <file alias="LinkManagementItem.qml">qml/LinkManagementItem.qml</file>
+        <file alias="LinkManagementMenu.qml">qml/LinkManagementMenu.qml</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="MainPage.qml">qml/MainPage.qml</file>
         <file alias="Ping1DVisualizer.qml">qml/Ping1DVisualizer.qml</file>
@@ -15,10 +17,15 @@
     <qresource prefix="/icons">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
         <file alias="chat_white.svg">qml/icons/chat_white.svg</file>
+        <file alias="connection_white.svg">qml/icons/connection_white.svg</file>
+        <file alias="done_white.svg">qml/icons/done_white.svg</file>
+        <file alias="delete_white.svg">qml/icons/delete_white.svg</file>
         <file alias="info_white.svg">qml/icons/info_white.svg</file>
+        <file alias="plus_one_white.svg">qml/icons/plus_one_white.svg</file>
         <file alias="report_white.svg">qml/icons/report_white.svg</file>
         <file alias="save_white.svg">qml/icons/save_white.svg</file>
         <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
+        <file alias="sub_settings_white.svg">qml/icons/sub_settings_white.svg</file>
         <file alias="unlock_white.svg">qml/icons/unlock_white.svg</file>
         <file alias="lock_white.svg">qml/icons/lock_white.svg</file>
     </qresource>
