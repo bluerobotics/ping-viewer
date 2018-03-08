@@ -49,7 +49,7 @@ Item {
                 Text {
                     id: pingPerSecond
                     text: "0 ping/s"
-                    color: 'linen'
+                    color: Style.textColor
                 }
 
                 CheckBox {
@@ -140,7 +140,7 @@ Item {
             Text {
                 id: timeText
                 text: "Time:"
-                color: 'linen'
+                color: Style.textColor
             }
 
             Slider {
@@ -161,13 +161,13 @@ Item {
             Text {
                 id: replayElapsed
                 text: ping.link.isOnline() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
-                color: 'linen'
+                color: Style.textColor
             }
 
             Text {
                 id: replayFileName
                 text: "File:"
-                color: 'linen'
+                color: Style.textColor
             }
 
             PingButton {

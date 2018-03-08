@@ -61,7 +61,7 @@ Item {
 
                     Text {
                         text: "Sonar Type:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     ComboBox {
@@ -74,7 +74,7 @@ Item {
                     Text {
                         text: "Communication:"
                         enabled: true
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     ComboBox {
@@ -106,7 +106,7 @@ Item {
 
                     Text {
                         text: "Serial Port / Baud:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     ComboBox {
@@ -131,7 +131,7 @@ Item {
 
                     Text {
                         text: "UDP Host/Port:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     TextField {
@@ -158,7 +158,7 @@ Item {
 
                     Text {
                         text: "Save Path:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     TextField {
@@ -192,7 +192,7 @@ Item {
 
                     Text {
                         text: "Units:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     ComboBox {
@@ -204,7 +204,7 @@ Item {
 
                     Text {
                         text: "Plot Theme:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     ComboBox {
@@ -220,14 +220,21 @@ Item {
 
                     Text {
                         text: "Theme:"
-                        color: 'linen'
+                        color: Style.textColor
                     }
 
                     ComboBox {
-                        displayText: "Dark"
-                        enabled: false
+                        id: themeCB
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        model: ["Dark", "Light"]
+                        onCurrentTextChanged: {
+                            if (currentIndex) {
+                                Style.useLightStyle()
+                            } else {
+                                Style.useDarkStyle()
+                            }
+                        }
                     }
 
                     CheckBox {
@@ -268,7 +275,7 @@ Item {
 
                 Text {
                     text: "Current Firmware:"
-                    color: 'linen'
+                    color: Style.textColor
                 }
 
                 TextField {
@@ -279,7 +286,7 @@ Item {
                 Text {
                     id: firmwareLabel
                     text: "Firmware File:"
-                    color: 'linen'
+                    color: Style.textColor
                 }
 
                 TextField {
@@ -299,7 +306,7 @@ Item {
 
                 Text {
                     text: "Progress:"
-                    color: 'linen'
+                    color: Style.textColor
                 }
 
                 ProgressBar {
@@ -315,6 +322,7 @@ Item {
         property alias plotThemeIndex: plotThemeCB.currentIndex
         property alias replayItemChecked: replayChB.checked
         property alias smoothDataState: smoothDataChB.checkState
+        property alias themeIndex: themeCB.currentIndex
     }
 
 }

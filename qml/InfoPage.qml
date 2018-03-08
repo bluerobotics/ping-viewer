@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 import Logger 1.0
 
@@ -37,6 +38,12 @@ Item {
                 source: "/imgs/ping_name.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
+
+                ColorOverlay {
+                    anchors.fill: parent
+                    source: parent
+                    color: Style.iconColor
+                }
             }
 
             Rectangle {
@@ -57,13 +64,13 @@ Item {
                 Text {
                     z: 1
                     text: 'Version: <b>' + (GitTag == "" ? "No tags!" : GitTag)
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     text: 'Repository: <b>' + createHyperLink(repository, repository.split('/')[4].toUpperCase())
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                     onLinkActivated: {
                         print('Open link ', link)
@@ -73,7 +80,7 @@ Item {
                 Text {
                     z: 1
                     text: 'Git commit: <b>' + commitIdToLink(GitVersion)
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                     onLinkActivated: {
                         print('Open link ', link)
@@ -83,7 +90,7 @@ Item {
                 Text {
                     z: 1
                     text: " From: " + GitVersionDate
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                 }
             }
@@ -98,26 +105,26 @@ Item {
                     z: 1
                     // Add link to store device
                     text: 'Device: <b>' + deviceType
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     // Add link to model in store
                     text: 'Model: <b>' + deviceModel
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     text: 'Firmware Version: ' + deviceFirmware
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     text: "ID: " + deviceID
-                    color: 'linen'
+                    color: Style.textColor
                     textFormat: Text.RichText
                 }
             }
@@ -144,6 +151,12 @@ Item {
                 ToolTip {
                     id: tooltipForumPost
                     text: "Forum"
+                }
+
+                ColorOverlay {
+                    anchors.fill: parent
+                    source: parent
+                    color: Style.iconColor
                 }
             }
 
@@ -172,6 +185,12 @@ Item {
                     id: toolTipScrollLock
                     text: "Scroll Lock"
                 }
+
+                ColorOverlay {
+                    anchors.fill: parent
+                    source: parent
+                    color: Style.iconColor
+                }
             }
 
             Image {
@@ -194,13 +213,19 @@ Item {
                     id: tooltipIssue
                     text: "Report issue"
                 }
+
+                ColorOverlay {
+                    anchors.fill: parent
+                    source: parent
+                    color: Style.iconColor
+                }
             }
         }
 
         Rectangle {
             height: 2
             Layout.fillWidth: true
-            color: "linen"
+            color: Style.textColor
         }
 
         PingLogger {

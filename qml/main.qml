@@ -13,7 +13,7 @@ ApplicationWindow {
     height: 600
     width: 800
 
-    Material.theme: Material.Dark
+    Material.theme: Style.theme
     Material.accent: Material.Blue
     Material.foreground: Material.Blue
 
