@@ -20,7 +20,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     _update(true),
     currentDrawIndex(displayWidth)
 {
-    setAntialiasing(false);
+    setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));

@@ -24,7 +24,7 @@ class Waterfall : public QQuickPaintedItem
 
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     bool smooth() {return _smooth;}
-    void setSmooth(bool smooth) {_smooth = smooth; emit smoothChanged();}
+    void setSmooth(bool smooth) {_smooth = smooth; setAntialiasing(_smooth); emit smoothChanged();}
 
     QList<WaterfallGradient> _gradients;
     WaterfallGradient _gradient;
