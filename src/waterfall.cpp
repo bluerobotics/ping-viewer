@@ -246,6 +246,7 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
     _mouseStrength = RGBToValue(_image.pixelColor(pos));
     // depth
     _mouseDepth = pos.y();
+    emit mouseMove();
 }
 
 void Waterfall::hoverLeaveEvent(QHoverEvent *event)
