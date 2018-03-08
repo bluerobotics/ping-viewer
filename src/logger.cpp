@@ -95,7 +95,7 @@ void Logger::logMessage(const QString& msg, QtMsgType type)
 
     _logModel.insertRows(line, 1);
     _logModel.setData(_logModel.index(line), time, LogListModel::TimeRole);
-    _logModel.setData(_logModel.index(line), msg, Qt::DisplayRole);
+    _logModel.setData(_logModel.index(line), QString(msg).replace("\\n", "\n"), Qt::DisplayRole);
     _logModel.setData(_logModel.index(line), colors[type], Qt::ForegroundRole);
 }
 
