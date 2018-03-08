@@ -47,14 +47,32 @@ Item {
 
     ColumnLayout {
         id: mainLayout
-        Text {
-            id: readout
-            text: value.toFixed(precision) + units
-            color: 'white'
-            font.family: "Arial"
-            font.pointSize: 48
-            font.bold: true
+        RowLayout {
+            Text {
+                id: readout
+                text: value.toFixed(precision) + units
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: 48
+                font.bold: true
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
+            }
+
+            Text {
+                id: confidenceText
+                text: transformValue(confidence) + '%'
+                visible: typeof(strength) == "number"
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: readout.font.pointSize
+                font.bold: true
+            }
         }
+
         RowLayout {
             Text {
                 id: depthText
@@ -73,22 +91,7 @@ Item {
 
             Text {
                 id: strengthText
-                text: transformValue(strength, 2) + 'dB'
-                visible: typeof(strength) == "number"
-                color: 'white'
-                font.family: "Arial"
-                font.pointSize: 14
-                font.bold: true
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                color: "transparent"
-            }
-
-            Text {
-                id: confidenceText
-                text: transformValue(confidence) + '%'
+                text: transformValue(strength*100, 2) + '%'
                 visible: typeof(strength) == "number"
                 color: 'white'
                 font.family: "Arial"
