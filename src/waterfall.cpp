@@ -12,7 +12,7 @@ uint16_t Waterfall::displayWidth = 500;
 
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(2048, 200, QImage::Format_RGBA8888),
+    _image(2048, 600, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
@@ -181,24 +181,42 @@ void Waterfall::draw(const QList<double>& points)
             currentDrawIndex = displayWidth;
     }
 
+    int smoothingSteps = _image.height() / points.length(); // Interpolation points
+
     if(smooth()) {
         #pragma omp for
         for(int i = 0; i < points.length(); i++) {
             oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
         }
-        #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
 
+        #pragma omp for
+        for(int i = 0; i < points.length() - 1; i++) {
+            for (int j = 0; j < smoothingSteps; j++) { // Interpolate for vertical smoothing
+                double interpolatedValue = oldPoints[i] + j * (oldPoints[i + 1] - oldPoints[i]) / smoothingSteps;
+                _image.setPixelColor(currentDrawIndex, i * smoothingSteps + j, valueToRGB(interpolatedValue));
+            }
         }
+
+        int i = points.length() - 1; // Last row, nothing to interpolate!
+        for (int j = 0; j < smoothingSteps; j++) {
+            _image.setPixelColor(currentDrawIndex, i * smoothingSteps + j, valueToRGB(oldPoints[i]));
+        }
+
     } else {
         #pragma omp for
         for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
+            for (int j = 0; j < smoothingSteps; j++) { // Interpolate for vertical smoothing
+                double interpolatedValue = points[i] + j * (points[i+1] - points[i]) / smoothingSteps;
+                _image.setPixelColor(currentDrawIndex, i * smoothingSteps + j, valueToRGB(interpolatedValue));
+            }
+        }
 
+        int i = points.length() - 1; // Last row, nothing to interpolate!
+        for (int j = 0; j < smoothingSteps; j++) {
+            _image.setPixelColor(currentDrawIndex, i * smoothingSteps + j, valueToRGB(points[i]));
         }
     }
-    currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
+    currentDrawIndex++;
     _update = true;
 }
 
