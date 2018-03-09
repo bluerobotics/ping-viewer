@@ -11,9 +11,6 @@ Item {
     width: settingsLayout.width
 
     property var ping
-    property var waterfallItem
-    property var replayItem: replayChB.checked
-
     function connect(first, second) {
         // Do not connect if no type selected
         if(conntype.currentIndex < 0) {
@@ -184,6 +181,9 @@ Item {
                         enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        onCurrentTextChanged: {
+                            PingSettings.unitType = currentText
+                        }
                     }
 
                     Text {
@@ -196,9 +196,12 @@ Item {
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                         Layout.minimumWidth: 200
-                        model: waterfallItem.themes
+                        model: PingSettings.plotThemesAvailable
                         onCurrentTextChanged: {
-                            waterfallItem.theme = currentText
+                            PingSettings.plotTheme = currentText
+                        }
+                        onModelChanged: {
+                            currentIndex = settings.plotThemeIndex
                         }
                     }
 
@@ -212,6 +215,9 @@ Item {
                         enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        onCurrentTextChanged: {
+                            PingSettings.theme = currentText
+                        }
                     }
 
                     CheckBox {
@@ -220,6 +226,12 @@ Item {
                         checked: false
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
+                        onCheckStateChanged: {
+                            PingSettings.replayIsEnable = checkState
+                        }
+                        Component.onCompleted: {
+                            PingSettings.replayIsEnable = checkState
+                        }
                     }
 
                     CheckBox {
@@ -229,7 +241,10 @@ Item {
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
                         onCheckStateChanged: {
-                            waterfallItem.smooth = checkState
+                            PingSettings.smoothIsEnable = checkState
+                        }
+                        Component.onCompleted: {
+                            PingSettings.smoothIsEnable = checkState
                         }
                     }
                 }
@@ -296,9 +311,18 @@ Item {
     }
 
     Settings {
-        property alias plotThemeIndex: plotThemeCB.currentIndex
-        property alias replayItemChecked: replayChB.checked
+        id: settings
+        property var plotThemeIndex
+        property alias replayItemChecked: replayChB.checkState
         property alias smoothDataState: smoothDataChB.checkState
     }
 
+
+    Component.onCompleted: {
+        plotThemeCB.currentIndex = settings.plotThemeIndex
+    }
+
+    Component.onDestruction: {
+        settings.plotThemeIndex = plotThemeCB.currentIndex
+    }
 }
