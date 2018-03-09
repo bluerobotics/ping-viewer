@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file alias="qmldir">qml/qmldir</file>
         <file alias="Chart.qml">qml/Chart.qml</file>
         <file alias="InfoPage.qml">qml/InfoPage.qml</file>
         <file alias="Logo.qml">qml/Logo.qml</file>
@@ -9,6 +10,7 @@
         <file alias="PingButton.qml">qml/PingButton.qml</file>
         <file alias="PingItem.qml">qml/PingItem.qml</file>
         <file alias="PingLogger.qml">qml/PingLogger.qml</file>
+        <file alias="PingSettings.qml">qml/PingSettings.qml</file>
         <file alias="SettingsPage.qml">qml/SettingsPage.qml</file>
         <file alias="ValueReadout.qml">qml/ValueReadout.qml</file>
     </qresource>
