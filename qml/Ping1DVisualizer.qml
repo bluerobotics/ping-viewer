@@ -42,6 +42,7 @@ Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
+            transform: Rotation { origin.x: width/2; origin.y: height/2; axis { x: 1; y: 0; z: 0 } angle: 180
         }
 
         Chart {
@@ -50,6 +51,7 @@ Item {
             Layout.maximumWidth: 250
             Layout.preferredWidth: 100
             Layout.minimumWidth: 75
+            transform: Rotation { origin.x: width/2; origin.y: height/2; axis { x: 1; y: 0; z: 0 } angle: 180 }
         }
 
         Settings {
