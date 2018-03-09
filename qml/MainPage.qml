@@ -115,7 +115,7 @@ Item {
 
     PingItem {
         id: replayMenu
-        visible: settingsPage.replayItem
+        visible: PingSettings.replayIsEnable
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         state: "bottom-left"

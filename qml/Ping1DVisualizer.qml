@@ -42,6 +42,13 @@ Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
+
+            theme: PingSettings.plotTheme
+            smooth: PingSettings.smoothIsEnable
+
+            Component.onCompleted: {
+                PingSettings.plotThemesAvailable = themes
+            }
         }
 
         Chart {
