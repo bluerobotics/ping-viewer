@@ -34,8 +34,18 @@ CONFIG(debug, debug|release) {
     CONFIG += console
 }
 
+message("The project contains the following files:")
+message("Headers: " $$HEADERS)
+message("Sources: " $$SOURCES)
+message("Resources: " $$RESOURCES)
+message("QT: " $$QT)
+message("Config: " $$CONFIG)
+message("CXX flags: " $$QMAKE_CXXFLAGS)
+message("L flags: " $$QMAKE_LFLAGS)
+
 # https://git-scm.com/docs/git-log placeholders
 # Get git info
+message("Check for GIT version and tag:")
 exists ($$_PRO_FILE_PWD_/.git) {
     GIT_VERSION = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD log -1 --format=%h)
     GIT_VERSION_DATE = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD log -1 --format=%aI)
