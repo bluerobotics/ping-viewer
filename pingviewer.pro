@@ -30,10 +30,13 @@ RESOURCES += \
 include(lib/ping-protocol-cpp/ping.pri)
 
 build_pass:CONFIG(debug, debug|release) {
+    message("Debug Build !")
     win32 {
         # Windows debug
         CONFIG += console
     }
+} else {
+    message("Release Build !")
 }
 
 message("The project contains the following files:")
