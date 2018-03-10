@@ -231,13 +231,22 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 {
     event->accept();
     auto pos = event->pos();
-    pos.setX(pos.x()*_image.width()/width());
+
+    static uint16_t first;
+    if (currentDrawIndex < displayWidth) {
+        first = 0;
+    } else {
+        first = currentDrawIndex - displayWidth;
+    }
+
+    pos.setX(pos.x()*displayWidth/width() + first);
     pos.setY(pos.y()*_image.height()/height());
 
     // signal strength
     _mouseStrength = RGBToValue(_image.pixelColor(pos));
     // depth
     _mouseDepth = pos.y();
+    emit mouseMove();
 }
 
 void Waterfall::hoverLeaveEvent(QHoverEvent *event)

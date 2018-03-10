@@ -24,8 +24,6 @@ Item {
 
     function setDepth(depth) {
         readout.value = depth
-        readout.depth = waterfall.mouseDepth < 0 ? '-' : waterfall.mouseDepth
-        readout.strength = waterfall.mouseStrength  < 0 ? '-' : waterfall.mouseStrength
     }
 
     function setConfidence(perc) {
@@ -42,6 +40,10 @@ Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
+            onMouseMove: {
+                readout.depth = waterfall.mouseDepth < 0 ? '-' : waterfall.mouseDepth
+                readout.strength = waterfall.mouseStrength  < 0 ? '-' : waterfall.mouseStrength
+            }
         }
 
         Chart {

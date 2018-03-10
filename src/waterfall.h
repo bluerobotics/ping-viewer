@@ -42,6 +42,7 @@ class Waterfall : public QQuickPaintedItem
     signals:
     void imageChanged();
     void mouseDepthChanged();
+    void mouseMove();
     void mouseStrengthChanged();
     void mouseLeave();
     void themeChanged();
