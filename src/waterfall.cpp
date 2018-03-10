@@ -204,7 +204,7 @@ void Waterfall::draw(const QList<double>& points)
 
     } else {
         #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
+        for(int i = 0; i < points.length() - 1; i++) {
             for (int j = 0; j < smoothingSteps; j++) { // Interpolate for vertical smoothing
                 double interpolatedValue = points[i] + j * (points[i+1] - points[i]) / smoothingSteps;
                 _image.setPixelColor(currentDrawIndex, i * smoothingSteps + j, valueToRGB(interpolatedValue));
