@@ -17,12 +17,13 @@
     <qresource prefix="/icons">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
         <file alias="chat_white.svg">qml/icons/chat_white.svg</file>
+        <file alias="disk_black.svg">qml/icons/disk.svg</file>
         <file alias="info_white.svg">qml/icons/info_white.svg</file>
+        <file alias="lock_white.svg">qml/icons/lock_white.svg</file>
         <file alias="report_white.svg">qml/icons/report_white.svg</file>
         <file alias="save_white.svg">qml/icons/save_white.svg</file>
         <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
         <file alias="unlock_white.svg">qml/icons/unlock_white.svg</file>
-        <file alias="lock_white.svg">qml/icons/lock_white.svg</file>
     </qresource>
     <qresource prefix="/imgs">
         <file alias="br_icon.svg">qml/imgs/br_icon.svg</file>

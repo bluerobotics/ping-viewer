@@ -5,8 +5,6 @@ import QtGraphicalEffects 1.0
 Item {
     id: pingItem
     z: 1
-    height: iconRect.height
-    width: iconRect.width
     // Default state
     state: "top-left"
     signal  activated()
@@ -24,6 +22,10 @@ Item {
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var color: hideItem ? colorUnselected : colorSelected
     property var spin: false
+
+    // default, overridable
+    width: 36
+    height: 36
 
     onItemChanged: {
         if(item == null) {
@@ -63,8 +65,8 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
 
-        height: openIcon.height
-        width: openIcon.width
+        height: parent.height
+        width: parent.width
 
         visible: iconVisible
 
@@ -80,6 +82,9 @@ Item {
             visible: parent.visible
             property var flip: pingItem.clicked
             property var finalAngle: pingItem.spin ? 360 : 180
+
+            height: parent.height
+            width: parent.width
 
             RotationAnimator on rotation {
                 id: rotateIcon
