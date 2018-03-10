@@ -120,7 +120,7 @@ Item {
         anchors.bottom: parent.bottom
         state: "bottom-left"
         spin: true
-        icon: "/icons/save_white.svg"
+        icon: "/icons/disk_black.svg"
         item: RowLayout {
             PingButton {
                 id: replayStartBt
