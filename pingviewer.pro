@@ -29,9 +29,11 @@ RESOURCES += \
 
 include(lib/ping-protocol-cpp/ping.pri)
 
-CONFIG(debug, debug|release) {
-    # Windows debug
-    CONFIG += console
+win32 {
+    CONFIG(debug,debug|release) {
+        # Terminal output
+        CONFIG += console
+    }
 }
 
 # https://git-scm.com/docs/git-log placeholders
