@@ -29,8 +29,8 @@ RESOURCES += \
 
 include(lib/ping-protocol-cpp/ping.pri)
 
-win32 {
-    CONFIG(debug, debug|release) {
+build_pass:CONFIG(debug, debug|release) {
+    win32 {
         # Windows debug
         CONFIG += console
     }
