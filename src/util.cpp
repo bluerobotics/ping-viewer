@@ -1,3 +1,4 @@
+#include <QSerialPortInfo>
 #include <QtCharts/QXYSeries>
 
 #include "logger.h"
@@ -8,6 +9,17 @@ PING_LOGGING_CATEGORY(util, "ping.util");
 Util::Util()
 {
 
+}
+
+QStringList Util::serialPortList()
+{
+    auto serialPortInfoList = QSerialPortInfo::availablePorts();
+    QStringList portNameList;
+    portNameList.reserve(serialPortInfoList.length());
+    for (const auto& serialPortInfo : serialPortInfoList) {
+        portNameList.append(serialPortInfo.portName());
+    }
+    return portNameList;
 }
 
 void Util::update(QAbstractSeries* series, const QList<double>& points, const bool invert)

@@ -15,6 +15,7 @@ class Util : public QObject
 
 public:
     Q_INVOKABLE void update(QAbstractSeries* series, const QList<double>& points, const bool invert = false);
+    Q_INVOKABLE QStringList serialPortList();
 
     ~Util();
     static Util* self();
