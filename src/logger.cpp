@@ -91,7 +91,7 @@ void Logger::logMessage(const QString& msg, QtMsgType type)
 
     const int line = _logModel.rowCount();
     // Debug, Warning, Critical, Fatal, Info
-    static const QColor colors[] = { QColor("lightGrey"), QColor("orange"), QColor("red"), QColor("red"), QColor("grey") };
+    static const QColor colors[] = { QColor("DarkGray"), QColor("orange"), QColor("red"), QColor("red"), QColor("LimeGreen") };
 
     _logModel.insertRows(line, 1);
     _logModel.setData(_logModel.index(line), time, LogListModel::TimeRole);

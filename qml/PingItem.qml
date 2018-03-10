@@ -1,5 +1,6 @@
 import QtQuick                      2.7
 import QtQuick.Controls             1.2
+import QtGraphicalEffects 1.0
 
 Item {
     id: pingItem
@@ -19,8 +20,8 @@ Item {
     property var startAngle: 0
     property var icon: undefined
     property var clicked: false
-    property var colorUnselected: Qt.rgba(0,0,0,0.5)
-    property var colorSelected: Qt.rgba(0,0,0,0.75)
+    property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
+    property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var color: hideItem ? colorUnselected : colorSelected
     property var spin: false
 
@@ -97,6 +98,12 @@ Item {
                 rotateIcon.from = rotateIcon.to
                 rotateIcon.to = flip ? finalAngle + startAngle : 0 + startAngle
                 rotateIcon.running = true
+            }
+
+            ColorOverlay {
+                anchors.fill: parent
+                source: parent
+                color: Style.iconColor
             }
         }
 
