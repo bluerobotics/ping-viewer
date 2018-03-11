@@ -83,6 +83,10 @@ Logger::Logger():
 void Logger::installHandler()
 {
     originalHandler = qInstallMessageHandler(handleMessage); // This function returns the previous message handler
+
+    if (qEnvironmentVariableIsEmpty("QT_MESSAGE_PATTERN")) {
+        qSetMessagePattern(QStringLiteral("%{time [hh:mm:ss.zzz]} %{message}"));
+    }
 }
 
 void Logger::logMessage(const QString& msg, QtMsgType type)
