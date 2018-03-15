@@ -2,6 +2,7 @@ import QtGraphicalEffects 1.0
 import QtQml 2.2
 import QtQuick 2.7
 import QtQuick.Controls 2.3
+import QtQuick.Dialogs 1.3
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import Util 1.0
@@ -23,6 +24,19 @@ Item {
         repeat: true
         onTriggered: {
             serialPortList = Util.serialPortList()
+        }
+    }
+
+    Connections {
+        target: ping
+        onFlashProgress: {
+            flashProgress.indeterminate = false;
+            flashProgress.value = progress;
+        }
+        onFlashComplete: {
+            console.log("flash complete!")
+            flashProgress.value = 0.0;
+            flashProgress.indeterminate = true;
         }
     }
 
@@ -262,7 +276,7 @@ Item {
         GroupBox {
             id: firmwareGroup
             title: "Firmware Update"
-            enabled: false
+            enabled: true
             // Hack
             label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
@@ -290,18 +304,28 @@ Item {
                 }
 
                 TextField {
+                    id: firmwareFileName
                     Layout.columnSpan:  3
                     Layout.fillWidth: true
+                    text: fileDialog.fileName
                 }
 
                 PingButton {
                     text: "Browse.."
+                    onClicked: {
+                        fileDialog.visible = true
+                    }
                 }
 
                 PingButton {
                     text: "Firmware Update"
                     Layout.columnSpan:  5
                     Layout.fillWidth: true
+                    enabled: fileDialog.fileUrl.toString().length
+
+                    onClicked: {
+                        ping.firmwareUpdate(fileDialog.fileUrl)
+                    }
                 }
 
                 Text {
@@ -310,11 +334,31 @@ Item {
                 }
 
                 ProgressBar {
+                    id: flashProgress
                     indeterminate: true
                     Layout.columnSpan:  4
                     Layout.fillWidth: true
+                    value: 0.0
+                    from: 0.0
+                    to: 100.0
                 }
             }
+        }
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a file"
+        folder: shortcuts.home
+        visible: false
+        property var fileName: ""
+        onAccepted: {
+            console.log("You chose: " + fileDialog.fileUrls)
+            var sizeToRemove = fileDialog.folder.toString().length - fileDialog.fileUrl.toString().length + 1
+            fileName = fileDialog.fileUrl.toString().slice(sizeToRemove)
+        }
+        onRejected: {
+            console.log("Canceled")
         }
     }
 
