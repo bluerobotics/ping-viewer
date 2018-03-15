@@ -1,3 +1,6 @@
 [submodule "lib/ping-protocol-cpp"]
 	path = lib/ping-protocol-cpp
 	url = https://github.com/patrickelectric/public-privated-repo-protocol/
+[submodule "lib/code"]
+	path = lib/stm32flash
+	url = https://github.com/bluerobotics/stm32flash-code
