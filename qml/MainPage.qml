@@ -30,25 +30,20 @@ Item {
                 Slider {
                     id: pingHzSlider
                     from: 0
-                    value: 0
                     stepSize: 1
-                    to: 35
+                    to: 30
                     Layout.columnSpan:  3
+                    value: ping.pollFrequency;
                     onValueChanged: {
-                        pingPerSecond.text = Math.floor(value).toString() + " ping/s"
-                        var period = 1000/value
-                        if(isNaN(period) || period <= 0) {
-                            pingTimer.stop()
-                            return
+                            if (ping.pollFrequency != value) {
+                                ping.pollFrequency = value
+                            }
                         }
-                        pingTimer.start()
-                        pingTimer.interval = period
-                    }
                 }
 
                 Text {
                     id: pingPerSecond
-                    text: "0 ping/s"
+                    text: Math.round(ping.pollFrequency) + "ping/s"
                     color: Style.textColor
                 }
 
@@ -257,12 +252,6 @@ Item {
         onDeviceID: {
             infoPage.deviceID = ID
         }
-    }
-
-    Timer {
-        id: pingTimer
-        interval: 500; running: false; repeat: true
-        onTriggered: ping.protocol.requestEchosounderProfile()
     }
 
     ColumnLayout {
