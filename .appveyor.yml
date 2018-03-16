@@ -13,7 +13,7 @@ environment:
       QT_VERSION: 5.10
       QT_LINKAGE: static
       COVERITY_BUILD_CANDIDATE: True
-      QTDIR: C:\Qt\5.10.0\msvc2015
+      QTDIR: C:\Qt\5.10.1\msvc2015
       VCLIBS: VCRUNTIME140.dll MSVCP140.dll
 
 configuration:
