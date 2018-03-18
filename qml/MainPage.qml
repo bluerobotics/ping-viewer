@@ -17,6 +17,7 @@ Item {
 
         PingItem {
             id: menuContainer
+            icon: "/icons/arrow_right_white.svg"
             item:  GridLayout {
                 columns: 5
                 rowSpacing: 5
