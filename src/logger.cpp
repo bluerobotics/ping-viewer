@@ -14,22 +14,20 @@ static QtMessageHandler originalHandler = nullptr;
 QVariant LogListModel::data(const QModelIndex & index, int role) const
 {
     switch (role) {
-    case Qt::ForegroundRole :
-        {
-            auto itr = _rowColors.find(index.row());
-            if (itr != _rowColors.end()) {
-                return itr->second;
-            }
+    case Qt::ForegroundRole : {
+        auto itr = _rowColors.find(index.row());
+        if (itr != _rowColors.end()) {
+            return itr->second;
         }
-        break;
-    case LogListModel::TimeRole :
-        {
-            auto itr = _rowTimes.find(index.row());
-            if (itr != _rowTimes.end()) {
-                return itr->second;
-            }
+    }
+    break;
+    case LogListModel::TimeRole : {
+        auto itr = _rowTimes.find(index.row());
+        if (itr != _rowTimes.end()) {
+            return itr->second;
         }
-        break;
+    }
+    break;
     default:
         break;
     }
