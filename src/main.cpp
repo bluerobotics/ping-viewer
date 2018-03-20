@@ -52,10 +52,10 @@ int main(int argc, char *argv[])
 
     // Load the QML and set the Context
     // Logo
-    #ifdef QT_NO_DEBUG
-        engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
-        app.exec();
-    #endif
+#ifdef QT_NO_DEBUG
+    engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
+    app.exec();
+#endif
     // Main app
     engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
     engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
