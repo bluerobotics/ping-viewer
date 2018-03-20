@@ -8,6 +8,18 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:cs50/ppa'
+          packages:
+            - astyle
+      env:
+        - TEST="true"
+
+    - os: linux
+      dist: trusty
+      sudo: require
+      addons:
+        apt:
+          sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
@@ -21,7 +33,7 @@ matrix:
         - MATRIX_EVAL="COMPILER=clang++"
 
 install:
-- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
     sudo apt update -qq;
     sudo apt search qt510;
@@ -38,7 +50,15 @@ install:
   fi
 
 script:
-- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+- if [ ! -z $TEST ]; then
+    ./tools/astyle.sh;
+    git diff;
+    if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
+      echo "Style error ! Run astyle in tools. (./tools/astyle.sh)";
+      exit 1;
+    fi;
+  fi
+- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     source /opt/qt*/bin/qt*-env.sh;
     git submodule init;
     git submodule update;
@@ -74,8 +94,10 @@ script:
   fi
 
 after_success:
-- wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+- if [ -z $TEST ]; then
+    wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
+  fi
+- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     bash ./upload.sh ./pingviewer*.AppImage*;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh pingviewer*.dmg*; fi
