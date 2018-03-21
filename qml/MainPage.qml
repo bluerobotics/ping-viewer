@@ -262,7 +262,8 @@ Item {
     Timer {
         id: pingTimer
         interval: 500; running: false; repeat: true
-        onTriggered: ping.protocol.requestEchosounderProfile()
+        //onTriggered: ping.protocol.requestEchosounderProfile() // deprecated
+        onTriggered: ping.request(1102) // TODO get enums in qml
     }
 
     ColumnLayout {
