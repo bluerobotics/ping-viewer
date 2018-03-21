@@ -17,47 +17,9 @@ ApplicationWindow {
     Material.accent: Material.Blue
     Material.foreground: Material.Blue
 
-    StackView {
-        id: stack
+    MainPage {
         anchors.fill: parent
-        initialItem: mainPage
-
-        MainPage {
-            id: mainPage
-        }
-
-        pushEnter: Transition {
-            PropertyAnimation {
-                property: "y"
-                from: -window.height
-                to: 0
-                duration: 200
-            }
-        }
-        pushExit: Transition {
-            PropertyAnimation {
-                property: "y"
-                from: 0
-                to: window.height
-                duration: 200
-            }
-        }
-        popEnter: Transition {
-            PropertyAnimation {
-                property: "y"
-                from: window.height
-                to: 0
-                duration: 200
-            }
-        }
-        popExit: Transition {
-            PropertyAnimation {
-                property: "y"
-                from: 0
-                to: -window.height
-                duration: 200
-            }
-        }
+        id: mainPage
     }
 
     // Save windows position and size
