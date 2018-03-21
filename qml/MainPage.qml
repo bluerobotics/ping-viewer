@@ -282,6 +282,10 @@ Item {
         }
     }
 
+    PingStatus {
+        ping: ping
+    }
+
     LinearGradient {
         anchors.fill: parent
         z: parent.z-1
