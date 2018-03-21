@@ -6,10 +6,10 @@
 #include <QDebug>
 
 #include "abstractlink.h"
-#include "waterfall.h"
 #include "logger.h"
 #include "ping.h"
 #include "util.h"
+#include "waterfall.h"
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
