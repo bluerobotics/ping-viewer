@@ -203,6 +203,11 @@ Item {
             }
         }
 
+        onPointsUpdate: {
+//            ping1DVisualizer.draw(points)
+//            ping1DVisualizer.draw(ping.points) // we get points here, but apparently no way to determine size of array
+        }
+
         Component.onCompleted: {
             if(ping.link.isOpen()) {
                 firstRequest()
