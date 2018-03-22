@@ -32,18 +32,11 @@ Item {
                 color: "transparent"
             }
 
-            Image {
+            PingImage {
                 id: pingName
-                Layout.preferredHeight: 50
+                Layout.fillHeight: true
+                Layout.fillWidth: true
                 source: "/imgs/ping_name.svg"
-                fillMode: Image.PreserveAspectFit
-                mipmap: true
-
-                ColorOverlay {
-                    anchors.fill: parent
-                    source: parent
-                    color: Style.iconColor
-                }
             }
 
             Rectangle {
@@ -132,12 +125,13 @@ Item {
         }
         RowLayout {
             id: btLayout
+            Layout.preferredHeight: 40
 
-            Image {
+            PingImage {
                 id: forumPost
                 source: "/icons/chat_white.svg"
-                fillMode: Image.PreserveAspectFit
-                mipmap: true
+                Layout.fillHeight: true
+                Layout.fillWidth: true
 
                 MouseArea {
                     id: mouseAreaForumPost
@@ -152,22 +146,13 @@ Item {
                     id: tooltipForumPost
                     text: "Forum"
                 }
-
-                ColorOverlay {
-                    anchors.fill: parent
-                    source: parent
-                    color: Style.iconColor
-                }
             }
 
-            Image {
+            PingImage {
                 id: scrollLock
-                height: parent.height
-                width: height
+                Layout.fillHeight: true
                 Layout.fillWidth: true
                 source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
-                fillMode: Image.PreserveAspectFit
-                mipmap: true
 
                 MouseArea {
                     id: mouseAreaScrollLock
@@ -175,8 +160,7 @@ Item {
                     hoverEnabled: true
                     onEntered: toolTipScrollLock.visible = true
                     onExited: toolTipScrollLock.visible = false
-                    onClicked:
-                    {
+                    onClicked: {
                         log.scrollLockEnabled = !log.scrollLockEnabled
                     }
                 }
@@ -185,20 +169,14 @@ Item {
                     id: toolTipScrollLock
                     text: "Scroll Lock"
                 }
-
-                ColorOverlay {
-                    anchors.fill: parent
-                    source: parent
-                    color: Style.iconColor
-                }
             }
 
-            Image {
+            PingImage {
                 id: issue
-                anchors.right: btLayout.right
                 source: "/icons/report_white.svg"
-                fillMode: Image.PreserveAspectFit
-                mipmap: true
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                anchors.right: btLayout.right
 
                 MouseArea {
                     id: mouseAreaIssue
@@ -212,12 +190,6 @@ Item {
                 ToolTip {
                     id: tooltipIssue
                     text: "Report issue"
-                }
-
-                ColorOverlay {
-                    anchors.fill: parent
-                    source: parent
-                    color: Style.iconColor
                 }
             }
         }

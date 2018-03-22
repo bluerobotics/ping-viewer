@@ -24,6 +24,8 @@ Item {
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var color: hideItem ? colorUnselected : colorSelected
     property var spin: false
+    property var flip: false
+    property var finalAngle: spin ? 360 : 180
 
     onItemChanged: {
         if(item == null) {
@@ -39,7 +41,7 @@ Item {
     }
 
     onClickedChanged: {
-        openIcon.flip = clicked
+        flip = clicked
     }
 
     MouseArea {
@@ -58,28 +60,28 @@ Item {
         itemRect.hide = hideItem
     }
 
+    onFlipChanged: {
+        rotateIcon.from = rotateIcon.to
+        rotateIcon.to = pingItem.flip ? finalAngle + startAngle : 0 + startAngle
+        rotateIcon.running = true
+    }
+
     Rectangle {
         id: iconRect
         anchors.left: parent.left
         anchors.top: parent.top
 
-        height: openIcon.height
-        width: openIcon.width
+        height: 40
+        width: 40
 
         visible: iconVisible
 
         color: pingItem.color
 
-        Image {
+        PingImage {
             id: openIcon
-            source:         icon == undefined ? "/icons/arrow_right_white.svg" : icon
-            fillMode:       Image.PreserveAspectFit
-            mipmap:         true
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            visible: parent.visible
-            property var flip: pingItem.clicked
-            property var finalAngle: pingItem.spin ? 360 : 180
+            source: pingItem.icon
+            anchors.fill: parent
 
             RotationAnimator on rotation {
                 id: rotateIcon
@@ -89,21 +91,9 @@ Item {
                 running: true
                 onRunningChanged: {
                     if(pingItem.spin && pingItem.clicked) {
-                        openIcon.flip = !openIcon.flip
+                        pingItem.flip = !pingItem.flip
                     }
                 }
-            }
-
-            onFlipChanged: {
-                rotateIcon.from = rotateIcon.to
-                rotateIcon.to = flip ? finalAngle + startAngle : 0 + startAngle
-                rotateIcon.running = true
-            }
-
-            ColorOverlay {
-                anchors.fill: parent
-                source: parent
-                color: Style.iconColor
             }
         }
 
