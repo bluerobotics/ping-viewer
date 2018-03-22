@@ -54,8 +54,8 @@ public:
     static void installHandler();
     static void test();
 
-    signals:
-        void registeredCategoryChanged();
+signals:
+    void registeredCategoryChanged();
 
 private:
     Logger* operator = (Logger& other) = delete;

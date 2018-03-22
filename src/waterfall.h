@@ -39,7 +39,7 @@ class Waterfall : public QQuickPaintedItem
     static uint16_t displayWidth;
     uint16_t currentDrawIndex;
 
-    signals:
+signals:
     void imageChanged();
     void mouseDepthChanged();
     void mouseMove();

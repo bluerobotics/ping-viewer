@@ -28,7 +28,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     setTheme("Thermal 5");
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, [&]{if(_update) update(); _update = false;});
+    connect(timer, &QTimer::timeout, [&] {if(_update) update(); _update = false;});
     timer->start(50);
 }
 
@@ -72,19 +72,19 @@ void Waterfall::setGradients()
 
     WaterfallGradient ocean(QStringLiteral("Ocean"), {
         QColor(48,12,64),
-		QColor(86,30,111),
-		QColor(124,85,135),
-		QColor(167,114,130),
-		QColor(206,154,132),
+        QColor(86,30,111),
+        QColor(124,85,135),
+        QColor(167,114,130),
+        QColor(206,154,132),
     });
     _gradients.append(ocean);
 
     WaterfallGradient transparent(QStringLiteral("Transparent"), {
         QColor(20, 0, 120),
-		QColor(200, 30, 140),
-		QColor(255, 100, 0),
-		QColor(255, 255, 40),
-		QColor(255, 255, 255),
+        QColor(200, 30, 140),
+        QColor(255, 100, 0),
+        QColor(255, 255, 40),
+        QColor(255, 255, 255),
     });
     _gradients.append(transparent);
 
@@ -174,11 +174,11 @@ void Waterfall::draw(const QList<double>& points)
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
     if (currentDrawIndex >= _image.width()) {
-            old = _image.copy(_image.width() - displayWidth, 0, displayWidth, _image.height());
-            QPainter painter(&_image);
-            painter.drawImage(0, 0, old);
-            painter.end();
-            currentDrawIndex = displayWidth;
+        old = _image.copy(_image.width() - displayWidth, 0, displayWidth, _image.height());
+        QPainter painter(&_image);
+        painter.drawImage(0, 0, old);
+        painter.end();
+        currentDrawIndex = displayWidth;
     }
 
     if(smooth()) {
