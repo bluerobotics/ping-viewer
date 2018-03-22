@@ -15,10 +15,11 @@ Item {
 
         color: "black"
         opacity: 0.75
-        height:innerCol.height
-        width: innerCol.width
+        height: innerCol.height
+        width: innerCol.width*1.2
         Column {
             id: innerCol
+            anchors.centerIn: parent
             Row {
                 Text {
                     text: "FW: " + ping.fw_version_major + "." + ping.fw_version_minor
