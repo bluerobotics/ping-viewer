@@ -95,7 +95,7 @@ void Logger::logMessage(const QString& msg, QtMsgType type)
 
     _logModel.insertRows(line, 1);
     _logModel.setData(_logModel.index(line), time, LogListModel::TimeRole);
-    _logModel.setData(_logModel.index(line), msg, Qt::DisplayRole);
+    _logModel.setData(_logModel.index(line), QString(msg).replace("\\n", "\n"), Qt::DisplayRole);
     _logModel.setData(_logModel.index(line), colors[type], Qt::ForegroundRole);
 }
 
@@ -103,7 +103,7 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
 {
     static const QString msgTypes[] = { "Debug", "Warning", "Critical", "Fatal", "Info" };
     const QString file = QString(context.file).split('/').last();
-    const QString logMsg = QString("%2: %3 at %4(%5) %6").arg(msgTypes[type]).arg(context.category).arg(file).arg(context.line).arg(msg);
+    const QString logMsg = QString("%2: %3 at %4(%5) %6").arg(msgTypes[type], context.category, file, QString::number(context.line), msg);
 
     Logger::self()->logMessage(logMsg, type);
     if (originalHandler) {
