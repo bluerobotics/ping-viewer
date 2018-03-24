@@ -28,6 +28,7 @@ RESOURCES += \
 }
 
 include(lib/ping-protocol-cpp/ping.pri)
+include(lib/stm32flash/stm32flash.pri)
 
 build_pass:CONFIG(debug, debug|release) {
     message("Debug Build !")
