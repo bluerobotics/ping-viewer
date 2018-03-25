@@ -312,6 +312,7 @@ Item {
 
                 PingButton {
                     text: "Browse.."
+                    enabled: flashProgress.indeterminate
                     onClicked: {
                         fileDialog.visible = true
                     }
@@ -321,7 +322,7 @@ Item {
                     text: "Firmware Update"
                     Layout.columnSpan:  5
                     Layout.fillWidth: true
-                    enabled: fileDialog.fileUrl.toString().length
+                    enabled: fileDialog.fileUrl.toString().length && flashProgress.indeterminate
 
                     onClicked: {
                         ping.firmwareUpdate(fileDialog.fileUrl)
