@@ -56,6 +56,7 @@ after_build:
   - copy %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\pingviewer.exe deploy\pingviewer.exe
   - windeployqt --qmldir %APPVEYOR_BUILD_FOLDER%/qml --%CONFIGURATION% deploy/pingviewer.exe --verbose=2
   - for %%I in (%VCLIBS%) do copy %VCLIBDIR%\%%I deploy\
+  - appveyor DownloadFile https://transfer.sh/xGmWK/stm32flash.exe -FileName deploy/stm32flash.exe
   - 7z a -tzip pingviewer_%CONFIGURATION%.zip deploy -r
   - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%CONFIGURATION%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%CONFIGURATION%.zip
   - dir /b /s *.zip
