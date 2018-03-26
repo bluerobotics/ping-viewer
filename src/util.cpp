@@ -22,7 +22,7 @@ QStringList Util::serialPortList()
     return portNameList;
 }
 
-void Util::update(QAbstractSeries* series, const QList<double>& points, const bool invert)
+void Util::update(QAbstractSeries* series, const QList<double>& points, const float multiplier)
 {
     if (!series && points.isEmpty()) {
         qCDebug(util) << "Serie or vector not valid.";
@@ -31,11 +31,9 @@ void Util::update(QAbstractSeries* series, const QList<double>& points, const bo
     QXYSeries *xySeries = static_cast<QXYSeries *>(series);
     // Use replace instead of clear + append, it's optimized for performance
     QVector<QPointF> realPoints;
-    float signal = invert ? -1 : 1;
-    float mult = 255*signal;
     #pragma omp for
     for(int i = 0; i < points.size(); i++) {
-        realPoints << QPointF(i, mult*points[i]);
+        realPoints << QPointF(i, multiplier * points[i]);
     }
     xySeries->replace(realPoints);
 }

@@ -88,7 +88,6 @@ Item {
             icon: "/icons/settings_white.svg"
             item: SettingsPage {
                 id: settingsPage
-                ping: ping
                 waterfallItem: ping1DVisualizer.waterfallItem
             }
             onHideItemChanged: {
@@ -204,6 +203,11 @@ Item {
             }
         }
 
+        onPointsUpdate: {
+//            ping1DVisualizer.draw(points)
+//            ping1DVisualizer.draw(ping.points) // we get points here, but apparently no way to determine size of array
+        }
+
         Component.onCompleted: {
             if(ping.link.isOpen()) {
                 firstRequest()
@@ -263,7 +267,8 @@ Item {
     Timer {
         id: pingTimer
         interval: 500; running: false; repeat: true
-        onTriggered: ping.protocol.requestEchosounderProfile()
+        //onTriggered: ping.protocol.requestEchosounderProfile() // deprecated
+        onTriggered: ping.request(1102) // TODO get enums in qml
     }
 
     ColumnLayout {
@@ -275,6 +280,10 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
         }
+    }
+
+    PingStatus {
+        ping: ping
     }
 
     LinearGradient {

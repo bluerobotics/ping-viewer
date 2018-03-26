@@ -68,8 +68,8 @@ Item {
             labelsVisible: false
             labelFormat: "%.1f"
             tickCount: 2
-            min: -255
-            max: 255
+            min: -1
+            max: 1
         }
 
         LineSeries {
@@ -95,7 +95,7 @@ Item {
         function draw(points) {
             if (points) {
                 Util.update(serie, points)
-                Util.update(serieInv, points, true)
+                Util.update(serieInv, points, -1)
                 return
             }
 
