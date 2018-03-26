@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
-    qmlRegisterType<Protocol>("Protocol", 1, 0, "Protocol");
     qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
 
     QApplication app(argc, argv);
