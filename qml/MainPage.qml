@@ -25,7 +25,8 @@ Item {
 
                 PingButton {
                     text: "Emit Ping"
-                    onClicked: ping.protocol.requestEchosounderProfile()
+                    //requestEchosounderProfile
+                    onClicked: ping.request(1102)
                 }
 
                 Slider {
@@ -56,13 +57,16 @@ Item {
                 CheckBox {
                     id: autoGainChB
                     text: "Auto Gain"
+                    checked: ping.modeAuto
                     onCheckedChanged: {
-                        ping.protocol.setEchosounderAuto(checked)
+                        //setEchosounderAuto(checked)
+                        ping.request(1102)
                     }
                 }
 
                 ComboBox {
                     id: gainCB
+                    currentIndex: ping.gain
                     model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
                     enabled: !autoGainChB.checked
                     Layout.columnSpan:  4
@@ -71,7 +75,7 @@ Item {
                         displayText = model[currentIndex] + " dB"
                     }
                     onActivated: {
-                        ping.protocol.setEchosounderGain(index)
+                        //setEchosounderGain(index)
                     }
                 }
             }
@@ -103,6 +107,10 @@ Item {
             icon: "/icons/info_white.svg"
             item: InfoPage {
                 id: infoPage
+                deviceFirmware: ping.fw_version_major + "." + ping.fw_version_minor
+                deviceID: ping.srcId
+                deviceModel: ping.device_model
+                deviceType: ping.device_type
             }
             onHideItemChanged: {
                 if(hideItem == false) {
@@ -203,11 +211,6 @@ Item {
             }
         }
 
-        onPointsUpdate: {
-//            ping1DVisualizer.draw(points)
-//            ping1DVisualizer.draw(ping.points) // we get points here, but apparently no way to determine size of array
-        }
-
         Component.onCompleted: {
             if(ping.link.isOpen()) {
                 firstRequest()
@@ -215,60 +218,40 @@ Item {
         }
 
         function firstRequest() {
-            ping.protocol.requestEchosounderMode()
-            ping.protocol.requestEchosounderProfile()
-            ping.protocol.requestEchosounderProfile()
-            ping.protocol.requestVersion()
-            ping.protocol.requestDeviceID()
-            ping.protocol.requestNewData()
+            //requestEchosounderMode
+            ping.request(1111)
+            //requestEchosounderProfile
+            ping.request(1102)
+            //requestVersion
+            ping.request(101)
+            //requestDeviceID
+            ping.request(120)
+            //requestNewData // Does not exist
+            //ping.request(112)
         }
     }
 
     Connections {
-        target: ping.protocol
-        onEchosounderPoints: {
-            ping1DVisualizer.draw(points)
+        target: ping
+        onPointsUpdate: {
+            ping1DVisualizer.draw(ping.points)
         }
 
-        onEchosounderDistance: {
-            ping1DVisualizer.setDepth(mm/1e3)
+        onDistanceUpdate: {
+            ping1DVisualizer.setDepth(ping.distance/1e3)
         }
 
-        onEchosounderGain: {
-            gainCB.currentIndex = gain
-        }
-
-        onEchosounderAuto: {
-            autoGainChB.checked = mode
-        }
-
-        onEchosounderConfidence: {
-            ping1DVisualizer.setConfidence(perc)
-        }
-
-        onDeviceType: {
-            print(devType)
-            infoPage.deviceType = devType
-        }
-
-        onDeviceModel: {
-            infoPage.deviceModel = devModel
-        }
-
-        onFirmwareVersion: {
-            infoPage.deviceFirmware = fwVersion
-        }
-
-        onDeviceID: {
-            infoPage.deviceID = ID
+        onConfidenceUpdate: {
+            // Q_PROPERTY does not exist
+            //ping1DVisualizer.setConfidence(ping.confidence)
         }
     }
 
     Timer {
         id: pingTimer
         interval: 500; running: false; repeat: true
-        //onTriggered: ping.protocol.requestEchosounderProfile() // deprecated
-        onTriggered: ping.request(1102) // TODO get enums in qml
+        // TODO get message ID enums in qml
+        onTriggered: ping.request(1102)
     }
 
     ColumnLayout {
