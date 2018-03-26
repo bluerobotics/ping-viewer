@@ -293,6 +293,7 @@ Item {
                 }
 
                 TextField {
+                    enabled: false
                     Layout.columnSpan:  4
                     Layout.fillWidth: true
                 }
@@ -305,6 +306,7 @@ Item {
 
                 TextField {
                     id: firmwareFileName
+                    enabled: false
                     Layout.columnSpan:  3
                     Layout.fillWidth: true
                     text: fileDialog.fileName
