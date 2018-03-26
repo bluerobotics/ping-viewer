@@ -92,6 +92,7 @@ Item {
             icon: "/icons/settings_white.svg"
             item: SettingsPage {
                 id: settingsPage
+                ping: ping
                 waterfallItem: ping1DVisualizer.waterfallItem
             }
             onHideItemChanged: {
