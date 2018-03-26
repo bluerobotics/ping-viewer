@@ -105,7 +105,12 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
 {
     static const QString msgTypes[] = { "Debug", "Warning", "Critical", "Fatal", "Info" };
     const QString file = QString(context.file).split('/').last();
-    const QString logMsg = QString("%2[%3]: %4(%5) %6").arg(context.category).arg(msgTypes[type]).arg(file).arg(context.line).arg(msg);
+    QString fileInfo;
+    if (!file.isEmpty()) {
+        fileInfo = QString("%1(%2) ").arg(file).arg(context.line);
+    }
+
+    const QString logMsg = QString("%1[%2]: %3%4").arg(context.category).arg(msgTypes[type]).arg(fileInfo).arg(msg);
 
     Logger::self()->logMessage(logMsg, type);
     if (originalHandler) {
