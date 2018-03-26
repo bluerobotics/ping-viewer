@@ -202,31 +202,6 @@ void Waterfall::draw(const QList<double>& points)
     _update = true;
 }
 
-void Waterfall::randomUpdate()
-{
-    static uint counter = 0;
-    counter++;
-    QList <double> points;
-    points.reserve(_image.height());
-    const int numPoints = _image.height();
-    const float stop1 = numPoints / 2.0 - 10 * qSin(counter / 10.0);
-    const float stop2 = 3 * numPoints / 5.0 + 6 * qCos(counter / 5.5);
-    #pragma omp parallel for private(points)
-    for (int i = 0; i < numPoints; i++) {
-        float point;
-        if (i < stop1) {
-            point = 0.1 * (qrand()%256)/255;
-        } else if (i < stop2) {
-            point = (-4.0 / qPow((stop2-stop1), 2.0)) * qPow((i - stop1 - ((stop2-stop1) / 2.0)), 2.0)  + 1.0;
-        } else {
-            point = 0.45 * (qrand()%256)/255;
-        }
-
-        points.append(point);
-    }
-    draw(points);
-}
-
 void Waterfall::hoverMoveEvent(QHoverEvent *event)
 {
     event->accept();

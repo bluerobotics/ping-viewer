@@ -53,7 +53,6 @@ public:
     Waterfall(QQuickItem *parent = 0);
     void paint(QPainter *painer);
     void setImage(const QImage &image);
-    void randomUpdate();
     void setGradients();
     void setTheme(const QString& theme);
     QColor valueToRGB(float point);
