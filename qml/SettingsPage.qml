@@ -51,9 +51,12 @@ Item {
             return;
         }
 
-        // None = 0, File, Serial, Udp, Tcp
+        // None = 0, File, Serial, Udp, Tcp, Sim
         // Enum Type : arg[0] : arg[1s]
-        var connString = (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
+        var connString = conntype.currentIndex == 2
+                                ? "5:-:-"
+                                : (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
+
         console.log(connString)
         ping.connectLink(connString)
     }
@@ -97,7 +100,7 @@ Item {
                         enabled: true
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
-                        model: ["Serial (default)", "UDP", "TCP", "Simulation"]
+                        model: ["Serial (default)", "UDP", "Simulation"]
                         onActivated: {
                             switch(index) {
                                 case 0: // Serial
@@ -116,7 +119,7 @@ Item {
                                     connect(udpIp.text, udpPort.text)
                                     break
 
-                                case 3:
+                                case 2:
                                     udpIp.enabled = false
                                     udpPort.enabled = false
                                     serialPortsCB.enabled = false
