@@ -78,6 +78,14 @@ Item {
             }
             Row {
                 Text {
+                    text: "Ping msec: " + ping.msec_per_ping
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
                     text: "Gain index: " + ping.gain_index
                     color: "white"
                     font.family: "unicode"
