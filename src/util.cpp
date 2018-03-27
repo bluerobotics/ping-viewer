@@ -17,7 +17,9 @@ QStringList Util::serialPortList()
     QStringList portNameList;
     portNameList.reserve(serialPortInfoList.length());
     for (const auto& serialPortInfo : serialPortInfoList) {
-        portNameList.append(serialPortInfo.portName());
+        if (!serialPortInfo.portName().startsWith(QStringLiteral("cu."), Qt::CaseInsensitive)) {
+            portNameList.append(serialPortInfo.portName());
+        }
     }
     return portNameList;
 }
