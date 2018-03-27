@@ -37,12 +37,12 @@ matrix:
 
 install:
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
-    sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
+    sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
     sudo apt update -qq;
-    sudo apt search qt510;
-    sudo apt install build-essential qt510-meta-minimal/trusty qt510charts-no-lgpl/trusty
-    qt510quickcontrols/trusty qt510quickcontrols2/trusty qt510serialport/trusty
-    qt510graphicaleffects/trusty qt510svg/trusty qt510scxml/trusty git;
+    sudo apt search qt59;
+    sudo apt install build-essential qt59-meta-minimal qt59charts-no-lgpl
+    qt59quickcontrols qt59quickcontrols2 qt59serialport
+    qt59graphicaleffects qt59svg qt59scxml git;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew update > /dev/null;
@@ -84,7 +84,7 @@ script:
     chmod a+x linuxdeployqt*.AppImage;
     unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
     mkdir -p deploy/usr/plugins/imageformats/;
-    cp /opt/qt510/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
+    cp /opt/qt59/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
     ./linuxdeployqt*.AppImage deploy/pingviewer -verbose=2 -qmldir=../qml -bundle-non-qt-libs;
     ./linuxdeployqt*.AppImage deploy/pingviewer.desktop -verbose=2 -qmldir=../qml -appimage;
     find . | grep AppImage;
