@@ -39,6 +39,9 @@ Item {
                     onValueChanged: {
                         pingPerSecond.text = Math.floor(value).toString() + " ping/s"
                         var period = 1000/value
+
+                        ping.msec_per_ping = period
+
                         if(isNaN(period) || period <= 0) {
                             pingTimer.stop()
                             return
