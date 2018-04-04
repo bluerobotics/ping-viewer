@@ -11,22 +11,22 @@ Item {
     state: "top-left"
     signal  activated()
 
+    property bool flip: !hideItem
+    property bool hideItem: true
     property bool iconVisible: (pingBtMouseArea.containsMouse || pingItemMouseArea.containsMouse || !smartVisibility) && !inPopup
     property bool inPopup: false
+    property bool isSubItem: false
     property bool smartVisibility: false
+    property bool spin: false
     property var clicked: false
     property var color: hideItem ? colorUnselected : colorSelected
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
     property var finalAngle: spin ? 360 : 180
-    property var flip: !hideItem
-    property var hideItem: true
     property var hoverParent: undefined
     property var icon: undefined
     property var item: null
-    property var isSubItem: false
     property var marginMult: 1.05
-    property var spin: false
     property var startAngle: 0
 
     onItemChanged: {
