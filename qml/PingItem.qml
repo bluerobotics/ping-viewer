@@ -11,21 +11,23 @@ Item {
     state: "top-left"
     signal  activated()
 
-    property bool inPopup: false
-    property bool smartVisibility: false
+    property bool flip: !hideItem
+    property bool hideItem: true
     property bool iconVisible: (pingBtMouseArea.containsMouse || pingItemMouseArea.containsMouse || !smartVisibility) && !inPopup
-    property var item: null
-    property var hideItem: true
-    property var hoverParent: undefined
-    property var startAngle: 0
-    property var icon: undefined
+    property bool inPopup: false
+    property bool isSubItem: false
+    property bool smartVisibility: false
+    property bool spin: false
     property var clicked: false
-    property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
-    property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var color: hideItem ? colorUnselected : colorSelected
-    property var spin: false
-    property var flip: false
+    property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
+    property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
     property var finalAngle: spin ? 360 : 180
+    property var hoverParent: undefined
+    property var icon: undefined
+    property var item: null
+    property var marginMult: 1.05
+    property var startAngle: 0
 
     onItemChanged: {
         if(item == null) {
@@ -38,10 +40,6 @@ Item {
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
         item.anchors.verticalCenter = itemRect.verticalCenter
-    }
-
-    onClickedChanged: {
-        flip = clicked
     }
 
     MouseArea {
@@ -76,12 +74,13 @@ Item {
 
         visible: iconVisible
 
-        color: pingItem.color
+        color: isSubItem ? 'transparent' : pingItem.color
 
         PingImage {
             id: openIcon
             source: pingItem.icon
             anchors.fill: parent
+            selected: !pingItem.hideItem
 
             RotationAnimator on rotation {
                 id: rotateIcon
@@ -135,9 +134,8 @@ Item {
         id: itemRect
         opacity: 0
 
-        height: item != null ? item.height*1.05 : 0
-        width: item != null ? item.width*1.05 : 0
-
+        height: item != null ? item.height*marginMult : 0
+        width: item != null ? item.width*marginMult : 0
         color: pingItem.color
         property var hide: true
 

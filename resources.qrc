@@ -2,9 +2,12 @@
     <qresource prefix="/">
         <file alias="qmldir">qml/qmldir</file>
         <file alias="Chart.qml">qml/Chart.qml</file>
+        <file alias="DisplaySettings.qml">qml/DisplaySettings.qml</file>
+        <file alias="FirmwareUpdate.qml">qml/FirmwareUpdate.qml</file>
         <file alias="InfoPage.qml">qml/InfoPage.qml</file>
         <file alias="Logo.qml">qml/Logo.qml</file>
         <file alias="main.qml">qml/main.qml</file>
+        <file alias="MainMenu.qml">qml/MainMenu.qml</file>
         <file alias="MainPage.qml">qml/MainPage.qml</file>
         <file alias="Ping1DVisualizer.qml">qml/Ping1DVisualizer.qml</file>
         <file alias="PingButton.qml">qml/PingButton.qml</file>
@@ -12,13 +15,14 @@
         <file alias="PingImage.qml">qml/PingImage.qml</file>
         <file alias="PingLogger.qml">qml/PingLogger.qml</file>
         <file alias="PingStatus.qml">qml/PingStatus.qml</file>
-        <file alias="SettingsPage.qml">qml/SettingsPage.qml</file>
         <file alias="Style.qml">qml/Style.qml</file>
         <file alias="ValueReadout.qml">qml/ValueReadout.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
         <file alias="chat_white.svg">qml/icons/chat_white.svg</file>
+        <file alias="chip_white.svg">qml/icons/chip_white.svg</file>
+        <file alias="sun_white.svg">qml/icons/sun_white.svg</file>
         <file alias="disk_black.svg">qml/icons/disk.svg</file>
         <file alias="info_white.svg">qml/icons/info_white.svg</file>
         <file alias="lock_white.svg">qml/icons/lock_white.svg</file>

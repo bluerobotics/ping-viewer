@@ -5,6 +5,7 @@ Item {
     id: root
 
     property var source: undefined
+    property var selected: false
 
     Image {
         id: image
@@ -21,6 +22,6 @@ Item {
         id: colorOverlay
         anchors.fill: image
         source: image
-        color: Style.iconColor
+        color: selected ? Qt.rgba(0,0.5,0,0.75) : Style.iconColor
     }
 }

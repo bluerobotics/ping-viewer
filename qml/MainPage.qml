@@ -18,70 +18,10 @@ Item {
         PingItem {
             id: menuContainer
             icon: "/icons/arrow_right_white.svg"
-            item:  GridLayout {
-                columns: 5
-                rowSpacing: 5
-                columnSpacing: 5
-
-                PingButton {
-                    text: "Emit Ping"
-                    //requestEchosounderProfile
-                    onClicked: ping.request(1102)
-                }
-
-                Slider {
-                    id: pingHzSlider
-                    from: 0
-                    value: 0
-                    stepSize: 1
-                    to: 35
-                    Layout.columnSpan:  3
-                    onValueChanged: {
-                        pingPerSecond.text = Math.floor(value).toString() + " ping/s"
-                        var period = 1000/value
-
-                        ping.msec_per_ping = period
-
-                        if(isNaN(period) || period <= 0) {
-                            pingTimer.stop()
-                            return
-                        }
-                        pingTimer.start()
-                        pingTimer.interval = period
-                    }
-                }
-
-                Text {
-                    id: pingPerSecond
-                    text: "0 ping/s"
-                    color: Style.textColor
-                }
-
-                CheckBox {
-                    id: autoGainChB
-                    text: "Auto Gain"
-                    checked: ping.modeAuto
-                    onCheckedChanged: {
-                        //setEchosounderAuto(checked)
-                        ping.request(1102)
-                    }
-                }
-
-                ComboBox {
-                    id: gainCB
-                    currentIndex: ping.gain
-                    model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
-                    enabled: !autoGainChB.checked
-                    Layout.columnSpan:  4
-                    Layout.fillWidth: true
-                    onCurrentIndexChanged: {
-                        displayText = model[currentIndex] + " dB"
-                    }
-                    onActivated: {
-                        //setEchosounderGain(index)
-                    }
-                }
+            item: MainMenu {
+                ping: ping
             }
+
             onHideItemChanged: {
                 if(hideItem == false) {
                     settingsMenu.hideItem = true
@@ -92,11 +32,41 @@ Item {
 
         PingItem {
             id: settingsMenu
+            marginMult: 1
             icon: "/icons/settings_white.svg"
-            item: SettingsPage {
-                id: settingsPage
-                ping: ping
-                waterfallItem: ping1DVisualizer.waterfallItem
+            item: ColumnLayout {
+                spacing: 0
+                PingItem {
+                    id: displayItem
+                    isSubItem: true
+                    icon: "/icons/sun_white.svg"
+
+                    item: DisplaySettings {
+                        id: displaySettings
+                        waterfallItem: ping1DVisualizer.waterfallItem
+                    }
+
+                    onHideItemChanged: {
+                        if(hideItem == false) {
+                            firmwareUpdate.hideItem = true
+                        }
+                    }
+                }
+                PingItem {
+                    id: firmwareUpdate
+                    isSubItem: true
+                    icon: "/icons/chip_white.svg"
+
+                    item: FirmwareUpdate {
+                        ping: ping
+                    }
+
+                    onHideItemChanged: {
+                        if(hideItem == false) {
+                            displayItem.hideItem = true
+                        }
+                    }
+                }
             }
             onHideItemChanged: {
                 if(hideItem == false) {
@@ -127,7 +97,7 @@ Item {
 
     PingItem {
         id: replayMenu
-        visible: settingsPage.replayItem
+        visible: displaySettings.replayItem
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         state: "bottom-left"
