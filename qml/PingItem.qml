@@ -19,7 +19,7 @@ Item {
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
     property var finalAngle: spin ? 360 : 180
-    property var flip: false
+    property var flip: !hideItem
     property var hideItem: true
     property var hoverParent: undefined
     property var icon: undefined
@@ -40,10 +40,6 @@ Item {
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
         item.anchors.verticalCenter = itemRect.verticalCenter
-    }
-
-    onClickedChanged: {
-        flip = clicked
     }
 
     MouseArea {
