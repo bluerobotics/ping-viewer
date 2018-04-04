@@ -80,6 +80,7 @@ Item {
             id: openIcon
             source: pingItem.icon
             anchors.fill: parent
+            selected: !pingItem.hideItem
 
             RotationAnimator on rotation {
                 id: rotateIcon
