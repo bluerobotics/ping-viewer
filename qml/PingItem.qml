@@ -176,14 +176,16 @@ Item {
         }
 
         onHideChanged: {
-            item.enabled = !hide
-            rectOpa.from = rectOpa.to
-            rectOpa.to = hide ? 0 : 1
-            rectOpa.running = true
+            if(item != null) {
+                item.enabled = !hide
+                rectOpa.from = rectOpa.to
+                rectOpa.to = hide ? 0 : 1
+                rectOpa.running = true
 
-            itemOpa.from = itemOpa.to
-            itemOpa.to = hide ? 0 : 1
-            itemOpa.running = true
+                itemOpa.from = itemOpa.to
+                itemOpa.to = hide ? 0 : 1
+                itemOpa.running = true
+            }
         }
     }
 }
