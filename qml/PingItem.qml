@@ -16,14 +16,16 @@ Item {
     property bool iconVisible: (pingBtMouseArea.containsMouse || pingItemMouseArea.containsMouse || !smartVisibility) && !inPopup
     property bool inPopup: false
     property bool isSubItem: false
+    property bool pingpong: false
     property bool smartVisibility: false
-    property bool spin: false
+    property bool spin: fals
     property var animationType: Easing.Linear
     property var clicked: false
     property var color: hideItem ? colorUnselected : colorSelected
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
-    property var finalAngle: spin ? 360 : 180
+    property var finalAngle: 180
+    property var finalAngleValue: spin && !pingpong ? 360 : finalAngle
     property var hoverParent: undefined
     property var icon: undefined
     property var item: null
@@ -59,7 +61,7 @@ Item {
 
     onFlipChanged: {
         rotateIcon.from = rotateIcon.to
-        rotateIcon.to = pingItem.flip ? finalAngle + startAngle : 0 + startAngle
+        rotateIcon.to = pingItem.flip ? pingItem.finalAngleValue : pingItem.startAngle
         rotateIcon.running = true
     }
 
@@ -85,11 +87,17 @@ Item {
                 id: rotateIcon
                 from: startAngle
                 to: startAngle
-                duration: pingItem.spin ? 1000 : 200
+                duration: pingItem.pingpong ? 1000 : (pingItem.spin ? 2000 : 200)
+                direction: pingItem.pingpong ?
+                    RotationAnimation.Shortest : (itemRect.hide ? RotationAnimation.Counterclockwise : RotationAnimation.Clockwise)
                 running: true
                 easing.type: animationType
                 onRunningChanged: {
-                    if(pingItem.spin && pingItem.clicked) {
+                    if(running) {
+                        return
+                    }
+
+                    if((pingItem.spin && pingItem.clicked) || pingItem.pingpong) {
                         pingItem.flip = !pingItem.flip
                     }
                 }
