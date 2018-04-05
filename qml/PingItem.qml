@@ -18,6 +18,7 @@ Item {
     property bool isSubItem: false
     property bool smartVisibility: false
     property bool spin: false
+    property var animationType: Easing.Linear
     property var clicked: false
     property var color: hideItem ? colorUnselected : colorSelected
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
@@ -88,6 +89,7 @@ Item {
                 to: startAngle
                 duration: pingItem.spin ? 1000 : 200
                 running: true
+                easing.type: animationType
                 onRunningChanged: {
                     if(pingItem.spin && pingItem.clicked) {
                         pingItem.flip = !pingItem.flip
