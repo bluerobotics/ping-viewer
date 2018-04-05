@@ -132,6 +132,14 @@ Item {
                 anchors.bottom: iconRect.bottom
                 anchors.left: iconRect.right
             }
+        },
+        State {
+            name: "bottom-right"
+            AnchorChanges {
+                target: itemRect
+                anchors.bottom: iconRect.bottom
+                anchors.right: iconRect.left
+            }
         }
     ]
 
