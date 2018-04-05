@@ -20,6 +20,7 @@
     </qresource>
     <qresource prefix="/icons">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
+        <file alias="bell_white.svg">qml/icons/bell_white.svg</file>
         <file alias="chat_white.svg">qml/icons/chat_white.svg</file>
         <file alias="chip_white.svg">qml/icons/chip_white.svg</file>
         <file alias="sun_white.svg">qml/icons/sun_white.svg</file>
