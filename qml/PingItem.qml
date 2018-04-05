@@ -49,9 +49,7 @@ Item {
         enabled: smartVisibility
         hoverEnabled: true
         onClicked: {
-            if(item != null) {
-                hideItem = true
-            }
+            hideItem = true
         }
     }
 
@@ -103,11 +101,8 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onClicked: {
-                if(item != null) {
-                    itemRect.hide = !itemRect.hide
-                    hideItem = itemRect.hide
-                }
-
+                itemRect.hide = !itemRect.hide
+                hideItem = itemRect.hide
                 pingItem.clicked = !pingItem.clicked
             }
         }
