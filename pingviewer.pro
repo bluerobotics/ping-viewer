@@ -1,5 +1,7 @@
 TARGET = pingviewer
 
+RC_ICONS = deploy/icon.ico
+
 CONFIG += \
     c++14 \
     static
