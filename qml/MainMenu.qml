@@ -34,9 +34,12 @@ Item {
             return;
         }
 
-        // None = 0, File, Serial, Udp, Tcp
+        // None = 0, File, Serial, Udp, Tcp, Sim
         // Enum Type : arg[0] : arg[1s]
-        var connString = (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
+        var connString = conntype.currentIndex == 2
+                            ? "5:-:-"
+                            : (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
+
         ping.connectLink(connString)
     }
 
@@ -154,7 +157,7 @@ Item {
                     enabled: true
                     Layout.columnSpan:  4
                     Layout.fillWidth: true
-                    model: ["Serial (default)", "UDP"]
+                    model: ["Serial (default)", "UDP", "Simulation"]
                     onActivated: {
                         switch(index) {
                             case 0: // Serial
@@ -172,6 +175,13 @@ Item {
                                 baudrateBox.enabled = false
                                 connect(udpIp.text, udpPort.text)
                                 break
+
+                            case 2:
+                                udpIp.enabled = false
+                                udpPort.enabled = false
+                                serialPortsCB.enabled = false
+                                baudrateBox.enabled = false
+                                connect()
                         }
                     }
                 }
