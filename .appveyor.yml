@@ -72,4 +72,4 @@ deploy:
     draft: false
     prerelease: true
     auth_token:
-      secure: nDCdC4GpY1RMJ0Nw5rqRnl1Fu6yr4bpD501KE6NxZcnME39NayzOlWmIJaVWgVQF
+      secure: VEF0yQnbTywsc88aRTZH8e1/Z0M7qf2txtidiB43qrSFTvrE/2nAQzGx+eqCBb9p
