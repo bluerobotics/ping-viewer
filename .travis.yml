@@ -27,6 +27,21 @@ matrix:
       env:
         - DESC="AppImage deploy"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - QTV="qt510"
+
+    - os: linux
+      dist: trusty
+      sudo: require
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - DESC="AppImage deploy for QGC"
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - QTV="qt59"
 
     - os: osx
       osx_image: xcode9.2
@@ -37,12 +52,16 @@ matrix:
 
 install:
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
-    sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
+    if [ "${QTV}" = "qt59" ]; then
+      sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
+    else
+      sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
+    fi;
     sudo apt update -qq;
-    sudo apt search qt59;
-    sudo apt install build-essential qt59-meta-minimal qt59charts-no-lgpl
-    qt59quickcontrols qt59quickcontrols2 qt59serialport
-    qt59graphicaleffects qt59svg qt59scxml git;
+    sudo apt search ${QTV};
+    sudo apt install build-essential ${QTV}-meta-minimal ${QTV}charts-no-lgpl
+    ${QTV}quickcontrols ${QTV}quickcontrols2 ${QTV}serialport
+    ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml git;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew update > /dev/null;
@@ -84,10 +103,13 @@ script:
     chmod a+x linuxdeployqt*.AppImage;
     unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
     mkdir -p deploy/usr/plugins/imageformats/;
-    cp /opt/qt59/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
+    cp /opt/${QTV}/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
     ./linuxdeployqt*.AppImage deploy/pingviewer -verbose=2 -qmldir=../qml -bundle-non-qt-libs;
     ./linuxdeployqt*.AppImage deploy/pingviewer.desktop -verbose=2 -qmldir=../qml -appimage;
     find . | grep AppImage;
+    if [ "${QTV}" = "qt59" ]; then
+      mv pingviewer-x86_64.AppImage ./pingviewer-x86_64_QGC.AppImage;
+    fi;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     git submodule init;
