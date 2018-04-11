@@ -172,6 +172,13 @@ Item {
         }
     }
 
+    PingRelease {
+        id: pingRelease
+        z: 2
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+    }
+
     Ping {
         id: ping
 
