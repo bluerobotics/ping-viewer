@@ -18,7 +18,7 @@ Item {
     property bool isSubItem: false
     property bool pingpong: false
     property bool smartVisibility: false
-    property bool spin: fals
+    property bool spin: false
     property var animationType: Easing.Linear
     property var clicked: false
     property var color: hideItem ? colorUnselected : colorSelected
