@@ -14,6 +14,17 @@ Item {
     property var ping: null
     property var serialPortList: null
 
+
+    Timer {
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            serialPortList = Util.serialPortList()
+        }
+
+        Component.onCompleted: start()
+    }
+
     function connect(first, second) {
         // Only connect from user input
         if(!firmwareUpdate.visible) {
@@ -31,6 +42,7 @@ Item {
                             ? "5:-:-"
                             : (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
 
+        ping.stopDetector()
         ping.connectLink(connString)
     }
 
