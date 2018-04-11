@@ -109,6 +109,6 @@ after_success:
     wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
   fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
-    bash ./upload.sh ./pingviewer*.AppImage*;
+    bash ./upload.sh ./pingviewer*.AppImage;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh pingviewer*.dmg*; fi
