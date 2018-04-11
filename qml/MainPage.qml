@@ -191,22 +191,6 @@ Item {
             }
         }
 
-        function firstRequest() {
-            //requestEchosounderMode
-            ping.request(1111)
-            //requestEchosounderProfile
-            ping.request(1102)
-            //requestVersion
-            ping.request(101)
-            //requestDeviceID
-            ping.request(120)
-            //requestNewData // Does not exist
-            //ping.request(112)
-        }
-    }
-
-    Connections {
-        target: ping
         onPointsUpdate: {
             ping1DVisualizer.draw(ping.points)
         }
@@ -218,6 +202,19 @@ Item {
         onConfidenceUpdate: {
             // Q_PROPERTY does not exist
             //ping1DVisualizer.setConfidence(ping.confidence)
+        }
+
+        function firstRequest() {
+            //requestEchosounderMode
+            ping.request(1111)
+            //requestEchosounderProfile
+            ping.request(1102)
+            //requestVersion
+            ping.request(101)
+            //requestDeviceID
+            ping.request(120)
+            //requestNewData // Does not exist
+            //ping.request(112)
         }
     }
 
