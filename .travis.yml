@@ -94,7 +94,7 @@ script:
     cp ../qml/imgs/pingviewer.png deploy/;
     cp ../deploy/pingviewer.desktop deploy/;
     mv pingviewer deploy/;
-    wget https://github.com/patrickelectric/stm32flash-code/releases/download/continuous/stm32flash_linux.zip;
+    wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip;
     unzip stm32flash_linux.zip;
     chmod +x stm32flash;
     mv stm32flash deploy/;
@@ -119,7 +119,7 @@ script:
     qmake ..;
     make;
     find .;
-    wget https://github.com/patrickelectric/stm32flash-code/releases/download/continuous/stm32flash_osx.zip;
+    wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_osx.zip;
     unzip stm32flash_osx.zip;
     chmod +x stm32flash;
     mv stm32flash pingviewer.app/;
