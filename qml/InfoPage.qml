@@ -25,6 +25,8 @@ Item {
                 source: "/imgs/ping.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
+                smooth: true
+                antialiasing: true
             }
 
             Rectangle {
@@ -50,6 +52,8 @@ Item {
                 source: "/imgs/br_icon.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
+                smooth: true
+                antialiasing: true
             }
         }
         RowLayout {
