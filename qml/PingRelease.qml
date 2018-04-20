@@ -76,6 +76,6 @@ Item {
     }
 
     Component.onCompleted: {
-        getJson("https://api.github.com/repos/patrickelectric/public-privated-repo/releases")
+        getJson("https://api.github.com/repos/" + GitUserRepo + "/releases")
     }
 }
