@@ -63,9 +63,9 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     Logger::installHandler();
-    qCInfo(mainCategory) << GIT_VERSION;
-    qCInfo(mainCategory) << GIT_VERSION_DATE;
-    qCInfo(mainCategory) << GIT_TAG;
-    qCInfo(mainCategory) << GIT_URL;
+    qCInfo(mainCategory) << "Git version:" << GIT_VERSION;
+    qCInfo(mainCategory) << "Git version date:" << GIT_VERSION_DATE;
+    qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
+    qCInfo(mainCategory) << "Git url:" << GIT_URL;
     return app.exec();
 }
