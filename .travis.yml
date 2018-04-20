@@ -108,9 +108,7 @@ script:
     wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
     chmod a+x linuxdeployqt*.AppImage;
     unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
-    mkdir -p deploy/usr/plugins/imageformats/;
-    cp /opt/${QTV}/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
-    ./linuxdeployqt*.AppImage deploy/pingviewer -verbose=2 -qmldir=../qml -bundle-non-qt-libs;
+    ./linuxdeployqt*.AppImage deploy/pingviewer -verbose=2 -qmldir=../qml -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so;
     ./linuxdeployqt*.AppImage deploy/pingviewer.desktop -verbose=2 -qmldir=../qml -appimage;
     find . | grep AppImage;
     if [ "${QTV}" = "qt59" ]; then
