@@ -53,6 +53,7 @@ Item {
                         enabled: false
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        text: ping.fw_version_major + "." + ping.fw_version_minor
                     }
 
                     Text {
