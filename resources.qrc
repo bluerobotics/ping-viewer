@@ -33,9 +33,9 @@
         <file alias="unlock_white.svg">qml/icons/unlock_white.svg</file>
     </qresource>
     <qresource prefix="/imgs">
-        <file alias="br_icon.svg">qml/imgs/br_icon.svg</file>
+        <file alias="br_icon.png">qml/imgs/br_icon.png</file>
         <file alias="br_logo.png">qml/imgs/br_logo.png</file>
-        <file alias="ping.svg">qml/imgs/ping.svg</file>
-        <file alias="ping_name.svg">qml/imgs/ping_name.svg</file>
+        <file alias="ping.png">qml/imgs/ping.png</file>
+        <file alias="ping_name.png">qml/imgs/ping_name.png</file>
     </qresource>
 </RCC>
