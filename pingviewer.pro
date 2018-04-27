@@ -12,12 +12,14 @@ HEADERS += \
     src/waterfallgradient.h \
     src/waterfall.h \
     src/logger.h \
+    src/loglistmodel.h \
     src/util.h
 
 SOURCES += \
     src/waterfallgradient.cpp \
     src/waterfall.cpp \
     src/logger.cpp \
+    src/loglistmodel.cpp \
     src/util.cpp \
     src/main.cpp
 
