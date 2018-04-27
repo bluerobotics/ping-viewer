@@ -27,13 +27,13 @@ Item {
             Text {
                 id: leftText
                 text: time
-                color: foreground
+                color: foreground == undefined ? "purple" : foreground
             }
             Text {
                 width: parent.width - leftText.width
                 wrapMode: Text.WordWrap
                 text: display
-                color: foreground
+                color: foreground == undefined ? "purple" : foreground
             }
         }
         ScrollBar.horizontal: ScrollBar { }
