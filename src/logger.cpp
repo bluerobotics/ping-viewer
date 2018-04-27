@@ -103,6 +103,9 @@ void Logger::logMessage(const QString& msg, QtMsgType type)
 
 void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
+    // Check if category is not registered and add it in Logger
+    Logger::self()->registerCategory(context.category);
+
     static const QString msgTypes[] = { "Debug", "Warning", "Critical", "Fatal", "Info" };
     const QString file = QString(context.file).split('/').last();
     QString fileInfo;
@@ -120,6 +123,10 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
 
 void Logger::registerCategory(const char* category)
 {
+    if (_registeredCategories.contains(category)) {
+        return;
+    }
+    qCDebug(logger) << "New category registered: " << category;
     _registeredCategories << category;
     qCDebug(logger) << category << _settings.value(category).toBool();
     emit registeredCategoryChanged();
