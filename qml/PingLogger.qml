@@ -6,7 +6,7 @@ import Logger 1.0
 Item {
     id: root
 
-    property var scrollLockEnabled: false
+    property var scrollLockEnabled: true
 
     ListView {
         property bool loadComplete: false
