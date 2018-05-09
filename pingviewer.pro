@@ -23,6 +23,8 @@ SOURCES += \
     src/util.cpp \
     src/main.cpp
 
+include($$PWD/src/sensor/sensor.pri)
+
 RESOURCES += \
     resources.qrc
 
