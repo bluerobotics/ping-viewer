@@ -1,12 +1,8 @@
 #include "ping.h"
-#include "pingmessage/pingmessage.h"
-#include "pingmessage/pingmessage_es.h"
-#include "pingmessage/pingmessage_gen.h"
-#include "../link/seriallink.h"
+
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QLoggingCategory>
-#include <QProcess>
 #include <QRegularExpression>
 #include <QSerialPort>
 #include <QSerialPortInfo>
@@ -14,9 +10,15 @@
 #include <QThread>
 #include <QUrl>
 
+#include "link/seriallink.h"
+#include "pingmessage/pingmessage.h"
+#include "pingmessage/pingmessage_es.h"
+#include "pingmessage/pingmessage_gen.h"
+
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
-Ping::Ping() : Sensor() {
+Ping::Ping() : Sensor()
+{
     _points.reserve(_num_points);
     for (int i = 0; i < _num_points; i++) {
         _points.append(0);
@@ -27,14 +29,14 @@ Ping::Ping() : Sensor() {
     emit linkUpdate();
 
     _requestTimer.setInterval(1000);
-    connect(&_requestTimer, &QTimer::timeout, this, [this]{ request(PingMessage::es_profile); });
+    connect(&_requestTimer, &QTimer::timeout, this, [this] { request(PingMessage::es_profile); });
 
     //connectLink("2:/dev/ttyUSB2:115200");
 
     connect(&_detector, &ProtocolDetector::_detected, this, &Ping::connectLink);
     _detector.start();
 
-    connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect){
+    connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {
         if(!autodetect) {
             if(_detector.isRunning()) {
                 _detector.exit();
@@ -74,7 +76,7 @@ void Ping::handleMessage(PingMessage msg)
         emit fwVersionMajorUpdate();
         emit fwVersionMinorUpdate();
     }
-        break;
+    break;
 
     case PingMessage::es_distance: {
         ping_msg_es_distance m(msg);
@@ -95,7 +97,7 @@ void Ping::handleMessage(PingMessage msg)
         emit lengthMmUpdate();
         emit gainIndexUpdate();
     }
-        break;
+    break;
 
     case PingMessage::es_profile: {
         ping_msg_es_profile m(msg);
@@ -125,21 +127,21 @@ void Ping::handleMessage(PingMessage msg)
         emit gainIndexUpdate();
         emit pointsUpdate();
     }
-        break;
+    break;
 
     case PingMessage::es_mode: {
         ping_msg_es_mode m(msg);
         _mode_auto = m.auto_manual();
         emit modeAutoUpdate();
     }
-        break;
+    break;
 
     case PingMessage::es_rate: {
         ping_msg_es_rate m(msg);
         _msec_per_ping = m.msec_per_ping();
         emit msecPerPingUpdate();
     }
-        break;
+    break;
 
     default:
         qCritical() << "UNHANDLED MESSAGE ID:" << msg.message_id();
@@ -192,47 +194,53 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
     QSerialPortInfo pInfo(serialLink->QSerialPort::portName());
     QString portLocation = pInfo.systemLocation();
 
-    auto flash = [=](const QString& portLocation, const QString& firmwareFile, bool verify = false /*verify*/) {
-        #ifdef Q_OS_OSX
-        // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-        static QString binPath = QCoreApplication::applicationDirPath() + "/../..";
-        #else
-        static QString binPath = QCoreApplication::applicationDirPath();
-        #endif
-        static QString cmd = binPath + "/stm32flash -w %0 %1 -v -g 0x0";
-
-        QProcess *process = new QProcess();
-        process->setEnvironment(QProcess::systemEnvironment());
-        process->setProcessChannelMode(QProcess::MergedChannels);
-        qCDebug(PING_PROTOCOL_PING) << "3... 2... 1...";
-        qCDebug(PING_PROTOCOL_PING) << cmd.arg(QFileInfo(firmwareFile).absoluteFilePath(), portLocation);
-        process->start(cmd.arg(QFileInfo(firmwareFile).absoluteFilePath(), portLocation));
-        emit flashProgress(0);
-        connect(process, &QProcess::readyReadStandardOutput, this, [this, process] {
-            QString output(process->readAllStandardOutput());
-            // Track values like: (12.23%)
-            QRegularExpression regex("\\d{1,3}[.]\\d\\d");
-            QRegularExpressionMatch match = regex.match(output);
-            if (match.hasMatch()) {
-                QStringList percs = match.capturedTexts();
-                for(const auto& perc : percs) {
-                    _fw_update_perc = perc.toFloat();
-
-                    if (_fw_update_perc > 99.99) {
-                        emit flashComplete();
-                    } else {
-                        emit flashProgress(_fw_update_perc);
-                    }
-                }
-            }
-
-            qCDebug(PING_PROTOCOL_PING) << output;
-        });
-    };
-
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
     QThread::usleep(500e3);
     flash(portLocation, QUrl(fileUrl).toLocalFile());
+}
+
+void Ping::flash(const QString& portLocation, const QString& firmwareFile)
+{
+#ifdef Q_OS_OSX
+    // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
+    static QString binPath = QCoreApplication::applicationDirPath() + "/../..";
+#else
+    static QString binPath = QCoreApplication::applicationDirPath();
+#endif
+    static QString cmd = binPath + "/stm32flash -w %0 %1 -v -g 0x0";
+
+    _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
+    _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
+    _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
+    qCDebug(PING_PROTOCOL_PING) << "3... 2... 1...";
+    qCDebug(PING_PROTOCOL_PING) << cmd.arg(QFileInfo(firmwareFile).absoluteFilePath(), portLocation);
+    _firmwareProcess->start(cmd.arg(QFileInfo(firmwareFile).absoluteFilePath(), portLocation));
+    emit flashProgress(0);
+    connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, &Ping::firmwareUpdatePercentage);
+}
+
+void Ping::firmwareUpdatePercentage()
+{
+    QString output(_firmwareProcess->readAllStandardOutput());
+    // Track values like: (12.23%)
+    QRegularExpression regex("\\d{1,3}[.]\\d\\d");
+    QRegularExpressionMatch match = regex.match(output);
+    if(match.hasMatch()) {
+        QStringList percs = match.capturedTexts();
+        for(const auto& perc : percs) {
+            _fw_update_perc = perc.toFloat();
+
+            if (_fw_update_perc > 99.99) {
+                emit flashComplete();
+                QThread::usleep(500e3);
+                _detector.start();
+            } else {
+                emit flashProgress(_fw_update_perc);
+            }
+        }
+    }
+
+    qCDebug(PING_PROTOCOL_PING) << output;
 }
 
 void Ping::request(int id)
