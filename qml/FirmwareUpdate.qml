@@ -113,6 +113,7 @@ Item {
         folder: shortcuts.home
         visible: false
         property var fileName: ""
+        nameFilters: ["Hex Files (*.hex)"]
         onAccepted: {
             console.log("You chose: " + fileDialog.fileUrls)
             var sizeToRemove = fileDialog.folder.toString().length - fileDialog.fileUrl.toString().length + 1
