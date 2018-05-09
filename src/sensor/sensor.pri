@@ -1,10 +1,11 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/sensor.h \
     $$PWD/ping.h \
+    $$PWD/sensor.h \
     $$PWD/sensorarbitrary.h
 
 SOURCES += \
     $$PWD/ping.cpp \
-    $$PWD/sensor.cpp
+    $$PWD/sensor.cpp \
+    $$PWD/sensorarbitrary.cpp

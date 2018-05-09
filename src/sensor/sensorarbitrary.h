@@ -3,7 +3,6 @@
 #include <QJsonObject>
 #include <QVariant>
 
-#include "parsers/parser_json.h"
 #include "sensor.h"
 
 /// A class to handle a single arbitrary key:value
@@ -12,12 +11,7 @@ class SensorArbitrary : public Sensor
 {
     Q_OBJECT
 public:
-
-    SensorArbitrary() : Sensor() {
-        _parser = new JsonParser();
-        connect(dynamic_cast<JsonParser*>(_parser), &JsonParser::newJsonObject, this, &SensorArbitrary::handleJsonObject);
-        connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
-    }
+    SensorArbitrary();
 
     Q_PROPERTY(QVariant value READ value NOTIFY valueUpdate)
     QVariant value() { return _value; }
@@ -34,10 +28,5 @@ private:
     QString _name;
     QVariant _value;
 
-    void handleJsonObject(const QJsonObject& obj) {
-        _name = (obj.begin().key());
-        emit nameUpdate(_name);
-        _value = (obj.begin().value().toVariant());
-        emit valueUpdate(_value);
-    }
+    void handleJsonObject(const QJsonObject& obj);
 };
