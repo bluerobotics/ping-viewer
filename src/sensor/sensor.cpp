@@ -113,6 +113,15 @@ void Sensor::connectLinkLog(const QString& connString)
     emit linkLogUpdate();
 }
 
+void Sensor::setAutoDetect(bool autodetect)
+{
+    if(_autodetect == autodetect) {
+        return;
+    }
+    _autodetect = autodetect;
+    emit autoDetectUpdate(autodetect);
+}
+
 Sensor::~Sensor()
 {
 }

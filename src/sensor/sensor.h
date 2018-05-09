@@ -24,13 +24,7 @@ public:
     Q_INVOKABLE void connectLinkLog(const QString& connString);
 
     Q_PROPERTY(bool autodetect READ autoDetect WRITE setAutoDetect NOTIFY autoDetectUpdate)
-    void setAutoDetect(bool autodetect) {
-        if(_autodetect == autodetect) {
-            return;
-        }
-        _autodetect = autodetect;
-        emit autoDetectUpdate(autodetect);
-    };
+    void setAutoDetect(bool autodetect);
     bool autoDetect() { return _autodetect; };
 
 protected:
