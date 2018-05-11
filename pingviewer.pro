@@ -35,7 +35,7 @@ RESOURCES += \
 
 include(lib/ping-protocol-cpp/ping.pri)
 
-build_pass:CONFIG(debug, debug|release) {
+CONFIG(debug, debug|release) {
     message("Debug Build !")
     win32 {
         # Windows debug
