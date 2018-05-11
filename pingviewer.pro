@@ -72,3 +72,8 @@ exists ($$_PRO_FILE_PWD_/.git) {
     DEFINES += 'GIT_TAG=\\"-\\"'
     DEFINES += 'GIT_URL=\\"-\\"'
 }
+
+message(" GIT_VERSION:      " $$GIT_VERSION)
+message(" GIT_VERSION_DATE: " $$GIT_VERSION_DATE)
+message(" GIT_TAG:          " $$GIT_TAG)
+message(" GIT_URL:          " $$GIT_URL)
