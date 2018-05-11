@@ -306,6 +306,10 @@ void Ping::printStatus()
 
 void Ping::writeMessage(const PingMessage &msg)
 {
-    // todo add link::write(char*, int size)
-    link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData.data()), msg.msgData.size()));
+    if(link()) {
+        if(link()->isOpen()) {
+            // todo add link::write(char*, int size)
+            link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData.data()), msg.msgData.size()));
+        }
+    }
 }
