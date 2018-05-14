@@ -40,7 +40,7 @@ Item {
 
                 GridLayout {
                     anchors.fill: parent
-                    columns: 5
+                    columns: 10
                     rowSpacing: 5
                     columnSpacing: 5
 
@@ -51,9 +51,15 @@ Item {
 
                     TextField {
                         enabled: false
-                        Layout.columnSpan:  4
+                        Layout.columnSpan:  8
                         Layout.fillWidth: true
                         text: ping.fw_version_major + "." + ping.fw_version_minor
+                    }
+
+                    CheckBox {
+                        id: bootLoaderCB
+                        text: "Send reset"
+                        checked: true
                     }
 
                     Text {
@@ -65,7 +71,7 @@ Item {
                     TextField {
                         id: firmwareFileName
                         enabled: false
-                        Layout.columnSpan:  3
+                        Layout.columnSpan:  8
                         Layout.fillWidth: true
                         text: fileDialog.fileName
                     }
@@ -80,23 +86,19 @@ Item {
 
                     PingButton {
                         text: "Firmware Update"
-                        Layout.columnSpan:  5
+                        Layout.columnSpan:  10
                         Layout.fillWidth: true
                         enabled: fileDialog.fileUrl.toString().length && flashProgress.indeterminate
 
                         onClicked: {
-                            ping.firmwareUpdate(fileDialog.fileUrl)
+                            ping.firmwareUpdate(fileDialog.fileUrl, bootLoaderCB)
                         }
                     }
 
-                    Text {
-                        text: "Progress:"
-                        color: Style.textColor
-                    }
                     ProgressBar {
                         id: flashProgress
                         indeterminate: true
-                        Layout.columnSpan:  4
+                        Layout.columnSpan: 10
                         Layout.fillWidth: true
                         value: 0.0
                         from: 0.0
