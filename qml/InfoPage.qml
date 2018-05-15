@@ -156,18 +156,22 @@ Item {
                 id: scrollLock
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                // This works with new Qt versions
-                // source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
-                source: "/icons/lock_white.svg"
-                selected: log.scrollLockEnabled
+                source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
 
                 MouseArea {
                     id: mouseAreaScrollLock
                     anchors.fill: parent
                     hoverEnabled: true
+                    onEntered: toolTipScrollLock.visible = true
+                    onExited: toolTipScrollLock.visible = false
                     onClicked: {
                         log.scrollLockEnabled = !log.scrollLockEnabled
                     }
+                }
+
+                ToolTip {
+                    id: toolTipScrollLock
+                    text: "Scroll Lock"
                 }
             }
 
