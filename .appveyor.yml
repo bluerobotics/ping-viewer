@@ -14,6 +14,8 @@ environment:
       QT_LINKAGE: static
       COVERITY_BUILD_CANDIDATE: True
       QTDIR: C:\Qt\5.10.1\mingw53_32
+      MGWDIR: C:\Qt\Tools\mingw530_32\bin
+      MGWLIBS: libgomp-1.dll
       VCLIBS: VCRUNTIME140.dll MSVCP140.dll
 
 configuration:
@@ -57,6 +59,7 @@ after_build:
   - copy %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\pingviewer.exe deploy\pingviewer.exe
   - windeployqt --qmldir %APPVEYOR_BUILD_FOLDER%/qml --%CONFIGURATION% deploy/pingviewer.exe --verbose=2
   - for %%I in (%VCLIBS%) do copy %VCLIBDIR%\%%I deploy\
+  - for %%I in (%MGWLIBS%) do copy %MGWDIR%\%%I deploy\
   - appveyor DownloadFile https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -FileName deploy/stm32flash.exe
   - 7z a -tzip pingviewer_%CONFIGURATION%.zip deploy -r
   - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%CONFIGURATION%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%CONFIGURATION%.zip
