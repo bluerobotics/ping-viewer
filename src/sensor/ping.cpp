@@ -63,6 +63,22 @@ void Ping::handleMessage(PingMessage msg)
 
     switch (msg.message_id()) {
 
+    case PingMessage::ping1D_ack: {
+        qCDebug(PING_PROTOCOL_PING) << "GOT ACK";
+        break;
+    }
+
+    case PingMessage::ping1D_nack: {
+        qCCritical(PING_PROTOCOL_PING) << "GOT NACK";
+        break;
+    }
+
+    // needs dynamic-payload patch
+    case PingMessage::ping1D_ascii_text: {
+        qCDebug(PING_PROTOCOL_PING) << "GOT TEXT";
+        break;
+    }
+
     case PingMessage::ping1D_fw_version: {
         ping_msg_ping1D_fw_version m(msg);
         _device_type = m.device_type();
