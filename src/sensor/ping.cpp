@@ -77,6 +77,16 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
+    // This message is deprecated, it provides no added information because
+    // the device id is already supplied in every message header
+    case PingMessage::ping1D_device_id: {
+        ping_msg_ping1D_device_id m(msg);
+        _srcId = m.src_device_id();
+
+        emit srcIdUpdate();
+    }
+    break;
+
     case PingMessage::ping1D_distance: {
         ping_msg_ping1D_distance m(msg);
         _distance = m.distance();
