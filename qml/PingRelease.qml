@@ -12,7 +12,7 @@ Item {
         xmlhttp.onreadystatechange=function() {
             //code for debug
             //print(xmlhttp.status, xmlhttp.readyState)
-            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200) {
+            if (xmlhttp.readyState === XMLHttpRequest.DONE && xmlhttp.status == 200) {
                 handleJson(xmlhttp.responseText);
             }
         }
@@ -28,7 +28,7 @@ Item {
         // Check for release tag v0.0
         // Test release is t0.0
         var releaseTagRx
-        if(GitTag[0] == 't') {
+        if(GitTag[0] === 't') {
             releaseTagRx = /(t)\d+\.\d+/
             print('Running test version:')
         } else {

@@ -32,7 +32,7 @@ Item {
         }
 
         // Do not connect if no valid type or input
-        if(conntype.currentIndex < 0 && first != "" && second != "") {
+        if(conntype.currentIndex < 0 && first !== "" && second !== "") {
             return;
         }
 
@@ -75,7 +75,7 @@ Item {
                     Layout.columnSpan:  3
                     value: ping.pollFrequency;
                     onValueChanged: {
-                        if (ping.pollFrequency != value) {
+                        if (ping.pollFrequency !== value) {
                             ping.pollFrequency = value
                         }
                     }

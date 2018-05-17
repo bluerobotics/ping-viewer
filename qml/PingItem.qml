@@ -19,18 +19,18 @@ Item {
     property bool pingpong: false
     property bool smartVisibility: false
     property bool spin: false
-    property var animationType: Easing.Linear
-    property var clicked: false
+    property int animationType: Easing.Linear
+    property bool clicked: false
     property var color: hideItem ? colorUnselected : colorSelected
     property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
     property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
-    property var finalAngle: 180
+    property real finalAngle: 180
     property var finalAngleValue: spin && !pingpong ? 360 : finalAngle
     property var hoverParent: undefined
     property var icon: undefined
     property var item: null
-    property var marginMult: 1.05
-    property var startAngle: 0
+    property real marginMult: 1.05
+    property real startAngle: 0
 
     onItemChanged: {
         if(item == null) {
@@ -150,7 +150,7 @@ Item {
         height: item != null ? item.height*marginMult : 0
         width: item != null ? item.width*marginMult : 0
         color: pingItem.color
-        property var hide: true
+        property bool hide: true
 
         onOpacityChanged: {
             item.opacity = itemRect.opacity

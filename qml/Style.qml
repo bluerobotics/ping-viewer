@@ -9,7 +9,7 @@ QtObject {
     property string dark: "dark"
     property string light: "light"
     property bool isDark: true
-    property var theme: Material.Dark
+    property int theme: Material.Dark
 
     function useLightStyle() {
         theme = Material.Light

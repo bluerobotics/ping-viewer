@@ -133,7 +133,7 @@ Item {
                 stepSize: 1
                 to: ping.link.packageSize
                 onValueChanged: {
-                    if(ping.link.packageIndex != value) {
+                    if(ping.link.packageIndex !== value) {
                         ping.link.packageIndex = value
                         ping.link.start()
                     }

@@ -12,7 +12,7 @@ Item {
     property var protocol
 
     onWidthChanged: {
-        if(chart.Layout.minimumWidth == chart.width) {
+        if(chart.Layout.minimumWidth === chart.width) {
             waterfall.width = width - chart.width
         }
     }

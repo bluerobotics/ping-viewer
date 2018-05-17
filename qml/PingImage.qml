@@ -5,7 +5,7 @@ Item {
     id: root
 
     property var source: undefined
-    property var selected: false
+    property bool selected: false
 
     Image {
         id: image

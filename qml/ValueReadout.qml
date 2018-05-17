@@ -4,15 +4,15 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: root
-    property var value: 0
-    property var units: "m"
-    property var precision: 2
-    property var margin: 10
-    property var depth: -1
-    property var strength: -1
-    property var confidence: 0
-    property var parentWidth: 0
-    property var parentHeight: 0
+    property int value: 0
+    property string units: "m"
+    property int precision: 2
+    property int margin: 10
+    property int depth: -1
+    property int strength: -1
+    property int confidence: 0
+    property int parentWidth: 0
+    property int parentHeight: 0
     x: margin
 
     width: mainLayout.width

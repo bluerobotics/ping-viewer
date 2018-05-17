@@ -114,7 +114,7 @@ Item {
         title: "Please choose a file"
         folder: shortcuts.home
         visible: false
-        property var fileName: ""
+        property string fileName: ""
         nameFilters: ["Hex Files (*.hex)"]
         onAccepted: {
             console.log("You chose: " + fileDialog.fileUrls)

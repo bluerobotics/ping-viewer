@@ -9,10 +9,10 @@ Item {
     id: root
     height: mainLayout.height
     width: mainLayout.width
-    property var deviceType: 'No device'
-    property var deviceModel: 'No device'
-    property var deviceFirmware: 'No device'
-    property var deviceID: 'No device'
+    property string deviceType: 'No device'
+    property string deviceModel: 'No device'
+    property string deviceFirmware: 'No device'
+    property string deviceID: 'No device'
 
     ColumnLayout {
         id: mainLayout
@@ -60,7 +60,7 @@ Item {
             ColumnLayout {
                 Text {
                     z: 1
-                    text: 'Version: <b>' + (GitTag == "" ? "No tags!" : GitTag)
+                    text: 'Version: <b>' + (GitTag === "" ? "No tags!" : GitTag)
                     color: Style.textColor
                     textFormat: Text.RichText
                 }
