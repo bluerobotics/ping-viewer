@@ -75,7 +75,10 @@ void Ping::handleMessage(PingMessage msg)
 
     // needs dynamic-payload patch
     case PingMessage::ping1D_ascii_text: {
-        qCDebug(PING_PROTOCOL_PING) << "GOT TEXT";
+        // hack for now
+        QString txt(QByteArray((const char*)&(msg.msgData[8]), msg.payload_length()));
+        qInfo(PING_PROTOCOL_PING) << "GOT TEXT:" << txt;
+
         break;
     }
 
