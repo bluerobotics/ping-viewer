@@ -5,8 +5,7 @@
 #include "sensor.h"
 
 #include "pingmessage/pingmessage.h"
-#include "pingmessage/pingmessage_gen.h"
-#include "pingmessage/pingmessage_es.h"
+#include "pingmessage/pingmessage_ping1D.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 

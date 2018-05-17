@@ -12,8 +12,7 @@
 
 #include "link/seriallink.h"
 #include "pingmessage/pingmessage.h"
-#include "pingmessage/pingmessage_es.h"
-#include "pingmessage/pingmessage_gen.h"
+#include "pingmessage/pingmessage_ping1D.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
@@ -29,7 +28,7 @@ Ping::Ping() : Sensor()
     emit linkUpdate();
 
     _requestTimer.setInterval(1000);
-    connect(&_requestTimer, &QTimer::timeout, this, [this] { request(PingMessage::es_profile); });
+    connect(&_requestTimer, &QTimer::timeout, this, [this] { request(PingMessage::ping1D_profile); });
 
     //connectLink("2:/dev/ttyUSB2:115200");
 
@@ -64,8 +63,8 @@ void Ping::handleMessage(PingMessage msg)
 
     switch (msg.message_id()) {
 
-    case PingMessage::gen_version: {
-        ping_msg_gen_version m(msg);
+    case PingMessage::ping1D_fw_version: {
+        ping_msg_ping1D_fw_version m(msg);
         _device_type = m.device_type();
         _device_model = m.device_model();
         _fw_version_major = m.fw_version_major();
@@ -78,8 +77,8 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case PingMessage::es_distance: {
-        ping_msg_es_distance m(msg);
+    case PingMessage::ping1D_distance: {
+        ping_msg_ping1D_distance m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
         _pulse_usec = m.pulse_usec();
@@ -99,8 +98,8 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case PingMessage::es_profile: {
-        ping_msg_es_profile m(msg);
+    case PingMessage::ping1D_profile: {
+        ping_msg_ping1D_profile m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
         _pulse_usec = m.pulse_usec();
@@ -129,15 +128,15 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case PingMessage::es_mode: {
-        ping_msg_es_mode m(msg);
+    case PingMessage::ping1D_mode: {
+        ping_msg_ping1D_mode m(msg);
         _mode_auto = m.auto_manual();
         emit modeAutoUpdate();
     }
     break;
 
-    case PingMessage::es_rate: {
-        ping_msg_es_rate m(msg);
+    case PingMessage::ping1D_ping_rate_msec: {
+        ping_msg_ping1D_ping_rate_msec m(msg);
         _msec_per_ping = m.msec_per_ping();
         emit msecPerPingUpdate();
     }
@@ -173,7 +172,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
 
     if (sendPingGotoBootloader) {
         qCDebug(PING_PROTOCOL_PING) << "Put it in bootloader mode.";
-        ping_msg_gen_goto_bootloader m;
+        ping_msg_ping1D_goto_bootloader m;
         m.updateChecksum();
         link()->sendData(QByteArray(reinterpret_cast<const char*>(m.msgData.data()), m.msgData.size()));
     }
@@ -247,10 +246,9 @@ void Ping::request(int id)
 {
     qCDebug(PING_PROTOCOL_PING) << "Requesting:" << id;
 
-    ping_msg_gen_cmd_request m;
-    m.set_request_id(id);
+    ping_msg_ping1D_empty m;
+    m.set_id(id);
     m.updateChecksum();
-
     writeMessage(m);
 }
 

@@ -64,7 +64,7 @@ Item {
                 PingButton {
                     text: "Emit Ping"
                     //requestEchosounderProfile
-                    onClicked: ping.request(1102)
+                    onClicked: ping.request(1300)
                 }
 
                 Slider {
