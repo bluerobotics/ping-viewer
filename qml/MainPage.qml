@@ -213,13 +213,13 @@ Item {
 
         function firstRequest() {
             //requestEchosounderMode
-            ping.request(1111)
+            ping.request(1205)
             //requestEchosounderProfile
-            ping.request(1102)
+            ping.request(1300)
             //requestVersion
-            ping.request(101)
+            ping.request(1200)
             //requestDeviceID
-            ping.request(120)
+            ping.request(1201)
             //requestNewData // Does not exist
             //ping.request(112)
         }
@@ -229,7 +229,7 @@ Item {
         id: pingTimer
         interval: 500; running: false; repeat: true
         // TODO get message ID enums in qml
-        onTriggered: ping.request(1102)
+        onTriggered: ping.request(1300)
     }
 
     ColumnLayout {

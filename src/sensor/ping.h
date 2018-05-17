@@ -70,11 +70,11 @@ public:
     uint16_t msec_per_ping() { return _msec_per_ping; }
     void set_msec_per_ping(uint16_t msec_per_ping)
     {
-        ping_msg_es_rate m;
-        m.set_msec_per_ping(msec_per_ping);
+        ping_msg_ping1D_set_ping_rate_msec m;
+        m.set_rate_msec(msec_per_ping);
         m.updateChecksum();
         writeMessage(m);
-        request(PingMessage::es_rate);
+        request(PingMessage::ping1D_ping_rate_msec);
     }
 
     Q_PROPERTY(QVariant pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
