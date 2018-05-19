@@ -4,11 +4,17 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
+
+import FileManager 1.0
 import Ping 1.0
 
 Item {
     id: mainPage
     visible: true
+    focus: true
+
+    // Force focus to deal with hotkeys
+    onFocusChanged: focus = true
 
     Column {
         z: 1
@@ -253,6 +259,20 @@ Item {
         gradient: Gradient {
             GradientStop { position: 0.0; color: "#FF11b3ff" }
             GradientStop { position: 1.0; color: "#FF111363" }
+        }
+    }
+
+    Keys.onPressed: {
+        print("Key pressed: ", event.key)
+        if (event.key == Qt.Key_S) {
+            print("Grab screen image")
+            event.accepted = true
+
+            mainPage.grabToImage(function(result) {
+                print("Grab screen image callback")
+                print(FileManager.createFileName(FileManager.PICTURE))
+                result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
+            });
         }
     }
 }
