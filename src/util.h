@@ -14,7 +14,21 @@ class Util : public QObject
     Q_OBJECT
 
 public:
+
+    /**
+     * @brief Create a QAbstractSeries from a list of points
+     *
+     * @param series
+     * @param points
+     * @param multiplier This is a scalar to be used when creating the serie
+     */
     Q_INVOKABLE void update(QAbstractSeries* series, const QList<double>& points, const float multiplier = 1.0f);
+
+    /**
+     * @brief Return a list of the available serial ports
+     *
+     * @return QStringList serialPortList
+     */
     Q_INVOKABLE QStringList serialPortList();
 
     ~Util();
