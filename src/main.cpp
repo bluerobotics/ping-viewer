@@ -7,6 +7,7 @@
 #include <QRegularExpression>
 
 #include "abstractlink.h"
+#include "filemanager.h"
 #include "logger.h"
 #include "ping.h"
 #include "util.h"
@@ -32,6 +33,14 @@ QObject *utilRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
     return Util::self();
 }
 
+QObject *fileManagerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return FileManager::self();
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("Blue Robotics Inc.");
@@ -40,6 +49,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
+    qmlRegisterSingletonType<Logger>("FileManager", 1, 0, "FileManager", &fileManagerRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
