@@ -9,6 +9,7 @@ CONFIG += \
 QT += core charts gui qml quick widgets quickcontrols2 concurrent svg xml
 
 HEADERS += \
+    src/filemanager.h \
     src/waterfallgradient.h \
     src/waterfall.h \
     src/logger.h \
@@ -16,6 +17,7 @@ HEADERS += \
     src/util.h
 
 SOURCES += \
+    src/filemanager.cpp \
     src/waterfallgradient.cpp \
     src/waterfall.cpp \
     src/logger.cpp \
