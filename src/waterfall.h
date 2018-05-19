@@ -96,7 +96,7 @@ public:
      *
      * @param parent
      */
-    Waterfall(QQuickItem *parent = 0);
+    Waterfall(QQuickItem *parent = nullptr);
 
     /**
      * @brief This is used by the qml pain event
