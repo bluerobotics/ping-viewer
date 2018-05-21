@@ -273,6 +273,15 @@ Item {
                 print(FileManager.createFileName(FileManager.PICTURE))
                 result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
             });
+        } else if (event.key == Qt.Key_W) {
+            print("Grab waterfall image")
+            event.accepted = true
+
+            ping1DVisualizer.waterfallItem.grabToImage(function(result) {
+                print("Grab waterfall image callback")
+                print(FileManager.createFileName(FileManager.PICTURE))
+                result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
+            });
         }
     }
 }
