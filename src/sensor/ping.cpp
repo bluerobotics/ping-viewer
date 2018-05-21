@@ -1,3 +1,4 @@
+#include "filemanager.h"
 #include "ping.h"
 
 #include <QCoreApplication>
@@ -54,7 +55,10 @@ void Ping::connectLink(const QString& connString)
         _detector.exit();
     }
     setAutoDetect(false);
-    Sensor::connectLink(connString);
+    QString logConnString{
+        QStringLiteral("%1:%2:%3").arg(QString::number(1), FileManager::self()->createFileName(FileManager::FileType::BINARY), "w")
+    };
+    Sensor::connectLink(connString, logConnString);
 }
 
 void Ping::handleMessage(PingMessage msg)
