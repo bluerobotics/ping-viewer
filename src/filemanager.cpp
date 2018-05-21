@@ -34,10 +34,10 @@ FileManager::FileManager()
 
 QString FileManager::createFileName(FileManager::FileType type)
 {
-    QString path = type == FileType::LOG ? _guiLogDir.dir.path() : _picturesDir.dir.path();
+    QString path = fileTypeFolder[type]->dir.path();
     QString result = path + "/" \
-        + QDateTime::currentDateTime().toString(_fileName) \
-        + fileTypeExtension[type];
+                     + QDateTime::currentDateTime().toString(_fileName) \
+                     + fileTypeExtension[type];
     qCDebug(FILEMANAGER) << result;
     return result;
 }

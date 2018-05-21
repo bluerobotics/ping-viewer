@@ -36,15 +36,22 @@ private:
         bool ok = false;
     };
 
-    const QMap<FileType, QString> fileTypeExtension {
-          {LOG, ".txt"}
-        , {PICTURE, ".png"}
-        , {BINARY, ".bin"}
-    };
-
     folder _docDir;
     folder _fmDir;
     folder _guiLogDir;
     folder _picturesDir;
     folder _sensorLogDir;
+
+    const QMap<FileType, QString> fileTypeExtension {
+        {LOG, ".txt"}
+        , {PICTURE, ".png"}
+        , {BINARY, ".bin"}
+    };
+
+    const QMap<FileType, folder*> fileTypeFolder {
+        {LOG, &_guiLogDir}
+        , {PICTURE, &_picturesDir}
+        , {BINARY, &_sensorLogDir}
+    };
+
 };
