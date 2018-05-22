@@ -28,11 +28,11 @@ void Sensor::connectLink(const QString& connString, const QString& logConnString
     qCDebug(PING_PROTOCOL_SENSOR) << "connecting to" << connString;
     QStringList confList = connString.split(':');
     if(confList.length() != 3) {
-        qCDebug(PING_PROTOCOL_SENSOR) << "wrong size !";
+        qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !";
         return;
     }
     if(confList[0].toInt() <= 0 || confList[0].toInt() > 5) {
-        qCDebug(PING_PROTOCOL_SENSOR) << "wrong arg !";
+        qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !";
         return;
     }
     if(_linkIn) {
@@ -46,7 +46,7 @@ void Sensor::connectLink(const QString& connString, const QString& logConnString
     link()->startConnection();
 
     if(!link()->isOpen()) {
-        qCDebug(PING_PROTOCOL_SENSOR) << "Connection fail !" << connString << link()->errorString();;
+        qCCritical(PING_PROTOCOL_SENSOR) << "Connection fail !" << connString << link()->errorString();;
         emit connectionClose();
         return;
     }
@@ -83,7 +83,7 @@ void Sensor::connectLinkLog(const QString& connString)
 {
     if(_linkOut) {
         if(!_linkOut->self()->isOpen()) {
-            qCDebug(PING_PROTOCOL_SENSOR) << "No connection to log !" << linkLog()->errorString();
+            qCCritical(PING_PROTOCOL_SENSOR) << "No connection to log !" << linkLog()->errorString();
             return;
         }
         delete _linkOut;
@@ -91,11 +91,11 @@ void Sensor::connectLinkLog(const QString& connString)
 
     QStringList confList = connString.split(':');
     if(confList.length() != 3) {
-        qCDebug(PING_PROTOCOL_SENSOR) << "wrong size !" << confList;
+        qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !" << confList;
         return;
     }
     if(confList[0].toInt() <= 0 || confList[0].toInt() > 5) {
-        qCDebug(PING_PROTOCOL_SENSOR) << "wrong arg !" << confList;
+        qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !" << confList;
         return;
     }
 
@@ -107,7 +107,7 @@ void Sensor::connectLinkLog(const QString& connString)
     linkLog()->startConnection();
 
     if(!linkLog()->isOpen()) {
-        qCDebug(PING_PROTOCOL_SENSOR) << "Connection with log fail !" << connString << linkLog()->errorString();
+        qCCritical(PING_PROTOCOL_SENSOR) << "Connection with log fail !" << connString << linkLog()->errorString();
         return;
     }
 

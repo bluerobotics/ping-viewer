@@ -18,7 +18,7 @@ Logger::Logger()
     , _settings("Blue Robotics Inc.", "Ping Viewer")
 {
     if(!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        qCDebug(logger) << "A file with the gui log will not be available !";
+        qCWarning(logger) << "A file with the gui log will not be available !";
     }
 
     if(_settings.contains("filter")) {
