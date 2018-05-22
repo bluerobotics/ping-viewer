@@ -36,9 +36,12 @@ install:
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  - if %APPVEYOR_REPO_TAG%==true (set RELEASE_NAME=%APPVEYOR_REPO_TAG_NAME%) else set RELEASE_NAME=continuous
 
 before_build:
   # Prepare the out-of-source build directory.
+  - echo "RELEASE_NAME"
+  - echo %RELEASE_NAME%
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule init
   - git submodule update
@@ -71,7 +74,7 @@ artifacts:
 
 deploy:
   - provider: GitHub
-    release: continuous
+    release: $(RELEASE_NAME)
     artifact: PingViewer
     draft: false
     prerelease: true
