@@ -38,6 +38,7 @@ message("QT:           " $$QT)
 message("Config:       " $$CONFIG)
 message("CXX flags:    " $$QMAKE_CXXFLAGS)
 message("L flags:      " $$QMAKE_LFLAGS)
+message("Compiler:     " $$QMAKE_COMPILER_DEFINES)
 
 # https://git-scm.com/docs/git-log placeholders
 # Get git info
