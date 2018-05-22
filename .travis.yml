@@ -52,6 +52,9 @@ matrix:
         - DESC="dmg deploy"
         - MATRIX_EVAL="COMPILER=clang++"
 
+before_install:
+- eval "${MATRIX_EVAL}"
+
 install:
 - if [ -z $TEST ]; then
     pip install --user --upgrade pip;
@@ -87,6 +90,8 @@ script:
     fi;
   fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60;
+    g++ --version;
     source /opt/qt*/bin/qt*-env.sh;
     git submodule init;
     git submodule update;
