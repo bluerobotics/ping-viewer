@@ -1,3 +1,4 @@
+#include "filemanager.h"
 #include "logger.h"
 
 #include <iostream>
@@ -11,9 +12,15 @@ PING_LOGGING_CATEGORY(logger, "ping.logger")
 
 static QtMessageHandler originalHandler = nullptr;
 
-Logger::Logger():
-    _settings("Blue Robotics Inc.", "Ping Viewer")
+Logger::Logger()
+    : _file(FileManager::self()->createFileName(FileManager::FileType::LOG))
+    , _fileStream(&_file)
+    , _settings("Blue Robotics Inc.", "Ping Viewer")
 {
+    if(!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        qCDebug(logger) << "A file with the gui log will not be available !";
+    }
+
     if(_settings.contains("filter")) {
         QString filter = _settings.value("filter").toString();
         QLoggingCategory::setFilterRules(filter);
@@ -34,6 +41,9 @@ void Logger::installHandler()
 void Logger::logMessage(const QString& msg, QtMsgType type)
 {
     const QString time = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz]"));
+
+    // Save the message into the file
+    _fileStream << QString("%1 %2\n").arg(time).arg(msg);
 
     const int line = _logModel.rowCount();
     // Debug, Warning, Critical, Fatal, Info

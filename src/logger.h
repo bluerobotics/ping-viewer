@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QFile>
 #include <QLoggingCategory>
 #include <QSettings>
 #include <QStringListModel>
@@ -102,6 +103,8 @@ private:
      */
     void logMessage(const QString& msg, QtMsgType type);
 
+    QFile _file;
+    QTextStream _fileStream;
     QStringList _registeredCategories;
     QSettings _settings;
     LogListModel _logModel;

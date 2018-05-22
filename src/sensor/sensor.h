@@ -20,7 +20,7 @@ public:
     Q_PROPERTY(QString name READ name NOTIFY nameUpdate)
     QString name() { return _name; };
 
-    Q_INVOKABLE void connectLink(const QString& connString);
+    Q_INVOKABLE void connectLink(const QString& connString, const QString& logConnString = QString());
     Q_INVOKABLE void connectLinkLog(const QString& connString);
 
     Q_PROPERTY(bool autodetect READ autoDetect WRITE setAutoDetect NOTIFY autoDetectUpdate)

@@ -19,7 +19,7 @@ Sensor::Sensor() :
 }
 
 // TODO rework this after sublasses and parser rework
-void Sensor::connectLink(const QString& connString)
+void Sensor::connectLink(const QString& connString, const QString& logConnString)
 {
     if(link()->isOpen()) {
         link()->finishConnection();
@@ -55,7 +55,6 @@ void Sensor::connectLink(const QString& connString)
 
     if (_parser) {
         connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
-
     }
 
     emit connectionOpen();
@@ -70,9 +69,13 @@ void Sensor::connectLink(const QString& connString)
             _linkOut->deleteLater();
         }
     } else { // Start log, if not playing one
-        QString fileName = QStringLiteral("%1.%2").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmsszzz")), "bin");
-        QString config = QStringLiteral("%1:%2:%3").arg(QString::number(1), fileName, "w");
-        connectLinkLog(config);
+        if(logConnString.isEmpty()) {
+            QString fileName = QStringLiteral("%1.%2").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmsszzz")), "bin");
+            QString config = QStringLiteral("%1:%2:%3").arg(QString::number(1), fileName, "w");
+            connectLinkLog(config);
+        } else {
+            connectLinkLog(logConnString);
+        }
     }
 }
 

@@ -8,22 +8,7 @@ CONFIG += \
 
 QT += core charts gui qml quick widgets quickcontrols2 concurrent svg xml
 
-HEADERS += \
-    src/waterfallgradient.h \
-    src/waterfall.h \
-    src/logger.h \
-    src/loglistmodel.h \
-    src/util.h
-
-SOURCES += \
-    src/waterfallgradient.cpp \
-    src/waterfall.cpp \
-    src/logger.cpp \
-    src/loglistmodel.cpp \
-    src/util.cpp \
-    src/main.cpp
-
-include($$PWD/src/sensor/sensor.pri)
+include($$PWD/src/src.pri)
 
 RESOURCES += \
     resources.qrc
@@ -53,6 +38,7 @@ message("QT:           " $$QT)
 message("Config:       " $$CONFIG)
 message("CXX flags:    " $$QMAKE_CXXFLAGS)
 message("L flags:      " $$QMAKE_LFLAGS)
+message("Compiler:     " $$QMAKE_COMPILER_DEFINES)
 
 # https://git-scm.com/docs/git-log placeholders
 # Get git info
