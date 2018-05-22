@@ -74,7 +74,7 @@ public:
         m.set_rate_msec(msec_per_ping);
         m.updateChecksum();
         writeMessage(m);
-        request(PingMessage::ping1D_ping_rate_msec);
+        request(Ping1DNamespace::Ping_rate_msec);
     }
 
     Q_PROPERTY(QVariant pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)

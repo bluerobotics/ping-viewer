@@ -13,6 +13,9 @@
 #include "util.h"
 #include "waterfall.h"
 
+// Register message enums to qml
+#include "pingmessage/pingmessage.h"
+
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
@@ -55,6 +58,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
+
+    qmlRegisterUncreatableMetaObject(
+        Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
+    );
 
     QApplication app(argc, argv);
 

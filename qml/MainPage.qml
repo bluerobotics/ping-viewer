@@ -7,6 +7,7 @@ import Qt.labs.settings 1.0
 
 import FileManager 1.0
 import Ping 1.0
+import Ping1DNamespace 1.0
 
 Item {
     id: mainPage
@@ -215,16 +216,10 @@ Item {
         }
 
         function firstRequest() {
-            //requestEchosounderMode
-            ping.request(1205)
-            //requestEchosounderProfile
-            ping.request(1300)
-            //requestVersion
-            ping.request(1200)
-            //requestDeviceID
-            ping.request(1201)
-            //requestNewData // Does not exist
-            //ping.request(112)
+            ping.request(Ping1DNamespace.Mode)
+            ping.request(Ping1DNamespace.Profile)
+            ping.request(Ping1DNamespace.Fw_version)
+            ping.request(Ping1DNamespace.Device_id)
         }
     }
 
