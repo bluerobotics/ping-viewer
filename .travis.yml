@@ -139,6 +139,9 @@ after_success:
 - if [ -z $TEST ]; then
     wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
   fi
+- if [ ! -z $TRAVIS_BRANCH ] && [ "$TRAVIS_BRANCH" != "master" ] ; then
+    export UPLOADTOOL_SUFFIX=$TRAVIS_BRANCH;
+  fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     bash ./upload.sh ./pingviewer*.AppImage;
   fi
