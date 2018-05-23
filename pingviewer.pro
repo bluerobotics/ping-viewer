@@ -6,6 +6,9 @@ CONFIG += \
     c++14 \
     static
 
+QMAKE_CC = gcc-8
+QMAKE_CXX = g++-8
+
 QT += core charts gui qml quick widgets quickcontrols2 concurrent svg xml
 
 include($$PWD/src/src.pri)
