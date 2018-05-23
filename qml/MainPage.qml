@@ -13,9 +13,6 @@ Item {
     visible: true
     focus: true
 
-    // Force focus to deal with hotkeys
-    onFocusChanged: focus = true
-
     Column {
         z: 1
         anchors.left: parent.left
