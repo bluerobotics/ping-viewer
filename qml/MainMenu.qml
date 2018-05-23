@@ -210,7 +210,7 @@ Item {
                     color: Style.textColor
                 }
 
-                TextField {
+                PingTextField {
                     id: udpIp
                     text: "192.168.2.2"
                     enabled: false
@@ -221,7 +221,7 @@ Item {
                     }
                 }
 
-                TextField {
+                PingTextField {
                     id: udpPort
                     text: "1234"
                     enabled: false
@@ -237,7 +237,7 @@ Item {
                     color: Style.textColor
                 }
 
-                TextField {
+                PingTextField {
                     id: pathField
                     enabled: false
                     Layout.columnSpan:  3
