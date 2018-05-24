@@ -168,6 +168,11 @@ float Waterfall::RGBToValue(const QColor& color)
 
 void Waterfall::draw(const QList<double>& points)
 {
+    if(points.isEmpty()) {
+        randomUpdate();
+        return;
+    }
+
     static QImage old;
     static QList<double> oldPoints = points;
 
