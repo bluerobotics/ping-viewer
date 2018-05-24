@@ -136,6 +136,7 @@ script:
   fi
 
 after_success:
+- export DEPLOY_FILE="";
 - if [ -z $TEST ]; then
     wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
   fi
@@ -144,5 +145,33 @@ after_success:
   fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     bash ./upload.sh ./pingviewer*.AppImage;
+    export DEPLOY_FILE=${PWD}/pingviewer*.AppImage;
   fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh pingviewer*.dmg*; fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    bash ./upload.sh pingviewer*.dmg*;
+    export DEPLOY_FILE=${PWD}/pingviewer.dmg;
+  fi
+- echo "Deploy: ${DEPLOY_FILE}";
+- mkdir -p /tmp/deploy/s3;
+- mv ${DEPLOY_FILE} /tmp/deploy/s3;
+- echo "S3 folder";
+- ls /tmp/deploy/s3/*;
+
+deploy:
+  # deploy installers to s3 builds/ if on a branch
+  - provider: s3
+    access_key_id: AKIAI42TETMLX6KJRTRA
+    secret_access_key:
+      secure: sWhs8EH+S49EOmQGVFmnN2aaFegrdahNO7hjUSVLR3jwwjJYEEvzJEXd2wQg1LzkP6l7IBt8B+q8rHNiX9lwXUW11X0BVsrAz6vo1V99usnknvTIW+em6lWGGQcd1LZnrUWPwHhK/+7tmD/7crNuxxKsdiYqDLyP8AdvNwhK+/WzQj6zoBOhE++F5fKi52UK9glM15Zk30t8Ng0qmub1+zaPJwO1FPIR+hcAesxGDDplVSDQIiOZ4SqgYmC7u26HpcfsOXLS8YQdQwHOk6K+fNgrOc3MbdP0kE2W21SeVGNOVZaLsy6fAnZEdaJQcX1bkCFVgilcsyf5zppNuh0HFoNF4OpG9oDYQFYBkR0iDYnqXw89raqovW5N6hbsV4K6PN9/vLgk6KTuP5jpoIwvmGSYiPPXvgE26/agNMkEeJnwv/aa1QAABKX3A6XYylN9brmBUFE3xL5DyY2L0nH1q1KdtH+iOUpPRYnMkDNenPwbqlx2QC66pz06+IzYG4n1nRfTq4D23CsPud2W7dhsPg1ZWVxKkDS5rTHlIgpbWoj22jAJmwS48XVD98R0CoNsbsFCAPd6BMiciGirsyIRTtfJai25YbkJ+YDwrhzu/r8V9hpnjGc2PiwetXTnaPz8OOWmPgTGclNZD8FhdJwWPhnBMR56CT3ZxL5Sg3f4Ba4=
+    bucket: downloads.bluerobotics.com
+    upload-dir: PingViewer/builds/${TRAVIS_BRANCH}
+    acl: public_read
+    region: us-east-1
+    file_glob: true
+    local_dir: /tmp/deploy/s3/
+    file:
+      - /tmp/deploy/s3/*
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: ${DEPLOY_FILE} != ""
