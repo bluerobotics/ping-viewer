@@ -29,7 +29,7 @@ Ping::Ping() : Sensor()
     emit linkUpdate();
 
     _requestTimer.setInterval(1000);
-    connect(&_requestTimer, &QTimer::timeout, this, [this] { request(PingMessage::ping1D_profile); });
+    connect(&_requestTimer, &QTimer::timeout, this, [this] { request(Ping1DNamespace::Profile); });
 
     //connectLink("2:/dev/ttyUSB2:115200");
 
@@ -67,18 +67,18 @@ void Ping::handleMessage(PingMessage msg)
 
     switch (msg.message_id()) {
 
-    case PingMessage::ping1D_ack: {
+    case Ping1DNamespace::Ack: {
         qCDebug(PING_PROTOCOL_PING) << "GOT ACK";
         break;
     }
 
-    case PingMessage::ping1D_nack: {
+    case Ping1DNamespace::Nack: {
         qCCritical(PING_PROTOCOL_PING) << "GOT NACK";
         break;
     }
 
     // needs dynamic-payload patch
-    case PingMessage::ping1D_ascii_text: {
+    case Ping1DNamespace::Ascii_text: {
         // hack for now
         QString txt(QByteArray((const char*)&(msg.msgData[8]), msg.payload_length()));
         qCInfo(PING_PROTOCOL_PING) << "GOT TEXT:" << txt;
@@ -86,7 +86,7 @@ void Ping::handleMessage(PingMessage msg)
         break;
     }
 
-    case PingMessage::ping1D_fw_version: {
+    case Ping1DNamespace::Fw_version: {
         ping_msg_ping1D_fw_version m(msg);
         _device_type = m.device_type();
         _device_model = m.device_model();
@@ -102,7 +102,7 @@ void Ping::handleMessage(PingMessage msg)
 
     // This message is deprecated, it provides no added information because
     // the device id is already supplied in every message header
-    case PingMessage::ping1D_device_id: {
+    case Ping1DNamespace::Device_id: {
         ping_msg_ping1D_device_id m(msg);
         _srcId = m.src_device_id();
 
@@ -110,7 +110,7 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case PingMessage::ping1D_distance: {
+    case Ping1DNamespace::Distance: {
         ping_msg_ping1D_distance m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
@@ -131,7 +131,7 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case PingMessage::ping1D_profile: {
+    case Ping1DNamespace::Profile: {
         ping_msg_ping1D_profile m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
@@ -161,14 +161,14 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case PingMessage::ping1D_mode: {
+    case Ping1DNamespace::Mode: {
         ping_msg_ping1D_mode m(msg);
         _mode_auto = m.auto_manual();
         emit modeAutoUpdate();
     }
     break;
 
-    case PingMessage::ping1D_ping_rate_msec: {
+    case Ping1DNamespace::Ping_rate_msec: {
         ping_msg_ping1D_ping_rate_msec m(msg);
         _msec_per_ping = m.msec_per_ping();
         emit msecPerPingUpdate();
