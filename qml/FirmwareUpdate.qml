@@ -49,7 +49,7 @@ Item {
                         color: Style.textColor
                     }
 
-                    TextField {
+                    PingTextField {
                         enabled: false
                         Layout.columnSpan:  8
                         Layout.fillWidth: true
@@ -68,7 +68,7 @@ Item {
                         color: Style.textColor
                     }
 
-                    TextField {
+                    PingTextField {
                         id: firmwareFileName
                         enabled: false
                         Layout.columnSpan:  8

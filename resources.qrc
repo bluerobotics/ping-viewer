@@ -18,6 +18,7 @@
         <file alias="PingStatus.qml">qml/PingStatus.qml</file>
         <file alias="Style.qml">qml/Style.qml</file>
         <file alias="ValueReadout.qml">qml/ValueReadout.qml</file>
+        <file alias="PingTextField.qml">qml/PingTextField.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
