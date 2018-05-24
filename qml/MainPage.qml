@@ -231,13 +231,6 @@ Item {
         }
     }
 
-    Timer {
-        id: pingTimer
-        interval: 500; running: false; repeat: true
-        // TODO get message ID enums in qml
-        onTriggered: ping.request(1300)
-    }
-
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent
