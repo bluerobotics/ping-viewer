@@ -231,25 +231,6 @@ Item {
                         connect(udpIp.text, udpPort.text)
                     }
                 }
-
-                Text {
-                    text: "Save Path:"
-                    color: Style.textColor
-                }
-
-                PingTextField {
-                    id: pathField
-                    enabled: false
-                    Layout.columnSpan:  3
-                    Layout.fillWidth: true
-                }
-
-                Button {
-                    text: "Browse..."
-                    enabled: false
-                    // hack
-                    implicitWidth: baudrateBox.width
-                }
             }
         }
     }
