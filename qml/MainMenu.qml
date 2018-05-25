@@ -90,10 +90,9 @@ Item {
                 CheckBox {
                     id: autoGainChB
                     text: "Auto Gain"
-                    checked: ping.modeAuto
+                    checked: ping.mode_auto
                     onCheckedChanged: {
-                        //setEchosounderAuto(checked)
-                        ping.request(1102)
+                        ping.mode_auto = checked
                     }
                 }
 
