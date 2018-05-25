@@ -50,6 +50,14 @@ Item {
             }
             Row {
                 Text {
+                    text: "Auto: " + ping.mode_auto
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
                     text: "Start: " + ping.start_mm
                     color: "white"
                     font.family: "unicode"
