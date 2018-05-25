@@ -63,8 +63,16 @@ public:
     Q_PROPERTY(QList<double> points READ points NOTIFY pointsUpdate)
     QList<double> points() { return _points; }
 
-    Q_PROPERTY(bool mode_auto READ mode_auto NOTIFY modeAutoUpdate)
+    Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
     bool mode_auto() { return _mode_auto; }
+    void set_mode_auto(bool mode_auto)
+    {
+        ping_msg_ping1D_set_auto_manual m;
+        m.set_mode(mode_auto);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Mode);
+    }
 
     Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY msecPerPingUpdate)
     uint16_t msec_per_ping() { return _msec_per_ping; }
