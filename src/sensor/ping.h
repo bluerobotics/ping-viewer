@@ -75,8 +75,16 @@ public:
         request(Ping1DNamespace::Range);
     }
 
-    Q_PROPERTY(int gain_index READ gain_index NOTIFY gainIndexUpdate)
+    Q_PROPERTY(int gain_index READ gain_index WRITE set_gain_index NOTIFY gainIndexUpdate)
     uint32_t gain_index() { return _gain_index; }
+    void set_gain_index(int gain_index)
+    {
+        ping_msg_ping1D_set_gain_index m;
+        m.set_index(gain_index);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Gain_index);
+    }
 
     Q_PROPERTY(QList<double> points READ points NOTIFY pointsUpdate)
     QList<double> points() { return _points; }
