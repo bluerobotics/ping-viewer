@@ -110,6 +110,50 @@ Item {
                         ping.gain_index = currentIndex
                     }
                 }
+                Text {
+                    text: "Start/Stop (mm):"
+                    color: Style.textColor
+                }
+
+                PingTextField {
+                    id: startLength
+                    text: ""
+                    Layout.columnSpan: 2
+                    Layout.fillWidth: true
+                    onEditingFinished: {
+                        if (parseInt(text)) {
+                            ping.start_mm = parseInt(text)
+                        }
+                    }
+                    Connections {
+                        target: ping
+                        onLengthMmUpdate: {
+                            if (!startLength.focus) {
+                                startLength.text = ping.start_mm
+                            }
+                        }
+                    }
+                }
+
+                PingTextField {
+                    id: totalLength
+                    text: ""
+                    Layout.columnSpan: 2
+                    Layout.fillWidth: true
+                    onEditingFinished: {
+                        if (parseInt(text)) {
+                            ping.length_mm = parseInt(text)
+                        }
+                    }
+                    Connections {
+                        target: ping
+                        onLengthMmUpdate: {
+                            if (!totalLength.focus) {
+                                totalLength.text = ping.length_mm
+                            }
+                        }
+                    }
+                }
             }
         }
 
