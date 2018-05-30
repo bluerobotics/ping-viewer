@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: root
-    property int value: 0
+    property real value: 0
     property string units: "m"
     property int precision: 2
     property int margin: 10
