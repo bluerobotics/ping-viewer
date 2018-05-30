@@ -80,3 +80,13 @@ deploy:
     prerelease: true
     auth_token:
       secure: VEF0yQnbTywsc88aRTZH8e1/Z0M7qf2txtidiB43qrSFTvrE/2nAQzGx+eqCBb9p
+
+  - provider: S3
+    access_key_id: AKIAI42TETMLX6KJRTRA
+    secret_access_key:
+      secure: H+6JLuM6RmVdlzvYZ92+E1+NB/Z4580IDd8m2wNCbSpFhzSewGtVk3M2AkjKTlCG
+    bucket: downloads.bluerobotics.com
+    region: us-east-1
+    set_public: true
+    folder: PingViewer/builds/$(APPVEYOR_REPO_BRANCH)
+    artifact: PingViewer
