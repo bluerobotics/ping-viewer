@@ -51,11 +51,29 @@ public:
     Q_PROPERTY(int pulse_usec READ pulse_usec NOTIFY pulseUsecUpdate)
     uint16_t pulse_usec() { return _pulse_usec; }
 
-    Q_PROPERTY(int start_mm READ start_mm NOTIFY startMmUpdate)
+    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY startMmUpdate)
     uint32_t start_mm() { return _start_mm; }
+    void set_start_mm(int start_mm)
+    {
+        ping_msg_ping1D_set_range m;
+        m.set_start_mm(start_mm);
+        m.set_length_mm(_length_mm);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Range);
+    }
 
-    Q_PROPERTY(int length_mm READ length_mm NOTIFY lengthMmUpdate)
+    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY lengthMmUpdate)
     uint32_t length_mm() { return _length_mm; }
+    void set_length_mm(int length_mm)
+    {
+        ping_msg_ping1D_set_range m;
+        m.set_start_mm(_start_mm);
+        m.set_length_mm(length_mm);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Range);
+    }
 
     Q_PROPERTY(int gain_index READ gain_index NOTIFY gainIndexUpdate)
     uint32_t gain_index() { return _gain_index; }

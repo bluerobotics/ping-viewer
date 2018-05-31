@@ -175,6 +175,15 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
+    case Ping1DNamespace::Range: {
+        ping_msg_ping1D_range m(msg);
+        _start_mm = m.start_mm();
+        _length_mm = m.length_mm();
+        emit lengthMmUpdate();
+        emit startMmUpdate();
+    }
+    break;
+
     default:
         qCritical() << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;
