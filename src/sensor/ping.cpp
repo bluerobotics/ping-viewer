@@ -175,6 +175,29 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
+    case Ping1DNamespace::Range: {
+        ping_msg_ping1D_range m(msg);
+        _start_mm = m.start_mm();
+        _length_mm = m.length_mm();
+        emit lengthMmUpdate();
+        emit startMmUpdate();
+    }
+    break;
+
+    case Ping1DNamespace::General_info: {
+        ping_msg_ping1D_general_info m(msg);
+        _gain_index = m.gain_index();
+        emit gainIndexUpdate();
+    }
+    break;
+
+    case Ping1DNamespace::Gain_index: {
+        ping_msg_ping1D_gain_index m(msg);
+        _gain_index = m.gain_index();
+        emit gainIndexUpdate();
+    }
+    break;
+
     default:
         qCritical() << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;

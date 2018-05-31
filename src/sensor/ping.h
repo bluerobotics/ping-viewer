@@ -51,20 +51,54 @@ public:
     Q_PROPERTY(int pulse_usec READ pulse_usec NOTIFY pulseUsecUpdate)
     uint16_t pulse_usec() { return _pulse_usec; }
 
-    Q_PROPERTY(int start_mm READ start_mm NOTIFY startMmUpdate)
+    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY startMmUpdate)
     uint32_t start_mm() { return _start_mm; }
+    void set_start_mm(int start_mm)
+    {
+        ping_msg_ping1D_set_range m;
+        m.set_start_mm(start_mm);
+        m.set_length_mm(_length_mm);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Range);
+    }
 
-    Q_PROPERTY(int length_mm READ length_mm NOTIFY lengthMmUpdate)
+    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY lengthMmUpdate)
     uint32_t length_mm() { return _length_mm; }
+    void set_length_mm(int length_mm)
+    {
+        ping_msg_ping1D_set_range m;
+        m.set_start_mm(_start_mm);
+        m.set_length_mm(length_mm);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Range);
+    }
 
-    Q_PROPERTY(int gain_index READ gain_index NOTIFY gainIndexUpdate)
+    Q_PROPERTY(int gain_index READ gain_index WRITE set_gain_index NOTIFY gainIndexUpdate)
     uint32_t gain_index() { return _gain_index; }
+    void set_gain_index(int gain_index)
+    {
+        ping_msg_ping1D_set_gain_index m;
+        m.set_index(gain_index);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Gain_index);
+    }
 
     Q_PROPERTY(QList<double> points READ points NOTIFY pointsUpdate)
     QList<double> points() { return _points; }
 
-    Q_PROPERTY(bool mode_auto READ mode_auto NOTIFY modeAutoUpdate)
+    Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
     bool mode_auto() { return _mode_auto; }
+    void set_mode_auto(bool mode_auto)
+    {
+        ping_msg_ping1D_set_auto_manual m;
+        m.set_mode(mode_auto);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Mode);
+    }
 
     Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY msecPerPingUpdate)
     uint16_t msec_per_ping() { return _msec_per_ping; }

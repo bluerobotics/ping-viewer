@@ -10,16 +10,20 @@ Item {
 
     anchors.fill: parent
 
+    property var marginPix: 10
+
     Rectangle {
         anchors.centerIn: parent
 
         color: "black"
         opacity: 0.75
-        height: innerCol.height
-        width: innerCol.width*1.2
+        height: innerCol.height + 2 * marginPix
+        width: innerCol.width + 5 * marginPix
         Column {
             id: innerCol
-            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: marginPix
             Row {
                 Text {
                     text: "FW: " + ping.fw_version_major + "." + ping.fw_version_minor
@@ -39,6 +43,14 @@ Item {
             Row {
                 Text {
                     text: "Distance: " + ping.distance
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
+                    text: "Auto: " + ping.mode_auto
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8

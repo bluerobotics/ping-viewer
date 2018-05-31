@@ -90,16 +90,15 @@ Item {
                 CheckBox {
                     id: autoGainChB
                     text: "Auto Gain"
-                    checked: ping.modeAuto
+                    checked: ping.mode_auto
                     onCheckedChanged: {
-                        //setEchosounderAuto(checked)
-                        ping.request(1102)
+                        ping.mode_auto = checked
                     }
                 }
 
                 ComboBox {
                     id: gainCB
-                    currentIndex: ping.gain
+                    currentIndex: ping.gain_index
                     model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
                     enabled: !autoGainChB.checked
                     Layout.columnSpan:  4
@@ -108,7 +107,51 @@ Item {
                         displayText = model[currentIndex] + " dB"
                     }
                     onActivated: {
-                        //setEchosounderGain(index)
+                        ping.gain_index = currentIndex
+                    }
+                }
+                Text {
+                    text: "Start/Stop (mm):"
+                    color: Style.textColor
+                }
+
+                PingTextField {
+                    id: startLength
+                    text: ""
+                    Layout.columnSpan: 2
+                    Layout.fillWidth: true
+                    onEditingFinished: {
+                        if (parseInt(text)) {
+                            ping.start_mm = parseInt(text)
+                        }
+                    }
+                    Connections {
+                        target: ping
+                        onLengthMmUpdate: {
+                            if (!startLength.focus) {
+                                startLength.text = ping.start_mm
+                            }
+                        }
+                    }
+                }
+
+                PingTextField {
+                    id: totalLength
+                    text: ""
+                    Layout.columnSpan: 2
+                    Layout.fillWidth: true
+                    onEditingFinished: {
+                        if (parseInt(text)) {
+                            ping.length_mm = parseInt(text)
+                        }
+                    }
+                    Connections {
+                        target: ping
+                        onLengthMmUpdate: {
+                            if (!totalLength.focus) {
+                                totalLength.text = ping.length_mm
+                            }
+                        }
                     }
                 }
             }
