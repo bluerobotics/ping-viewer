@@ -211,8 +211,7 @@ Item {
         }
 
         onConfidenceUpdate: {
-            // Q_PROPERTY does not exist
-            //ping1DVisualizer.setConfidence(ping.confidence)
+            ping1DVisualizer.setConfidence(ping.confidence)
         }
 
         function firstRequest() {
