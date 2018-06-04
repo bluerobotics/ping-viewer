@@ -12,7 +12,7 @@ uint16_t Waterfall::displayWidth = 500;
 
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(2048, 200, QImage::Format_RGBA8888),
+    _image(2048, 2000, QImage::Format_RGBA8888),
     _painter(nullptr),
     _mouseDepth(0),
     _mouseStrength(0),
@@ -20,6 +20,9 @@ Waterfall::Waterfall(QQuickItem *parent):
     _update(true),
     currentDrawIndex(displayWidth)
 {
+    // This is the max depth that ping returns
+    setWaterfallMaxDepth(48.903);
+    _DCRing.fill({0, 0}, displayWidth);
     setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -117,6 +120,12 @@ void Waterfall::setGradients()
     emit themesChanged();
 }
 
+void Waterfall::setWaterfallMaxDepth(float maxDepth)
+{
+    _waterfallDepth = maxDepth;
+    _pixelsPerMeter = _image.height()/_waterfallDepth;
+}
+
 void Waterfall::setTheme(const QString& theme)
 {
     _theme = theme;
@@ -145,7 +154,9 @@ void Waterfall::paint(QPainter *painter)
 
     // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
     pix = QPixmap::fromImage(_image);
-    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _image.height()));
+    // Code for debug, draw the entire waterfall
+    //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
+    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _maxDepthToDraw));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -166,35 +177,60 @@ float Waterfall::RGBToValue(const QColor& color)
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(const QList<double>& points)
+void Waterfall::draw(const QList<double>& points, float depth, float confidence)
 {
-    static QImage old;
+    static QImage old = _image;
     static QList<double> oldPoints = points;
+    _DCRing.append({depth, confidence});
+
+    int virtualHeight = floor(_pixelsPerMeter*depth);
+
+    static auto lastMaxDepth = [this] {
+        float maxDepth = 0;
+        for(const auto& DC : this->_DCRing)
+        {
+            maxDepth = maxDepth < DC.depth ? DC.depth : maxDepth;
+        }
+        return maxDepth;
+    };
+
+    _maxDepthToDraw = floor(lastMaxDepth()*_pixelsPerMeter);
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
     if (currentDrawIndex >= _image.width()) {
-        old = _image.copy(_image.width() - displayWidth, 0, displayWidth, _image.height());
+        //Swap is faster
+        _image.swap(old);
+        _image.fill(Qt::transparent);
         QPainter painter(&_image);
-        painter.drawImage(0, 0, old);
+        // Clean everything and start from zero
+        painter.fillRect(_image.rect(), Qt::transparent);
+        painter.drawImage(QRect(0, 0, displayWidth, _image.height()),
+                          old, QRect(old.width() - displayWidth, 0, displayWidth, old.height()));
         painter.end();
+
+        // Start painting from the beginning
         currentDrawIndex = displayWidth;
     }
+
+    // Do up/downsampling
+    float factor = points.length()/((float)virtualHeight);
 
     if(smooth()) {
         #pragma omp for
         for(int i = 0; i < points.length(); i++) {
             oldPoints[i] = points[i]*0.2 + oldPoints[i]*0.8;
         }
+
         #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[i]));
+        for(int i = 0; i < virtualHeight; i++) {
+            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[factor*i]));
 
         }
     } else {
         #pragma omp for
-        for(int i = 0; i < _image.height(); i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[i]));
+        for(int i = 0; i < virtualHeight; i++) {
+            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[factor*i]));
 
         }
     }
@@ -214,14 +250,22 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
         first = currentDrawIndex - displayWidth;
     }
 
+    int widthPos = pos.x()*displayWidth/width();
     pos.setX(pos.x()*displayWidth/width() + first);
-    pos.setY(pos.y()*_image.height()/height());
+    pos.setY(pos.y()*_maxDepthToDraw/(float)height());
 
     // signal strength
     _mouseStrength = RGBToValue(_image.pixelColor(pos));
+
     // depth
-    _mouseDepth = pos.y();
+    _mouseDepth = pos.y()/(float)_pixelsPerMeter;
     emit mouseMove();
+
+    const auto& depthAndConfidence = _DCRing[displayWidth - widthPos];
+    _mouseColumnConfidence = depthAndConfidence.confidence;
+    _mouseColumnDepth = depthAndConfidence.depth;
+    emit mouseColumnConfidenceChanged();
+    emit mouseColumnDepthChanged();
 }
 
 void Waterfall::hoverLeaveEvent(QHoverEvent *event)

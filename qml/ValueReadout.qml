@@ -11,6 +11,8 @@ Item {
     property real depth: -1
     property real strength: -1
     property real confidence: 0
+    property real columnConfidence: 0
+    property real columnDepth: 0
     property int parentWidth: 0
     property int parentHeight: 0
     x: margin
@@ -69,6 +71,33 @@ Item {
                 color: 'white'
                 font.family: "Arial"
                 font.pointSize: readout.font.pointSize
+                font.bold: true
+            }
+        }
+
+        RowLayout {
+            Text {
+                id: textColumnDepth
+                text: transformValue(columnDepth, precision) + units
+                visible: typeof(strength) == "number"
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: 14
+                font.bold: true
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
+            }
+
+            Text {
+                id: textColumnConfidence
+                text: transformValue(columnConfidence, 0) + '%'
+                visible: typeof(strength) == "number"
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: 14
                 font.bold: true
             }
         }

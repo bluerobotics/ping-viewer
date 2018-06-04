@@ -203,7 +203,8 @@ Item {
         }
 
         onPointsUpdate: {
-            ping1DVisualizer.draw(ping.points)
+            // Move from mm to m
+            ping1DVisualizer.draw(ping.points, ping.distance*1e-3, ping.confidence)
         }
 
         onDistanceUpdate: {

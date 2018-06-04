@@ -2,6 +2,7 @@
 #include <QImage>
 
 #include "logger.h"
+#include "ringvector.h"
 #include "waterfallgradient.h"
 
 Q_DECLARE_LOGGING_CATEGORY(waterfall)
@@ -27,7 +28,23 @@ class Waterfall : public QQuickPaintedItem
     Q_PROPERTY(float mouseDepth READ mouseDepth NOTIFY mouseDepthChanged)
 
     /**
-     * @brief Get signal strength from mouse position
+     * @brief Get signal confidence from mouse position column
+     *
+     * @return float
+     */
+    float mouseColumnConfidence() {return _mouseColumnConfidence;}
+    Q_PROPERTY(float mouseColumnConfidence READ mouseColumnConfidence NOTIFY mouseColumnConfidenceChanged)
+
+    /**
+     * @brief Get signal deepth from mouse position column
+     *
+     * @return float
+     */
+    float mouseColumnDepth() {return _mouseColumnDepth;}
+    Q_PROPERTY(float mouseColumnDepth READ mouseColumnDepth NOTIFY mouseColumnDepthChanged)
+
+    /**
+     * @brief Get signal confidence from mouse column
      *
      * @return float
      */
@@ -67,10 +84,17 @@ class Waterfall : public QQuickPaintedItem
     void setSmooth(bool smooth) {_smooth = smooth; setAntialiasing(_smooth); emit smoothChanged();}
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
+
+    Q_INVOKABLE float getWaterfallDepth() {return _maxDepthToDraw;}
+
     QList<WaterfallGradient> _gradients;
     WaterfallGradient _gradient;
     QImage _image;
     QPainter *_painter;
+    float _pixelsPerMeter;
+    float _maxDepthToDraw;
+    float _mouseColumnConfidence;
+    float _mouseColumnDepth;
     float _mouseDepth;
     float _mouseStrength;
     bool _smooth;
@@ -79,10 +103,21 @@ class Waterfall : public QQuickPaintedItem
     QList<QString> _themes;
     static uint16_t displayWidth;
     uint16_t currentDrawIndex;
+    float _waterfallDepth;
+
+    // Depth and Confidence package
+    struct DCPack {
+        float depth;
+        float confidence;
+    };
+
+    RingVector<DCPack> _DCRing;
 
 signals:
     void imageChanged();
     void mouseDepthChanged();
+    void mouseColumnConfidenceChanged();
+    void mouseColumnDepthChanged();
     void mouseMove();
     void mouseStrengthChanged();
     void mouseLeave();
@@ -120,6 +155,13 @@ public:
     void setGradients();
 
     /**
+     * @brief Set the waterfall max depth in meters
+     *
+     * @param maxDepth
+     */
+    Q_INVOKABLE void setWaterfallMaxDepth(float maxDepth);
+
+    /**
      * @brief Change the theme used in the waterfall
      *
      * @param theme name
@@ -146,8 +188,10 @@ public:
      * @brief Draw a list of points in the waterfall
      *
      * @param points
+     * @param depth
+     * @param confidence
      */
-    Q_INVOKABLE void draw(const QList<double>& points);
+    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0);
 
     /**
      * @brief Function that deals when the mouse is inside the waterfall
