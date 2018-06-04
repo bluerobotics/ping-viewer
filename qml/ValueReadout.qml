@@ -91,7 +91,7 @@ Item {
 
             Text {
                 id: strengthText
-                text: transformValue(strength*100, 2) + '%'
+                text: transformValue(strength*100, 0) + '%'
                 visible: typeof(strength) == "number"
                 color: 'white'
                 font.family: "Arial"
