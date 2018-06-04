@@ -6,11 +6,11 @@ Item {
     id: root
     property real value: 0
     property string units: "m"
-    property int precision: 2
+    property real precision: 2
     property int margin: 10
-    property int depth: -1
-    property int strength: -1
-    property int confidence: 0
+    property real depth: -1
+    property real strength: -1
+    property real confidence: 0
     property int parentWidth: 0
     property int parentHeight: 0
     x: margin
