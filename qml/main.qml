@@ -18,8 +18,8 @@ ApplicationWindow {
     Material.foreground: Material.Blue
 
     MainPage {
-        anchors.fill: parent
         id: mainPage
+        anchors.fill: parent
     }
 
     // Save windows position and size
