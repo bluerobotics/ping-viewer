@@ -140,6 +140,19 @@ Item {
                 anchors.bottom: iconRect.bottom
                 anchors.right: iconRect.left
             }
+        },
+        State {
+            name: "fill-right"
+            AnchorChanges {
+                target: itemRect
+                anchors.left: iconRect.right
+            }
+            PropertyChanges {
+                target: itemRect
+                y: - pingItem.y
+                height: mainPage.height
+                width: mainPage.width - pingItem.width
+            }
         }
     ]
 
