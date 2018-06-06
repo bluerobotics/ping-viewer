@@ -10,7 +10,7 @@ import Ping 1.0
 import Ping1DNamespace 1.0
 
 Item {
-    id: mainPage
+    id: root
     visible: true
     focus: true
 
@@ -253,7 +253,7 @@ Item {
             print("Grab screen image")
             event.accepted = true
 
-            mainPage.grabToImage(function(result) {
+            root.grabToImage(function(result) {
                 print("Grab screen image callback")
                 print(FileManager.createFileName(FileManager.PICTURE))
                 result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
