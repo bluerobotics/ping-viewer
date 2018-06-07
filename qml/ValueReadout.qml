@@ -143,8 +143,11 @@ Item {
 
 
     Component.onCompleted: {
-        if(root.y == 0) {
-            root.y = parent.height - height - margin
+        if(y <= 0 || y + height > parent.height) {
+            y = margin
+        }
+        if(x <= 0 || x + width > parent.width) {
+            x = margin
         }
     }
 }
