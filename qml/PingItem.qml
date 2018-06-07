@@ -122,6 +122,8 @@ Item {
             AnchorChanges {
                 target: itemRect
                 anchors.top: iconRect.top
+                anchors.bottom: undefined
+                anchors.right: undefined
                 anchors.left: iconRect.right
             }
         },
@@ -129,7 +131,9 @@ Item {
             name: "bottom-left"
             AnchorChanges {
                 target: itemRect
+                anchors.top: undefined
                 anchors.bottom: iconRect.bottom
+                anchors.right: undefined
                 anchors.left: iconRect.right
             }
         },
@@ -137,14 +141,19 @@ Item {
             name: "bottom-right"
             AnchorChanges {
                 target: itemRect
+                anchors.top: undefined
                 anchors.bottom: iconRect.bottom
                 anchors.right: iconRect.left
+                anchors.left: undefined
             }
         },
         State {
             name: "fill-right"
             AnchorChanges {
                 target: itemRect
+                anchors.top: mainPage.top
+                anchors.bottom: undefined
+                anchors.right: undefined
                 anchors.left: iconRect.right
             }
             PropertyChanges {
