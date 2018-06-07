@@ -83,8 +83,10 @@ Item {
         PingItem {
             id: infoMenu
             icon: "/icons/info_white.svg"
+            state: "fill-right"
             item: InfoPage {
                 id: infoPage
+                anchors.fill: parent
                 deviceFirmware: ping.fw_version_major + "." + ping.fw_version_minor
                 deviceID: ping.srcId
                 deviceModel: ping.device_model

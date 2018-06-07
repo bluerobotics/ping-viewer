@@ -7,17 +7,34 @@ import Logger 1.0
 
 Item {
     id: root
-    height: mainLayout.height
-    width: mainLayout.width
     property string deviceType: 'No device'
     property string deviceModel: 'No device'
     property string deviceFirmware: 'No device'
     property string deviceID: 'No device'
 
+    onWidthChanged: updateGridLayout()
+    onVisibleChanged: updateGridLayout()
+
+    function updateGridLayout() {
+        if(logCategoryGrid.maxItemSize*logCategoryGrid.columns > width) {
+            if(logCategoryGrid.columns > 1) {
+                logCategoryGrid.columns -= 1
+            }
+        } else if(logCategoryGrid.maxItemSize*(logCategoryGrid.columns + 1) < width) {
+            logCategoryGrid.columns += 1
+        }
+    }
+
     ColumnLayout {
         id: mainLayout
+        width: root.width
+        height: root.height
         RowLayout {
-            Layout.preferredHeight: 50
+            id: headerLayout
+            width: mainLayout.width
+            Layout.rightMargin: 10
+            Layout.leftMargin: 10
+            Layout.topMargin: 10
 
             Image {
                 id: pingIcon
@@ -29,21 +46,19 @@ Item {
                 antialiasing: true
             }
 
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
-                color: "transparent"
             }
 
             PingImage {
                 id: pingName
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                height: 50
+                width: 150
                 source: "/imgs/ping_name.png"
             }
 
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
-                color: "transparent"
             }
 
             Image {
@@ -56,8 +71,15 @@ Item {
                 antialiasing: true
             }
         }
+
         RowLayout {
+            id: textRow
+            Layout.fillWidth: true
+            Layout.rightMargin: 10
+            Layout.leftMargin: 10
+
             ColumnLayout {
+                id: textColumn
                 Text {
                     z: 1
                     text: 'Version: <b>' + (GitTag === "" ? "No tags!" : GitTag)
@@ -92,12 +114,12 @@ Item {
                 }
             }
 
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
-                color: "transparent"
             }
 
             ColumnLayout {
+
                 Text {
                     z: 1
                     // Add link to store device
@@ -125,17 +147,19 @@ Item {
                     textFormat: Text.RichText
                 }
             }
-
         }
         RowLayout {
             id: btLayout
-            Layout.preferredHeight: 40
+            Layout.preferredHeight: 50
+            width: root.width
+            Layout.rightMargin: 10
+            Layout.leftMargin: 10
 
             PingImage {
                 id: forumPost
                 source: "/icons/chat_white.svg"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                height: 50
+                width: 50
 
                 MouseArea {
                     id: mouseAreaForumPost
@@ -152,11 +176,15 @@ Item {
                 }
             }
 
+            Item {
+                Layout.fillWidth: true
+            }
+
             PingImage {
                 id: scrollLock
-                Layout.fillHeight: true
-                Layout.fillWidth: true
                 source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
+                height: 50
+                width: 50
 
                 MouseArea {
                     id: mouseAreaScrollLock
@@ -175,12 +203,15 @@ Item {
                 }
             }
 
+            Item {
+                Layout.fillWidth: true
+            }
+
             PingImage {
                 id: issue
                 source: "/icons/report_white.svg"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                anchors.right: btLayout.right
+                height: 50
+                width: 50
 
                 MouseArea {
                     id: mouseAreaIssue
@@ -199,6 +230,7 @@ Item {
         }
 
         Rectangle {
+            id: logLineDiv
             height: 2
             Layout.fillWidth: true
             color: Style.textColor
@@ -208,17 +240,19 @@ Item {
             id: log
             height: 300
             Layout.fillWidth: true
+            Layout.fillHeight: true
             Component.onCompleted: {
                 print(height, width)
             }
         }
-
         GridLayout {
-            columns: 4
+            id: logCategoryGrid
             rowSpacing: 5
             columnSpacing: 5
+            columns: 5
+            Layout.fillWidth: true
+            property var maxItemSize: 100
             Repeater {
-                Layout.fillWidth: true
                 model: Logger.registeredCategory
                 CheckBox {
                     text: modelData
@@ -228,8 +262,20 @@ Item {
                         Logger.setCategory(modelData.toString(), checked)
                     }
                 }
+                onModelChanged: {
+                    for(var i in model) {
+                        var size = model[i].length*font.font.pixelSize
+                        logCategoryGrid.maxItemSize = logCategoryGrid.maxItemSize > size ? logCategoryGrid.maxItemSize : size
+                        print(model[i], model[i].length*font.font.pixelSize)
+                    }
+                }
             }
         }
+    }
+
+    // Used to get text size
+    Text {
+        id: font
     }
 
     property var repository: GitUrl.split('.git')[0]
