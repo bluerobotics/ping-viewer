@@ -16,6 +16,7 @@ Item {
     property bool iconVisible: (pingBtMouseArea.containsMouse || pingItemMouseArea.containsMouse || !smartVisibility) && !inPopup
     property bool inPopup: false
     property bool isSubItem: false
+    property bool itemIsSubItem: false
     property bool pingpong: false
     property bool smartVisibility: false
     property bool spin: false
@@ -171,7 +172,7 @@ Item {
 
         height: item != null ? item.height*marginMult : 0
         width: item != null ? item.width*marginMult : 0
-        color: pingItem.color
+        color: itemIsSubItem ? "transparent" : pingItem.color
         property bool hide: true
 
         onOpacityChanged: {
