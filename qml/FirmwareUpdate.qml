@@ -7,11 +7,13 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
 Item {
-    id: firmwareUpdate
+    id: root
     visible: false
-    height: settingsLayout.height
-    width: settingsLayout.width
+    property var icon: "/icons/chip_white.svg"
     property var ping: null
+
+    Layout.fillHeight: true
+    Layout.fillWidth: true
 
     Connections {
         target: ping
@@ -28,7 +30,10 @@ Item {
 
     ColumnLayout {
         id: settingsLayout
-        width: 600
+        width: parent.width - 20
+        height: parent.height - 20
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         RowLayout {
             GroupBox {
                 id: firmwareGroup

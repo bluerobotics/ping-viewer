@@ -37,41 +37,22 @@ Item {
         PingItem {
             id: settingsMenu
             marginMult: 1
+            itemIsSubItem: true
+            state: "fill-right"
             icon: "/icons/settings_white.svg"
-            item: ColumnLayout {
-                spacing: 0
-                PingItem {
-                    id: displayItem
-                    isSubItem: true
-                    icon: "/icons/sun_white.svg"
+            item: ConfigurationPage {
+                id: configurationPage
 
-                    item: DisplaySettings {
-                        id: displaySettings
-                        waterfallItem: ping1DVisualizer.waterfallItem
-                    }
-
-                    onHideItemChanged: {
-                        if(hideItem == false) {
-                            firmwareUpdate.hideItem = true
-                        }
-                    }
+                DisplaySettings {
+                    id: displaySettings
+                    waterfallItem: ping1DVisualizer.waterfallItem
                 }
-                PingItem {
-                    id: firmwareUpdate
-                    isSubItem: true
-                    icon: "/icons/chip_white.svg"
 
-                    item: FirmwareUpdate {
-                        ping: ping
-                    }
-
-                    onHideItemChanged: {
-                        if(hideItem == false) {
-                            displayItem.hideItem = true
-                        }
-                    }
+                FirmwareUpdate {
+                    ping: ping
                 }
             }
+
             onHideItemChanged: {
                 if(hideItem == false) {
                     menuContainer.hideItem = true
