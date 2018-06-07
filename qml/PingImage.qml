@@ -4,12 +4,11 @@ import QtGraphicalEffects 1.0
 Item {
     id: root
 
-    property var source: undefined
+    property alias source: image.source
     property bool selected: false
 
     Image {
         id: image
-        source: root.source
         mipmap: true
         smooth: true
         visible: false
