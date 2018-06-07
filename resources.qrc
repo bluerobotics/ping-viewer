@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file alias="qmldir">qml/qmldir</file>
         <file alias="Chart.qml">qml/Chart.qml</file>
+        <file alias="ConfigurationPage.qml">qml/ConfigurationPage.qml</file>
         <file alias="DisplaySettings.qml">qml/DisplaySettings.qml</file>
         <file alias="FirmwareUpdate.qml">qml/FirmwareUpdate.qml</file>
         <file alias="InfoPage.qml">qml/InfoPage.qml</file>
