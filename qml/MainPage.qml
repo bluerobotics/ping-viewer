@@ -203,7 +203,8 @@ Item {
         }
 
         onPointsUpdate: {
-            ping1DVisualizer.draw(ping.points)
+            // Move from mm to m
+            ping1DVisualizer.draw(ping.points, (ping.length_mm - ping.start_mm) * 1e-3, ping.confidence)
         }
 
         onDistanceUpdate: {
@@ -211,8 +212,7 @@ Item {
         }
 
         onConfidenceUpdate: {
-            // Q_PROPERTY does not exist
-            //ping1DVisualizer.setConfidence(ping.confidence)
+            ping1DVisualizer.setConfidence(ping.confidence)
         }
 
         function firstRequest() {

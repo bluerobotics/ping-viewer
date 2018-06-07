@@ -17,8 +17,8 @@ Item {
         }
     }
 
-    function draw(points) {
-        waterfall.draw(points)
+    function draw(points, depth, confidence) {
+        waterfall.draw(points, depth, confidence)
         chart.draw(points)
     }
 
@@ -43,6 +43,8 @@ Item {
             onMouseMove: {
                 readout.depth = waterfall.mouseDepth < 0 ? '-' : waterfall.mouseDepth
                 readout.strength = waterfall.mouseStrength  < 0 ? '-' : waterfall.mouseStrength
+                readout.columnDepth = waterfall.mouseColumnDepth < 0 ? '-' : waterfall.mouseColumnDepth
+                readout.columnConfidence = waterfall.mouseColumnConfidence < 0 ? '-' : waterfall.mouseColumnConfidence
             }
         }
 

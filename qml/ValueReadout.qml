@@ -6,11 +6,13 @@ Item {
     id: root
     property real value: 0
     property string units: "m"
-    property int precision: 2
+    property real precision: 2
     property int margin: 10
-    property int depth: -1
-    property int strength: -1
-    property int confidence: 0
+    property real depth: -1
+    property real strength: -1
+    property real confidence: 0
+    property real columnConfidence: 0
+    property real columnDepth: 0
     property int parentWidth: 0
     property int parentHeight: 0
     x: margin
@@ -75,6 +77,33 @@ Item {
 
         RowLayout {
             Text {
+                id: textColumnDepth
+                text: transformValue(columnDepth, precision) + units
+                visible: typeof(strength) == "number"
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: 14
+                font.bold: true
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                color: "transparent"
+            }
+
+            Text {
+                id: textColumnConfidence
+                text: transformValue(columnConfidence, 0) + '%'
+                visible: typeof(strength) == "number"
+                color: 'white'
+                font.family: "Arial"
+                font.pointSize: 14
+                font.bold: true
+            }
+        }
+
+        RowLayout {
+            Text {
                 id: depthText
                 text: transformValue(depth, precision) + units
                 visible: typeof(strength) == "number"
@@ -91,7 +120,7 @@ Item {
 
             Text {
                 id: strengthText
-                text: transformValue(strength*100, 2) + '%'
+                text: transformValue(strength*100, 0) + '%'
                 visible: typeof(strength) == "number"
                 color: 'white'
                 font.family: "Arial"
