@@ -4,6 +4,7 @@ RC_ICONS = deploy/icon.ico
 
 CONFIG += \
     c++14 \
+    qtquickcompiler \
     static
 
 QT += core charts gui qml quick widgets quickcontrols2 concurrent svg xml
