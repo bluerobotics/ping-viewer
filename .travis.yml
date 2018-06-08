@@ -18,18 +18,18 @@ matrix:
         - TEST="true"
 
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: require
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
           packages:
             - g++-7
       env:
         - DESC="AppImage deploy"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-        - QTV="qt510"
+        - QTV="qt511"
 
     - os: linux
       dist: trusty
@@ -64,13 +64,18 @@ install:
     if [ "${QTV}" = "qt59" ]; then
       sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
     else
-      sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
+      sudo add-apt-repository --yes ppa:beineri/opt-qt-5.11.0-xenial;
     fi;
     sudo apt update -qq;
     sudo apt search ${QTV};
-    sudo apt install build-essential ${QTV}-meta-minimal ${QTV}charts-no-lgpl
+    sudo apt install build-essential ${QTV}charts-no-lgpl
     ${QTV}quickcontrols ${QTV}quickcontrols2 ${QTV}serialport
     ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml git;
+    if [ "${QTV}" = "qt59" ]; then
+      sudo apt install ${QTV}-meta-minimal;
+    else
+      sudo apt install ${QTV}base libgl1-mesa-dev;
+    fi;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew update > /dev/null;
