@@ -241,9 +241,6 @@ Item {
             height: 300
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Component.onCompleted: {
-                print(height, width)
-            }
         }
         GridLayout {
             id: logCategoryGrid
@@ -266,7 +263,6 @@ Item {
                     for(var i in model) {
                         var size = model[i].length*font.font.pixelSize
                         logCategoryGrid.maxItemSize = logCategoryGrid.maxItemSize > size ? logCategoryGrid.maxItemSize : size
-                        print(model[i], model[i].length*font.font.pixelSize)
                     }
                 }
             }
