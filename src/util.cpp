@@ -24,7 +24,8 @@ QStringList Util::serialPortList()
     return portNameList;
 }
 
-void Util::update(QAbstractSeries* series, const QList<double>& points, const float multiplier)
+void Util::update(QAbstractSeries* series, const QList<double>& points,
+                  const float multiplier, const float upDownSampling)
 {
     if (!series && points.isEmpty()) {
         qCDebug(util) << "Serie or vector not valid.";
@@ -36,6 +37,11 @@ void Util::update(QAbstractSeries* series, const QList<double>& points, const fl
     #pragma omp for
     for(int i = 0; i < points.size(); i++) {
         realPoints << QPointF(i, multiplier * points[i]);
+    }
+    int finalSize = points.size()*upDownSampling;
+    #pragma omp for
+    for(int i = points.size(); i < finalSize; i++) {
+        realPoints << QPointF(i, 0);
     }
     xySeries->replace(realPoints);
 }

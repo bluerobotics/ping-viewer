@@ -7,6 +7,8 @@ Item {
     anchors.margins: 0
     transform: Rotation { origin.x: width/2; origin.y: height/2; angle: 90}
 
+    property real maxDepthToDraw: 0
+
     function correctChartSize() {
         chart.height = width
         // plotArea.x is a private margin in ChartView
@@ -14,8 +16,8 @@ Item {
         chart.width = height + 2*chart.plotArea.x
     }
 
-    function draw(points) {
-        chart.draw(points)
+    function draw(points, depth) {
+        chart.draw(points, depth)
         correctChartSize()
     }
     onWidthChanged: correctChartSize()
@@ -92,10 +94,11 @@ Item {
             color: 'lime'
         }
 
-        function draw(points) {
+        function draw(points, depth) {
+            axisX.max = 200*maxDepthToDraw/depth
             if (points) {
-                Util.update(serie, points)
-                Util.update(serieInv, points, -1)
+                Util.update(serie, points, 1, maxDepthToDraw/depth)
+                Util.update(serieInv, points, -1, maxDepthToDraw/depth)
                 return
             }
 
