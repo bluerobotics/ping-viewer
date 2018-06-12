@@ -32,13 +32,16 @@ FileManager::FileManager()
     }
 }
 
-QString FileManager::createFileName(FileManager::FileType type)
+QString FileManager::createFileName(FileManager::FileType type, QString name)
 {
     QString path = fileTypeFolder[type]->dir.path();
-    QString result = path + "/" \
-                     + QDateTime::currentDateTime().toString(_fileName) \
-                     + fileTypeExtension[type];
-    qCDebug(FILEMANAGER) << result;
+    QString result = path + "/";
+    if(name.isEmpty()) {
+        result += QDateTime::currentDateTime().toString(_fileName);
+    } else {
+        result += name;
+    }
+    result += fileTypeExtension[type];
     return result;
 }
 

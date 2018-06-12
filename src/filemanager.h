@@ -22,7 +22,7 @@ public:
     ~FileManager();
     static FileManager* self();
 
-    Q_INVOKABLE QString createFileName(FileManager::FileType type);
+    Q_INVOKABLE QString createFileName(FileManager::FileType type, QString name = QString());
 
 private:
     FileManager* operator = (FileManager& other) = delete;
