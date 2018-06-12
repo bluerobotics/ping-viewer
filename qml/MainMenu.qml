@@ -224,6 +224,7 @@ Item {
                 }
 
                 Text {
+                    id: font
                     text: "Serial Port / Baud:"
                     color: Style.textColor
                 }
