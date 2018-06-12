@@ -156,7 +156,7 @@ void Waterfall::paint(QPainter *painter)
     pix = QPixmap::fromImage(_image);
     // Code for debug, draw the entire waterfall
     //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
-    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _maxDepthToDraw));
+    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _maxDepthToDrawInPixels));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -194,7 +194,9 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
         return maxDepth;
     };
 
-    _maxDepthToDraw = floor(lastMaxDepth()*_pixelsPerMeter);
+    _maxDepthToDraw = lastMaxDepth();
+    emit maxDepthToDrawChanged();
+    _maxDepthToDrawInPixels = floor(_maxDepthToDraw*_pixelsPerMeter);
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
@@ -252,7 +254,7 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 
     int widthPos = pos.x()*displayWidth/width();
     pos.setX(pos.x()*displayWidth/width() + first);
-    pos.setY(pos.y()*_maxDepthToDraw/(float)height());
+    pos.setY(pos.y()*_maxDepthToDrawInPixels/(float)height());
 
     // signal strength
     _mouseStrength = RGBToValue(_image.pixelColor(pos));

@@ -85,7 +85,13 @@ class Waterfall : public QQuickPaintedItem
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
 
-    Q_INVOKABLE float getWaterfallDepth() {return _maxDepthToDraw;}
+    /**
+     * @brief Return max depth in waterfall at the moment in meters
+     *
+     * @param smooth
+     */
+    Q_INVOKABLE float getMaxDepthToDraw() {return _maxDepthToDraw;}
+    Q_PROPERTY(float maxDepthToDraw READ getMaxDepthToDraw NOTIFY maxDepthToDrawChanged)
 
     QList<WaterfallGradient> _gradients;
     WaterfallGradient _gradient;
@@ -93,6 +99,7 @@ class Waterfall : public QQuickPaintedItem
     QPainter *_painter;
     float _pixelsPerMeter;
     float _maxDepthToDraw;
+    float _maxDepthToDrawInPixels;
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
     float _mouseDepth;
@@ -115,6 +122,7 @@ class Waterfall : public QQuickPaintedItem
 
 signals:
     void imageChanged();
+    void maxDepthToDrawChanged();
     void mouseDepthChanged();
     void mouseColumnConfidenceChanged();
     void mouseColumnDepthChanged();

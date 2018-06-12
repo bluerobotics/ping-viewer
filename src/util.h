@@ -22,7 +22,8 @@ public:
      * @param points
      * @param multiplier This is a scalar to be used when creating the serie
      */
-    Q_INVOKABLE void update(QAbstractSeries* series, const QList<double>& points, const float multiplier = 1.0f);
+    Q_INVOKABLE void update(QAbstractSeries* series, const QList<double>& points,
+                            const float multiplier = 1.0f, const float upDownSampling = 1.0f);
 
     /**
      * @brief Return a list of the available serial ports
