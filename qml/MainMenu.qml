@@ -239,6 +239,15 @@ Item {
                             connect(serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
+
+                    onModelChanged: {
+                        var maxWidth = width
+                        for(var i in model) {
+                            var modelWidth = (model[i].length+1)*font.font.pixelSize
+                            maxWidth = maxWidth < modelWidth ? modelWidth : maxWidth
+                        }
+                        popup.width = maxWidth
+                    }
                 }
 
                 ComboBox {
