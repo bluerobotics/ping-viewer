@@ -9,6 +9,8 @@ import FileManager 1.0
 import Ping 1.0
 import Ping1DNamespace 1.0
 
+import com.blackgrain.qml.quickdownload 1.0
+
 Item {
     id: root
     visible: true
@@ -270,5 +272,21 @@ Item {
                 result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
             });
         }
+    }
+
+    Download {
+        url: "https://s3.amazonaws.com/downloads.bluerobotics.com/PingViewer/logs/exemplary.bin"
+        destination: "file://" + FileManager.createFileName(FileManager.BINARY, "exemplary")
+
+        running: true
+
+        followRedirects: true
+        onRedirected: print('Redirected', url,'->', redirectUrl)
+
+        onStarted: print('Started download', url)
+        onError: print(errorString)
+        onProgressChanged: print('Progress:', progress)
+        onFinished: print('Download done: ', destination)
+
     }
 }
