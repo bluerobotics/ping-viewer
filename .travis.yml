@@ -51,6 +51,15 @@ matrix:
       env:
         - DESC="dmg deploy"
         - MATRIX_EVAL="COMPILER=clang++"
+        - QT_CONFIG="release"
+
+    - os: osx
+      osx_image: xcode9.3
+      compiler: clang
+      env:
+        - DESC="dmg debug"
+        - MATRIX_EVAL="COMPILER=clang++"
+        - QT_CONFIG="debug"
 
 before_install:
 - eval "${MATRIX_EVAL}"
@@ -130,7 +139,7 @@ script:
     git submodule update;
     mkdir build;
     cd build;
-    qmake ..;
+    qmake .. CONFIG+=${QT_CONFIG};
     make || travis_terminate 1;
     find .;
     wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_osx.zip;
@@ -138,6 +147,7 @@ script:
     chmod +x stm32flash;
     mv stm32flash pingviewer.app/;
     macdeployqt pingviewer.app/ -qmldir=../qml -dmg;
+    mv pingviewer.dmg pingviewer-${QT_CONFIG}.dmg;
   fi
 
 after_success:
@@ -154,7 +164,7 @@ after_success:
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     bash ./upload.sh pingviewer*.dmg*;
-    export DEPLOY_FILE=${PWD}/pingviewer.dmg;
+    export DEPLOY_FILE=${PWD}/pingviewer-${QT_CONFIG}.dmg;
   fi
 - echo "Deploy: ${DEPLOY_FILE}";
 - mkdir -p /tmp/deploy/s3;
