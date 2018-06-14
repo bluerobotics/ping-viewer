@@ -118,12 +118,17 @@ Item {
                 PingTextField {
                     id: startLength
                     text: ""
+                    validator: IntValidator{bottom: 0; top: 48903;}
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
                     onEditingFinished: {
-                        if (parseInt(text)) {
-                            ping.start_mm = parseInt(text)
+                        var length_mm = parseInt(totalLength.text)
+                        var start_mm = Math.min(parseInt(text), length_mm - 500)
+                        if(isNaN(start_mm)) {
+                            start_mm = 0
                         }
+                        text = start_mm
+                        ping.start_mm = start_mm
                     }
                     Connections {
                         target: ping
@@ -138,12 +143,17 @@ Item {
                 PingTextField {
                     id: totalLength
                     text: ""
+                    validator: IntValidator{bottom: 0; top: 48903;}
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
                     onEditingFinished: {
-                        if (parseInt(text)) {
-                            ping.length_mm = parseInt(text)
+                        var start_mm = parseInt(startLength.text)
+                        var length_mm = Math.max(parseInt(text), start_mm + 500)
+                        if(isNaN(length_mm)) {
+                            length_mm = 48903
                         }
+                        text = length_mm
+                        ping.length_mm = length_mm
                     }
                     Connections {
                         target: ping
