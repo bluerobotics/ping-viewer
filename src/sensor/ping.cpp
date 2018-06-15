@@ -81,7 +81,7 @@ void Ping::handleMessage(PingMessage msg)
     case Ping1DNamespace::Ascii_text: {
         // hack for now
         QString txt(QByteArray((const char*)&(msg.msgData[8]), msg.payload_length()));
-        qCInfo(PING_PROTOCOL_PING) << "GOT TEXT:" << txt;
+        qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << txt;
 
         break;
     }
