@@ -56,110 +56,118 @@ Item {
             label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
 
-            GridLayout {
-                columns: 5
-                rowSpacing: 5
-                columnSpacing: 5
+            ColumnLayout {
+                spacing: 5
 
-                PingButton {
-                    text: "Emit Ping"
-                    //requestEchosounderProfile
-                    onClicked: ping.request(1300)
-                }
-
-                Slider {
-                    id: pingHzSlider
-                    from: 0
-                    stepSize: 1
-                    to: 30
-                    Layout.columnSpan:  3
-                    value: ping.pollFrequency;
-                    onValueChanged: {
-                        if (ping.pollFrequency !== value) {
-                            ping.pollFrequency = value
-                        }
+                RowLayout {
+                    spacing: 5
+                    PingButton {
+                        text: "Emit Ping"
+                        //requestEchosounderProfile
+                        onClicked: ping.request(1300)
                     }
-                }
 
-                Text {
-                    id: pingPerSecond
-                    text: Math.round(ping.pollFrequency) + "ping/s"
-                    color: Style.textColor
-                }
-
-                CheckBox {
-                    id: autoGainChB
-                    text: "Auto Gain"
-                    checked: ping.mode_auto
-                    onCheckedChanged: {
-                        ping.mode_auto = checked
-                    }
-                }
-
-                ComboBox {
-                    id: gainCB
-                    currentIndex: ping.gain_index
-                    model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
-                    enabled: !autoGainChB.checked
-                    Layout.columnSpan:  4
-                    Layout.fillWidth: true
-                    onCurrentIndexChanged: {
-                        displayText = model[currentIndex] + " dB"
-                    }
-                    onActivated: {
-                        ping.gain_index = currentIndex
-                    }
-                }
-                Text {
-                    text: "Start/Stop (mm):"
-                    color: Style.textColor
-                }
-
-                PingTextField {
-                    id: startLength
-                    text: ""
-                    validator: IntValidator{bottom: 0; top: 48903;}
-                    Layout.columnSpan: 2
-                    Layout.fillWidth: true
-                    onEditingFinished: {
-                        var length_mm = parseInt(totalLength.text)
-                        var start_mm = Math.min(parseInt(text), length_mm - 500)
-                        if(isNaN(start_mm)) {
-                            start_mm = 0
-                        }
-                        text = start_mm
-                        ping.start_mm = start_mm
-                    }
-                    Connections {
-                        target: ping
-                        onLengthMmUpdate: {
-                            if (!startLength.focus) {
-                                startLength.text = ping.start_mm
+                    Slider {
+                        id: pingHzSlider
+                        from: 0
+                        stepSize: 1
+                        to: 30
+                        Layout.columnSpan:  3
+                        value: ping.pollFrequency;
+                        onValueChanged: {
+                            if (ping.pollFrequency !== value) {
+                                ping.pollFrequency = value
                             }
                         }
                     }
+
+                    Text {
+                        id: pingPerSecond
+                        text: Math.round(ping.pollFrequency) + "ping/s"
+                        color: Style.textColor
+                    }
                 }
 
-                PingTextField {
-                    id: totalLength
-                    text: ""
-                    validator: IntValidator{bottom: 0; top: 48903;}
-                    Layout.columnSpan: 2
-                    Layout.fillWidth: true
-                    onEditingFinished: {
-                        var start_mm = parseInt(startLength.text)
-                        var length_mm = Math.max(parseInt(text), start_mm + 500)
-                        if(isNaN(length_mm)) {
-                            length_mm = 48903
+                RowLayout {
+                    spacing: 5
+                    CheckBox {
+                        id: autoGainChB
+                        text: "Auto Gain"
+                        checked: ping.mode_auto
+                        onCheckedChanged: {
+                            ping.mode_auto = checked
                         }
-                        text = length_mm
-                        ping.length_mm = length_mm
                     }
-                    Connections {
-                        target: ping
-                        onLengthMmUpdate: {
-                            if (!totalLength.focus) {
-                                totalLength.text = ping.length_mm
+
+                    ComboBox {
+                        id: gainCB
+                        currentIndex: ping.gain_index
+                        model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
+                        enabled: !autoGainChB.checked
+                        Layout.columnSpan:  4
+                        Layout.fillWidth: true
+                        onCurrentIndexChanged: {
+                            displayText = model[currentIndex] + " dB"
+                        }
+                        onActivated: {
+                            ping.gain_index = currentIndex
+                        }
+                    }
+                }
+
+                RowLayout {
+                    spacing: 5
+                    Text {
+                        text: "Start/Stop (mm):"
+                        color: Style.textColor
+                    }
+
+                    PingTextField {
+                        id: startLength
+                        text: ""
+                        validator: IntValidator{bottom: 0; top: 48903;}
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+                        onEditingFinished: {
+                            var length_mm = parseInt(totalLength.text)
+                            var start_mm = Math.min(parseInt(text), length_mm - 500)
+                            if(isNaN(start_mm)) {
+                                start_mm = 0
+                            }
+                            text = start_mm
+                            ping.start_mm = start_mm
+                        }
+                        Connections {
+                            target: ping
+                            onLengthMmUpdate: {
+                                if (!startLength.focus) {
+                                    startLength.text = ping.start_mm
+                                }
+                            }
+                        }
+                    }
+
+                    PingTextField {
+                        id: totalLength
+                        text: ""
+                        validator: IntValidator{bottom: 0; top: 48903;}
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+                        onEditingFinished: {
+                            var start_mm = parseInt(startLength.text)
+                            var length_mm = Math.max(parseInt(text), start_mm + 500)
+                            if(isNaN(length_mm)) {
+                                length_mm = 48903
+                            }
+                            text = length_mm
+                            ping.length_mm = length_mm
+                        }
+                        Connections {
+                            target: ping
+                            onLengthMmUpdate: {
+                                if (!totalLength.focus) {
+                                    totalLength.text = ping.length_mm
+                                }
                             }
                         }
                     }
