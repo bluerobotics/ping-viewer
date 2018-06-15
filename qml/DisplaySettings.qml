@@ -11,7 +11,7 @@ Item {
     height: settingsLayout.height
     width: settingsLayout.width
     property var waterfallItem
-    property bool replayItem: replayChB.checked
+    property alias replayItem: replayChB.checked
 
     ColumnLayout {
         id: settingsLayout

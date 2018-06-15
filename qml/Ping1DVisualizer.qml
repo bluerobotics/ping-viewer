@@ -8,7 +8,7 @@ import Waterfall 1.0
 
 Item {
     id: visualizer
-    property var waterfallItem: waterfall
+    property alias waterfallItem: waterfall
     property var protocol
 
     onWidthChanged: {
