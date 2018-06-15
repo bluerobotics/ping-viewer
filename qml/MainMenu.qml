@@ -6,6 +6,8 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import Util 1.0
 
+import Ping1DNamespace 1.0
+
 Item {
     id: firmwareUpdate
     visible: false
@@ -64,7 +66,7 @@ Item {
                     PingButton {
                         text: "Emit Ping"
                         //requestEchosounderProfile
-                        onClicked: ping.request(1300)
+                        onClicked: ping.request(Ping1DNamespace.Profile)
                     }
 
                     Slider {
