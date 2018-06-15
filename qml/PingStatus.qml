@@ -5,12 +5,10 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: root
-
-    property var ping
-
     anchors.fill: parent
 
     property var marginPix: 10
+    property var ping
 
     Rectangle {
         anchors.centerIn: parent

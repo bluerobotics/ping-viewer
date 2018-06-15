@@ -4,6 +4,10 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: root
+    x: margin
+    width: mainLayout.width
+    height: mainLayout.height
+
     property real value: 0
     property string units: "m"
     property real precision: 2
@@ -15,10 +19,6 @@ Item {
     property real columnDepth: 0
     property int parentWidth: 0
     property int parentHeight: 0
-    x: margin
-
-    width: mainLayout.width
-    height: mainLayout.height
 
     // Take care of the item position while resizing parent
     Connections {
