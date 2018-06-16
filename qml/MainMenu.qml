@@ -16,17 +16,6 @@ Item {
     property var ping: null
     property var serialPortList: null
 
-
-    Timer {
-        interval: 1000
-        repeat: true
-        onTriggered: {
-            serialPortList = Util.serialPortList()
-        }
-
-        Component.onCompleted: start()
-    }
-
     function connect(first, second) {
         // Only connect from user input
         if(!firmwareUpdate.visible) {
@@ -60,9 +49,11 @@ Item {
 
             ColumnLayout {
                 spacing: 5
+                width: parent.width
 
                 RowLayout {
                     spacing: 5
+
                     PingButton {
                         text: "Emit Ping"
                         //requestEchosounderProfile
@@ -74,7 +65,6 @@ Item {
                         from: 0
                         stepSize: 1
                         to: 30
-                        Layout.columnSpan:  3
                         value: ping.pollFrequency;
                         onValueChanged: {
                             if (ping.pollFrequency !== value) {
@@ -85,13 +75,14 @@ Item {
 
                     Text {
                         id: pingPerSecond
-                        text: Math.round(ping.pollFrequency) + "ping/s"
+                        text: Math.round(ping.pollFrequency) + " ping/s"
                         color: Style.textColor
                     }
                 }
 
                 RowLayout {
                     spacing: 5
+
                     CheckBox {
                         id: autoGainChB
                         text: "Auto Gain"
@@ -103,7 +94,7 @@ Item {
 
                     ComboBox {
                         id: gainCB
-                        currentIndex: ping.gain_index
+                        currentIndex: ping.gain_index ? ping.gain_index : 0
                         model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
                         enabled: !autoGainChB.checked
                         Layout.columnSpan:  4
@@ -218,90 +209,101 @@ Item {
                     onActivated: {
                         switch(index) {
                             case 0: // Serial
-                                udpIp.enabled = false
-                                udpPort.enabled = false
-                                serialPortsCB.enabled = true
-                                baudrateBox.enabled = true
+                                udpLayout.enabled = false
+                                serialLayout.enabled = true
                                 connect(serialPortsCB.currentText, baudrateBox.currentText)
                                 break
 
                             case 1: // UDP
-                                udpIp.enabled = true
-                                udpPort.enabled = true
-                                serialPortsCB.enabled = false
-                                baudrateBox.enabled = false
+                                udpLayout.enabled = true
+                                serialLayout.enabled = false
                                 connect(udpIp.text, udpPort.text)
                                 break
 
                             case 2:
-                                udpIp.enabled = false
-                                udpPort.enabled = false
-                                serialPortsCB.enabled = false
-                                baudrateBox.enabled = false
+                                udpLayout.enabled = false
+                                serialLayout.enabled = false
                                 connect()
                         }
                     }
                 }
 
-                Text {
-                    id: font
-                    text: "Serial Port / Baud:"
-                    color: Style.textColor
-                }
+                RowLayout {
+                    id: serialLayout
+                    spacing: 5
+                    Layout.columnSpan:  5
 
-                ComboBox {
-                    id: serialPortsCB
-                    Layout.columnSpan:  3
-                    Layout.fillWidth: true
-                    model: serialPortList
-                    onActivated: {
-                        if (currentIndex > -1) {
+                    Text {
+                        text: "Serial Port / Baud:"
+                        color: Style.textColor
+                    }
+
+                    ComboBox {
+                        id: serialPortsCB
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
+                        model: serialPortList
+                        onActivated: {
+                            if (currentIndex > -1) {
+                                connect(serialPortsCB.currentText, baudrateBox.currentText)
+                            }
+                        }
+
+                        onModelChanged: {
+                            var maxWidth = width
+                            for(var i in model) {
+                                var modelWidth = (model[i].length+1)*font.font.pixelSize
+                                maxWidth = maxWidth < modelWidth ? modelWidth : maxWidth
+                            }
+                            popup.width = maxWidth
+                        }
+                        onPressedChanged: {
+                            if(pressed) {
+                                serialPortList = Util.serialPortList()
+                            }
+                        }
+                        Component.onCompleted: serialPortList = Util.serialPortList()
+                    }
+
+                    ComboBox {
+                        id: baudrateBox
+                        model: [115200, 921600]
+                        onActivated: {
                             connect(serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
+                }
 
-                    onModelChanged: {
-                        var maxWidth = width
-                        for(var i in model) {
-                            var modelWidth = (model[i].length+1)*font.font.pixelSize
-                            maxWidth = maxWidth < modelWidth ? modelWidth : maxWidth
+                RowLayout {
+                    id: udpLayout
+                    spacing: 5
+                    Layout.columnSpan:  5
+
+                    Text {
+                        text: "UDP Host/Port:"
+                        color: Style.textColor
+                    }
+
+                    PingTextField {
+                        id: udpIp
+                        text: "192.168.2.2"
+                        enabled: false
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
+                        onTextChanged: {
+                            connect(udpIp.text, udpPort.text)
                         }
-                        popup.width = maxWidth
                     }
-                }
 
-                ComboBox {
-                    id: baudrateBox
-                    model: [115200, 921600]
-                    onActivated: {
-                        connect(serialPortsCB.currentText, baudrateBox.currentText)
-                    }
-                }
-
-                Text {
-                    text: "UDP Host/Port:"
-                    color: Style.textColor
-                }
-
-                PingTextField {
-                    id: udpIp
-                    text: "192.168.2.2"
-                    enabled: false
-                    Layout.columnSpan:  2
-                    Layout.fillWidth: true
-                    onTextChanged: {
-                        connect(udpIp.text, udpPort.text)
-                    }
-                }
-
-                PingTextField {
-                    id: udpPort
-                    text: "1234"
-                    enabled: false
-                    Layout.columnSpan:  2
-                    Layout.fillWidth: true
-                    onTextChanged: {
-                        connect(udpIp.text, udpPort.text)
+                    PingTextField {
+                        id: udpPort
+                        text: "1234"
+                        enabled: false
+                        Layout.columnSpan:  2
+                        Layout.fillWidth: true
+                        onTextChanged: {
+                            connect(udpIp.text, udpPort.text)
+                        }
                     }
                 }
             }
