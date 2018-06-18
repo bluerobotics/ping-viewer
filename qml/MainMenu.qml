@@ -234,6 +234,7 @@ Item {
                     Layout.columnSpan:  5
 
                     Text {
+                        id: font
                         text: "Serial Port / Baud:"
                         color: Style.textColor
                     }
