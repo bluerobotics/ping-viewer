@@ -153,7 +153,7 @@ void Waterfall::paint(QPainter *painter)
     }
 
     // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
-    pix = QPixmap::fromImage(_image);
+    pix = QPixmap::fromImage(_image, Qt::NoFormatConversion);
     // Code for debug, draw the entire waterfall
     //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
     _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _maxDepthToDrawInPixels));
