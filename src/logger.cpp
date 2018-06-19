@@ -43,7 +43,7 @@ void Logger::logMessage(const QString& msg, QtMsgType type)
     const QString time = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz]"));
 
     // Save the message into the file
-    _fileStream << QString("%1 %2\n").arg(time).arg(msg);
+    _fileStream << QString("%1 %2\n").arg(time, msg);
 
     const int line = _logModel.rowCount();
     // Debug, Warning, Critical, Fatal, Info
@@ -67,7 +67,7 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
         fileInfo = QString("%1(%2) ").arg(file).arg(context.line);
     }
 
-    const QString logMsg = QString("%1[%2]: %3%4").arg(context.category).arg(msgTypes[type]).arg(fileInfo).arg(msg);
+    const QString logMsg = QString("%1[%2]: %3%4").arg(context.category, msgTypes[type], fileInfo, msg);
 
     Logger::self()->logMessage(logMsg, type);
     if (originalHandler) {
@@ -92,7 +92,7 @@ void Logger::setCategory(QString category, bool enable)
     _settings.setValue(category, enable);
 
     QString filter;
-    for(const auto ourCategory : _registeredCategories) {
+    for(const auto& ourCategory : qAsConst(_registeredCategories)) {
         filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
     }
 
@@ -124,7 +124,7 @@ void Logger::test()
 Logger::~Logger()
 {
     QString filter;
-    for(const auto ourCategory : _registeredCategories) {
+    for(const auto& ourCategory : qAsConst(_registeredCategories)) {
         filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
     }
     _settings.setValue("filter", filter);

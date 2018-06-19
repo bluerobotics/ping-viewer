@@ -31,7 +31,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     setTheme("Thermal 5");
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, [&] {if(_update) update(); _update = false;});
+    connect(timer, &QTimer::timeout, this, [&] {if(_update) update(); _update = false;});
     timer->start(50);
 }
 
@@ -187,7 +187,7 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
 
     static auto lastMaxDepth = [this] {
         float maxDepth = 0;
-        for(const auto& DC : this->_DCRing)
+        for(const auto& DC : qAsConst(this->_DCRing))
         {
             maxDepth = maxDepth < DC.depth ? DC.depth : maxDepth;
         }

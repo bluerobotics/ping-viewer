@@ -15,7 +15,7 @@ void WaterfallGradient::setColors(const QList<QColor>& colors)
 {
     float stepSize = 1.0/(colors.length() - 1);
     float step = 0;
-    for(const auto color : colors) {
+    for(const auto& color : colors) {
         setColorAt(stepSize*step++, color);
     }
 }

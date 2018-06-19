@@ -14,9 +14,8 @@ Util::Util()
 QStringList Util::serialPortList()
 {
     static QSerialPortInfo serialPortInfo;
-    static QList<QSerialPortInfo> serialPortInfoList;
+    static const QList<QSerialPortInfo> serialPortInfoList{serialPortInfo.availablePorts()};
     static QStringList portNameList;
-    serialPortInfoList = serialPortInfo.availablePorts();
     portNameList.clear();
     for (const auto& serialPortInfo : serialPortInfoList) {
         if (!serialPortInfo.portName().startsWith(QStringLiteral("cu."), Qt::CaseInsensitive)) {
