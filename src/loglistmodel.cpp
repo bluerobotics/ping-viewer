@@ -38,7 +38,7 @@ bool LogListModel::setData(const QModelIndex & index, const QVariant & value, in
         emit dataChanged(index, index, roles);
         return true;
     case (LogListModel::TimeRole) :
-        _rowTimes[index.row()] = value.value<QString>();
+        _rowTimes[index.row()] = value.toString();
         emit dataChanged(index, index, roles);
         return true;
     default :
