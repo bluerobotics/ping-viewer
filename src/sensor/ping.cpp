@@ -230,7 +230,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
         qCDebug(PING_PROTOCOL_PING) << "Put it in bootloader mode.";
         ping_msg_ping1D_goto_bootloader m;
         m.updateChecksum();
-        link()->sendData(QByteArray(reinterpret_cast<const char*>(m.msgData.data()), m.msgData.size()));
+        emit link()->sendData(QByteArray(reinterpret_cast<const char*>(m.msgData.data()), m.msgData.size()));
     }
 
     // Wait for bytes to be written before finishing the connection
@@ -363,7 +363,7 @@ void Ping::writeMessage(const PingMessage &msg)
     if(link()) {
         if(link()->isOpen()) {
             // todo add link::write(char*, int size)
-            link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData.data()), msg.msgData.size()));
+            emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData.data()), msg.msgData.size()));
         }
     }
 }
