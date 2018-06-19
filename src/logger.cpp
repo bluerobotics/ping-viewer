@@ -92,7 +92,7 @@ void Logger::setCategory(QString category, bool enable)
     _settings.setValue(category, enable);
 
     QString filter;
-    for(const auto ourCategory : _registeredCategories) {
+    for(const auto& ourCategory : qAsConst(_registeredCategories)) {
         filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
     }
 
@@ -124,7 +124,7 @@ void Logger::test()
 Logger::~Logger()
 {
     QString filter;
-    for(const auto ourCategory : _registeredCategories) {
+    for(const auto& ourCategory : qAsConst(_registeredCategories)) {
         filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
     }
     _settings.setValue("filter", filter);

@@ -187,7 +187,7 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
 
     static auto lastMaxDepth = [this] {
         float maxDepth = 0;
-        for(const auto& DC : this->_DCRing)
+        for(const auto& DC : qAsConst(this->_DCRing))
         {
             maxDepth = maxDepth < DC.depth ? DC.depth : maxDepth;
         }
