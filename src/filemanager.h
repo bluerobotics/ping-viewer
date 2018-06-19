@@ -17,7 +17,7 @@ public:
         PICTURE,
         BINARY
     };
-    Q_ENUMS(FileType)
+    Q_ENUM(FileType)
 
     ~FileManager();
     static FileManager* self();
