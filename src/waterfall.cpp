@@ -31,7 +31,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     setTheme("Thermal 5");
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, [&] {if(_update) update(); _update = false;});
+    connect(timer, &QTimer::timeout, this, [&] {if(_update) update(); _update = false;});
     timer->start(50);
 }
 
