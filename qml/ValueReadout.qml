@@ -53,7 +53,7 @@ Item {
             Text {
                 id: readout
                 text: value.toFixed(precision) + units
-                color: 'white'
+                color: confidenceToColor(confidence)
                 font.family: "Arial"
                 font.pointSize: 48
                 font.bold: true
@@ -68,7 +68,7 @@ Item {
                 id: confidenceText
                 text: transformValue(confidence) + '%'
                 visible: typeof(strength) == "number"
-                color: 'white'
+                color: confidenceToColor(confidence)
                 font.family: "Arial"
                 font.pointSize: readout.font.pointSize
                 font.bold: true
@@ -80,7 +80,7 @@ Item {
                 id: textColumnDepth
                 text: transformValue(columnDepth, precision) + units
                 visible: typeof(strength) == "number"
-                color: 'white'
+                color: confidenceToColor(columnConfidence)
                 font.family: "Arial"
                 font.pointSize: 14
                 font.bold: true
@@ -95,7 +95,7 @@ Item {
                 id: textColumnConfidence
                 text: transformValue(columnConfidence, 0) + '%'
                 visible: typeof(strength) == "number"
-                color: 'white'
+                color: confidenceToColor(columnConfidence)
                 font.family: "Arial"
                 font.pointSize: 14
                 font.bold: true
@@ -128,6 +128,10 @@ Item {
                 font.bold: true
             }
         }
+    }
+
+    function confidenceToColor(confidence) {
+        return Qt.rgba(2*(1 - confidence/100), 2*confidence/100, 0)
     }
 
     function transformValue(value, precision) {
