@@ -68,21 +68,18 @@ void Ping::handleMessage(PingMessage msg)
     switch (msg.message_id()) {
 
     case Ping1DNamespace::Ack: {
-        qCDebug(PING_PROTOCOL_PING) << "GOT ACK";
+        qCDebug(PING_PROTOCOL_PING) << "Sensor ACK.";
         break;
     }
 
     case Ping1DNamespace::Nack: {
-        qCCritical(PING_PROTOCOL_PING) << "GOT NACK";
+        qCCritical(PING_PROTOCOL_PING) << "Sensor NACK:" << QString::fromStdString(ping_msg_ping1D_nack(msg).err_msg());
         break;
     }
 
     // needs dynamic-payload patch
     case Ping1DNamespace::Ascii_text: {
-        // hack for now
-        QString txt(QByteArray((const char*)&(msg.msgData[8]), msg.payload_length()));
-        qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << txt;
-
+        qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << QString::fromStdString(ping_msg_ping1D_ascii_text(msg).msg());
         break;
     }
 
