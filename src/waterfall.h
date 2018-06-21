@@ -110,6 +110,7 @@ class Waterfall : public QQuickPaintedItem
     float _pixelsPerMeter;
     float _maxDepthToDraw;
     float _maxDepthToDrawInPixels;
+    float _minDepthToDrawInPixels;
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
     float _mouseDepth;
@@ -127,6 +128,7 @@ class Waterfall : public QQuickPaintedItem
      *
      */
     struct DCPack {
+        float initialDepth;
         float depth;
         float confidence;
     };
@@ -213,7 +215,7 @@ public:
      * @param depth
      * @param confidence
      */
-    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0);
+    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0);
 
     /**
      * @brief Function that deals when the mouse is inside the waterfall

@@ -1,5 +1,7 @@
 #include "waterfall.h"
 
+#include <limits>
+
 #include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
@@ -15,6 +17,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     _image(2048, 2000, QImage::Format_RGBA8888),
     _painter(nullptr),
     _maxDepthToDrawInPixels(0),
+    _minDepthToDrawInPixels(0),
     _mouseDepth(0),
     _mouseStrength(0),
     _smooth(true),
@@ -23,7 +26,7 @@ Waterfall::Waterfall(QQuickItem *parent):
 {
     // This is the max depth that ping returns
     setWaterfallMaxDepth(48.903);
-    _DCRing.fill({0, 0}, displayWidth);
+    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0}, displayWidth);
     setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -157,7 +160,8 @@ void Waterfall::paint(QPainter *painter)
     pix = QPixmap::fromImage(_image, Qt::NoFormatConversion);
     // Code for debug, draw the entire waterfall
     //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
-    _painter->drawPixmap(QRect(0, 0, width(), height()), pix, QRect(first, 0, displayWidth, _maxDepthToDrawInPixels));
+    _painter->drawPixmap(QRect(0, 0, width(), height()), pix,
+                         QRect(first, _minDepthToDrawInPixels, displayWidth, _maxDepthToDrawInPixels - _minDepthToDrawInPixels));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -178,13 +182,19 @@ float Waterfall::RGBToValue(const QColor& color)
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(const QList<double>& points, float depth, float confidence)
+void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint)
 {
     static QImage old = _image;
     static QList<double> oldPoints = points;
-    _DCRing.append({depth, confidence});
+    _DCRing.append({initPoint, depth, confidence});
 
     int virtualHeight = floor(_pixelsPerMeter*depth);
+    int virtualFloor = floor(_pixelsPerMeter*initPoint);
+
+    if(virtualHeight <= virtualFloor || _image.height() < virtualHeight || 0 > virtualFloor) {
+        qCWarning(waterfall) << "Invalid Height and Floor:" << virtualHeight << virtualFloor;
+        return;
+    }
 
     static auto lastMaxDepth = [this] {
         float maxDepth = 0;
@@ -195,9 +205,19 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
         return maxDepth;
     };
 
+    static auto lastMinDepth = [this] {
+        float minDepth = std::numeric_limits<float>::max();
+        for(const auto& DC : qAsConst(this->_DCRing))
+        {
+            minDepth = minDepth > DC.initialDepth ? DC.initialDepth : minDepth;
+        }
+        return minDepth;
+    };
+
     _maxDepthToDraw = lastMaxDepth();
     emit maxDepthToDrawChanged();
     _maxDepthToDrawInPixels = floor(_maxDepthToDraw*_pixelsPerMeter);
+    _minDepthToDrawInPixels = floor(lastMinDepth()*_pixelsPerMeter);
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
@@ -218,7 +238,7 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
     }
 
     // Do up/downsampling
-    float factor = points.length()/((float)virtualHeight);
+    float factor = points.length()/((float)(virtualHeight - virtualFloor));
 
     if(smooth()) {
         #pragma omp for
@@ -227,15 +247,13 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
         }
 
         #pragma omp for
-        for(int i = 0; i < virtualHeight; i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(oldPoints[factor*i]));
-
+        for(int i = 0; i < virtualHeight - virtualFloor; i++) {
+            _image.setPixelColor(currentDrawIndex, i + virtualFloor, valueToRGB(oldPoints[factor*i]));
         }
     } else {
         #pragma omp for
-        for(int i = 0; i < virtualHeight; i++) {
-            _image.setPixelColor(currentDrawIndex, i, valueToRGB(points[factor*i]));
-
+        for(int i = 0; i < virtualHeight - virtualFloor; i++) {
+            _image.setPixelColor(currentDrawIndex, i + virtualFloor, valueToRGB(points[factor*i]));
         }
     }
     currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
@@ -260,7 +278,7 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 
     int widthPos = pos.x()*displayWidth/width();
     pos.setX(pos.x()*displayWidth/width() + first);
-    pos.setY(pos.y()*_maxDepthToDrawInPixels/(float)height());
+    pos.setY(pos.y()*(_maxDepthToDrawInPixels-_minDepthToDrawInPixels)/(float)height());
 
     // signal strength
     _mouseStrength = RGBToValue(_image.pixelColor(pos));
