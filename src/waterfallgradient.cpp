@@ -37,7 +37,7 @@ QColor WaterfallGradient::getColor(float value)
         return QColor();
     }
 
-    auto stopsValues = stops();
+    const auto& stopsValues = stops();
     if(stopsValues.length() < 2) {
         qCWarning(waterfallGradient) << "Need more than one stop value.";
         return QColor();
@@ -59,7 +59,7 @@ float WaterfallGradient::getValue(const QColor& color)
         return 0.0f;
     }
 
-    auto stopsValues = stops();
+    const auto& stopsValues = stops();
     for(int i(0); i < stopsValues.length() - 1; i++) {
         if(colorsInRange(color, stopsValues[i].second, stopsValues[i+1].second)) {
             return valueLinearInterpolation(color, stopsValues[i], stopsValues[i+1]);
