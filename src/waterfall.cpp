@@ -238,7 +238,11 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
         }
     }
     currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
-    _updateTimer->start(50);
+
+    // Fix max update in 20Hz at max
+    if(!_updateTimer->isActive()) {
+        _updateTimer->start(50);
+    }
 }
 
 void Waterfall::hoverMoveEvent(QHoverEvent *event)
