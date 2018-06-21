@@ -81,9 +81,16 @@ class Waterfall : public QQuickPaintedItem
      *
      * @param smooth
      */
-    void setSmooth(bool smooth) {_smooth = smooth; setAntialiasing(_smooth); emit smoothChanged();}
+    void setSmooth(bool smooth) {_smooth = smooth; emit smoothChanged();}
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
+    /**
+     * @brief Set antialiasing proprieties
+     *
+     * @param antialiasing
+     */
+    void setAliasing(bool antialiasing) {setAntialiasing(antialiasing); emit antialiasingChanged();}
+    Q_PROPERTY(bool antialiasing READ antialiasing WRITE setAliasing NOTIFY antialiasingChanged)
 
     /**
      * @brief Return max depth in waterfall at the moment in meters
@@ -121,6 +128,7 @@ class Waterfall : public QQuickPaintedItem
     RingVector<DCPack> _DCRing;
 
 signals:
+    void antialiasingChanged();
     void imageChanged();
     void maxDepthToDrawChanged();
     void mouseDepthChanged();
