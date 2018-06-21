@@ -31,6 +31,20 @@ CONFIG(debug, debug|release) {
     message("Release Build !")
 }
 
+# Enable ccache where we can
+linux|macx|ios {
+    system(which ccache) {
+        message("Found ccache, enabling in..")
+        !ios {
+            QMAKE_CXX = ccache $$QMAKE_CXX
+            QMAKE_CC  = ccache $$QMAKE_CC
+        } else {
+            QMAKE_CXX = $$PWD/tools/iosccachecc.sh
+            QMAKE_CC  = $$PWD/tools/iosccachecxx.sh
+        }
+    }
+}
+
 message("The project contains the following files:")
 message("Headers:      " $$HEADERS)
 message("Sources:      " $$SOURCES)
