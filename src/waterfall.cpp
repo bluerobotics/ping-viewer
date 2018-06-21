@@ -208,7 +208,8 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
         // Clean everything and start from zero
         painter.fillRect(_image.rect(), Qt::transparent);
         painter.drawImage(QRect(0, 0, displayWidth, _image.height()),
-                          old, QRect(old.width() - displayWidth, 0, displayWidth, old.height()));
+                          old, QRect(old.width() - displayWidth, 0, displayWidth, old.height()),
+                          Qt::NoFormatConversion);
         painter.end();
 
         // Start painting from the beginning
