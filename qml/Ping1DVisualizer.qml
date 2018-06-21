@@ -17,8 +17,8 @@ Item {
         }
     }
 
-    function draw(points, depth, confidence) {
-        waterfall.draw(points, depth, confidence)
+    function draw(points, depth, confidence, initialPoint) {
+        waterfall.draw(points, depth, confidence, initialPoint)
         chart.draw(points, depth)
     }
 
