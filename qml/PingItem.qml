@@ -90,7 +90,7 @@ Item {
                 duration: pingItem.pingpong ? 1000 : (pingItem.spin ? 2000 : 200)
                 direction: pingItem.pingpong ?
                     RotationAnimation.Shortest : (itemRect.hide ? RotationAnimation.Counterclockwise : RotationAnimation.Clockwise)
-                running: true
+                running: false
                 easing.type: animationType
                 onRunningChanged: {
                     if(running) {
