@@ -110,6 +110,8 @@ Item {
 
                 RowLayout {
                     spacing: 5
+                    enabled: !autoGainChB.checked
+
                     Text {
                         text: "Start/Stop (mm):"
                         color: Style.textColor
