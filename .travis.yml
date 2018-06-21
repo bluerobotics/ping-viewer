@@ -2,6 +2,8 @@ sudo: false
 language: cpp
 python:
   - "3.6"
+cache:
+  - ccache
 matrix:
   include:
     - os: linux
@@ -63,6 +65,13 @@ matrix:
 
 before_install:
 - eval "${MATRIX_EVAL}"
+- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
+    sudo apt install ccache;
+  fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    brew update > /dev/null;
+    brew install ccache;
+  fi
 
 install:
 - if [ -z $TEST ]; then
@@ -87,7 +96,6 @@ install:
     fi;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-    brew update > /dev/null;
     brew install qt@5.11;
     chmod -R 755 /usr/local/opt/qt5/*;
     export QTDIR="/usr/local/opt/qt5";
