@@ -94,6 +94,17 @@ Item {
                             waterfallItem.smooth = checkState
                         }
                     }
+
+                    CheckBox {
+                        id: antialiasingDataChB
+                        text: "Antialiasing"
+                        checked: true
+                        Layout.columnSpan:  5
+                        Layout.fillWidth: true
+                        onCheckStateChanged: {
+                            waterfallItem.antialiasing = checkState
+                        }
+                    }
                 }
             }
         }
