@@ -17,7 +17,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     _mouseDepth(0),
     _mouseStrength(0),
     _smooth(true),
-    _update(true),
+    _updateTimer(new QTimer(this)),
     currentDrawIndex(displayWidth)
 {
     // This is the max depth that ping returns
@@ -30,9 +30,9 @@ Waterfall::Waterfall(QQuickItem *parent):
     setGradients();
     setTheme("Thermal 5");
 
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [&] {if(_update) update(); _update = false;});
-    timer->start(50);
+    connect(_updateTimer, &QTimer::timeout, this, [&] {update();});
+    _updateTimer->setSingleShot(true);
+    _updateTimer->start(50);
 }
 
 void Waterfall::setGradients()
@@ -238,7 +238,7 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence)
         }
     }
     currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
-    _update = true;
+    _updateTimer->start(50);
 }
 
 void Waterfall::hoverMoveEvent(QHoverEvent *event)
