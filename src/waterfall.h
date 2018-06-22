@@ -103,6 +103,13 @@ class Waterfall : public QQuickPaintedItem
     Q_INVOKABLE float getMaxDepthToDraw() {return _maxDepthToDraw;}
     Q_PROPERTY(float maxDepthToDraw READ getMaxDepthToDraw NOTIFY maxDepthToDrawChanged)
 
+    /**
+     * @brief Return min depth in waterfall at the moment in meters
+     *
+     */
+    Q_INVOKABLE float getMinDepthToDraw() {return _minDepthToDraw;}
+    Q_PROPERTY(float minDepthToDraw READ getMinDepthToDraw NOTIFY minDepthToDrawChanged)
+
     QList<WaterfallGradient> _gradients;
     WaterfallGradient _gradient;
     QImage _image;
@@ -110,6 +117,7 @@ class Waterfall : public QQuickPaintedItem
     float _pixelsPerMeter;
     float _maxDepthToDraw;
     float _maxDepthToDrawInPixels;
+    float _minDepthToDraw;
     float _minDepthToDrawInPixels;
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
@@ -138,6 +146,7 @@ class Waterfall : public QQuickPaintedItem
 signals:
     void antialiasingChanged();
     void imageChanged();
+    void minDepthToDrawChanged();
     void maxDepthToDrawChanged();
     void mouseDepthChanged();
     void mouseColumnConfidenceChanged();
@@ -214,6 +223,7 @@ public:
      * @param points
      * @param depth
      * @param confidence
+     * @param initPoint
      */
     Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0);
 

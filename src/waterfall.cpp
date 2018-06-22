@@ -215,9 +215,12 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
     };
 
     _maxDepthToDraw = lastMaxDepth();
+    _minDepthToDraw = lastMinDepth();
+
+    emit minDepthToDrawChanged();
     emit maxDepthToDrawChanged();
     _maxDepthToDrawInPixels = floor(_maxDepthToDraw*_pixelsPerMeter);
-    _minDepthToDrawInPixels = floor(lastMinDepth()*_pixelsPerMeter);
+    _minDepthToDrawInPixels = floor(_minDepthToDraw*_pixelsPerMeter);
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
