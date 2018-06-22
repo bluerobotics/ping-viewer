@@ -7,6 +7,10 @@
 
 Q_DECLARE_LOGGING_CATEGORY(waterfall)
 
+/**
+ * @brief Waterfall widget
+ *
+ */
 class Waterfall : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -95,7 +99,6 @@ class Waterfall : public QQuickPaintedItem
     /**
      * @brief Return max depth in waterfall at the moment in meters
      *
-     * @param smooth
      */
     Q_INVOKABLE float getMaxDepthToDraw() {return _maxDepthToDraw;}
     Q_PROPERTY(float maxDepthToDraw READ getMaxDepthToDraw NOTIFY maxDepthToDrawChanged)
@@ -119,7 +122,10 @@ class Waterfall : public QQuickPaintedItem
     uint16_t currentDrawIndex;
     float _waterfallDepth;
 
-    // Depth and Confidence package
+    /**
+     * @brief Depth and Confidence package
+     *
+     */
     struct DCPack {
         float depth;
         float confidence;
