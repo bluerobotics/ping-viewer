@@ -5,18 +5,31 @@
 
 #include "sensor.h"
 
-/// A class to handle a single arbitrary key:value
-/// arriving in the form of plain text Json
+/**
+ * @brief Handle a single arbitrary key:value
+ * arriving in the form of plain text Json
+ */
 class SensorArbitrary : public Sensor
 {
     Q_OBJECT
 public:
     SensorArbitrary();
 
-    Q_PROPERTY(QVariant value READ value NOTIFY valueUpdate)
+    /**
+     * @brief Get value
+     *
+     * @return QVariant
+     */
     QVariant value() { return _value; }
-    Q_PROPERTY(QString name READ name NOTIFY nameUpdate)
+    Q_PROPERTY(QVariant value READ value NOTIFY valueUpdate)
+
+    /**
+     * @brief Get name
+     *
+     * @return QString
+     */
     QString name() { return _name; }
+    Q_PROPERTY(QString name READ name NOTIFY nameUpdate)
 
 signals:
     void valueUpdate(QVariant value);
