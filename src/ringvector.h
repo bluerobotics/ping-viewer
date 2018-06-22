@@ -2,6 +2,11 @@
 
 #include <QVector>
 
+/**
+ * @brief Ring vector class template
+ *
+ * @tparam T
+ */
 template <typename T>
 class RingVector: public QVector<T>
 {
@@ -10,6 +15,10 @@ public:
         : _accessType(FIFO)
         , _appendIndex(-1) {}
 
+    /**
+     * @brief Ring buffer type
+     *
+     */
     enum ACCESS_TYPE {
         FIFO,   // 0 will be the newest data to append
         LIFO    // 0 will be the oldest data to append
