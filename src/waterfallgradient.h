@@ -5,6 +5,10 @@
 
 Q_DECLARE_LOGGING_CATEGORY(waterfallGradient)
 
+/**
+ * @brief Manage gradients for waterfall
+ *
+ */
 class WaterfallGradient : public QLinearGradient
 {
     QString _name;
@@ -12,8 +16,8 @@ public:
     /**
      * @brief Construct a new Waterfall Gradient object
      *
-     * @param gradient name
-     * @param List of colors
+     * @param name
+     * @param colors
      */
     WaterfallGradient(QString name = "", QList<QColor> colors = QList<QColor>());
 

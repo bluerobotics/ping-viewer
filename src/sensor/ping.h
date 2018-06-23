@@ -10,6 +10,11 @@
 #include "parsers/detector.h"
 #include "pingmessage/pingmessage_all.h"
 
+/**
+ * @brief Define ping sensor
+ * 1D Sonar
+ *
+ */
 class Ping : public Sensor
 {
     Q_OBJECT
@@ -18,41 +23,110 @@ public:
     Ping();
     ~Ping() { _detector.terminate(); _detector.wait(); }
 
+    /**
+     * @brief Add connection
+     *
+     * @param connString Connection string defined as (int:string:arg)
+     */
     void connectLink(const QString& connString);
-    void printStatus(); // console debug
 
-    Q_PROPERTY(int srcId READ srcId NOTIFY srcIdUpdate)
+    /**
+     * @brief debug function
+     */
+    void printStatus();
+
+    /**
+     * @brief Get device source ID
+     *
+     * @return uint8_t source id
+     */
     uint8_t srcId() { return _srcId; }
+    Q_PROPERTY(int srcId READ srcId NOTIFY srcIdUpdate)
 
-    Q_PROPERTY(int dstId READ dstId NOTIFY dstIdUpdate)
+    /**
+     * @brief Return destiny ID
+     *
+     * @return uint8_t destiny id
+     */
     uint8_t dstId() { return _dstId; }
+    Q_PROPERTY(int dstId READ dstId NOTIFY dstIdUpdate)
 
-    Q_PROPERTY(int fw_version_major READ fw_version_major NOTIFY fwVersionMajorUpdate)
+    /**
+     * @brief Return firmware major version
+     *
+     * @return uint16_t firmware major version number
+     */
     uint16_t fw_version_major() { return _fw_version_major; }
+    Q_PROPERTY(int fw_version_major READ fw_version_major NOTIFY fwVersionMajorUpdate)
 
-    Q_PROPERTY(int fw_version_minor READ fw_version_minor NOTIFY fwVersionMinorUpdate)
+    /**
+     * @brief Return firmware minor version
+     *
+     * @return uint16_t firmware minor version number
+     */
     uint16_t fw_version_minor() { return _fw_version_minor; }
+    Q_PROPERTY(int fw_version_minor READ fw_version_minor NOTIFY fwVersionMinorUpdate)
 
-    Q_PROPERTY(int device_type READ device_type NOTIFY deviceTypeUpdate)
+    /**
+     * @brief Return device type number
+     *
+     * @return uint8_t Device type number
+     */
     uint8_t device_type() { return _device_type; }
+    Q_PROPERTY(int device_type READ device_type NOTIFY deviceTypeUpdate)
 
-    Q_PROPERTY(int device_model READ device_model NOTIFY deviceModelUpdate)
+    /**
+     * @brief Return device model number
+     *
+     * @return uint8_t Device model number
+     */
     uint8_t device_model() { return _device_model; }
+    Q_PROPERTY(int device_model READ device_model NOTIFY deviceModelUpdate)
 
-    Q_PROPERTY(int distance READ distance NOTIFY distanceUpdate)
+    /**
+     * @brief Return distance in mm
+     *
+     * @return uint32_t
+     */
     uint32_t distance() { return _distance; }
+    Q_PROPERTY(int distance READ distance NOTIFY distanceUpdate)
 
-    Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberUpdate)
+    /**
+     * @brief Return number of pings emitted
+     *
+     * @return uint32_t
+     */
     uint32_t ping_number() { return _ping_number; }
+    Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberUpdate)
 
-    Q_PROPERTY(int confidence READ confidence NOTIFY confidenceUpdate)
+    /**
+     * @brief Return depth confidence
+     *
+     * @return uint8_t
+     */
     uint8_t confidence() { return _confidence; }
+    Q_PROPERTY(int confidence READ confidence NOTIFY confidenceUpdate)
 
-    Q_PROPERTY(int pulse_usec READ pulse_usec NOTIFY pulseUsecUpdate)
+    /**
+     * @brief Return pulse emition in ms
+     *
+     * @return uint16_t
+     */
     uint16_t pulse_usec() { return _pulse_usec; }
+    Q_PROPERTY(int pulse_usec READ pulse_usec NOTIFY pulseUsecUpdate)
 
-    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY startMmUpdate)
+    /**
+     * @brief Return start distance of sonar points in mm
+     *
+     * @return uint32_t
+     */
     uint32_t start_mm() { return _start_mm; }
+
+    /**
+     * @brief Set sensor start analyze distance in mm
+     *
+     * @param start_mm
+     */
     void set_start_mm(int start_mm)
     {
         ping_msg_ping1D_set_range m;
@@ -62,9 +136,20 @@ public:
         writeMessage(m);
         request(Ping1DNamespace::Range);
     }
+    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY startMmUpdate)
 
-    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY lengthMmUpdate)
+    /**
+     * @brief return points length in mm
+     *
+     * @return uint32_t
+     */
     uint32_t length_mm() { return _length_mm; }
+
+    /**
+     * @brief Set sensor window analysis size
+     *
+     * @param length_mm
+     */
     void set_length_mm(int length_mm)
     {
         ping_msg_ping1D_set_range m;
@@ -74,9 +159,20 @@ public:
         writeMessage(m);
         request(Ping1DNamespace::Range);
     }
+    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY lengthMmUpdate)
 
-    Q_PROPERTY(int gain_index READ gain_index WRITE set_gain_index NOTIFY gainIndexUpdate)
+    /**
+     * @brief Return gain index
+     *
+     * @return uint32_t
+     */
     uint32_t gain_index() { return _gain_index; }
+
+    /**
+     * @brief Set sensor gain index
+     *
+     * @param gain_index
+     */
     void set_gain_index(int gain_index)
     {
         ping_msg_ping1D_set_gain_index m;
@@ -85,12 +181,29 @@ public:
         writeMessage(m);
         request(Ping1DNamespace::Gain_index);
     }
+    Q_PROPERTY(int gain_index READ gain_index WRITE set_gain_index NOTIFY gainIndexUpdate)
 
-    Q_PROPERTY(QList<double> points READ points NOTIFY pointsUpdate)
+    /**
+     * @brief Return last array of points
+     *
+     * @return QList<double>
+     */
     QList<double> points() { return _points; }
+    Q_PROPERTY(QList<double> points READ points NOTIFY pointsUpdate)
 
-    Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
+    /**
+     * @brief Get auto mode status
+     *
+     * @return true running
+     * @return false not running
+     */
     bool mode_auto() { return _mode_auto; }
+
+    /**
+     * @brief Set sensor auto mode
+     *
+     * @param mode_auto
+     */
     void set_mode_auto(bool mode_auto)
     {
         ping_msg_ping1D_set_auto_manual m;
@@ -99,9 +212,20 @@ public:
         writeMessage(m);
         request(Ping1DNamespace::Mode);
     }
+    Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
 
-    Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY msecPerPingUpdate)
+    /**
+     * @brief Get time between pings in ms
+     *
+     * @return uint16_t
+     */
     uint16_t msec_per_ping() { return _msec_per_ping; }
+
+    /**
+     * @brief Set time between pings in ms
+     *
+     * @param msec_per_ping
+     */
     void set_msec_per_ping(uint16_t msec_per_ping)
     {
         ping_msg_ping1D_set_ping_rate_msec m;
@@ -110,20 +234,47 @@ public:
         writeMessage(m);
         request(Ping1DNamespace::Ping_rate_msec);
     }
+    Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY msecPerPingUpdate)
 
-    Q_PROPERTY(QVariant pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
+    /**
+     * @brief Return poll frequency
+     *
+     * @return QVariant
+     */
     QVariant pollFrequency();
+
+    /**
+     * @brief Set poll frequency
+     *
+     * @param pollFrequency
+     */
     void setPollFrequency(QVariant pollFrequency);
+    Q_PROPERTY(QVariant pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
 
     // TODO, maybe store history/filtered history of values in this
     // object for access by different visual elements without need to recompute
     // TODO install filters here?
 
-    Q_INVOKABLE void request(int id); // send request for message
+    /**
+     * @brief Request message id
+     *
+     * @param id
+     */
+    Q_INVOKABLE void request(int id);
 
+    /**
+     * @brief Do firmware sensor update
+     *
+     * @param fileUrl firmware file path
+     * @param sendPingGotoBootloader Use "goto bootloader" message
+     */
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true);
 
 signals:
+    /**
+     * @brief emitted when propriety changes
+     */
+///@{
     void srcIdUpdate();
     void dstIdUpdate();
     void deviceTypeUpdate();
@@ -142,12 +293,31 @@ signals:
 
     void modeAutoUpdate();
     void msecPerPingUpdate();
+///@}
 
+    /**
+     * @brief Emit firmware update progress
+     *
+     * @param progress
+     */
     void flashProgress(float progress);
+
+    /**
+     * @brief Emit when firmware update finished
+     *
+     */
     void flashComplete();
 
+    /**
+     * @brief Emit when poll frequency changes
+     *
+     */
     void pollFrequencyUpdate();
 private:
+    /**
+     * @brief Sensor variables
+     */
+///@{
     uint8_t _srcId;
     uint8_t _dstId;
 
@@ -163,6 +333,7 @@ private:
     uint32_t _start_mm;
     uint32_t _length_mm;
     uint32_t _gain_index;
+///@}
 
     float _fw_update_perc;
 

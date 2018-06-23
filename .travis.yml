@@ -15,8 +15,9 @@ matrix:
             - sourceline: 'ppa:cs50/ppa'
           packages:
             - astyle
+            - doxygen
       env:
-        - DESC="Check code style"
+        - DESC="Check code style && Doxygen"
         - TEST="true"
 
     - os: linux
@@ -110,6 +111,8 @@ script:
       echo "Style error ! Run astyle in tools. (./tools/astyle.sh)";
       exit 1;
     fi;
+    cd doc;
+    ../tools/testdoxygen.sh;
   fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60;

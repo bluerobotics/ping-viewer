@@ -21,6 +21,10 @@ Q_DECLARE_LOGGING_CATEGORY(logger)
     static PingLoggingCategory pingCategory ## name (__VA_ARGS__); \
     Q_LOGGING_CATEGORY(name, __VA_ARGS__)
 
+/**
+ * @brief Manage the project logger
+ *
+ */
 class Logger : public QObject
 {
     Q_OBJECT
@@ -84,8 +88,13 @@ public:
      */
     static void test();
 
-    ~Logger();
+    /**
+     * @brief Return Logger pointer
+     *
+     * @return Logger*
+     */
     static Logger* self();
+    ~Logger();
 
 signals:
     void registeredCategoryChanged();
@@ -110,6 +119,10 @@ private:
     LogListModel _logModel;
 };
 
+/**
+ * @brief Register categories
+ *
+ */
 class PingLoggingCategory
 {
 public:
