@@ -9,13 +9,6 @@ Item {
     property bool scrollLockEnabled: true
 
     ListView {
-        property bool loadComplete: false
-
-        Component.onCompleted: {
-            loadComplete = true
-        }
-
-        id: logView
         anchors.fill: parent
         contentWidth: parent.width
         clip: true
@@ -39,12 +32,11 @@ Item {
         ScrollBar.horizontal: ScrollBar { }
         ScrollBar.vertical: ScrollBar { }
 
-        Connections {
-            target: Logger.logModel
-            onDataChanged: {
-                if (scrollLockEnabled && logView.loadComplete) {
-                    logView.positionViewAtEnd();
-                }
+        onCountChanged: {
+            if(scrollLockEnabled) {
+                // This appears to be better than positionViewAtEnd
+                // Less bug
+                positionViewAtIndex(count - 1, ListView.Beginning)
             }
         }
     }
