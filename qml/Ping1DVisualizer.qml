@@ -41,10 +41,10 @@ Item {
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
             onMouseMove: {
-                readout.depth = waterfall.mouseDepth < 0 ? '-' : waterfall.mouseDepth
-                readout.strength = waterfall.mouseStrength  < 0 ? '-' : waterfall.mouseStrength
-                readout.columnDepth = waterfall.mouseColumnDepth < 0 ? '-' : waterfall.mouseColumnDepth
-                readout.columnConfidence = waterfall.mouseColumnConfidence < 0 ? '-' : waterfall.mouseColumnConfidence
+                readout.depth = Math.min(waterfall.mouseDepth, 0)
+                readout.strength = Math.min(waterfall.mouseStrength, 0)
+                readout.columnDepth = Math.min(waterfall.mouseColumnDepth, 0)
+                readout.columnConfidence = Math.min(waterfall.mouseColumnConfidence, 0)
             }
         }
 
