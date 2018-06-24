@@ -19,7 +19,7 @@ Item {
 
     function draw(points, depth, confidence, initialPoint) {
         waterfall.draw(points, depth, confidence, initialPoint)
-        chart.draw(points, depth)
+        chart.draw(points, depth, initialPoint)
     }
 
     function setDepth(depth) {
@@ -55,6 +55,7 @@ Item {
             Layout.preferredWidth: 100
             Layout.minimumWidth: 75
             maxDepthToDraw: waterfall.maxDepthToDraw
+            minDepthToDraw: waterfall.minDepthToDraw
         }
 
         Settings {
