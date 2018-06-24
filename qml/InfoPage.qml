@@ -300,14 +300,8 @@ Item {
         }
     }
 
-    Popup {
+    PingPopup {
         id: popup
-        //mainPage
-        x: (window.width - width)/2
-        y: (window.height - height)/2
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
         GroupBox {
             id: connGroup

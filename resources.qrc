@@ -14,6 +14,7 @@
         <file alias="PingItem.qml">qml/PingItem.qml</file>
         <file alias="PingImage.qml">qml/PingImage.qml</file>
         <file alias="PingLogger.qml">qml/PingLogger.qml</file>
+        <file alias="PingPopup.qml">qml/PingPopup.qml</file>
         <file alias="PingRelease.qml">qml/PingRelease.qml</file>
         <file alias="PingStatus.qml">qml/PingStatus.qml</file>
         <file alias="Style.qml">qml/Style.qml</file>
