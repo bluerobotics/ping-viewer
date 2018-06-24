@@ -14,6 +14,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
     _image(2048, 2000, QImage::Format_RGBA8888),
     _painter(nullptr),
+    _maxDepthToDrawInPixels(0),
     _mouseDepth(0),
     _mouseStrength(0),
     _smooth(true),
