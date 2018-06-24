@@ -23,11 +23,17 @@ public:
      *
      * @param series
      * @param points
+     * @param initPos
+     * @param finalPos
+     * @param minPoint
+     * @param maxPoint
      * @param multiplier
-     * @param upDownSampling
      */
     Q_INVOKABLE void update(QAbstractSeries* series, const QList<double>& points,
-                            const float multiplier = 1.0f, const float upDownSampling = 1.0f);
+                            const float initPos, const float finalPos,
+                            const float minPoint, const float maxPoint,
+                            const float multiplier = 1
+                           );
 
     /**
      * @brief Return a list of the available serial ports
