@@ -3,6 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
+import Qt.labs.settings 1.0
+
 import Logger 1.0
 
 Item {
@@ -156,31 +158,6 @@ Item {
             Layout.leftMargin: 10
 
             PingImage {
-                id: forumPost
-                source: "/icons/chat_white.svg"
-                height: 50
-                width: 50
-
-                MouseArea {
-                    id: mouseAreaForumPost
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onEntered: tooltipForumPost.visible = true
-                    onExited: tooltipForumPost.visible = false
-                    onClicked: Qt.openUrlExternally("http://discuss.bluerobotics.com")
-                }
-
-                ToolTip {
-                    id: tooltipForumPost
-                    text: "Forum"
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
-
-            PingImage {
                 id: scrollLock
                 source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
                 height: 50
@@ -208,6 +185,31 @@ Item {
             }
 
             PingImage {
+                id: forumPost
+                source: "/icons/chat_white.svg"
+                height: 50
+                width: 50
+
+                MouseArea {
+                    id: mouseAreaForumPost
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: tooltipForumPost.visible = true
+                    onExited: tooltipForumPost.visible = false
+                    onClicked: Qt.openUrlExternally("http://discuss.bluerobotics.com")
+                }
+
+                ToolTip {
+                    id: tooltipForumPost
+                    text: "Forum"
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            PingImage {
                 id: issue
                 source: "/icons/report_white.svg"
                 height: 50
@@ -225,6 +227,35 @@ Item {
                 ToolTip {
                     id: tooltipIssue
                     text: "Report issue"
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            PingImage {
+                id: resetSettings
+                source: "/icons/settings_reset_black.svg"
+                height: 50
+                width: 50
+
+                MouseArea {
+                    id: mouseAreaResetSettings
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: tooltipResetSettings.visible = true
+                    onExited: tooltipResetSettings.visible = false
+                    onClicked: {
+                        print("Reset settings, interface need restart!")
+                        popup.open()
+                        //settings.reset = true
+                    }
+                }
+
+                ToolTip {
+                    id: tooltipResetSettings
+                    text: "Reset settings"
                 }
             }
         }
@@ -269,6 +300,76 @@ Item {
         }
     }
 
+    Popup {
+        id: popup
+        //mainPage
+        x: (window.width - width)/2
+        y: (window.height - height)/2
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        GroupBox {
+            id: connGroup
+            title: "Reset settings"
+            enabled: true
+            // Hack
+            label.x: width/2 - label.contentWidth/2
+            anchors.fill: parent
+
+            GridLayout {
+                Layout.margins: 15
+                columns: 5
+                rowSpacing: 10
+                columnSpacing: 10
+                anchors.fill: parent
+
+                Text {
+                    text: "This action will reset the appication settings and do a restart of the program, do you want to proceed ?"
+                    clip: true
+                    Layout.maximumWidth: parent.width - 50
+                    Layout.columnSpan: 5
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.alignment: Qt.AlignHCenter
+                    color: Style.textColor
+                    wrapMode: Text.WordWrap
+                }
+
+                PingButton {
+                    text: "Abort"
+                    Layout.fillWidth: true
+                    Layout.columnSpan:  2
+                    onClicked: {
+                        print("Abort settings reset")
+                        popup.close()
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 1
+                }
+
+                PingButton {
+                    text: "Yes"
+                    Layout.fillWidth: true
+                    Layout.columnSpan:  2
+                    onClicked: {
+                        print("Reset settings.")
+                        settings.reset = true
+                        Qt.quit()
+                    }
+                }
+
+                Item {
+                    height: 10
+                    Layout.columnSpan: 5
+                    Layout.fillWidth: true
+                }
+            }
+        }
+    }
+
     // Used to get text size
     Text {
         id: font
@@ -283,5 +384,10 @@ Item {
     function commitIdToLink(id) {
         var link = repository + "/commit/" + id
         return createHyperLink(link, id)
+    }
+
+    Settings {
+        id: settings
+        property bool reset: false
     }
 }
