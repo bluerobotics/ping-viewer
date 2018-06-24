@@ -31,6 +31,7 @@
         <file alias="lock_white.svg">qml/icons/lock_white.svg</file>
         <file alias="report_white.svg">qml/icons/report_white.svg</file>
         <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
+        <file alias="settings_reset_black.svg">qml/icons/settings_reset_black.svg</file>
         <file alias="unlock_white.svg">qml/icons/unlock_white.svg</file>
     </qresource>
     <qresource prefix="/imgs">
