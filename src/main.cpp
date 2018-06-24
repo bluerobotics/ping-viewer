@@ -65,6 +65,10 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    // DPI support and HiDPI pixmaps
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
     QQmlApplicationEngine engine;
 
     // Load the QML and set the Context

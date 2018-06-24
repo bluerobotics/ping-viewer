@@ -156,7 +156,7 @@ void Waterfall::paint(QPainter *painter)
     pix = QPixmap::fromImage(_image, Qt::NoFormatConversion);
     // Code for debug, draw the entire waterfall
     //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
-    _painter->drawPixmap(_painter->viewport(), pix, QRect(first, 0, displayWidth, _maxDepthToDrawInPixels));
+    _painter->drawPixmap(QRect(0, 0, width(), height()), pix, QRect(first, 0, displayWidth, _maxDepthToDrawInPixels));
 }
 
 void Waterfall::setImage(const QImage &image)
