@@ -238,6 +238,7 @@ Item {
 
     PingStatus {
         ping: ping
+        visible: displaySettings.debugMode
     }
 
     LinearGradient {
