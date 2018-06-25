@@ -123,7 +123,7 @@ script:
     mkdir build;
     cd build;
     qmake ..;
-    make || travis_terminate 1;
+    make -j3 || travis_terminate 1;
     mkdir deploy;
     ls ../qml/;
     ls ../qml/imgs;
@@ -151,7 +151,7 @@ script:
     mkdir build;
     cd build;
     qmake .. CONFIG+=${QT_CONFIG};
-    make || travis_terminate 1;
+    make -j3 || travis_terminate 1;
     find .;
     wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_osx.zip;
     unzip stm32flash_osx.zip;
