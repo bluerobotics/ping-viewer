@@ -115,6 +115,7 @@ Item {
         property alias replayItemChecked: replayChB.checked
         property alias smoothDataState: smoothDataChB.checkState
         property alias themeIndex: themeCB.currentIndex
+        property alias waterfallAntialiasingData: antialiasingDataChB.checkState
     }
 
 }
