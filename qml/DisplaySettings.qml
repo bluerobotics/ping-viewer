@@ -12,6 +12,7 @@ Item {
     width: settingsLayout.width
     property var waterfallItem
     property alias replayItem: replayChB.checked
+    property alias debugMode: debugChB.checked
 
     ColumnLayout {
         id: settingsLayout
@@ -120,12 +121,21 @@ Item {
                             waterfallItem.antialiasing = checkState
                         }
                     }
+
+                    CheckBox {
+                        id: debugChB
+                        text: "Debug mode"
+                        checked: false
+                        Layout.columnSpan:  5
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }
     }
 
     Settings {
+        property alias debugBool: debugChB.checkState
         property alias plotThemeIndex: plotThemeCB.currentIndex
         property alias replayItemChecked: replayChB.checked
         property alias smoothDataState: smoothDataChB.checkState
