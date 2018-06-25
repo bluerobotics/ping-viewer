@@ -26,24 +26,54 @@ QStringList Util::serialPortList()
 }
 
 void Util::update(QAbstractSeries* series, const QList<double>& points,
-                  const float multiplier, const float upDownSampling)
+                  const float initPos, const float finalPos,
+                  const float minPoint, const float maxPoint,
+                  const float multiplier)
 {
+    static const int numberOfPoints = 300;
+
+    // Check inputs
     if (!series && points.isEmpty()) {
         qCDebug(util) << "Serie or vector not valid.";
+        return;
     }
 
+    if(initPos > finalPos) {
+        qCDebug(util) << "InitPos need to be lower than finalPos.";
+        return;
+    }
+
+    // Points per Meter
+    const float distPoints = numberOfPoints/(maxPoint - minPoint);
+
     QXYSeries *xySeries = static_cast<QXYSeries *>(series);
+
     // Use replace instead of clear + append, it's optimized for performance
     QVector<QPointF> realPoints;
+    realPoints.reserve(numberOfPoints);
+
+    // Start
+    const int lastStartPoint = int(distPoints*(initPos-minPoint));
     #pragma omp for
-    for(int i = 0; i < points.size(); i++) {
-        realPoints << QPointF(i, multiplier * points[i]);
-    }
-    int finalSize = points.size()*upDownSampling;
-    #pragma omp for
-    for(int i = points.size(); i < finalSize; i++) {
+    for(int i = 0; i < lastStartPoint; i++) {
         realPoints << QPointF(i, 0);
     }
+
+    // Data
+    const int lastDataPoint = int((finalPos - initPos)*distPoints);
+    const float dataIndexScale = points.length()/((finalPos - initPos)*distPoints);
+    #pragma omp for
+    for(int i = 0; i < lastDataPoint; i++) {
+        realPoints << QPointF(i + lastStartPoint, multiplier * points[i*dataIndexScale]);
+    }
+
+    // Final
+    #pragma omp for
+    for(int i = realPoints.length(); i < numberOfPoints; i++) {
+        realPoints << QPointF(i, 0);
+    }
+
+    // Do replace
     xySeries->replace(realPoints);
 }
 

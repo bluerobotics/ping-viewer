@@ -8,6 +8,7 @@ Item {
     transform: Rotation { origin.x: width/2; origin.y: height/2; angle: 90}
 
     property real maxDepthToDraw: 0
+    property real minDepthToDraw: 0
 
     function correctChartSize() {
         chart.height = width
@@ -16,8 +17,8 @@ Item {
         chart.width = height + 2*chart.plotArea.x
     }
 
-    function draw(points, depth) {
-        chart.draw(points, depth)
+    function draw(points, depth, initPos) {
+        chart.draw(points, depth, initPos)
         correctChartSize()
     }
     onWidthChanged: correctChartSize()
@@ -57,7 +58,7 @@ Item {
             labelFormat: "%.1f"
             tickCount: 3
             min: 0
-            max: 200
+            max: 300
         }
 
         ValueAxis {
@@ -94,11 +95,10 @@ Item {
             color: 'lime'
         }
 
-        function draw(points, depth) {
-            axisX.max = 200*maxDepthToDraw/depth
+        function draw(points, depth, initPost) {
             if (points) {
-                Util.update(serie, points, 1, maxDepthToDraw/depth)
-                Util.update(serieInv, points, -1, maxDepthToDraw/depth)
+                Util.update(serie, points, initPost, depth, minDepthToDraw, maxDepthToDraw, 1)
+                Util.update(serieInv, points, initPost, depth, minDepthToDraw, maxDepthToDraw, -1)
                 return
             }
 
