@@ -76,6 +76,21 @@ Item {
                         }
                     }
 
+                    Text {
+                        text: "Waterfall render:"
+                        color: Style.textColor
+                    }
+
+                    ComboBox {
+                        id: waterfallRenderCB
+                        Layout.columnSpan:  4
+                        Layout.fillWidth: true
+                        model: ["Raster (Default)", "OpenGL"]
+                        onCurrentTextChanged: {
+                            waterfallItem.renderTarget = currentIndex
+                        }
+                    }
+
                     CheckBox {
                         id: replayChB
                         text: "Enable replay menu"
@@ -115,6 +130,8 @@ Item {
         property alias replayItemChecked: replayChB.checked
         property alias smoothDataState: smoothDataChB.checkState
         property alias themeIndex: themeCB.currentIndex
+        property alias waterfallAntialiasingData: antialiasingDataChB.checkState
+        property alias waterfallRender: waterfallRenderCB.currentIndex
     }
 
 }
