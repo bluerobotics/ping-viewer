@@ -51,7 +51,8 @@ before_build:
 build_script:
   # Compile it and check for .exe
   - cd %APPVEYOR_BUILD_FOLDER%-build
-  - '%make%'
+  # We are using make with mingw
+  - '%make% -j3'
   - dir /b /s *.exe
 
 after_build:
