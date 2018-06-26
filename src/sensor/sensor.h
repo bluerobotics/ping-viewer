@@ -45,7 +45,7 @@ public:
      * @param connString Connection string defined as (int:string:arg)
      * @param logConnString Log connection string defined as (int:string:arg)
      */
-    Q_INVOKABLE void connectLink(const QString& connString, const QString& logConnString = QString());
+    Q_INVOKABLE void connectLink(QStringList connString, const QStringList& logConnString = QStringList());
 
     /**
      * @brief Add log link
@@ -53,7 +53,7 @@ public:
      * @param connString Log connection string defined as (int:string:arg)
      * @return Q_INVOKABLE connectLinkLog
      */
-    Q_INVOKABLE void connectLinkLog(const QString& connString);
+    Q_INVOKABLE void connectLinkLog(QStringList connString);
 
     /**
      * @brief Set auto detect
