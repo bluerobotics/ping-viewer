@@ -259,7 +259,7 @@ void Ping::flash(const QString& portLocation, const QString& firmwareFile)
 #else
     static QString binPath = QCoreApplication::applicationDirPath();
 #endif
-    static QString cmd = binPath + "/stm32flash -w %0 %1 -v -g 0x0";
+    static QString cmd = binPath + "/stm32flash -w %0 -v -g 0x0 %1";
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
     _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
