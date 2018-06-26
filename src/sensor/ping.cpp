@@ -31,7 +31,7 @@ Ping::Ping() : Sensor()
     _requestTimer.setInterval(1000);
     connect(&_requestTimer, &QTimer::timeout, this, [this] { request(Ping1DNamespace::Profile); });
 
-    //connectLink("2:/dev/ttyUSB2:115200");
+    //connectLink(QStringList({"2", "/dev/ttyUSB2", "115200"}));
 
     connect(&_detector, &ProtocolDetector::_detected, this, &Ping::connectLink);
     _detector.start();
@@ -49,14 +49,14 @@ Ping::Ping() : Sensor()
     });
 }
 
-void Ping::connectLink(const QString& connString)
+void Ping::connectLink(const QStringList& connString)
 {
     if(_detector.isRunning()) {
         _detector.exit();
     }
     setAutoDetect(false);
-    QString logConnString{
-        QStringLiteral("%1:%2:%3").arg(QString::number(1), FileManager::self()->createFileName(FileManager::FileType::BINARY), "w")
+    QStringList logConnString{
+        QStringLiteral("1"), FileManager::self()->createFileName(FileManager::FileType::BINARY), QStringLiteral("w")
     };
     Sensor::connectLink(connString, logConnString);
 }

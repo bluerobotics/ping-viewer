@@ -28,7 +28,7 @@ public:
      *
      * @param connString Connection string defined as (int:string:arg)
      */
-    void connectLink(const QString& connString);
+    void connectLink(const QStringList& connString);
 
     /**
      * @brief debug function

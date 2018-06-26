@@ -173,7 +173,16 @@ Item {
         onAccepted: {
             var sizeToRemove = replayFileDialog.folder.toString().length - replayFileDialog.fileUrl.toString().length + 1
             // 1 (File) : File (remove file://) : format
-            ping.connectLink("1:"+replayFileDialog.fileUrl.toString().slice(7)+":r")
+            var finalString
+            var urlString = replayFileDialog.fileUrl.toString()
+            if (urlString.startsWith("file:///")) {
+                // Check if is a windows string (8) or linux (7)
+                var sliceValue = urlString.charAt(9) === ':' ? 8 : 7
+                finalString = urlString.substring(sliceValue)
+            } else {
+                finalString = urlString
+            }
+            ping.connectLink(["1", finalString, "r"])
             replayFileName.text = "File: " + replayFileDialog.fileUrl.toString().slice(sizeToRemove)
         }
     }
