@@ -30,8 +30,8 @@ Item {
         // None = 0, File, Serial, Udp, Tcp, Sim
         // Enum Type : arg[0] : arg[1s]
         var connString = conntype.currentIndex == 2
-                            ? "5:-:-"
-                            : (conntype.currentIndex + 2).toString() + ":" + first + ":" + second
+                            ? ["5", "-", "-"]
+                            : [(conntype.currentIndex + 2).toString(), first, second]
 
         ping.connectLink(connString)
     }

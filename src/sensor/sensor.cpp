@@ -19,30 +19,28 @@ Sensor::Sensor() :
 }
 
 // TODO rework this after sublasses and parser rework
-void Sensor::connectLink(const QString& connString, const QString& logConnString)
+void Sensor::connectLink(QStringList connString, const QStringList& logConnString)
 {
     if(link()->isOpen()) {
         link()->finishConnection();
     }
 
     qCDebug(PING_PROTOCOL_SENSOR) << "connecting to" << connString;
-    QStringList confList = connString.split(':');
-    if(confList.length() != 3) {
+    if(connString.length() != 3) {
         qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !";
         return;
     }
-    if(confList[0].toInt() <= 0 || confList[0].toInt() > 5) {
+    if(connString[0].toInt() <= 0 || connString[0].toInt() > 5) {
         qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !";
         return;
     }
     if(_linkIn) {
         delete _linkIn;
     }
-    _linkIn = new Link((AbstractLink::LinkType)confList[0].toInt(), "Default");
-    confList.removeFirst();
-    QString conf = confList.join(':');
+    _linkIn = new Link((AbstractLink::LinkType)connString[0].toInt(), "Default");
+    connString.removeFirst();
 
-    link()->setConfiguration(conf);
+    link()->setConfiguration(connString);
     link()->startConnection();
 
     if(!link()->isOpen()) {
@@ -71,7 +69,7 @@ void Sensor::connectLink(const QString& connString, const QString& logConnString
     } else { // Start log, if not playing one
         if(logConnString.isEmpty()) {
             QString fileName = QStringLiteral("%1.%2").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmsszzz")), "bin");
-            QString config = QStringLiteral("%1:%2:%3").arg(QString::number(1), fileName, "w");
+            QStringList config{QStringLiteral("1"), fileName, QStringLiteral("w")};
             connectLinkLog(config);
         } else {
             connectLinkLog(logConnString);
@@ -79,7 +77,7 @@ void Sensor::connectLink(const QString& connString, const QString& logConnString
     }
 }
 
-void Sensor::connectLinkLog(const QString& connString)
+void Sensor::connectLinkLog(QStringList connString)
 {
     if(_linkOut) {
         if(!_linkOut->self()->isOpen()) {
@@ -89,21 +87,19 @@ void Sensor::connectLinkLog(const QString& connString)
         delete _linkOut;
     }
 
-    QStringList confList = connString.split(':');
-    if(confList.length() != 3) {
-        qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !" << confList;
+    if(connString.length() != 3) {
+        qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !" << connString;
         return;
     }
-    if(confList[0].toInt() <= 0 || confList[0].toInt() > 5) {
-        qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !" << confList;
+    if(connString[0].toInt() <= 0 || connString[0].toInt() > 5) {
+        qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !" << connString;
         return;
     }
 
-    _linkOut = new Link((AbstractLink::LinkType)confList[0].toInt(), "Log");
-    confList.removeFirst();
-    QString conf = confList.join(':');
+    _linkOut = new Link((AbstractLink::LinkType)connString[0].toInt(), "Log");
+    connString.removeFirst();
 
-    linkLog()->setConfiguration(conf);
+    linkLog()->setConfiguration(connString);
     linkLog()->startConnection();
 
     if(!linkLog()->isOpen()) {
