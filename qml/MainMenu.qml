@@ -109,6 +109,34 @@ Item {
                 }
 
                 RowLayout {
+                    spacing: 2
+                    Text {
+                        text: "Speed of Sound (m/s):"
+                        color: Style.textColor
+                    }
+
+                    PingTextField {
+                        id: speedOfSound
+                        text: ""
+                        validator: DoubleValidator{bottom: 1400; top: 1600;} // m/s
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+                        onEditingFinished: {
+                            var speed_of_sound = parseFloat(speedOfSound.text)
+                            ping.speed_of_sound = speed_of_sound * 1000 // mm/s
+                        }
+                        Connections {
+                            target: ping
+                            onSpeedOfSoundUpdate: {
+                                if (!speedOfSound.focus) {
+                                    speedOfSound.text = ping.speed_of_sound / 1000
+                                }
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
                     spacing: 5
                     enabled: !autoGainChB.checked
 

@@ -231,6 +231,7 @@ Item {
             ping.request(Ping1DNamespace.Profile)
             ping.request(Ping1DNamespace.Fw_version)
             ping.request(Ping1DNamespace.Device_id)
+            ping.request(Ping1DNamespace.Speed_of_sound)
             ping.pollFrequency = 15
         }
     }
