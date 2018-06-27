@@ -148,6 +148,7 @@ class Waterfall : public QQuickPaintedItem
         float initialDepth;
         float depth;
         float confidence;
+        float distance;
     };
 
     RingVector<DCPack> _DCRing;
@@ -234,8 +235,9 @@ public:
      * @param depth
      * @param confidence
      * @param initPoint
+     * @param distance
      */
-    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0);
+    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0, float distance = 0);
 
     /**
      * @brief Function that deals when the mouse is inside the waterfall

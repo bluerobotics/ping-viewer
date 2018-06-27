@@ -26,7 +26,7 @@ Waterfall::Waterfall(QQuickItem *parent):
 {
     // This is the max depth that ping returns
     setWaterfallMaxDepth(70);
-    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0}, displayWidth);
+    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
     setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -182,11 +182,11 @@ float Waterfall::RGBToValue(const QColor& color)
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint)
+void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint, float distance)
 {
     static QImage old = _image;
     static QList<double> oldPoints = points;
-    _DCRing.append({initPoint, depth, confidence});
+    _DCRing.append({initPoint, depth, confidence, distance});
 
     int virtualHeight = floor(_pixelsPerMeter*depth);
     int virtualFloor = floor(_pixelsPerMeter*initPoint);
@@ -294,7 +294,7 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 
     const auto& depthAndConfidence = _DCRing[displayWidth - widthPos];
     _mouseColumnConfidence = depthAndConfidence.confidence;
-    _mouseColumnDepth = depthAndConfidence.depth;
+    _mouseColumnDepth = depthAndConfidence.distance;
     emit mouseColumnConfidenceChanged();
     emit mouseColumnDepthChanged();
 }
