@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import Qt.labs.settings 1.0
 import QtQuick.Layouts 1.3
 
@@ -12,11 +12,8 @@ Item {
     property string units: "m"
     property real precision: 2
     property int margin: 10
-    property real depth: -1
     property real strength: -1
     property real confidence: 0
-    property real columnConfidence: 0
-    property real columnDepth: 0
     property int parentWidth: 0
     property int parentHeight: 0
 
@@ -49,83 +46,27 @@ Item {
 
     ColumnLayout {
         id: mainLayout
-        RowLayout {
-            Text {
-                id: readout
-                text: value.toFixed(precision) + units
-                color: confidenceToColor(confidence)
-                font.family: "Arial"
-                font.pointSize: 48
-                font.bold: true
-            }
+        Text {
+            id: readout
+            width: textMetrics.width
+            height: textMetrics.height
+            text: value.toFixed(precision) + units
+            color: confidenceToColor(confidence)
+            font.family: "Arial"
+            font.pointSize: 48
+            font.bold: true
 
-            Rectangle {
-                Layout.fillWidth: true
-                color: "transparent"
-            }
-
-            Text {
+             Text {
                 id: confidenceText
-                text: transformValue(confidence) + '%'
+                x: readout.width - width
+                y: readout.height*4/5
+                text: "Confidence: " + transformValue(confidence) + "%"
                 visible: typeof(strength) == "number"
                 color: confidenceToColor(confidence)
                 font.family: "Arial"
-                font.pointSize: readout.font.pointSize
+                font.pointSize: readout.font.pointSize/3
                 font.bold: true
-            }
-        }
-
-        RowLayout {
-            Text {
-                id: textColumnDepth
-                text: transformValue(columnDepth, precision) + units
-                visible: typeof(strength) == "number"
-                color: confidenceToColor(columnConfidence)
-                font.family: "Arial"
-                font.pointSize: 14
-                font.bold: true
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                color: "transparent"
-            }
-
-            Text {
-                id: textColumnConfidence
-                text: transformValue(columnConfidence, 0) + '%'
-                visible: typeof(strength) == "number"
-                color: confidenceToColor(columnConfidence)
-                font.family: "Arial"
-                font.pointSize: 14
-                font.bold: true
-            }
-        }
-
-        RowLayout {
-            Text {
-                id: depthText
-                text: transformValue(depth, precision) + units
-                visible: typeof(strength) == "number"
-                color: 'white'
-                font.family: "Arial"
-                font.pointSize: 14
-                font.bold: true
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                color: "transparent"
-            }
-
-            Text {
-                id: strengthText
-                text: transformValue(strength*100, 0) + '%'
-                visible: typeof(strength) == "number"
-                color: 'white'
-                font.family: "Arial"
-                font.pointSize: 14
-                font.bold: true
+                anchors.margins: 0
             }
         }
     }
