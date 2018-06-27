@@ -41,10 +41,46 @@ Item {
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
             onMouseMove: {
-                readout.depth = Math.max(waterfall.mouseDepth, 0)
                 readout.strength = Math.max(waterfall.mouseStrength, 0)
-                readout.columnDepth = Math.max(waterfall.mouseColumnDepth, 0)
-                readout.columnConfidence = Math.max(waterfall.mouseColumnConfidence, 0)
+            }
+
+            Rectangle {
+                x: waterfall.mousePos.x - width/2 + height/2
+                y: width/2
+                height: 15
+                width: waterfall.height
+                transform: Rotation { origin.x: height/2; angle: 90}
+                gradient: Gradient {
+                    GradientStop { position: 0.3; color: "transparent" }
+                    GradientStop { position: 0.5; color: Style.color }
+                    GradientStop { position: 0.8; color: "transparent" }
+                }
+
+                ColumnLayout {
+                    x: waterfall.mousePos.y - width/2
+                    y: -height*2
+                    rotation: -90
+                    Text {
+                        id: mouseReadout
+                        text: waterfall.mouseColumnDepth.toFixed(2) + "m"
+                        color: confidenceToColor(waterfall.mouseColumnConfidence)
+                        font.family: "Arial"
+                        font.pointSize: 15
+                        font.bold: true
+
+                        Text {
+                            id: mouseConfidenceText
+                            x: mouseReadout.width - width
+                            y: mouseReadout.height*4/5
+                            text: transformValue(waterfall.mouseColumnConfidence) + "%"
+                            visible: typeof(waterfall.mouseColumnConfidence) == "number"
+                            color: confidenceToColor(waterfall.mouseColumnConfidence)
+                            font.family: "Arial"
+                            font.pointSize: 10
+                            font.bold: true
+                        }
+                    }
+                }
             }
         }
 
@@ -65,5 +101,13 @@ Item {
 
     ValueReadout {
         id: readout
+    }
+
+    function confidenceToColor(confidence) {
+        return Qt.rgba(2*(1 - confidence/100), 2*confidence/100, 0)
+    }
+
+    function transformValue(value, precision) {
+        return typeof(value) == "number" ? value.toFixed(precision) : value + ' '
     }
 }
