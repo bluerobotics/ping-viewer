@@ -271,6 +271,8 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 {
     event->accept();
     auto pos = event->pos();
+    _mousePos = pos;
+    emit mousePosChanged();
 
     static uint16_t first;
     if (currentDrawIndex < displayWidth) {

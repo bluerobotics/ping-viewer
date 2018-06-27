@@ -48,6 +48,14 @@ class Waterfall : public QQuickPaintedItem
     Q_PROPERTY(float mouseColumnDepth READ mouseColumnDepth NOTIFY mouseColumnDepthChanged)
 
     /**
+     * @brief Return mouse position
+     *
+     * @return QPoint
+     */
+    QPoint mousePos() {return _mousePos;}
+    Q_PROPERTY(QPoint mousePos READ mousePos NOTIFY mousePosChanged)
+
+    /**
      * @brief Get signal confidence from mouse column
      *
      * @return float
@@ -122,6 +130,7 @@ class Waterfall : public QQuickPaintedItem
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
     float _mouseDepth;
+    QPoint _mousePos;
     float _mouseStrength;
     bool _smooth;
     QTimer* _updateTimer;
@@ -152,6 +161,7 @@ signals:
     void mouseColumnConfidenceChanged();
     void mouseColumnDepthChanged();
     void mouseMove();
+    void mousePosChanged();
     void mouseStrengthChanged();
     void mouseLeave();
     void themeChanged();
