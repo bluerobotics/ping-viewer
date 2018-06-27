@@ -120,7 +120,7 @@ Item {
                     PingTextField {
                         id: startLength
                         text: ""
-                        validator: IntValidator{bottom: 0; top: 48903;}
+                        validator: IntValidator{bottom: 0; top: 70000;}
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
@@ -145,7 +145,7 @@ Item {
                     PingTextField {
                         id: totalLength
                         text: ""
-                        validator: IntValidator{bottom: 0; top: 48903;}
+                        validator: IntValidator{bottom: 0; top: 70000;}
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
