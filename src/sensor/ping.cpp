@@ -29,7 +29,16 @@ Ping::Ping() : Sensor()
     emit linkUpdate();
 
     _requestTimer.setInterval(1000);
-    connect(&_requestTimer, &QTimer::timeout, this, [this] { request(Ping1DNamespace::Profile); });
+    connect(&_requestTimer, &QTimer::timeout, this, [this] {
+        if(link()->type() <= AbstractLink::LinkType::File ||
+                link()->type() == AbstractLink::LinkType::PingSimulation)
+        {
+            qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
+            _requestTimer.stop();
+            return;
+        }
+        request(Ping1DNamespace::Profile);
+    });
 
     //connectLink(QStringList({"2", "/dev/ttyUSB2", "115200"}));
 
@@ -304,6 +313,11 @@ void Ping::firmwareUpdatePercentage()
 
 void Ping::request(int id)
 {
+    if(link()->type() <= AbstractLink::LinkType::File ||
+            link()->type() == AbstractLink::LinkType::PingSimulation) {
+        qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
+        return;
+    }
     qCDebug(PING_PROTOCOL_PING) << "Requesting:" << id;
 
     ping_msg_ping1D_empty m;
@@ -365,7 +379,7 @@ void Ping::printStatus()
 void Ping::writeMessage(const PingMessage &msg)
 {
     if(link()) {
-        if(link()->isOpen()) {
+        if(link()->isOpen() && link()->type() != AbstractLink::LinkType::File) {
             // todo add link::write(char*, int size)
             emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData.data()), msg.msgData.size()));
         }
