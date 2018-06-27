@@ -48,6 +48,14 @@ class Waterfall : public QQuickPaintedItem
     Q_PROPERTY(float mouseColumnDepth READ mouseColumnDepth NOTIFY mouseColumnDepthChanged)
 
     /**
+     * @brief Return mouse position
+     *
+     * @return QPoint
+     */
+    QPoint mousePos() {return _mousePos;}
+    Q_PROPERTY(QPoint mousePos READ mousePos NOTIFY mousePosChanged)
+
+    /**
      * @brief Get signal confidence from mouse column
      *
      * @return float
@@ -122,6 +130,7 @@ class Waterfall : public QQuickPaintedItem
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
     float _mouseDepth;
+    QPoint _mousePos;
     float _mouseStrength;
     bool _smooth;
     QTimer* _updateTimer;
@@ -139,6 +148,7 @@ class Waterfall : public QQuickPaintedItem
         float initialDepth;
         float depth;
         float confidence;
+        float distance;
     };
 
     RingVector<DCPack> _DCRing;
@@ -152,6 +162,7 @@ signals:
     void mouseColumnConfidenceChanged();
     void mouseColumnDepthChanged();
     void mouseMove();
+    void mousePosChanged();
     void mouseStrengthChanged();
     void mouseLeave();
     void themeChanged();
@@ -224,8 +235,9 @@ public:
      * @param depth
      * @param confidence
      * @param initPoint
+     * @param distance
      */
-    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0);
+    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0, float distance = 0);
 
     /**
      * @brief Function that deals when the mouse is inside the waterfall

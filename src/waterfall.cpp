@@ -14,7 +14,7 @@ uint16_t Waterfall::displayWidth = 500;
 
 Waterfall::Waterfall(QQuickItem *parent):
     QQuickPaintedItem(parent),
-    _image(2048, 2000, QImage::Format_RGBA8888),
+    _image(2048, 2500, QImage::Format_RGBA8888),
     _painter(nullptr),
     _maxDepthToDrawInPixels(0),
     _minDepthToDrawInPixels(0),
@@ -25,8 +25,8 @@ Waterfall::Waterfall(QQuickItem *parent):
     currentDrawIndex(displayWidth)
 {
     // This is the max depth that ping returns
-    setWaterfallMaxDepth(48.903);
-    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0}, displayWidth);
+    setWaterfallMaxDepth(70);
+    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
     setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -182,11 +182,11 @@ float Waterfall::RGBToValue(const QColor& color)
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint)
+void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint, float distance)
 {
     static QImage old = _image;
     static QList<double> oldPoints = points;
-    _DCRing.append({initPoint, depth, confidence});
+    _DCRing.append({initPoint, depth, confidence, distance});
 
     int virtualHeight = floor(_pixelsPerMeter*depth);
     int virtualFloor = floor(_pixelsPerMeter*initPoint);
@@ -271,6 +271,8 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 {
     event->accept();
     auto pos = event->pos();
+    _mousePos = pos;
+    emit mousePosChanged();
 
     static uint16_t first;
     if (currentDrawIndex < displayWidth) {
@@ -292,7 +294,7 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 
     const auto& depthAndConfidence = _DCRing[displayWidth - widthPos];
     _mouseColumnConfidence = depthAndConfidence.confidence;
-    _mouseColumnDepth = depthAndConfidence.depth;
+    _mouseColumnDepth = depthAndConfidence.distance;
     emit mouseColumnConfidenceChanged();
     emit mouseColumnDepthChanged();
 }

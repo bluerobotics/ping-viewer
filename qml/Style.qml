@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.1
 QtObject {
     property color textColor: 'linen'
     property color iconColor: textColor
+    property color color: isDark ? "black" : "linen"
     property string dark: "dark"
     property string light: "light"
     property bool isDark: true
