@@ -34,10 +34,10 @@ void Sensor::connectLink(QStringList connString, const QStringList& logConnStrin
         qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !";
         return;
     }
-    if(_linkIn) {
-        delete _linkIn;
+    if(link()) {
+        _linkIn.clear();
     }
-    _linkIn = new Link((AbstractLink::LinkType)connString[0].toInt(), "Default");
+    _linkIn = QSharedPointer<Link>(new Link((AbstractLink::LinkType)connString[0].toInt(), "Default"));
     connString.removeFirst();
 
     link()->setConfiguration(connString);
@@ -59,12 +59,13 @@ void Sensor::connectLink(QStringList connString, const QStringList& logConnStrin
 
     // Disable log if playing one
     if(link()->type() == AbstractLink::LinkType::File) {
-        if(!_linkOut) {
+        if(!linkLog()) {
             return;
         }
+
         if(linkLog()->isOpen()) {
             linkLog()->finishConnection();
-            _linkOut->deleteLater();
+            _linkOut.clear();
         }
     } else { // Start log, if not playing one
         if(logConnString.isEmpty()) {
@@ -79,12 +80,12 @@ void Sensor::connectLink(QStringList connString, const QStringList& logConnStrin
 
 void Sensor::connectLinkLog(QStringList connString)
 {
-    if(_linkOut) {
-        if(!_linkOut->self()->isOpen()) {
+    if(linkLog()) {
+        if(!linkLog()->isOpen()) {
             qCCritical(PING_PROTOCOL_SENSOR) << "No connection to log !" << linkLog()->errorString();
             return;
         }
-        delete _linkOut;
+        _linkOut.clear();
     }
 
     if(connString.length() != 3) {
@@ -96,7 +97,7 @@ void Sensor::connectLinkLog(QStringList connString)
         return;
     }
 
-    _linkOut = new Link((AbstractLink::LinkType)connString[0].toInt(), "Log");
+    _linkOut = QSharedPointer<Link>(new Link((AbstractLink::LinkType)connString[0].toInt(), "Log"));
     connString.removeFirst();
 
     linkLog()->setConfiguration(connString);
