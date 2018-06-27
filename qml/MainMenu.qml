@@ -124,12 +124,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var length_mm = parseInt(totalLength.text)
-                            var start_mm = Math.min(parseInt(text), length_mm - 500)
-                            if(isNaN(start_mm)) {
-                                start_mm = 0
-                            }
-                            text = start_mm
+                            var start_mm = parseInt(startLength.text)
                             ping.start_mm = start_mm
                         }
                         Connections {
@@ -149,12 +144,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var start_mm = parseInt(startLength.text)
-                            var length_mm = Math.max(parseInt(text), start_mm + 500)
-                            if(isNaN(length_mm)) {
-                                length_mm = 48903
-                            }
-                            text = length_mm
+                            var length_mm = parseInt(totalLength.text)
                             ping.length_mm = length_mm
                         }
                         Connections {
