@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QPointer>
+
 #include "link.h"
 #include "parsers/parser.h"
 
@@ -20,7 +22,7 @@ public:
      *
      * @return AbstractLink*
      */
-    AbstractLink* link() { return _linkIn ? _linkIn->self() : nullptr; };
+    AbstractLink* link() { return _linkIn.data() ? _linkIn->self() : nullptr; };
     Q_PROPERTY(AbstractLink* link READ link NOTIFY linkUpdate)
 
     /**
@@ -28,7 +30,7 @@ public:
      *
      * @return AbstractLink*
      */
-    AbstractLink* linkLog() { return _linkOut ? _linkOut->self() : nullptr; };
+    AbstractLink* linkLog() { return _linkOut.data() ? _linkOut->self() : nullptr; };
     Q_PROPERTY(AbstractLink* linkLog READ linkLog NOTIFY linkLogUpdate)
 
     /**
@@ -73,8 +75,8 @@ public:
 protected:
     bool _autodetect;
 
-    Link* _linkIn;
-    Link* _linkOut;
+    QSharedPointer<Link> _linkIn;
+    QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation
 
     QString _name; // TODO populate
