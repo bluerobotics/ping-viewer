@@ -195,6 +195,13 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
+    case Ping1DNamespace::Speed_of_sound: {
+        ping_msg_ping1D_speed_of_sound m(msg);
+        _speed_of_sound = m.speed_mmps();
+        emit speedOfSoundUpdate();
+    }
+    break;
+
     default:
         qCritical() << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;

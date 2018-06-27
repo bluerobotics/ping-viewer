@@ -237,6 +237,28 @@ public:
     Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY msecPerPingUpdate)
 
     /**
+     * @brief Get the speed of sound (mm/s) used for calculating the distance from time-of-flight
+     *
+     * @return uint32_t
+     */
+    uint32_t speed_of_sound() { return _speed_of_sound; }
+
+    /**
+     * @brief Set speed of sound (mm/s) used for calculating distance from time-of-flight
+     *
+     * @param speed_of_sound
+     */
+    void set_speed_of_sound(uint32_t speed_of_sound)
+    {
+        ping_msg_ping1D_set_speed_of_sound m;
+        m.set_speed(speed_of_sound);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Speed_of_sound);
+    }
+    Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundUpdate)
+
+    /**
      * @brief Return poll frequency
      *
      * @return QVariant
@@ -293,6 +315,7 @@ signals:
 
     void modeAutoUpdate();
     void msecPerPingUpdate();
+    void speedOfSoundUpdate();
 ///@}
 
     /**
@@ -333,6 +356,7 @@ private:
     uint32_t _start_mm;
     uint32_t _length_mm;
     uint32_t _gain_index;
+    uint32_t _speed_of_sound;
 ///@}
 
     float _fw_update_perc;
