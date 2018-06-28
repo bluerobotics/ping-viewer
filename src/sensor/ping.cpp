@@ -312,7 +312,7 @@ void Ping::request(int id)
     writeMessage(m);
 }
 
-QVariant Ping::pollFrequency()
+float Ping::pollFrequency()
 {
     if (!_requestTimer.isActive()) {
         return 0;
@@ -320,15 +320,16 @@ QVariant Ping::pollFrequency()
     return 1000.0f / _requestTimer.interval();
 }
 
-void Ping::setPollFrequency(QVariant pollFrequency)
+void Ping::setPollFrequency(float pollFrequency)
 {
-    if (pollFrequency.toInt() <= 0) {
+    if (pollFrequency <= 0 || pollFrequency > 30) {
+        qCWarning(PING_PROTOCOL_PING) << "Invalid frequency:" << pollFrequency;
         if (_requestTimer.isActive()) {
             _requestTimer.stop();
         }
     } else {
-        int period_ms = 1000.0f / pollFrequency.toInt();
-        qCDebug(PING_PROTOCOL_PING) << "setting f" << pollFrequency.toInt() << period_ms;
+        int period_ms = 1000.0f / pollFrequency;
+        qCDebug(PING_PROTOCOL_PING) << "Setting frequency(Hz) and period(ms):" << pollFrequency << period_ms;
         _requestTimer.setInterval(period_ms);
         if (!_requestTimer.isActive()) {
             _requestTimer.start();

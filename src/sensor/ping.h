@@ -261,17 +261,17 @@ public:
     /**
      * @brief Return poll frequency
      *
-     * @return QVariant
+     * @return float
      */
-    QVariant pollFrequency();
+    float pollFrequency();
 
     /**
      * @brief Set poll frequency
      *
      * @param pollFrequency
      */
-    void setPollFrequency(QVariant pollFrequency);
-    Q_PROPERTY(QVariant pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
+    void setPollFrequency(float pollFrequency);
+    Q_PROPERTY(float pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
 
     // TODO, maybe store history/filtered history of values in this
     // object for access by different visual elements without need to recompute
