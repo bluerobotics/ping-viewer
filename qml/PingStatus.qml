@@ -118,6 +118,22 @@ Item {
                     font.pointSize: 8
                 }
             }
+            Row {
+                Text {
+                    text: "Ascii text:\n" + ping.ascii_text
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
+                    text: "Error message:\n" + ping.err_msg
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
         }
     }
 }
