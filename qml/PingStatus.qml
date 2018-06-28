@@ -110,6 +110,14 @@ Item {
                     font.pointSize: 8
                 }
             }
+            Row {
+                Text {
+                    text: "Speed of sound : " + ping.speed_of_sound
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
         }
     }
 }
