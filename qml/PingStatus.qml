@@ -40,7 +40,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Distance: " + ping.distance
+                    text: "Distance (mm): " + ping.distance
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -48,7 +48,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Auto: " + ping.mode_auto
+                    text: "Auto (bool): " + ping.mode_auto
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -56,7 +56,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Start: " + ping.start_mm
+                    text: "Start (mm): " + ping.start_mm
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -64,7 +64,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Length: " + ping.length_mm
+                    text: "Length (mm): " + ping.length_mm
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -72,7 +72,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Ping #: " + ping.ping_number
+                    text: "Ping (#): " + ping.ping_number
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -80,7 +80,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Pulse usec: " + ping.pulse_usec
+                    text: "Pulse durantion (μs): " + ping.pulse_usec
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -88,7 +88,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Ping msec: " + ping.msec_per_ping
+                    text: "Ping interval (ms): " + ping.msec_per_ping
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -96,7 +96,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Gain index: " + ping.gain_index
+                    text: "Gain (index): " + ping.gain_index
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -104,7 +104,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Confidence: " + ping.confidence
+                    text: "Confidence (%): " + ping.confidence
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -112,7 +112,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Speed of sound : " + ping.speed_of_sound
+                    text: "Speed of sound (mm/s): " + ping.speed_of_sound
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
