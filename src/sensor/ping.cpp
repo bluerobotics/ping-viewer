@@ -82,13 +82,17 @@ void Ping::handleMessage(PingMessage msg)
     }
 
     case Ping1DNamespace::Nack: {
-        qCCritical(PING_PROTOCOL_PING) << "Sensor NACK:" << QString::fromStdString(ping_msg_ping1D_nack(msg).err_msg());
+        _err_msg = QString::fromStdString(ping_msg_ping1D_nack(msg).err_msg());
+        qCCritical(PING_PROTOCOL_PING) << "Sensor NACK:" << _err_msg;
+        emit errMsgUpdate();
         break;
     }
 
     // needs dynamic-payload patch
     case Ping1DNamespace::Ascii_text: {
-        qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << QString::fromStdString(ping_msg_ping1D_ascii_text(msg).msg());
+        _ascii_text = QString::fromStdString(ping_msg_ping1D_ascii_text(msg).msg());
+        qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << _ascii_text;
+        emit asciiTextUpdate();
         break;
     }
 
@@ -326,7 +330,7 @@ void Ping::request(int id)
     writeMessage(m);
 }
 
-QVariant Ping::pollFrequency()
+float Ping::pollFrequency()
 {
     if (!_requestTimer.isActive()) {
         return 0;
@@ -334,15 +338,16 @@ QVariant Ping::pollFrequency()
     return 1000.0f / _requestTimer.interval();
 }
 
-void Ping::setPollFrequency(QVariant pollFrequency)
+void Ping::setPollFrequency(float pollFrequency)
 {
-    if (pollFrequency.toInt() <= 0) {
+    if (pollFrequency <= 0 || pollFrequency > 30) {
+        qCWarning(PING_PROTOCOL_PING) << "Invalid frequency:" << pollFrequency;
         if (_requestTimer.isActive()) {
             _requestTimer.stop();
         }
     } else {
-        int period_ms = 1000.0f / pollFrequency.toInt();
-        qCDebug(PING_PROTOCOL_PING) << "setting f" << pollFrequency.toInt() << period_ms;
+        int period_ms = 1000.0f / pollFrequency;
+        qCDebug(PING_PROTOCOL_PING) << "Setting frequency(Hz) and period(ms):" << pollFrequency << period_ms;
         _requestTimer.setInterval(period_ms);
         if (!_requestTimer.isActive()) {
             _requestTimer.start();

@@ -261,17 +261,33 @@ public:
     /**
      * @brief Return poll frequency
      *
-     * @return QVariant
+     * @return float
      */
-    QVariant pollFrequency();
+    float pollFrequency();
 
     /**
      * @brief Set poll frequency
      *
      * @param pollFrequency
      */
-    void setPollFrequency(QVariant pollFrequency);
-    Q_PROPERTY(QVariant pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
+    void setPollFrequency(float pollFrequency);
+    Q_PROPERTY(float pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
+
+    /**
+     * @brief Return last ascii_text message
+     *
+     * @return QString
+     */
+    QString asciiText() { return _ascii_text; }
+    Q_PROPERTY(QString ascii_text READ asciiText NOTIFY asciiTextUpdate)
+
+    /**
+     * @brief Return last err_msg message
+     *
+     * @return QString
+     */
+    QString errMsg() { return _err_msg; }
+    Q_PROPERTY(QString err_msg READ errMsg NOTIFY errMsgUpdate)
 
     // TODO, maybe store history/filtered history of values in this
     // object for access by different visual elements without need to recompute
@@ -297,6 +313,9 @@ signals:
      * @brief emitted when propriety changes
      */
 ///@{
+    void asciiTextUpdate();
+    void errMsgUpdate();
+
     void srcIdUpdate();
     void dstIdUpdate();
     void deviceTypeUpdate();
@@ -341,6 +360,9 @@ private:
      * @brief Sensor variables
      */
 ///@{
+    QString _ascii_text;
+    QString _err_msg;
+
     uint8_t _srcId;
     uint8_t _dstId;
 
