@@ -281,6 +281,9 @@ Item {
                 print(FileManager.createFileName(FileManager.PICTURE))
                 result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
             });
+        } else if (event.key == Qt.Key_R) {
+            print("Clear waterfall")
+            ping1DVisualizer.waterfallItem.clear()
         }
     }
 }

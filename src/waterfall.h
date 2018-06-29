@@ -14,6 +14,12 @@ Q_DECLARE_LOGGING_CATEGORY(waterfall)
 class Waterfall : public QQuickPaintedItem
 {
     Q_OBJECT
+public:
+    /**
+     * @brief Clear waterfall and restart all parameters
+     *
+     */
+    Q_INVOKABLE void clear();
 
     /**
      * @brief Return waterfall image
