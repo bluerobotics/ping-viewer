@@ -39,6 +39,17 @@ Waterfall::Waterfall(QQuickItem *parent):
     _updateTimer->start(50);
 }
 
+void Waterfall::clear()
+{
+    qCDebug(waterfall) << "Cleaning waterfall and restarting internal variables";
+    _maxDepthToDrawInPixels = 0;
+    _minDepthToDrawInPixels = 0;
+    _mouseDepth = 0;
+    _mouseStrength = 0;
+    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
+    _image.fill(Qt::transparent);
+}
+
 void Waterfall::setGradients()
 {
     WaterfallGradient thermal5Grad(QStringLiteral("Thermal 5"), {
