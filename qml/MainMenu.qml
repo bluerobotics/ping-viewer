@@ -42,7 +42,7 @@ Item {
         GroupBox {
             id: pingGroup
             title: "Ping"
-            enabled: true
+            enabled: ping.connected
             // Hack
             label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
