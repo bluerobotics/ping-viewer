@@ -72,9 +72,17 @@ public:
     bool autoDetect() { return _autodetect; };
     Q_PROPERTY(bool autodetect READ autoDetect WRITE setAutoDetect NOTIFY autoDetectUpdate)
 
+    /**
+     * @brief Return true if sensor is connected
+     *
+     * @return bool
+     */
+    bool connected() { return _connected; };
+    Q_PROPERTY(bool connected READ connected NOTIFY connectionUpdate)
+
 protected:
     bool _autodetect;
-
+    bool _connected;
     QSharedPointer<Link> _linkIn;
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation
@@ -87,6 +95,7 @@ signals:
     // In
     void connectionClose();
     void connectionOpen();
+    void connectionUpdate();
     void nameUpdate();
     void linkUpdate();
 
