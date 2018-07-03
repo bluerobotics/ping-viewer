@@ -23,6 +23,7 @@ Item {
     }
 
     function setDepth(depth) {
+        depthAxis.depth_mm = depth
         readout.value = depth
     }
 
@@ -82,6 +83,13 @@ Item {
                     }
                 }
             }
+
+            DepthAxis {
+                id: depthAxis
+                anchors.fill:parent
+                start_mm: waterfall.minDepthToDraw
+                end_mm: waterfall.maxDepthToDraw
+            }
         }
 
         Chart {
@@ -90,6 +98,7 @@ Item {
             Layout.maximumWidth: 250
             Layout.preferredWidth: 100
             Layout.minimumWidth: 75
+            // TODO these should be properties of the Ping1DVisualizer
             maxDepthToDraw: waterfall.maxDepthToDraw
             minDepthToDraw: waterfall.minDepthToDraw
         }
