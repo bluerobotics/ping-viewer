@@ -115,7 +115,7 @@ private:
     QFile _file;
     QTextStream _fileStream;
     QStringList _registeredCategories;
-    QSettings _settings;
+    QSettings& _settings;
     LogListModel _logModel;
 };
 

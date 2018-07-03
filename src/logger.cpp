@@ -1,5 +1,6 @@
 #include "filemanager.h"
 #include "logger.h"
+#include "settingsmanager.h"
 
 #include <iostream>
 #include <QDebug>
@@ -15,18 +16,10 @@ static QtMessageHandler originalHandler = nullptr;
 Logger::Logger()
     : _file(FileManager::self()->createFileName(FileManager::FileType::LOG))
     , _fileStream(&_file)
-    , _settings("Blue Robotics Inc.", "Ping Viewer")
+    , _settings(SettingsManager::self()->settings())
 {
     if(!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         qCWarning(logger) << "A file with the gui log will not be available !";
-    }
-
-    //TODO: Settings cpp singleton need to be created
-    if(_settings.contains("reset")) {
-        bool reset = _settings.value("reset").toBool();
-        if(reset) {
-            _settings.clear();
-        }
     }
 
     if(_settings.contains("filter")) {
