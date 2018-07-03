@@ -5,14 +5,14 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
+import SettingsManager 1.0
+
 Item {
     id: displaySettings
     visible: false
     height: settingsLayout.height
     width: settingsLayout.width
     property var waterfallItem
-    property alias replayItem: replayChB.checked
-    property alias debugMode: debugChB.checked
 
     ColumnLayout {
         id: settingsLayout
@@ -35,11 +35,15 @@ Item {
                         color: Style.textColor
                     }
 
-                    ComboBox {
-                        displayText: "Meters"
-                        enabled: false
-                        Layout.columnSpan:  4
+                    PingComboBox {
+                        id: distanceUnitsCb
+                        model: SettingsManager.distanceUnitsModel
+                        setting: SettingsManager.distanceUnits
+                        Layout.columnSpan: 4
                         Layout.fillWidth: true
+                        onSettingChanged: {
+                            SettingsManager.distanceUnits = setting
+                        }
                     }
 
                     Text {
@@ -80,9 +84,10 @@ Item {
                     CheckBox {
                         id: replayChB
                         text: "Enable replay menu"
-                        checked: false
+                        checked: SettinsManager.replayMenu
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
+                        onCheckedChanged: SettingsManager.replayMenu = checked
                     }
 
                     CheckBox {
@@ -110,9 +115,10 @@ Item {
                     CheckBox {
                         id: debugChB
                         text: "Debug mode"
-                        checked: false
+                        checked: SettingsManager.debugMode
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
+                        onCheckedChanged: SettingsManager.debugMode = checked
                     }
                 }
             }
@@ -120,9 +126,7 @@ Item {
     }
 
     Settings {
-        property alias debugBool: debugChB.checkState
         property alias plotThemeIndex: plotThemeCB.currentIndex
-        property alias replayItemChecked: replayChB.checked
         property alias smoothDataState: smoothDataChB.checkState
         property alias themeIndex: themeCB.currentIndex
         property alias waterfallAntialiasingData: antialiasingDataChB.checkState
