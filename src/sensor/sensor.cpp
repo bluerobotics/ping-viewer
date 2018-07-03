@@ -11,11 +11,20 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 
 Sensor::Sensor() :
     _autodetect(true)
+    ,_connected(false)
     ,_linkIn(new Link(AbstractLink::LinkType::Serial, "Default"))
     ,_linkOut(nullptr)
     ,_parser(nullptr)
 {
-
+    emit connectionUpdate();
+    connect(this, &Sensor::connectionOpen, this, [this] {
+        this->_connected = true;
+        emit this->connectionUpdate();
+    });
+    connect(this, &Sensor::connectionClose, this, [this] {
+        this->_connected = false;
+        emit this->connectionUpdate();
+    });
 }
 
 // TODO rework this after sublasses and parser rework
