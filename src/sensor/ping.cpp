@@ -40,6 +40,20 @@ Ping::Ping() : Sensor()
         request(Ping1DNamespace::Profile);
     });
 
+    _periodicRequestTimer.setInterval(400);
+    connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
+        if(link()->type() <= AbstractLink::LinkType::File ||
+                link()->type() == AbstractLink::LinkType::PingSimulation)
+        {
+            qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
+            _requestTimer.stop();
+            return;
+        }
+        //request(Ping1DNamespace::Pcb_temperature);
+        request(Ping1DNamespace::Processor_temperature);
+        request(Ping1DNamespace::Voltage_5);
+    });
+
     //connectLink(QStringList({"2", "/dev/ttyUSB2", "115200"}));
 
     connect(&_detector, &ProtocolDetector::_detected, this, &Ping::connectLink);
@@ -68,6 +82,7 @@ void Ping::connectLink(const QStringList& connString)
         QStringLiteral("1"), FileManager::self()->createFileName(FileManager::FileType::BINARY), QStringLiteral("w")
     };
     Sensor::connectLink(connString, logConnString);
+    _periodicRequestTimer.start();
 }
 
 void Ping::handleMessage(PingMessage msg)
