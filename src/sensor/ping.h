@@ -434,6 +434,7 @@ private:
 
     ProtocolDetector _detector;
     QTimer _requestTimer;
+    QTimer _periodicRequestTimer; // For automatic periodic updates (board voltage and temperature)
 
     QSharedPointer<QProcess> _firmwareProcess;
 };
