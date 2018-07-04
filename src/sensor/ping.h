@@ -259,6 +259,30 @@ public:
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundUpdate)
 
     /**
+     * @brief Get the processor temperature (centi-degrees C)
+     *
+     * @return uint16_t
+     */
+    uint16_t processor_temperature() { return _processor_temperature; }
+    Q_PROPERTY(int processor_temperature READ processor_temperature NOTIFY processorTemperatureUpdate)
+
+    /**
+     * @brief Get the pcb temperature (centi-degrees C)
+     *
+     * @return uint16_t
+     */
+    uint16_t pcb_temperature() { return _pcb_temperature; }
+    Q_PROPERTY(int pcb_temperature READ pcb_temperature NOTIFY pcbTemperatureUpdate)
+
+    /**
+     * @brief Get the board voltage (milliVolts)
+     *
+     * @return uint16_t
+     */
+    uint16_t board_voltage() { return _board_voltage; }
+    Q_PROPERTY(int board_voltage READ board_voltage NOTIFY boardVoltageUpdate)
+
+    /**
      * @brief Return poll frequency
      *
      * @return float
@@ -335,6 +359,10 @@ signals:
     void modeAutoUpdate();
     void msecPerPingUpdate();
     void speedOfSoundUpdate();
+
+    void processorTemperatureUpdate();
+    void pcbTemperatureUpdate();
+    void boardVoltageUpdate();
 ///@}
 
     /**
@@ -379,6 +407,10 @@ private:
     uint32_t _length_mm;
     uint32_t _gain_index;
     uint32_t _speed_of_sound;
+
+    uint16_t _processor_temperature;
+    uint16_t _pcb_temperature;
+    uint16_t _board_voltage;
 ///@}
 
     float _fw_update_perc;

@@ -215,6 +215,27 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
+    case Ping1DNamespace::Processor_temperature: {
+        ping_msg_ping1D_processor_temperature m(msg);
+        _processor_temperature = m.temp();
+        emit processorTemperatureUpdate();
+    }
+    break;
+
+    case Ping1DNamespace::Pcb_temperature: {
+        ping_msg_ping1D_pcb_temperature m(msg);
+        _pcb_temperature = m.temp();
+        emit pcbTemperatureUpdate();
+    }
+    break;
+
+    case Ping1DNamespace::Voltage_5: {
+        ping_msg_ping1D_voltage_5 m(msg);
+        _board_voltage = m.mvolts(); // millivolts
+        emit boardVoltageUpdate();
+    }
+    break;
+
     default:
         qCritical() << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;
