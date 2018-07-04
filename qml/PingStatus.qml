@@ -56,7 +56,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Start (mm): " + ping.start_mm
+                    text: "Scan Start (mm): " + ping.start_mm
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -64,7 +64,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Length (mm): " + ping.length_mm
+                    text: "Scan Length (mm): " + ping.length_mm
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
