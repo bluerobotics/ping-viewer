@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
 
 import Logger 1.0
+import SettingsManager 1.0
 
 Item {
     id: root
@@ -249,7 +250,6 @@ Item {
                     onClicked: {
                         print("Reset settings, interface need restart!")
                         popup.open()
-                        //settings.reset = true
                     }
                 }
 
@@ -350,7 +350,7 @@ Item {
                     Layout.columnSpan:  2
                     onClicked: {
                         print("Reset settings.")
-                        settings.reset = true
+                        SettingsManager.reset = true
                         Qt.quit()
                     }
                 }
@@ -378,10 +378,5 @@ Item {
     function commitIdToLink(id) {
         var link = repository + "/commit/" + id
         return createHyperLink(link, id)
-    }
-
-    Settings {
-        id: settings
-        property bool reset: false
     }
 }

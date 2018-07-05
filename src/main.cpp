@@ -10,6 +10,7 @@
 #include "filemanager.h"
 #include "logger.h"
 #include "ping.h"
+#include "settingsmanager.h"
 #include "util.h"
 #include "waterfall.h"
 
@@ -44,6 +45,14 @@ QObject *fileManagerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
     return FileManager::self();
 }
 
+QObject *settingsManager(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return SettingsManager::self();
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("Blue Robotics Inc.");
@@ -54,6 +63,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonType<Logger>("FileManager", 1, 0, "FileManager", &fileManagerRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
+    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", &settingsManager);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");

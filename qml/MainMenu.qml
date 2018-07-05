@@ -118,7 +118,11 @@ Item {
                     PingTextField {
                         id: speedOfSound
                         text: ""
-                        validator: DoubleValidator{bottom: 1400; top: 1600;} // m/s
+                        validator: DoubleValidator {
+                            // Values in m/s
+                            bottom: SettingsManager.debugMode ? 0 : 1400
+                            top: SettingsManager.debugMode ? 1e5 : 1600
+                        }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {

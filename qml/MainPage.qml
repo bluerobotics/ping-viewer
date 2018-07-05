@@ -8,6 +8,7 @@ import Qt.labs.settings 1.0
 import FileManager 1.0
 import Ping 1.0
 import Ping1DNamespace 1.0
+import SettingsManager 1.0
 
 Item {
     id: root
@@ -103,7 +104,7 @@ Item {
 
     PingItem {
         id: replayMenu
-        visible: displaySettings.replayItem
+        visible: SettingsManager.replayMenu
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         state: "bottom-left"
@@ -249,7 +250,7 @@ Item {
 
     PingStatus {
         ping: ping
-        visible: displaySettings.debugMode
+        visible: SettingsManager.debugMode
     }
 
     LinearGradient {
