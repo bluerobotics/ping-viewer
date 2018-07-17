@@ -36,7 +36,7 @@ install:
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
-  - if %APPVEYOR_REPO_TAG%==true (set RELEASE_NAME=%APPVEYOR_REPO_TAG_NAME%) else set RELEASE_NAME=continuous
+  - if %APPVEYOR_REPO_TAG%==true (set RELEASE_NAME=%APPVEYOR_REPO_TAG_NAME%) else set RELEASE_NAME=%APPVEYOR_REPO_BRANCH%
 
 before_build:
   # Prepare the out-of-source build directory.
@@ -89,5 +89,5 @@ deploy:
     bucket: downloads.bluerobotics.com
     region: us-east-1
     set_public: true
-    folder: PingViewer/builds/$(APPVEYOR_REPO_BRANCH)
+    folder: PingViewer/builds/$(RELEASE_NAME)
     artifact: PingViewer
