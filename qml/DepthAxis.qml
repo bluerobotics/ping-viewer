@@ -11,7 +11,7 @@ Item {
     property var length_mm: end_mm - start_mm
     property var depth_mm: 0 // The range to target (bottom) currently reported by the ping
 
-    property var validIncrements: [0.1, 0.25, 0.5, 1, 2, 5, 10]
+    property var validIncrements: [0.1, 0.2, 0.5, 1, 2, 5, 10]
 
     property int numTicks: 10
     property int maxTicks: 10
@@ -95,7 +95,11 @@ Item {
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom // Use layout alignement instead (no anchors)
                 Layout.bottomMargin: 5
                 Layout.rightMargin: 7
-                text: lastIndex ? end_mm.toFixed(1) : start_mm + (index + 1) * increment
+                text: lastIndex
+                      ? end_mm.toFixed(1)
+                      : increment < 1
+                        ? (start_mm + (index + 1) * increment).toFixed(1)
+                        : (start_mm + (index + 1) * increment).toFixed(0)
                 color: root.color
                 font.bold: true
                 font.pointSize: 22
