@@ -13,7 +13,7 @@ environment:
       QT_VERSION: 5.11
       QT_LINKAGE: static
       COVERITY_BUILD_CANDIDATE: True
-      QTDIR: C:\Qt\5.11.0\mingw53_32
+      QTDIR: C:\Qt\%QT_VERSION%\mingw53_32
       MGWDIR: C:\Qt\Tools\mingw530_32\bin
       MGWLIBS: libgomp-1.dll
       VCLIBS: VCRUNTIME140.dll MSVCP140.dll
