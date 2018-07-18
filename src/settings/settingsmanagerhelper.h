@@ -47,7 +47,7 @@ private: \
  * The output will be something like:
  * AUTO_PROPERTY_MODEL(TYPE, NAME, MODEL_TYPE, {model_var_1, model_var_2}):
  *    Q_PROPERTY(myType myName READ myName WRITE myName NOTIFY myNameChanged)
- *    Q_PROPERTY(myModelType myNameModel READ myNameModel)
+ *    Q_PROPERTY(const myModelType* myNameModel READ myNameModel)
  *public:
  *    // Get property
  *    myType myName() {
@@ -65,17 +65,16 @@ private: \
  *        emit myNameChanged();
  *    }
  *    // Get myName model
- *    myModelType myNameModel() { return _myNameModel; }
+ *    const myModelType* myNameModel() { return _myNameModel; }
  *    Q_SIGNAL void myNameChanged();
  *private:
  *    // Define internal variable and its model
  *    myType _myName;
- *    const myModelType _myNameModel =
- *        {model_var_1, model_var_2};
+ *    const myModelType* _myNameModel{new myModelType({model_var_1, model_var_2})};
  */
 #define AUTO_PROPERTY_MODEL(TYPE, NAME, MODEL_TYPE, MODEL_LIST) \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME ## Changed ) \
-    Q_PROPERTY(MODEL_TYPE NAME ## Model READ NAME ## Model ) \
+    Q_PROPERTY(const MODEL_TYPE* NAME ## Model READ NAME ## Model ) \
 public: \
     TYPE NAME() { _ ## NAME = _settings.value(QStringLiteral(#NAME)).value<TYPE>(); return _ ## NAME ; } \
     void NAME(TYPE value) { \
@@ -85,12 +84,11 @@ public: \
         qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
         emit NAME ## Changed(); \
     } \
-    MODEL_TYPE NAME ## Model() { return _ ## NAME ## Model; }\
+    const MODEL_TYPE* NAME ## Model() { return _ ## NAME ## Model; }\
     Q_SIGNAL void NAME ## Changed();\
 private: \
     TYPE _ ## NAME; \
-    const MODEL_TYPE _ ## NAME ## Model = \
-        MODEL_LIST;
+    const MODEL_TYPE* _ ## NAME ## Model{new MODEL_TYPE(MODEL_LIST)};
 
 // Wrap model list
 #define MODEL(...) \
