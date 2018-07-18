@@ -83,7 +83,7 @@ install:
     if [ "${QTV}" = "qt59" ]; then
       sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
     else
-      sudo add-apt-repository --yes ppa:beineri/opt-qt-5.11.0-xenial;
+      sudo add-apt-repository --yes ppa:beineri/opt-qt-5.11.1-xenial;
     fi;
     sudo apt update -qq;
     sudo apt search ${QTV};
