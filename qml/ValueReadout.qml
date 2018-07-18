@@ -2,6 +2,8 @@ import QtQuick 2.7
 import Qt.labs.settings 1.0
 import QtQuick.Layouts 1.3
 
+import SettingsManager 1.0
+
 Item {
     id: root
     x: margin
@@ -9,7 +11,8 @@ Item {
     height: mainLayout.height
 
     property real value: 0
-    property string units: "m"
+    property string units: SettingsManager.distanceUnits['distance']
+    property real scalar: SettingsManager.distanceUnits['distanceScalar']
     property real precision: 2
     property int margin: 10
     property real strength: -1
@@ -50,7 +53,7 @@ Item {
             id: readout
             width: textMetrics.width
             height: textMetrics.height
-            text: value.toFixed(precision) + units
+            text: (scalar*value).toFixed(precision) + units
             color: confidenceToColor(confidence)
             font.family: "Arial"
             font.pointSize: 48
