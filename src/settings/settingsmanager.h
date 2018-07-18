@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QStringListModel>
 
+#include "qjsonsettings.h"
 #include "settingsmanagerhelper.h"
 
 class QJSEngine;
@@ -75,5 +76,20 @@ private:
     AUTO_PROPERTY(bool, debugMode)
     AUTO_PROPERTY(bool, replayMenu)
     AUTO_PROPERTY(bool, reset)
-    AUTO_PROPERTY_MODEL(QString, distanceUnits, QStringList, MODEL({"Metric", "Imperial"}))
+    //AUTO_PROPERTY_MODEL(QString, adistanceUnits, QStringList, MODEL({"Metric", "Imperial"})) // Example
+    AUTO_PROPERTY_JSONMODEL(distanceUnits, QByteArrayLiteral(R"({
+            "settings": [
+                {
+                    "name": "Metric",
+                    "distance": "m",
+                    "distanceScalar": 1
+                },
+                {
+                    "name": "Imperial",
+                    "distance": "ft",
+                    "distanceScalar": 0.3048
+                }
+            ]
+        })"))
+
 };
