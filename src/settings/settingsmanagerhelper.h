@@ -74,7 +74,7 @@ private: \
  */
 #define AUTO_PROPERTY_MODEL(TYPE, NAME, MODEL_TYPE, MODEL_LIST) \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME ## Changed ) \
-    Q_PROPERTY(const MODEL_TYPE* NAME ## Model READ NAME ## Model ) \
+    Q_PROPERTY(const MODEL_TYPE* NAME ## Model READ NAME ## Model CONSTANT ) \
 public: \
     TYPE NAME() { _ ## NAME = _settings.value(QStringLiteral(#NAME)).value<TYPE>(); return _ ## NAME ; } \
     void NAME(TYPE value) { \
