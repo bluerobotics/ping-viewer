@@ -35,7 +35,7 @@ Item {
                         color: Style.textColor
                     }
 
-                    PingComboBox {
+                    ComboBox {
                         id: distanceUnitsCb
                         model: SettingsManager.distanceUnitsModel
                         textRole: "name"

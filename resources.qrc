@@ -12,7 +12,6 @@
         <file alias="MainPage.qml">qml/MainPage.qml</file>
         <file alias="Ping1DVisualizer.qml">qml/Ping1DVisualizer.qml</file>
         <file alias="PingButton.qml">qml/PingButton.qml</file>
-        <file alias="PingComboBox.qml">qml/PingComboBox.qml</file>
         <file alias="PingItem.qml">qml/PingItem.qml</file>
         <file alias="PingImage.qml">qml/PingImage.qml</file>
         <file alias="PingLogger.qml">qml/PingLogger.qml</file>
