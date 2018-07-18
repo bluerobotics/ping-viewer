@@ -90,6 +90,49 @@ private: \
     TYPE _ ## NAME; \
     const MODEL_TYPE* _ ## NAME ## Model{new MODEL_TYPE(MODEL_LIST)};
 
+/**
+ * @brief Create a model property for qml connections with QJsonSettings
+ * The output will be something like:
+ * #define AUTO_PROPERTY_JSONMODEL(NAME, JSON) \
+ *    Q_PROPERTY(int myNameIndex READ myNameIndex WRITE myNameIndex NOTIFY myNameIndexChanged ) \
+ *    Q_PROPERTY(const QJsonSettings* myNameModel READ myNameModel ) \
+ *    Q_PROPERTY(QJsonObject myName READ myName NOTIFY myNameIndexChanged ) \
+ *public: \
+ *    int myNameIndex() { _myNameIndex = _settings.value(QStringLiteral(myName)).value<int>(); return _myNameIndex ; } \
+ *    void myNameIndex(int value) { \
+ *        if(_myNameIndex == value) { return; }\
+ *        _myNameIndex = value; \
+ *        _settings.setValue(QStringLiteral(myName), value); \
+ *        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(myName) << value;\
+ *        emit myNameIndexChanged(); \
+ *    } \
+ *    const QJsonSettings* myNameModel() { return _myNameModel; }\
+ *    QJsonObject myName() { return _myNameModel->object(myNameIndex()); } \
+ *    Q_SIGNAL void myNameIndexChanged();\
+private: \
+    int _myNameIndex; \
+    const QJsonSettings* _myNameModel{new QJsonSettings(JSON)};
+ */
+#define AUTO_PROPERTY_JSONMODEL(NAME, JSON) \
+    Q_PROPERTY(int NAME ## Index READ NAME ## Index WRITE NAME ## Index NOTIFY NAME ## Index ## Changed ) \
+    Q_PROPERTY(const QJsonSettings* NAME ## Model READ NAME ## Model CONSTANT) \
+    Q_PROPERTY(QJsonObject NAME READ NAME NOTIFY NAME ## Index ## Changed ) \
+public: \
+    int NAME ## Index() { _ ## NAME ## Index = _settings.value(QStringLiteral(#NAME)).value<int>(); return _ ## NAME ## Index ; } \
+    void NAME ## Index(int value) { \
+        if(_ ## NAME ## Index == value) { return; }\
+        _ ## NAME ## Index = value; \
+        _settings.setValue(QStringLiteral(#NAME), value); \
+        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
+        emit NAME ## Index ## Changed(); \
+    } \
+    const QJsonSettings* NAME ## Model() { return _ ## NAME ## Model; }\
+    QJsonObject NAME() { return _ ## NAME ## Model->object(NAME ## Index()); } \
+    Q_SIGNAL void NAME ## Index ## Changed();\
+private: \
+    int _ ## NAME ## Index; \
+    const QJsonSettings* _ ## NAME ## Model{new QJsonSettings(JSON)};
+
 // Wrap model list
 #define MODEL(...) \
     __VA_ARGS__
