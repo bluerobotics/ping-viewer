@@ -97,7 +97,7 @@ void Ping::handleMessage(PingMessage msg)
     }
 
     case Ping1DNamespace::Nack: {
-        _err_msg = QString::fromStdString(ping_msg_ping1D_nack(msg).err_msg());
+        _err_msg = QString((const char*)ping_msg_ping1D_nack(msg).err_msg());
         qCCritical(PING_PROTOCOL_PING) << "Sensor NACK:" << _err_msg;
         emit errMsgUpdate();
         break;
@@ -105,7 +105,7 @@ void Ping::handleMessage(PingMessage msg)
 
     // needs dynamic-payload patch
     case Ping1DNamespace::Ascii_text: {
-        _ascii_text = QString::fromStdString(ping_msg_ping1D_ascii_text(msg).msg());
+        _ascii_text = QString((const char*)ping_msg_ping1D_ascii_text(msg).msg());
         qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << _ascii_text;
         emit asciiTextUpdate();
         break;
@@ -283,7 +283,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
         qCDebug(PING_PROTOCOL_PING) << "Put it in bootloader mode.";
         ping_msg_ping1D_goto_bootloader m;
         m.updateChecksum();
-        emit link()->sendData(QByteArray(reinterpret_cast<const char*>(m.msgData.data()), m.msgData.size()));
+        emit link()->sendData(QByteArray(reinterpret_cast<const char*>(m.msgData), m.msgDataLength()));
     }
 
     // Wait for bytes to be written before finishing the connection
@@ -422,7 +422,7 @@ void Ping::writeMessage(const PingMessage &msg)
     if(link()) {
         if(link()->isOpen() && link()->type() != AbstractLink::LinkType::File) {
             // todo add link::write(char*, int size)
-            emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData.data()), msg.msgData.size()));
+            emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength()));
         }
     }
 }
