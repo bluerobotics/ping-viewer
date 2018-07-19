@@ -16,9 +16,7 @@ public:
      *
      * @param parent
      */
-    LogListModel(QObject* parent = nullptr)
-        : QStringListModel(parent)
-    {}
+    LogListModel(QObject* parent = nullptr);
 
     enum { TimeRole = Qt::UserRole + 0x10 };
 
@@ -53,6 +51,10 @@ private:
     QVector<int> _roles{
         Qt::ForegroundRole,
         LogListModel::TimeRole,
+    };
+    QHash<int, QByteArray> _roleNames{
+        {{Qt::ForegroundRole}, {"foreground"}},
+        {{LogListModel::TimeRole}, {"time"}},
     };
     std::map<int, QColor> _rowColors;
     std::map<int, QString> _rowTimes;

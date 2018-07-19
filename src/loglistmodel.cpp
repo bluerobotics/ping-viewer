@@ -1,5 +1,11 @@
 #include "loglistmodel.h"
 
+LogListModel::LogListModel(QObject* parent)
+    : QStringListModel(parent)
+{
+    _roleNames.unite(QStringListModel::roleNames());
+}
+
 QVariant LogListModel::data(const QModelIndex & index, int role) const
 {
     switch (role) {
@@ -44,8 +50,5 @@ bool LogListModel::setData(const QModelIndex & index, const QVariant & value, in
 
 QHash<int, QByteArray> LogListModel::roleNames() const
 {
-    QHash<int, QByteArray> ret = QStringListModel::roleNames();
-    ret.insert(Qt::ForegroundRole, "foreground");
-    ret.insert(LogListModel::TimeRole, "time");
-    return ret;
+    return _roleNames;
 }
