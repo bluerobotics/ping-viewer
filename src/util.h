@@ -5,6 +5,9 @@
 
 QT_CHARTS_USE_NAMESPACE
 
+class QJSEngine;
+class QQmlEngine;
+
 Q_DECLARE_LOGGING_CATEGORY(util);
 
 class QQuickView;
@@ -49,6 +52,15 @@ public:
      */
     static Util* self();
     ~Util();
+
+    /**
+     * @brief Return a pointer of this singleton to the qml register function
+     *
+     * @param engine
+     * @param scriptEngine
+     * @return QObject*
+     */
+    static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 private:
     Util* operator = (Util& other) = delete;
