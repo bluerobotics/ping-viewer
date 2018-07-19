@@ -37,14 +37,6 @@ QObject *utilRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
     return Util::self();
 }
 
-QObject *fileManagerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    return FileManager::self();
-}
-
 QObject *settingsManager(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
@@ -61,7 +53,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", &fileManagerRegister);
+    qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
     qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", &settingsManager);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);

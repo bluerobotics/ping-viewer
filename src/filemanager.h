@@ -8,6 +8,9 @@
 
 Q_DECLARE_LOGGING_CATEGORY(FILEMANAGER);
 
+class QJSEngine;
+class QQmlEngine;
+
 /**
  * @brief Manage folder creation, structure and filenames
  *
@@ -41,6 +44,15 @@ public:
      * @return QString
      */
     Q_INVOKABLE QString createFileName(FileManager::FileType type);
+
+    /**
+     * @brief Return a pointer of this singleton to the qml register function
+     *
+     * @param engine
+     * @param scriptEngine
+     * @return QObject*
+     */
+    static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 private:
     /**
