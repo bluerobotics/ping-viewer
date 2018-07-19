@@ -36,7 +36,12 @@ install:
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  # Travis and appveyor does not have compatible names to continuous release
+  # - If building a tag: Upload the build using the tag name
+  # - When building master: Upload the build to the continuous tag
+  # - When building a branch: Upload using the branch name
   - if %APPVEYOR_REPO_TAG%==true (set RELEASE_NAME=%APPVEYOR_REPO_TAG_NAME%) else set RELEASE_NAME=%APPVEYOR_REPO_BRANCH%
+  - if %RELEASE_NAME%=="master" (set RELEASE_NAME="continuous")
 
 before_build:
   # Prepare the out-of-source build directory.
