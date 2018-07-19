@@ -21,15 +21,6 @@ Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
-
-QObject *settingsManager(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    return SettingsManager::self();
-}
-
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("Blue Robotics Inc.");
@@ -40,7 +31,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
-    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", &settingsManager);
+    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
