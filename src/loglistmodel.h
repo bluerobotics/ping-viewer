@@ -50,6 +50,10 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
+    QVector<int> _roles{
+        Qt::ForegroundRole,
+        LogListModel::TimeRole,
+    };
     std::map<int, QColor> _rowColors;
     std::map<int, QString> _rowTimes;
 };

@@ -26,20 +26,14 @@ QVariant LogListModel::data(const QModelIndex & index, int role) const
 
 bool LogListModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    QVector<int> roles(4);
-    roles.append(Qt::DisplayRole);
-    roles.append(Qt::EditRole);
-    roles.append(Qt::ForegroundRole);
-    roles.append(LogListModel::TimeRole);
-
     switch (role) {
     case (Qt::ForegroundRole) :
         _rowColors[index.row()] = value.value<QColor>();
-        emit dataChanged(index, index, roles);
+        emit dataChanged(index, index, _roles);
         return true;
     case (LogListModel::TimeRole) :
         _rowTimes[index.row()] = value.toString();
-        emit dataChanged(index, index, roles);
+        emit dataChanged(index, index, _roles);
         return true;
     default :
         break;
