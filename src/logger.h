@@ -8,7 +8,9 @@
 #include "loglistmodel.h"
 
 enum QtMsgType;
+class QJSEngine;
 class QMessageLogContext;
+class QQmlEngine;
 class QString;
 
 Q_DECLARE_LOGGING_CATEGORY(logger)
@@ -95,6 +97,15 @@ public:
      */
     static Logger* self();
     ~Logger();
+
+    /**
+     * @brief Return a pointer of this singleton to the qml register function
+     *
+     * @param engine
+     * @param scriptEngine
+     * @return QObject*
+     */
+    static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 signals:
     void registeredCategoryChanged();

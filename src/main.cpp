@@ -21,13 +21,6 @@ Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
-QObject *loggerRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    return Logger::self();
-}
 
 QObject *utilRegister(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -54,7 +47,7 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
-    qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
+    qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
     qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", &settingsManager);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
