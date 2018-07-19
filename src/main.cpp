@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    qmlRegisterSingletonType<Logger>("FileManager", 1, 0, "FileManager", &fileManagerRegister);
+    qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", &fileManagerRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", &loggerRegister);
     qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", &settingsManager);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", &utilRegister);
