@@ -39,6 +39,14 @@ void Logger::installHandler()
     }
 }
 
+QObject* Logger::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return self();
+}
+
 void Logger::logMessage(const QString& msg, QtMsgType type)
 {
     const QString time = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz]"));

@@ -38,6 +38,14 @@ void SettingsManager::set(QString& settingName, QVariant& value)
     _settings.setValue(settingName, value);
 }
 
+QObject* SettingsManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return self();
+}
+
 SettingsManager* SettingsManager::self()
 {
     static SettingsManager* self = new SettingsManager();

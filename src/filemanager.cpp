@@ -32,6 +32,14 @@ FileManager::FileManager()
     }
 }
 
+QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return self();
+}
+
 QString FileManager::createFileName(FileManager::FileType type)
 {
     QString path = fileTypeFolder[type]->dir.path();
@@ -48,6 +56,4 @@ FileManager* FileManager::self()
     return self;
 }
 
-FileManager::~FileManager()
-{
-}
+FileManager::~FileManager() = default;

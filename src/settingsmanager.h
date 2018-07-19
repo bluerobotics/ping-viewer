@@ -6,6 +6,9 @@
 
 #include "settingsmanagerhelper.h"
 
+class QJSEngine;
+class QQmlEngine;
+
 Q_DECLARE_LOGGING_CATEGORY(SETTINGSMANAGER)
 
 /**
@@ -47,6 +50,16 @@ public:
      */
     static SettingsManager* self();
     ~SettingsManager();
+
+    /**
+     * @brief Return a pointer of this singleton to the qml register function
+     *
+     * @param engine
+     * @param scriptEngine
+     * @return QObject*
+     */
+    static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
+
 private:
     SettingsManager* operator = (SettingsManager& other) = delete;
     SettingsManager(const SettingsManager& other) = delete;

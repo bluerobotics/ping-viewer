@@ -77,6 +77,14 @@ void Util::update(QAbstractSeries* series, const QList<double>& points,
     xySeries->replace(realPoints);
 }
 
+QObject* Util::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return self();
+}
+
 Util* Util::self()
 {
     static Util* self = new Util();
