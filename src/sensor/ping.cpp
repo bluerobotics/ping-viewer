@@ -89,7 +89,7 @@ Ping::Ping() : Sensor()
 void Ping::connectLink(const QStringList& connString)
 {
     if(_detector.isRunning()) {
-        _detector.exit();
+        _detector.requestInterruption();
     }
     setAutoDetect(false);
     QStringList logConnString{
