@@ -30,23 +30,28 @@ Ping::Ping() : Sensor()
 
     _requestTimer.setInterval(1000);
     connect(&_requestTimer, &QTimer::timeout, this, [this] {
-        if(link()->type() <= AbstractLink::LinkType::File ||
-                link()->type() == AbstractLink::LinkType::PingSimulation)
+        if(!link()->isWritable())
         {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
             _requestTimer.stop();
             return;
         }
+
+        if(!link()->isOpen())
+        {
+            qCCritical(PING_PROTOCOL_PING) << "Can't write, port is not open!";
+            _requestTimer.stop();
+            return;
+        }
+
         request(Ping1DNamespace::Profile);
     });
 
     _periodicRequestTimer.setInterval(400);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
-        if(link()->type() <= AbstractLink::LinkType::File ||
-                link()->type() == AbstractLink::LinkType::PingSimulation)
+        if(link()->isWritable())
         {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
-            _requestTimer.stop();
             _periodicRequestTimer.stop();
             return;
         }
