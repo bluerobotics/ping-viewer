@@ -114,7 +114,7 @@ Item {
             PingButton {
                 id: replayStartBt
                 text: "▮▮"
-                enabled: !ping.link.isOnline()
+                enabled: !ping.link.isWritable()
                 onClicked: {
                     if(text == "▶") {
                         text = "▮▮"
@@ -134,7 +134,7 @@ Item {
 
             Slider {
                 id: replaySlider
-                enabled: !ping.link.isOnline()
+                enabled: !ping.link.isWritable()
                 from: 0
                 value: ping.link.packageIndex
                 stepSize: 1
@@ -149,7 +149,7 @@ Item {
 
             Text {
                 id: replayElapsed
-                text: ping.link.isOnline() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
+                text: ping.link.isWritable() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
                 color: Style.textColor
             }
 

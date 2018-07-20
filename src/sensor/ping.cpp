@@ -30,25 +30,39 @@ Ping::Ping() : Sensor()
 
     _requestTimer.setInterval(1000);
     connect(&_requestTimer, &QTimer::timeout, this, [this] {
-        if(link()->type() <= AbstractLink::LinkType::File ||
-                link()->type() == AbstractLink::LinkType::PingSimulation)
+        if(!link()->isWritable())
         {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
             _requestTimer.stop();
             return;
         }
+
+        if(!link()->isOpen())
+        {
+            qCCritical(PING_PROTOCOL_PING) << "Can't write, port is not open!";
+            _requestTimer.stop();
+            return;
+        }
+
         request(Ping1DNamespace::Profile);
     });
 
     _periodicRequestTimer.setInterval(400);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
-        if(link()->type() <= AbstractLink::LinkType::File ||
-                link()->type() == AbstractLink::LinkType::PingSimulation)
+        if(link()->isWritable())
         {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
-            _requestTimer.stop();
+            _periodicRequestTimer.stop();
             return;
         }
+
+        if(!link()->isOpen())
+        {
+            qCCritical(PING_PROTOCOL_PING) << "Can't write, port is not open!";
+            _periodicRequestTimer.stop();
+            return;
+        }
+
         //request(Ping1DNamespace::Pcb_temperature);
         request(Ping1DNamespace::Processor_temperature);
         request(Ping1DNamespace::Voltage_5);
@@ -287,9 +301,9 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
     }
 
     // Wait for bytes to be written before finishing the connection
-    while (serialLink->QSerialPort::bytesToWrite()) {
+    while (serialLink->port()->bytesToWrite()) {
         qCDebug(PING_PROTOCOL_PING) << "Waiting for bytes to be written...";
-        serialLink->QSerialPort::waitForBytesWritten();
+        serialLink->port()->waitForBytesWritten();
         qCDebug(PING_PROTOCOL_PING) << "Done !";
     }
 
@@ -299,7 +313,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
     link()->finishConnection();
 
 
-    QSerialPortInfo pInfo(serialLink->QSerialPort::portName());
+    QSerialPortInfo pInfo(serialLink->port()->portName());
     QString portLocation = pInfo.systemLocation();
 
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
