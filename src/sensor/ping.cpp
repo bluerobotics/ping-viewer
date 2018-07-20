@@ -301,9 +301,9 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
     }
 
     // Wait for bytes to be written before finishing the connection
-    while (serialLink->QSerialPort::bytesToWrite()) {
+    while (serialLink->port()->bytesToWrite()) {
         qCDebug(PING_PROTOCOL_PING) << "Waiting for bytes to be written...";
-        serialLink->QSerialPort::waitForBytesWritten();
+        serialLink->port()->waitForBytesWritten();
         qCDebug(PING_PROTOCOL_PING) << "Done !";
     }
 
@@ -313,7 +313,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
     link()->finishConnection();
 
 
-    QSerialPortInfo pInfo(serialLink->QSerialPort::portName());
+    QSerialPortInfo pInfo(serialLink->port()->portName());
     QString portLocation = pInfo.systemLocation();
 
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
