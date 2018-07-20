@@ -6,6 +6,8 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import Waterfall 1.0
 
+import SettingsManager 1.0
+
 Item {
     id: visualizer
     property alias waterfallItem: waterfall
@@ -63,7 +65,7 @@ Item {
                     rotation: -90
                     Text {
                         id: mouseReadout
-                        text: waterfall.mouseColumnDepth.toFixed(2) + "m"
+                        text: (waterfall.mouseColumnDepth*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
                         color: confidenceToColor(waterfall.mouseColumnConfidence)
                         font.family: "Arial"
                         font.pointSize: 15

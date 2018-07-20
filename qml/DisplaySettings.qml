@@ -35,14 +35,15 @@ Item {
                         color: Style.textColor
                     }
 
-                    PingComboBox {
+                    ComboBox {
                         id: distanceUnitsCb
                         model: SettingsManager.distanceUnitsModel
-                        setting: SettingsManager.distanceUnits
+                        textRole: "name"
+                        currentIndex: SettingsManager.distanceUnitsIndex
                         Layout.columnSpan: 4
                         Layout.fillWidth: true
-                        onSettingChanged: {
-                            SettingsManager.distanceUnits = setting
+                        onCurrentIndexChanged: {
+                            SettingsManager.distanceUnitsIndex = currentIndex
                         }
                     }
 

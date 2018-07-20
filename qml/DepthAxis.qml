@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import SettingsManager 1.0
+
 Item {
     id: root
 
@@ -18,6 +20,8 @@ Item {
     property var increment: 1 // increment to use between tick marks
 
     property var color: "white"
+
+    property real scalar: SettingsManager.distanceUnits['distanceScalar']
 
     function getIncrement() {
         var inc;
@@ -96,10 +100,10 @@ Item {
                 Layout.bottomMargin: 5
                 Layout.rightMargin: 7
                 text: lastIndex
-                      ? end_mm.toFixed(1)
+                      ? (scalar*end_mm).toFixed(1)
                       : increment < 1
-                        ? (start_mm + (index + 1) * increment).toFixed(1)
-                        : (start_mm + (index + 1) * increment).toFixed(0)
+                        ? (scalar*(start_mm + (index + 1) * increment)).toFixed(1)
+                        : (scalar*(start_mm + (index + 1) * increment)).toFixed(0)
                 color: root.color
                 font.bold: true
                 font.pointSize: 22

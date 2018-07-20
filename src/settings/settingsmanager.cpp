@@ -13,6 +13,7 @@ SettingsManager::SettingsManager()
             _settings.clear();
         }
     }
+    qRegisterMetaType<QJsonSettings*>("const QJsonSettings*");
 }
 
 QVariant SettingsManager::value(QString& settingName)

@@ -130,11 +130,4 @@ void Logger::test()
     qCritical() << "This is a critical message";
 }
 
-Logger::~Logger()
-{
-    QString filter;
-    for(const auto& ourCategory : qAsConst(_registeredCategories)) {
-        filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
-    }
-    _settings.setValue("filter", filter);
-}
+Logger::~Logger() = default;
