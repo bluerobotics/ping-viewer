@@ -1,9 +1,7 @@
 #pragma once
 
 #include <QLoggingCategory>
-#include <QtCharts/QAbstractSeries>
-
-QT_CHARTS_USE_NAMESPACE
+#include <QtCharts>
 
 class QJSEngine;
 class QQmlEngine;
@@ -32,7 +30,7 @@ public:
      * @param maxPoint
      * @param multiplier
      */
-    Q_INVOKABLE void update(QAbstractSeries* series, const QList<double>& points,
+    Q_INVOKABLE void update(QtCharts::QAbstractSeries * series, const QList<double>& points,
                             const float initPos, const float finalPos,
                             const float minPoint, const float maxPoint,
                             const float multiplier = 1
