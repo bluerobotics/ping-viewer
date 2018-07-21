@@ -25,7 +25,7 @@ QStringList Util::serialPortList()
     return portNameList;
 }
 
-void Util::update(QAbstractSeries* series, const QList<double>& points,
+void Util::update(QtCharts::QAbstractSeries* series, const QList<double>& points,
                   const float initPos, const float finalPos,
                   const float minPoint, const float maxPoint,
                   const float multiplier)
