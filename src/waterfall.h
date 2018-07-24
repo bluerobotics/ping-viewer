@@ -128,7 +128,7 @@ public:
     WaterfallGradient _gradient;
     QImage _image;
     QPainter *_painter;
-    float _pixelsPerMeter;
+    float _minPixelsPerMeter;
     float _maxDepthToDraw;
     float _maxDepthToDrawInPixels;
     float _minDepthToDraw;
