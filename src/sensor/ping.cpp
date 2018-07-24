@@ -25,6 +25,7 @@ Ping::Ping() : Sensor()
     }
     _parser = new PingParser();
     connect(dynamic_cast<PingParser*>(_parser), &PingParser::newMessage, this, &Ping::handleMessage);
+    connect(dynamic_cast<PingParser*>(_parser), &PingParser::parseError, this, &Ping::parserErrorsUpdate);
     connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
     emit linkUpdate();
 
@@ -270,11 +271,14 @@ void Ping::handleMessage(PingMessage msg)
         break;
     }
 
+    // TODO is this signalling expensive?
+    // we can cut down on this a lot in general
     _dstId = msg.dst_device_id();
     _srcId = msg.src_device_id();
 
     emit dstIdUpdate();
     emit srcIdUpdate();
+    emit parsedMsgsUpdate();
 
 //    printStatus();
 }

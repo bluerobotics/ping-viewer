@@ -145,6 +145,22 @@ Item {
             }
             Row {
                 Text {
+                    text: "RX Packets (#): " + ping.parsed_msgs
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
+                    text: "RX Errors (#): " + ping.parser_errors
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
                     text: "Ascii text:\n" + ping.ascii_text
                     color: "white"
                     font.family: "unicode"

@@ -313,6 +313,21 @@ public:
     QString errMsg() { return _err_msg; }
     Q_PROPERTY(QString err_msg READ errMsg NOTIFY errMsgUpdate)
 
+    /**
+     * @brief Return number of parser errors
+     *
+     * @return int
+     */
+    int parserErrors() { return _parser ? _parser->errors : 0; }
+    Q_PROPERTY(int parser_errors READ parserErrors NOTIFY parserErrorsUpdate)
+
+    /**
+     * @brief Return number of successfully parsed messages
+     *
+     * @return int
+     */
+    int parsedMsgs() { return _parser ? _parser->parsed : 0; }
+    Q_PROPERTY(int parsed_msgs READ parsedMsgs NOTIFY parsedMsgsUpdate)
     // TODO, maybe store history/filtered history of values in this
     // object for access by different visual elements without need to recompute
     // TODO install filters here?
@@ -363,6 +378,9 @@ signals:
     void processorTemperatureUpdate();
     void pcbTemperatureUpdate();
     void boardVoltageUpdate();
+
+    void parserErrorsUpdate();
+    void parsedMsgsUpdate();
 ///@}
 
     /**
