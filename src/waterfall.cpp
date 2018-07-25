@@ -138,7 +138,7 @@ void Waterfall::setGradients()
 void Waterfall::setWaterfallMaxDepth(float maxDepth)
 {
     _waterfallDepth = maxDepth;
-    _pixelsPerMeter = _image.height()/_waterfallDepth;
+    _minPixelsPerMeter = _image.height()/_waterfallDepth;
 }
 
 void Waterfall::setTheme(const QString& theme)
@@ -195,18 +195,17 @@ float Waterfall::RGBToValue(const QColor& color)
 
 void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint, float distance)
 {
+    // Declare oldImage variable to do image spins
     static QImage old = _image;
+    // Declare oldPoints variable to do some filter
     static QList<double> oldPoints = points;
+
+    // This ring vector will store variables of the last n samples for user access
     _DCRing.append({initPoint, depth, confidence, distance});
 
-    int virtualHeight = floor(_pixelsPerMeter*depth);
-    int virtualFloor = floor(_pixelsPerMeter*initPoint);
-
-    if(virtualHeight <= virtualFloor || _image.height() < virtualHeight || 0 > virtualFloor) {
-        qCWarning(waterfall) << "Invalid Height and Floor:" << virtualHeight << virtualFloor;
-        return;
-    }
-
+    /**
+     * @brief Get lastMaxDepth from the last n samples
+     */
     static auto lastMaxDepth = [this] {
         float maxDepth = 0;
         for(const auto& DC : qAsConst(this->_DCRing))
@@ -216,6 +215,9 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
         return maxDepth;
     };
 
+    /**
+     * @brief Get lastMinDepth from the last n samples
+     */
     static auto lastMinDepth = [this] {
         float minDepth = std::numeric_limits<float>::max();
         for(const auto& DC : qAsConst(this->_DCRing))
@@ -225,13 +227,48 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
         return minDepth;
     };
 
-    _maxDepthToDraw = lastMaxDepth();
     _minDepthToDraw = lastMinDepth();
-
+    _maxDepthToDraw = lastMaxDepth();
     emit minDepthToDrawChanged();
     emit maxDepthToDrawChanged();
-    _maxDepthToDrawInPixels = floor(_maxDepthToDraw*_pixelsPerMeter);
-    _minDepthToDrawInPixels = floor(_minDepthToDraw*_pixelsPerMeter);
+
+    // Calculate new resolution for small distances range
+    static float lastDynamicPixelsPerMeterScalar = 0;
+    float dynamicPixelsPerMeterScalar = 1.0;
+    // Fix min resolution to be 400 pixels
+    if((_maxDepthToDraw - _minDepthToDraw)*_minPixelsPerMeter < 400) {
+        dynamicPixelsPerMeterScalar = 400/((_maxDepthToDraw - _minDepthToDraw)*_minPixelsPerMeter);
+        if(!lastDynamicPixelsPerMeterScalar) {
+            lastDynamicPixelsPerMeterScalar = dynamicPixelsPerMeterScalar;
+        }
+        _maxDepthToDrawInPixels = 400;
+
+        // Rescale everything when resolution changes
+        if(lastDynamicPixelsPerMeterScalar != dynamicPixelsPerMeterScalar) {
+            //Swap is faster
+            _image.swap(old);
+            _image.fill(Qt::transparent);
+            QPainter painter(&_image);
+            // Clean everything and start from zero
+            painter.fillRect(_image.rect(), Qt::transparent);
+            painter.drawImage(QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar/lastDynamicPixelsPerMeterScalar),
+                              old.scaled(_image.width(), _image.height()));
+            painter.end();
+        }
+
+        lastDynamicPixelsPerMeterScalar = dynamicPixelsPerMeterScalar;
+    } else {
+        _maxDepthToDrawInPixels = floor(_maxDepthToDraw*_minPixelsPerMeter);
+    }
+    _minDepthToDrawInPixels = floor(_minDepthToDraw*_minPixelsPerMeter);
+
+    int virtualFloor = floor(initPoint*_minPixelsPerMeter);
+    int virtualHeight = floor(depth*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+
+    if(virtualHeight <= virtualFloor || _image.height() < virtualHeight || 0 > virtualFloor) {
+        qCWarning(waterfall) << "Invalid Height and Floor:" << virtualHeight << virtualFloor;
+        return;
+    }
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
@@ -300,7 +337,7 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
     _mouseStrength = RGBToValue(_image.pixelColor(pos));
 
     // depth
-    _mouseDepth = pos.y()/(float)_pixelsPerMeter;
+    _mouseDepth = pos.y()/(float)_minPixelsPerMeter;
     emit mouseMove();
 
     const auto& depthAndConfidence = _DCRing[displayWidth - widthPos];

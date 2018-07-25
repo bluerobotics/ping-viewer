@@ -50,7 +50,7 @@ Ping::Ping() : Sensor()
 
     _periodicRequestTimer.setInterval(400);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
-        if(link()->isWritable())
+        if(!link()->isWritable())
         {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
             _periodicRequestTimer.stop();
