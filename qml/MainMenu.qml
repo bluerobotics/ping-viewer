@@ -313,6 +313,7 @@ Item {
                     id: udpLayout
                     spacing: 5
                     Layout.columnSpan:  5
+                    enabled: false
 
                     Text {
                         text: "UDP Host/Port:"
@@ -322,7 +323,6 @@ Item {
                     PingTextField {
                         id: udpIp
                         text: "192.168.2.2"
-                        enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
                         onTextChanged: {
@@ -333,7 +333,6 @@ Item {
                     PingTextField {
                         id: udpPort
                         text: "1234"
-                        enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
                         onTextChanged: {
