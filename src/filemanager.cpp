@@ -42,10 +42,18 @@ QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* script
 
 QString FileManager::createFileName(FileManager::FileType type)
 {
-    QString path = fileTypeFolder[type]->dir.path();
-    QString result = path + "/" \
-                     + QDateTime::currentDateTime().toString(_fileName) \
-                     + fileTypeExtension[type];
+    QString result;
+    if(fileTypeFolder.contains(type)) {
+        QString path = fileTypeFolder[type]->dir.path();
+        result = path + "/" \
+                 + QDateTime::currentDateTime().toString(_fileName) \
+                 + fileTypeExtension[type];
+    } else {
+        result = QDateTime::currentDateTime().toString(_fileName) \
+                 + "%0" \
+                 + fileTypeExtension[type];
+    }
+
     qCDebug(FILEMANAGER) << result;
     return result;
 }

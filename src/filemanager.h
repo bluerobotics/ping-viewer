@@ -25,7 +25,8 @@ public:
     enum FileType {
         LOG,
         PICTURE,
-        BINARY
+        BINARY,
+        CSV,
     };
     Q_ENUM(FileType)
 
@@ -91,6 +92,7 @@ private:
         {LOG, ".txt"}
         , {PICTURE, ".png"}
         , {BINARY, ".bin"}
+        , {CSV, ".csv"}
     };
 
     /**
