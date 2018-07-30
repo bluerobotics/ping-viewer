@@ -54,6 +54,7 @@ Item {
                     onHideItemChanged: {
                         if(hideItem == false) {
                             firmwareUpdate.hideItem = true
+                            csvProcess.hideItem = true
                         }
                     }
                 }
@@ -69,6 +70,23 @@ Item {
                     onHideItemChanged: {
                         if(hideItem == false) {
                             displayItem.hideItem = true
+                            csvProcess.hideItem = true
+                        }
+                    }
+                }
+                PingItem {
+                    id: csvProcess
+                    isSubItem: true
+                    icon: "/icons/swap.svg"
+
+                    item: CSVProcess {
+                        ping: ping
+                    }
+
+                    onHideItemChanged: {
+                        if(hideItem == false) {
+                            displayItem.hideItem = true
+                            firmwareUpdate.hideItem = true
                         }
                     }
                 }

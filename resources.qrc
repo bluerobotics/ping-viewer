@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file alias="qmldir">qml/qmldir</file>
         <file alias="Chart.qml">qml/Chart.qml</file>
+        <file alias="CSVProcess.qml">qml/CSVProcess.qml</file>
         <file alias="DepthAxis.qml">qml/DepthAxis.qml</file>
         <file alias="DisplaySettings.qml">qml/DisplaySettings.qml</file>
         <file alias="FirmwareUpdate.qml">qml/FirmwareUpdate.qml</file>
@@ -31,6 +32,7 @@
         <file alias="disk_black.svg">qml/icons/disk.svg</file>
         <file alias="info_white.svg">qml/icons/info_white.svg</file>
         <file alias="lock_white.svg">qml/icons/lock_white.svg</file>
+        <file alias="swap.svg">qml/icons/swap.svg</file>
         <file alias="report_white.svg">qml/icons/report_white.svg</file>
         <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
         <file alias="settings_reset_black.svg">qml/icons/settings_reset_black.svg</file>
