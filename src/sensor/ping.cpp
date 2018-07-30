@@ -1,7 +1,9 @@
 #include "filemanager.h"
 #include "ping.h"
 
+#include <QtGlobal>
 #include <QCoreApplication>
+#include <QFile>
 #include <QFileInfo>
 #include <QLoggingCategory>
 #include <QRegularExpression>
@@ -11,6 +13,7 @@
 #include <QThread>
 #include <QUrl>
 
+#include "link/filelink.h"
 #include "link/seriallink.h"
 #include "pingmessage/pingmessage.h"
 #include "pingmessage/pingmessage_ping1D.h"
@@ -443,4 +446,93 @@ void Ping::writeMessage(const PingMessage &msg)
             emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength()));
         }
     }
+}
+
+void Ping::logToCSV(QString file, QString outputDir)
+{
+    // Create a filelink and get all the packages
+    FileLink inputLink;
+    inputLink.setConfiguration({QUrl(file).toLocalFile(), "r"});
+    auto packages = inputLink.getPackages();
+
+    // Start the progress emition
+    emit csvProgress(0);
+    // Get the output of our CSV file
+    QString message_prefix = outputDir + "/" + FileManager::self()->createFileName(FileManager::FileType::CSV);
+
+    // Structure to deal with files and text stream
+    struct File {
+        QFile* file;
+        QTextStream* textStream;
+    };
+    QMap<int, File> csvFiles;
+
+    // Check each package, create a message and check for valid idi
+    for(int i = 0, lastPercentage = 0, percentage = 0; i < packages.size(); i++, percentage = 100*i/packages.size()) {
+        // This will avoid redundant emition
+        if(lastPercentage != percentage) {
+            lastPercentage = percentage;
+            emit csvProgress(percentage);
+        }
+
+        //Check for valid checksum and id
+        ping_msg_ping1D_empty ping_message{(uint8_t*)(packages[i].data()), (uint16_t)packages[i].length()};
+        if(!ping_message.verifyChecksum()) {
+            continue;
+        }
+        switch (ping_message.message_id()) {
+        case Ping1DNamespace::Profile: {
+            ping_msg_ping1D_profile message{ping_message};
+            // Check if id file is already open.
+            // If not create a header
+            if(!csvFiles.contains(message.message_id())) {
+                csvFiles.insert(message.message_id(), {new QFile, new QTextStream});
+                csvFiles[message.message_id()].file->setFileName(QUrl(message_prefix.arg("_profile")).toLocalFile());
+                bool fileOpen = csvFiles[message.message_id()].file->open(QIODevice::WriteOnly | QIODevice::Text);
+                if(!fileOpen) {
+                    qCCritical(PING_PROTOCOL_PING) << "Failed to open CSV file!";
+                    qCDebug(PING_PROTOCOL_PING) << csvFiles[message.message_id()].file->errorString() \
+                                                << csvFiles[message.message_id()].file->error();
+                    break;
+                }
+                csvFiles[message.message_id()].textStream->setDevice(csvFiles[message.message_id()].file);
+                auto keys = message.function_map.keys();
+                for(const auto& key : qAsConst(keys)) {
+                    csvFiles[message.message_id()].textStream[0] << key;
+                    if(key != message.function_map.lastKey()) {
+                        csvFiles[message.message_id()].textStream[0] << ",";
+                    } else {
+                        csvFiles[message.message_id()].textStream[0] << ",data";
+                        csvFiles[message.message_id()].textStream[0] << '\n';
+                    }
+                }
+            }
+            // For each function set it value
+            auto keys = message.function_map.keys();
+            for(const auto& key : qAsConst(keys)) {
+                csvFiles[message.message_id()].textStream[0] << message.function_map[key]() << ',';
+
+                // The profile message has a function that is a pointer
+                // function_map only return values for numeric returns
+                if(key == message.function_map.lastKey()) {
+                    for(uint j = 0; j < 200; j++) {
+                        csvFiles[message.message_id()].textStream[0] << message.data()[j];
+                        if(j != 199) {
+                            csvFiles[message.message_id()].textStream[0] << ';';
+                        }
+                    }
+                    csvFiles[message.message_id()].textStream[0] << '\n';
+                }
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    for(const auto& value : qAsConst(csvFiles)) {
+        delete value.textStream;
+        delete value.file;
+    }
+    emit csvComplete();
 }

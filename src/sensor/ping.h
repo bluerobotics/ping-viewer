@@ -347,6 +347,14 @@ public:
      */
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true);
 
+    /**
+     * @brief Create CSV files from log
+     *
+     * @param file Input file
+     * @param outputDir Directory to save CSV files
+     */
+    Q_INVOKABLE void logToCSV(QString file, QString outputDir);
+
 signals:
     /**
      * @brief emitted when propriety changes
@@ -401,6 +409,18 @@ signals:
      *
      */
     void pollFrequencyUpdate();
+
+    /**
+     * @brief Emit CSV conversion progress
+     *
+     * @param progress
+     */
+    void csvProgress(float progress);
+
+    /**
+     * @brief Emit when CSV conversion is complete
+     */
+    void csvComplete();
 private:
     /**
      * @brief Sensor variables
