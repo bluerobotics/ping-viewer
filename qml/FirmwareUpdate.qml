@@ -6,6 +6,8 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
+import SettingsManager 1.0
+
 Item {
     id: firmwareUpdate
     visible: false
@@ -51,14 +53,33 @@ Item {
 
                     PingTextField {
                         enabled: false
-                        Layout.columnSpan:  8
+                        Layout.columnSpan: SettingsManager.debugMode ? 3 : 9
                         Layout.fillWidth: true
                         text: ping.fw_version_major + "." + ping.fw_version_minor
+                    }
+
+                    ComboBox {
+                        id: baudComboBox
+                        // This should use the same values in Ping::FlashBaudrate
+                        model: [57600, 115200, 230400]
+                        Layout.columnSpan: 3
+                        Layout.fillWidth: true
+                        visible: SettingsManager.debugMode
+                    }
+
+                    CheckBox {
+                        id: verifyCB
+                        text: "Verify"
+                        visible: SettingsManager.debugMode
+                        Layout.columnSpan: 2
+                        checked: true
                     }
 
                     CheckBox {
                         id: bootLoaderCB
                         text: "Send reset"
+                        visible: SettingsManager.debugMode
+                        Layout.columnSpan: 1
                         checked: true
                     }
 
@@ -91,7 +112,9 @@ Item {
                         enabled: fileDialog.fileUrl.toString().length && flashProgress.indeterminate
 
                         onClicked: {
-                            ping.firmwareUpdate(fileDialog.fileUrl, bootLoaderCB)
+                            var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
+                            var verify = SettingsManager.debugMode ? verifyCB.checked : true
+                            ping.firmwareUpdate(fileDialog.fileUrl, bootLoaderCB, baud, verifyCB.checked)
                         }
                     }
 
