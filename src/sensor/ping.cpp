@@ -112,9 +112,9 @@ void Ping::handleMessage(PingMessage msg)
     }
 
     case Ping1DNamespace::Nack: {
-        _err_msg = QString((const char*)ping_msg_ping1D_nack(msg).err_msg());
-        qCCritical(PING_PROTOCOL_PING) << "Sensor NACK:" << _err_msg;
-        emit errMsgUpdate();
+        _nack_msg = QString((const char*)ping_msg_ping1D_nack(msg).nack_msg());
+        qCCritical(PING_PROTOCOL_PING) << "Sensor NACK:" << _nack_msg;
+        emit nackMsgUpdate();
         break;
     }
 
@@ -156,8 +156,8 @@ void Ping::handleMessage(PingMessage msg)
         _confidence = m.confidence();
         _pulse_usec = m.pulse_usec();
         _ping_number = m.ping_number();
-        _start_mm = m.start_mm();
-        _length_mm = m.length_mm();
+        _scan_start = m.scan_start();
+        _scan_length = m.scan_length();
         _gain_index = m.gain_index();
 
         // TODO, change to distMsgUpdate() or similar
@@ -165,8 +165,8 @@ void Ping::handleMessage(PingMessage msg)
         emit pingNumberUpdate();
         emit confidenceUpdate();
         emit pulseUsecUpdate();
-        emit startMmUpdate();
-        emit lengthMmUpdate();
+        emit scanStartUpdate();
+        emit scanLengthUpdate();
         emit gainIndexUpdate();
     }
     break;
@@ -177,8 +177,8 @@ void Ping::handleMessage(PingMessage msg)
         _confidence = m.confidence();
         _pulse_usec = m.pulse_usec();
         _ping_number = m.ping_number();
-        _start_mm = m.start_mm();
-        _length_mm = m.length_mm();
+        _scan_start = m.scan_start();
+        _scan_length = m.scan_length();
         _gain_index = m.gain_index();
 //        num_points = m.num_points(); // const
 //        memcpy(_points.data(), m.data(), _num_points); // careful with constant
@@ -194,33 +194,33 @@ void Ping::handleMessage(PingMessage msg)
         emit pingNumberUpdate();
         emit confidenceUpdate();
         emit pulseUsecUpdate();
-        emit startMmUpdate();
-        emit lengthMmUpdate();
+        emit scanStartUpdate();
+        emit scanLengthUpdate();
         emit gainIndexUpdate();
         emit pointsUpdate();
     }
     break;
 
-    case Ping1DNamespace::Mode: {
-        ping_msg_ping1D_mode m(msg);
-        _mode_auto = m.auto_manual();
+    case Ping1DNamespace::Mode_auto: {
+        ping_msg_ping1D_mode_auto m(msg);
+        _mode_auto = m.mode_auto();
         emit modeAutoUpdate();
     }
     break;
 
-    case Ping1DNamespace::Ping_rate_msec: {
-        ping_msg_ping1D_ping_rate_msec m(msg);
-        _msec_per_ping = m.msec_per_ping();
-        emit msecPerPingUpdate();
+    case Ping1DNamespace::Ping_rate: {
+        ping_msg_ping1D_ping_rate m(msg);
+        _ping_rate = m.ping_rate();
+        emit pingRateUpdate();
     }
     break;
 
     case Ping1DNamespace::Range: {
         ping_msg_ping1D_range m(msg);
-        _start_mm = m.start_mm();
-        _length_mm = m.length_mm();
-        emit lengthMmUpdate();
-        emit startMmUpdate();
+        _scan_start = m.scan_start();
+        _scan_length = m.scan_length();
+        emit scanLengthUpdate();
+        emit scanStartUpdate();
     }
     break;
 
@@ -240,7 +240,7 @@ void Ping::handleMessage(PingMessage msg)
 
     case Ping1DNamespace::Speed_of_sound: {
         ping_msg_ping1D_speed_of_sound m(msg);
-        _speed_of_sound = m.speed_mmps();
+        _speed_of_sound = m.speed_of_sound();
         emit speedOfSoundUpdate();
     }
     break;
@@ -427,11 +427,11 @@ void Ping::printStatus()
     qCDebug(PING_PROTOCOL_PING) << "\t- confidence:" << _confidence;
     qCDebug(PING_PROTOCOL_PING) << "\t- pulse_usec:" << _pulse_usec;
     qCDebug(PING_PROTOCOL_PING) << "\t- ping_number:" << _ping_number;
-    qCDebug(PING_PROTOCOL_PING) << "\t- start_mm:" << _start_mm;
-    qCDebug(PING_PROTOCOL_PING) << "\t- length_mm:" << _length_mm;
+    qCDebug(PING_PROTOCOL_PING) << "\t- start_mm:" << _scan_start;
+    qCDebug(PING_PROTOCOL_PING) << "\t- length_mm:" << _scan_length;
     qCDebug(PING_PROTOCOL_PING) << "\t- gain_index:" << _gain_index;
     qCDebug(PING_PROTOCOL_PING) << "\t- mode_auto:" << _mode_auto;
-    qCDebug(PING_PROTOCOL_PING) << "\t- msec_per_ping:" << _msec_per_ping;
+    qCDebug(PING_PROTOCOL_PING) << "\t- msec_per_ping:" << _ping_rate;
 //    qCDebug(PING_PROTOCOL_PING) << "\t- points:" << QByteArray((const char*)points, num_points).toHex();
 }
 

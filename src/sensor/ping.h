@@ -120,7 +120,7 @@ public:
      *
      * @return uint32_t
      */
-    uint32_t start_mm() { return _start_mm; }
+    uint32_t start_mm() { return _scan_start; }
 
     /**
      * @brief Set sensor start analyze distance in mm
@@ -130,20 +130,20 @@ public:
     void set_start_mm(int start_mm)
     {
         ping_msg_ping1D_set_range m;
-        m.set_start_mm(start_mm);
-        m.set_length_mm(_length_mm);
+        m.set_scan_start(start_mm);
+        m.set_scan_length(_scan_length);
         m.updateChecksum();
         writeMessage(m);
         request(Ping1DNamespace::Range);
     }
-    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY startMmUpdate)
+    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartUpdate)
 
     /**
      * @brief return points length in mm
      *
      * @return uint32_t
      */
-    uint32_t length_mm() { return _length_mm; }
+    uint32_t length_mm() { return _scan_length; }
 
     /**
      * @brief Set sensor window analysis size
@@ -153,13 +153,13 @@ public:
     void set_length_mm(int length_mm)
     {
         ping_msg_ping1D_set_range m;
-        m.set_start_mm(_start_mm);
-        m.set_length_mm(length_mm);
+        m.set_scan_start(_scan_start);
+        m.set_scan_length(length_mm);
         m.updateChecksum();
         writeMessage(m);
         request(Ping1DNamespace::Range);
     }
-    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY lengthMmUpdate)
+    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthUpdate)
 
     /**
      * @brief Return gain index
@@ -176,7 +176,7 @@ public:
     void set_gain_index(int gain_index)
     {
         ping_msg_ping1D_set_gain_index m;
-        m.set_index(gain_index);
+        m.set_gain_index(gain_index);
         m.updateChecksum();
         writeMessage(m);
         request(Ping1DNamespace::Gain_index);
@@ -206,11 +206,11 @@ public:
      */
     void set_mode_auto(bool mode_auto)
     {
-        ping_msg_ping1D_set_auto_manual m;
-        m.set_mode(mode_auto);
+        ping_msg_ping1D_set_mode_auto m;
+        m.set_mode_auto(mode_auto);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::Mode);
+        request(Ping1DNamespace::Mode_auto);
     }
     Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
 
@@ -219,7 +219,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t msec_per_ping() { return _msec_per_ping; }
+    uint16_t msec_per_ping() { return _ping_rate; }
 
     /**
      * @brief Set time between pings in ms
@@ -228,13 +228,13 @@ public:
      */
     void set_msec_per_ping(uint16_t msec_per_ping)
     {
-        ping_msg_ping1D_set_ping_rate_msec m;
-        m.set_rate_msec(msec_per_ping);
+        ping_msg_ping1D_set_ping_rate m;
+        m.set_ping_rate(msec_per_ping);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::Ping_rate_msec);
+        request(Ping1DNamespace::Ping_rate);
     }
-    Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY msecPerPingUpdate)
+    Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY pingRateUpdate)
 
     /**
      * @brief Get the speed of sound (mm/s) used for calculating the distance from time-of-flight
@@ -251,7 +251,7 @@ public:
     void set_speed_of_sound(uint32_t speed_of_sound)
     {
         ping_msg_ping1D_set_speed_of_sound m;
-        m.set_speed(speed_of_sound);
+        m.set_speed_of_sound(speed_of_sound);
         m.updateChecksum();
         writeMessage(m);
         request(Ping1DNamespace::Speed_of_sound);
@@ -310,8 +310,8 @@ public:
      *
      * @return QString
      */
-    QString errMsg() { return _err_msg; }
-    Q_PROPERTY(QString err_msg READ errMsg NOTIFY errMsgUpdate)
+    QString errMsg() { return _nack_msg; }
+    Q_PROPERTY(QString err_msg READ errMsg NOTIFY nackMsgUpdate)
 
     /**
      * @brief Return number of parser errors
@@ -353,7 +353,7 @@ signals:
      */
 ///@{
     void asciiTextUpdate();
-    void errMsgUpdate();
+    void nackMsgUpdate();
 
     void srcIdUpdate();
     void dstIdUpdate();
@@ -366,13 +366,13 @@ signals:
     void pingNumberUpdate();
     void confidenceUpdate();
     void pulseUsecUpdate();
-    void startMmUpdate();
-    void lengthMmUpdate();
+    void scanStartUpdate();
+    void scanLengthUpdate();
     void gainIndexUpdate();
     void pointsUpdate();
 
     void modeAutoUpdate();
-    void msecPerPingUpdate();
+    void pingRateUpdate();
     void speedOfSoundUpdate();
 
     void processorTemperatureUpdate();
@@ -407,7 +407,7 @@ private:
      */
 ///@{
     QString _ascii_text;
-    QString _err_msg;
+    QString _nack_msg;
 
     uint8_t _srcId;
     uint8_t _dstId;
@@ -421,8 +421,8 @@ private:
     uint8_t _confidence; // 0-100%
     uint16_t _pulse_usec;
     uint32_t _ping_number;
-    uint32_t _start_mm;
-    uint32_t _length_mm;
+    uint32_t _scan_start;
+    uint32_t _scan_length;
     uint32_t _gain_index;
     uint32_t _speed_of_sound;
 
@@ -441,7 +441,7 @@ private:
     QList<double> _points;
 
     bool _mode_auto;
-    uint16_t _msec_per_ping;
+    uint16_t _ping_rate;
 
     // TODO const &
     void handleMessage(PingMessage msg); // handle incoming message
