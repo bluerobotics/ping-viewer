@@ -327,10 +327,10 @@ void Ping::flash(const QString& portLocation, const QString& firmwareFile, int b
     // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
     static QString binPath = QCoreApplication::applicationDirPath() + "/../..";
 #else
-    static QString binPath = QCoreApplication::applicationDirPath();
+    static QString binPath = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
 #endif
     static QString cmd = binPath + QStringLiteral("/stm32flash -w %0 %1 -g 0x0 -b %2 %3").arg(
-                             QFileInfo(firmwareFile).absoluteFilePath(), verify ? "-v" : "", QString::number(baud), portLocation
+                             QDir::toNativeSeparators(QFileInfo(firmwareFile).absoluteFilePath()), verify ? "-v" : "", QString::number(baud), portLocation
                          );
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
