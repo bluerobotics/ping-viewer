@@ -49,7 +49,7 @@ Ping::Ping() : Sensor()
 
     _periodicRequestTimer.setInterval(400);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
-        if(link()->isWritable())
+        if(link()->isOpen() && !link()->isWritable())
         {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
             _periodicRequestTimer.stop();
@@ -59,7 +59,6 @@ Ping::Ping() : Sensor()
         if(!link()->isOpen())
         {
             qCCritical(PING_PROTOCOL_PING) << "Can't write, port is not open!";
-            _periodicRequestTimer.stop();
             return;
         }
 
