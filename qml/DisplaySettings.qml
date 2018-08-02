@@ -85,7 +85,7 @@ Item {
                     CheckBox {
                         id: replayChB
                         text: "Enable replay menu"
-                        checked: SettinsManager.replayMenu
+                        checked: SettingsManager.replayMenu
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
                         onCheckedChanged: SettingsManager.replayMenu = checked
