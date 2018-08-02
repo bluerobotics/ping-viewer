@@ -31,6 +31,10 @@ Item {
                 if(hideItem == false) {
                     settingsMenu.hideItem = true
                     infoMenu.hideItem = true
+                } else {
+                    if(settingsMenu.hideItem && infoMenu.hideItem) {
+                        root.focus = true
+                    }
                 }
             }
         }
@@ -77,6 +81,10 @@ Item {
                 if(hideItem == false) {
                     menuContainer.hideItem = true
                     infoMenu.hideItem = true
+                } else {
+                    if(menuContainer.hideItem && infoMenu.hideItem) {
+                        root.focus = true
+                    }
                 }
             }
         }
@@ -97,6 +105,10 @@ Item {
                 if(hideItem == false) {
                     menuContainer.hideItem = true
                     settingsMenu.hideItem = true
+                } else {
+                    if(menuContainer.hideItem && settingsMenu.hideItem) {
+                        root.focus = true
+                    }
                 }
             }
         }
@@ -162,6 +174,12 @@ Item {
             PingButton {
                 text: "Replay Data"
                 onClicked: replayFileDialog.visible = true
+            }
+        }
+
+        onHideItemChanged: {
+            if(hideItem) {
+                root.focus = true
             }
         }
     }
