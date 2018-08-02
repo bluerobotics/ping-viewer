@@ -7,6 +7,7 @@ import Qt.labs.settings 1.0
 import Util 1.0
 
 import Ping1DNamespace 1.0
+import SettingsManager 1.0
 
 Item {
     id: firmwareUpdate
@@ -152,7 +153,10 @@ Item {
                     PingTextField {
                         id: startLength
                         text: ""
-                        validator: IntValidator{bottom: 0; top: 70000;}
+                        validator: IntValidator {
+                            bottom: 0
+                            top: SettingsManager.debugMode ? 1e6 : 7e5;
+                        }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
@@ -177,7 +181,10 @@ Item {
                     PingTextField {
                         id: totalLength
                         text: ""
-                        validator: IntValidator{bottom: 0; top: 70000;}
+                        validator: IntValidator {
+                            bottom: 0
+                            top: SettingsManager.debugMode ? 1e6 : 7e5;
+                        }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
