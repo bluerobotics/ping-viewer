@@ -40,7 +40,7 @@ matrix:
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
           packages:
             - g++-7
       env:
@@ -115,7 +115,9 @@ script:
     ../tools/testdoxygen.sh;
   fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60;
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60;
+    gcc --version;
     g++ --version;
     source /opt/qt*/bin/qt*-env.sh;
     git submodule init;
