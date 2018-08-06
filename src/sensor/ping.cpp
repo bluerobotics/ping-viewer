@@ -48,7 +48,7 @@ Ping::Ping() : Sensor()
         request(Ping1DNamespace::Profile);
     });
 
-    _periodicRequestTimer.setInterval(400);
+    _periodicRequestTimer.setInterval(1000);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
         if(!link()->isWritable())
         {
@@ -64,7 +64,7 @@ Ping::Ping() : Sensor()
             return;
         }
 
-        //request(Ping1DNamespace::Pcb_temperature);
+        request(Ping1DNamespace::Pcb_temperature);
         request(Ping1DNamespace::Processor_temperature);
         request(Ping1DNamespace::Voltage_5);
         request(Ping1DNamespace::Mode_auto);
