@@ -313,6 +313,7 @@ Item {
                     id: udpLayout
                     spacing: 5
                     Layout.columnSpan:  5
+                    enabled: false
 
                     Text {
                         text: "UDP Host/Port:"
@@ -322,10 +323,12 @@ Item {
                     PingTextField {
                         id: udpIp
                         text: "192.168.2.2"
-                        enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
-                        onTextChanged: {
+                        onEditingFinished: {
+                            if (udpIp.text == "0.0.0.0" || udpIp.text == "localhost") {
+                                udpIp.text = "127.0.0.1"
+                            }
                             connect(udpIp.text, udpPort.text)
                         }
                     }
@@ -333,10 +336,9 @@ Item {
                     PingTextField {
                         id: udpPort
                         text: "1234"
-                        enabled: false
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
-                        onTextChanged: {
+                        onEditingFinished: {
                             connect(udpIp.text, udpPort.text)
                         }
                     }
