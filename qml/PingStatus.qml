@@ -126,15 +126,14 @@ Item {
                     font.pointSize: 8
                 }
             }
-            // N/A for now
-//            Row {
-//                Text {
-//                    text: "PCB temperature (C): " + ping.pcb_temperature
-//                    color: "white"
-//                    font.family: "unicode"
-//                    font.pointSize: 8
-//                }
-//            }
+            Row {
+                Text {
+                    text: "PCB temperature (C): " + (ping.pcb_temperature / 100).toFixed(1)
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
             Row {
                 Text {
                     text: "Board voltage (V): " + (ping.board_voltage / 1000).toFixed(2)

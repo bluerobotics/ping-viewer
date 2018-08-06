@@ -64,7 +64,7 @@ Ping::Ping() : Sensor()
             return;
         }
 
-        //request(Ping1DNamespace::Pcb_temperature);
+        request(Ping1DNamespace::Pcb_temperature);
         request(Ping1DNamespace::Processor_temperature);
         request(Ping1DNamespace::Voltage_5);
         request(Ping1DNamespace::Mode_auto);
