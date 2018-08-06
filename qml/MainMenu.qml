@@ -326,6 +326,9 @@ Item {
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
                         onEditingFinished: {
+                            if (udpIp.text == "0.0.0.0" || udpIp.text == "localhost") {
+                                udpIp.text = "127.0.0.1"
+                            }
                             connect(udpIp.text, udpPort.text)
                         }
                     }
