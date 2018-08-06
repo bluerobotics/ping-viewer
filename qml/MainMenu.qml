@@ -95,7 +95,7 @@ Item {
                     ComboBox {
                         id: gainCB
                         currentIndex: ping.gain_index ? ping.gain_index : 0
-                        model: [0.5, 1.4, 4.3, 10, 23.4, 71, 166, 338, 794, 1737]
+                        model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
                         enabled: !autoGainChB.checked
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
