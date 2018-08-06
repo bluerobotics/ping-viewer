@@ -6,6 +6,7 @@ TextField {
     selectByMouse: true
 
     onEditingFinished: {
+        focus = false
         mainPage.forceActiveFocus()
     }
 

@@ -67,6 +67,7 @@ Ping::Ping() : Sensor()
         //request(Ping1DNamespace::Pcb_temperature);
         request(Ping1DNamespace::Processor_temperature);
         request(Ping1DNamespace::Voltage_5);
+        request(Ping1DNamespace::Mode_auto);
     });
 
     //connectLink(QStringList({"2", "/dev/ttyUSB2", "115200"}));

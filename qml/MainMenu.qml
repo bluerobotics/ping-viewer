@@ -166,7 +166,7 @@ Item {
                         }
                         Connections {
                             target: ping
-                            onLengthMmUpdate: {
+                            onScanStartUpdate: {
                                 if (!startLength.focus) {
                                     startLength.text = ping.start_mm
                                 }
@@ -191,7 +191,7 @@ Item {
                         }
                         Connections {
                             target: ping
-                            onLengthMmUpdate: {
+                            onScanLengthUpdate: {
                                 if (!totalLength.focus) {
                                     totalLength.text = ping.length_mm
                                 }
