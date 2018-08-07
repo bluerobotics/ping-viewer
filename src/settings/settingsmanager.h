@@ -87,7 +87,7 @@ private:
                 {
                     "name": "Imperial",
                     "distance": "ft",
-                    "distanceScalar": 0.3048
+                    "distanceScalar": 3.280839895
                 }
             ]
         })"))
