@@ -135,7 +135,7 @@ Item {
     // A triangle indicator to show the current depth reported by the ping
     Canvas {
         id: depthPointer
-        y: (parent.height / length_mm) * depth_mm - height / 2
+        y: (parent.height / length_mm) * (depth_mm - start_mm) - height / 2
         width: 20
         height: 12
         anchors.right: parent.right

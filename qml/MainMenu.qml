@@ -145,7 +145,7 @@ Item {
                     enabled: !autoGainChB.checked
 
                     Text {
-                        text: "Start/Stop (mm):"
+                        text: "Start/Length (mm):"
                         color: Style.textColor
                     }
 
