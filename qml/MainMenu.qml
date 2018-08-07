@@ -145,7 +145,7 @@ Item {
                     enabled: !autoGainChB.checked
 
                     Text {
-                        text: "Start/Stop (mm):"
+                        text: "Start/Length (mm):"
                         color: Style.textColor
                     }
 
@@ -156,11 +156,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var length_mm = parseInt(totalLength.text)
-                            var start_mm = Math.min(parseInt(text), length_mm - 500)
-                            if(isNaN(start_mm)) {
-                                start_mm = 0
-                            }
+                            var start_mm = parseInt(text)
                             text = start_mm
                             ping.start_mm = start_mm
                         }
@@ -182,9 +178,9 @@ Item {
                         Layout.fillWidth: true
                         onEditingFinished: {
                             var start_mm = parseInt(startLength.text)
-                            var length_mm = Math.max(parseInt(text), start_mm + 500)
+                            var length_mm = Math.min(parseInt(text), 50000 - start_mm)
                             if(isNaN(length_mm)) {
-                                length_mm = 48903
+                                length_mm = 500
                             }
                             text = length_mm
                             ping.length_mm = length_mm

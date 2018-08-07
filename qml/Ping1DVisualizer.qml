@@ -19,9 +19,9 @@ Item {
         }
     }
 
-    function draw(points, depth, confidence, initialPoint, distance) {
-        waterfall.draw(points, depth, confidence, initialPoint, distance)
-        chart.draw(points, depth, initialPoint)
+    function draw(points, confidence, initialPoint, length, distance) {
+        waterfall.draw(points, confidence, initialPoint, length, distance)
+        chart.draw(points, length + initialPoint, initialPoint)
     }
 
     function setDepth(depth) {

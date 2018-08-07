@@ -206,8 +206,10 @@ void Ping::handleMessage(PingMessage msg)
 
     case Ping1DNamespace::Mode_auto: {
         ping_msg_ping1D_mode_auto m(msg);
-        _mode_auto = m.mode_auto();
-        emit modeAutoUpdate();
+        if(_mode_auto != m.mode_auto()) {
+            _mode_auto = m.mode_auto();
+            emit modeAutoUpdate();
+        }
     }
     break;
 

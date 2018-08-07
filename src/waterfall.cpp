@@ -172,7 +172,7 @@ void Waterfall::paint(QPainter *painter)
     // Code for debug, draw the entire waterfall
     //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
     _painter->drawPixmap(QRect(0, 0, width(), height()), pix,
-                         QRect(first, _minDepthToDrawInPixels, displayWidth, _maxDepthToDrawInPixels - _minDepthToDrawInPixels));
+                         QRect(first, _minDepthToDrawInPixels, displayWidth, _maxDepthToDrawInPixels));
 }
 
 void Waterfall::setImage(const QImage &image)
@@ -193,26 +193,73 @@ float Waterfall::RGBToValue(const QColor& color)
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(const QList<double>& points, float depth, float confidence, float initPoint, float distance)
+void Waterfall::draw(const QList<double>& points, float confidence, float initPoint, float length, float distance)
 {
+    /*
+        initPoint: The lowest point of the last sample in meters
+        length: The length of the last sample in meters
+        _minPixelsPerMeter: waterfall max pixel height divided by max depth
+            _minPixelsPerMeter = _image.height()/_waterfallDepth;
+        lastMaxDC: Returns the last DC structure with max depth
+        lastMinDepth: Returns the minimum point in the chart
+        _minDepthToDraw: Minimum depth point, populated by lastMinDepth
+        _maxDepthToDraw: Maximum depth point, calculated from lastMaxDC
+        dynamicPixelsPerMeterScalar: Calculate the delta between number of pixels per meter
+            dynamicPixelsPerMeterScalar = 400/((_maxDepthToDraw - _minDepthToDraw)*_minPixelsPerMeter);
+
+        old (oldest sample)     new (last sample)
+        |                       |
+        +-----------------------+  - _minDepthToDrawInPixels
+        |         |-----|       |
+        |         |-----|       |
+        |         |-------------+  - virtualFloor
+        |         |-------------+  - virtualHeight
+        |         ||      |---| |
+        |         ||       |-|  |
+        |         ||       |-|  |
+        |         ||       |-|  |
+        |         +|       |-|  |
+        |         |        ++   |
+        |         |         |   |
+        |         |         |   |
+        |         |         |   |
+        |         |         |   |
+        |                   |   |
+        |                   |   |
+        |                   |   |
+        +-----------------------+  - _maxDepthToDrawInPixels = 400px
+
+        _minDepthToDrawInPixels: The lowest pixel that will appears for the user
+            _minDepthToDrawInPixels = (_minDepthToDraw*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+        _maxDepthToDrawInPixels: Is defined to be 400 pixels
+        virtualFloor: It's the lowest pixel position to start drawing the last sample
+            virtualFloor = (initPoint*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+        virtualFloor: It's the highest delta pixel position (from virtualFloor) to finish drawing the last sample
+            virtualHeight = ((length + initPoint - _minDepthToDraw)*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+    */
+
     // Declare oldImage variable to do image spins
     static QImage old = _image;
     // Declare oldPoints variable to do some filter
     static QList<double> oldPoints = points;
 
     // This ring vector will store variables of the last n samples for user access
-    _DCRing.append({initPoint, depth, confidence, distance});
+    _DCRing.append({initPoint, length, confidence, distance});
 
     /**
      * @brief Get lastMaxDepth from the last n samples
      */
-    static auto lastMaxDepth = [this] {
+    static auto lastMaxDC = [this] {
         float maxDepth = 0;
+        DCPack tempDC{0, 0, 0, 0};
         for(const auto& DC : qAsConst(this->_DCRing))
         {
-            maxDepth = maxDepth < DC.depth ? DC.depth : maxDepth;
+            if(maxDepth < DC.length + DC.initialDepth && DC.initialDepth != static_cast<const float>(_image.height())) {
+                maxDepth = DC.length + DC.initialDepth;
+                tempDC = DC;
+            }
         }
-        return maxDepth;
+        return tempDC;
     };
 
     /**
@@ -226,9 +273,10 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
         }
         return minDepth;
     };
-
+    static DCPack _maxDC;
+    _maxDC = lastMaxDC();
     _minDepthToDraw = lastMinDepth();
-    _maxDepthToDraw = lastMaxDepth();
+    _maxDepthToDraw = _maxDC.initialDepth + _maxDC.length;
     emit minDepthToDrawChanged();
     emit maxDepthToDrawChanged();
 
@@ -258,17 +306,11 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
 
         lastDynamicPixelsPerMeterScalar = dynamicPixelsPerMeterScalar;
     } else {
-        _maxDepthToDrawInPixels = floor(_maxDepthToDraw*_minPixelsPerMeter);
+        _maxDepthToDrawInPixels = ((_maxDepthToDraw  - _minDepthToDraw)*_minPixelsPerMeter);
     }
-    _minDepthToDrawInPixels = floor(_minDepthToDraw*_minPixelsPerMeter);
-
-    int virtualFloor = floor(initPoint*_minPixelsPerMeter);
-    int virtualHeight = floor(depth*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
-
-    if(virtualHeight <= virtualFloor || _image.height() < virtualHeight || 0 > virtualFloor) {
-        qCWarning(waterfall) << "Invalid Height and Floor:" << virtualHeight << virtualFloor;
-        return;
-    }
+    _minDepthToDrawInPixels = (_minDepthToDraw*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+    int virtualFloor = (initPoint*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+    int virtualHeight = ((length + initPoint - _minDepthToDraw)*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
@@ -289,7 +331,7 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
     }
 
     // Do up/downsampling
-    float factor = points.length()/((float)(virtualHeight - virtualFloor));
+    float factor = points.length()/((float)(virtualHeight - (virtualFloor - _minDepthToDrawInPixels)));
 
     if(smooth()) {
         #pragma omp for
@@ -298,12 +340,12 @@ void Waterfall::draw(const QList<double>& points, float depth, float confidence,
         }
 
         #pragma omp for
-        for(int i = 0; i < virtualHeight - virtualFloor; i++) {
+        for(int i = 0; i < virtualHeight; i++) {
             _image.setPixelColor(currentDrawIndex, i + virtualFloor, valueToRGB(oldPoints[factor*i]));
         }
     } else {
         #pragma omp for
-        for(int i = 0; i < virtualHeight - virtualFloor; i++) {
+        for(int i = 0; i < virtualHeight; i++) {
             _image.setPixelColor(currentDrawIndex, i + virtualFloor, valueToRGB(points[factor*i]));
         }
     }

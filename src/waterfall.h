@@ -152,7 +152,7 @@ public:
      */
     struct DCPack {
         float initialDepth;
-        float depth;
+        float length;
         float confidence;
         float distance;
     };
@@ -238,12 +238,12 @@ public:
      * @brief Draw a list of points in the waterfall
      *
      * @param points
-     * @param depth
      * @param confidence
      * @param initPoint
+     * @param length
      * @param distance
      */
-    Q_INVOKABLE void draw(const QList<double>& points, float depth = 50, float confidence = 0, float initPoint = 0, float distance = 0);
+    Q_INVOKABLE void draw(const QList<double>& points, float confidence = 0, float initPoint = 0, float length = 50, float distance = 0);
 
     /**
      * @brief Function that deals when the mouse is inside the waterfall
