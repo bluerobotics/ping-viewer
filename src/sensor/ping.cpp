@@ -174,6 +174,16 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
+    case Ping1DNamespace::Distance_simple: {
+        ping_msg_ping1D_distance_simple m(msg);
+        _distance = m.distance();
+        _confidence = m.confidence();
+
+        emit distanceUpdate();
+        emit confidenceUpdate();
+    }
+    break;
+
     case Ping1DNamespace::Profile: {
         ping_msg_ping1D_profile m(msg);
         _distance = m.distance();
