@@ -272,7 +272,7 @@ void Ping::handleMessage(PingMessage msg)
     break;
 
     default:
-        qCritical() << "UNHANDLED MESSAGE ID:" << msg.message_id();
+        qWarning(PING_PROTOCOL_PING) << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;
     }
 
