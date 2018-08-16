@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
+import AbstractLinkNamespace 1.0
 import FileManager 1.0
 import Ping 1.0
 import Ping1DNamespace 1.0
@@ -201,7 +202,7 @@ Item {
             } else {
                 finalString = urlString
             }
-            ping.connectLink(["1", finalString, "r"])
+            ping.connectLink(AbstractLinkNamespace.File, [finalString, "r"])
             replayFileName.text = "File: " + replayFileDialog.fileUrl.toString().slice(sizeToRemove)
         }
     }

@@ -70,9 +70,9 @@ Ping::Ping() : Sensor()
         request(Ping1DNamespace::Mode_auto);
     });
 
-    //connectLink(QStringList({"2", "/dev/ttyUSB2", "115200"}));
+    //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
-    connect(&_detector, &ProtocolDetector::_detected, this, &Ping::connectLink);
+    connect(&_detector, &ProtocolDetector::connectionDetected, this, &Ping::connectLink);
     _detector.start();
 
     connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {
@@ -88,16 +88,13 @@ Ping::Ping() : Sensor()
     });
 }
 
-void Ping::connectLink(const QStringList& connString)
+void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
     if(_detector.isRunning()) {
         _detector.requestInterruption();
     }
     setAutoDetect(false);
-    QStringList logConnString{
-        QStringLiteral("1"), FileManager::self()->createFileName(FileManager::FileType::BINARY), QStringLiteral("w")
-    };
-    Sensor::connectLink(connString, logConnString);
+    Sensor::connectLink(LinkConfiguration{connType, connString}, {LinkType::File, {FileManager::self()->createFileName(FileManager::FileType::BINARY), QStringLiteral("w")}});
     _periodicRequestTimer.start();
 }
 
@@ -388,8 +385,8 @@ void Ping::firmwareUpdatePercentage()
 
 void Ping::request(int id)
 {
-    if(link()->type() <= AbstractLink::LinkType::File ||
-            link()->type() == AbstractLink::LinkType::PingSimulation) {
+    if(link()->type() <= LinkType::File ||
+            link()->type() == LinkType::PingSimulation) {
         qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
         return;
     }
@@ -455,7 +452,7 @@ void Ping::printStatus()
 void Ping::writeMessage(const PingMessage &msg)
 {
     if(link()) {
-        if(link()->isOpen() && link()->type() != AbstractLink::LinkType::File) {
+        if(link()->isOpen() && link()->type() != LinkType::File) {
             // todo add link::write(char*, int size)
             emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength()));
         }

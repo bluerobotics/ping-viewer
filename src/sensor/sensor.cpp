@@ -12,7 +12,7 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 Sensor::Sensor() :
     _autodetect(true)
     ,_connected(false)
-    ,_linkIn(new Link(AbstractLink::LinkType::Serial, "Default"))
+    ,_linkIn(new Link(LinkType::Serial, "Default"))
     ,_linkOut(nullptr)
     ,_parser(nullptr)
 {
@@ -28,32 +28,25 @@ Sensor::Sensor() :
 }
 
 // TODO rework this after sublasses and parser rework
-void Sensor::connectLink(QStringList connString, const QStringList& logConnString)
+void Sensor::connectLink(const LinkConfiguration& conConf, const LinkConfiguration& logConf)
 {
     if(link()->isOpen()) {
         link()->finishConnection();
     }
 
-    qCDebug(PING_PROTOCOL_SENSOR) << "connecting to" << connString;
-    if(connString.length() != 3) {
-        qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !";
-        return;
-    }
-    if(connString[0].toInt() <= 0 || connString[0].toInt() > 5) {
-        qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !";
+    qCDebug(PING_PROTOCOL_SENSOR) << "Connecting to" << conConf.toString();
+    if(!conConf.isValid()) {
+        qCWarning(PING_PROTOCOL_SENSOR) << LinkConfiguration::errorToString(conConf.error());
         return;
     }
     if(link()) {
         _linkIn.clear();
     }
-    _linkIn = QSharedPointer<Link>(new Link((AbstractLink::LinkType)connString[0].toInt(), "Default"));
-    connString.removeFirst();
-
-    link()->setConfiguration(connString);
+    _linkIn = QSharedPointer<Link>(new Link(conConf));
     link()->startConnection();
 
     if(!link()->isOpen()) {
-        qCCritical(PING_PROTOCOL_SENSOR) << "Connection fail !" << connString << link()->errorString();;
+        qCCritical(PING_PROTOCOL_SENSOR) << "Connection fail !" << conConf.toString() << link()->errorString();;
         emit connectionClose();
         return;
     }
@@ -67,7 +60,7 @@ void Sensor::connectLink(QStringList connString, const QStringList& logConnStrin
     emit connectionOpen();
 
     // Disable log if playing one
-    if(link()->type() == AbstractLink::LinkType::File) {
+    if(link()->type() == LinkType::File) {
         if(!linkLog()) {
             return;
         }
@@ -77,17 +70,16 @@ void Sensor::connectLink(QStringList connString, const QStringList& logConnStrin
             _linkOut.clear();
         }
     } else { // Start log, if not playing one
-        if(logConnString.isEmpty()) {
+        if(!logConf.isValid()) {
             QString fileName = QStringLiteral("%1.%2").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmsszzz")), "bin");
-            QStringList config{QStringLiteral("1"), fileName, QStringLiteral("w")};
-            connectLinkLog(config);
+            connectLinkLog({LinkType::File, {fileName, QStringLiteral("w")}});
         } else {
-            connectLinkLog(logConnString);
+            connectLinkLog(logConf);
         }
     }
 }
 
-void Sensor::connectLinkLog(QStringList connString)
+void Sensor::connectLinkLog(const LinkConfiguration& logConf)
 {
     if(linkLog()) {
         if(!linkLog()->isOpen()) {
@@ -97,23 +89,16 @@ void Sensor::connectLinkLog(QStringList connString)
         _linkOut.clear();
     }
 
-    if(connString.length() != 3) {
-        qCWarning(PING_PROTOCOL_SENSOR) << "wrong size !" << connString;
-        return;
-    }
-    if(connString[0].toInt() <= 0 || connString[0].toInt() > 5) {
-        qCWarning(PING_PROTOCOL_SENSOR) << "wrong arg !" << connString;
+    if(!logConf.isValid()) {
+        qCWarning(PING_PROTOCOL_SENSOR) << LinkConfiguration::errorToString(logConf.error());
         return;
     }
 
-    _linkOut = QSharedPointer<Link>(new Link((AbstractLink::LinkType)connString[0].toInt(), "Log"));
-    connString.removeFirst();
-
-    linkLog()->setConfiguration(connString);
+    _linkOut = QSharedPointer<Link>(new Link(logConf));
     linkLog()->startConnection();
 
     if(!linkLog()->isOpen()) {
-        qCCritical(PING_PROTOCOL_SENSOR) << "Connection with log fail !" << connString << linkLog()->errorString();
+        qCCritical(PING_PROTOCOL_SENSOR) << "Connection with log fail !" << logConf.toString() << linkLog()->errorString();
         return;
     }
 
