@@ -4,6 +4,8 @@ if [ -z "$1" ]; then
 fi
 
 echo "Check for ImageMagick:"
+# It's necessary to have librsvg in ImageMagick
+# brew install imagemagick --with-librsvg
 convert --version
 echo "Check for iconutil:"
 iconutil --help
@@ -24,7 +26,7 @@ mkdir $icnstempfolder
 echo "Convert files.."
 for size in 1024 512 256 64 32; do
     echo "icon_${size}x${size}.png"
-    convert -background none -resize ${size}x${size} $inputfile "${icnstempfolder}/icon_${size}x${size}.png"
+    convert -background none -size ${size}x${size} $inputfile "${icnstempfolder}/icon_${size}x${size}.png"
 done
 echo "Create icns file."
 iconutil --convert icns $icnstempfolder
