@@ -1,6 +1,9 @@
 TARGET = pingviewer
 
+# windows
 RC_ICONS = deploy/icon.ico
+# mac
+ICON = deploy/icon.icns
 
 CONFIG += \
     c++14 \
