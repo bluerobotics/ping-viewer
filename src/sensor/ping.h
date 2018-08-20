@@ -344,8 +344,10 @@ public:
      *
      * @param fileUrl firmware file path
      * @param sendPingGotoBootloader Use "goto bootloader" message
+     * @param baud baud rate value
+     * @param verify this variable is true when all
      */
-    Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true);
+    Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600, bool verify = true);
 
 signals:
     /**
@@ -448,7 +450,7 @@ private:
     void writeMessage(const PingMessage& msg); // write a messge to link
 
     void firmwareUpdatePercentage();
-    void flash(const QString& portLocation, const QString& firmwareFile);
+    void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
 
     ProtocolDetector _detector;
     QTimer _requestTimer;

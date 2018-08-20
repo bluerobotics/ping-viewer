@@ -298,7 +298,7 @@ void Ping::handleMessage(PingMessage msg)
 //    printStatus();
 }
 
-void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
+void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
 
@@ -337,10 +337,10 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader)
 
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
     QThread::usleep(500e3);
-    flash(portLocation, QUrl(fileUrl).toLocalFile());
+    flash(portLocation, QUrl(fileUrl).toLocalFile(), baud, verify);
 }
 
-void Ping::flash(const QString& portLocation, const QString& firmwareFile)
+void Ping::flash(const QString& portLocation, const QString& firmwareFile, int baud, bool verify)
 {
 #ifdef Q_OS_OSX
     // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
@@ -348,14 +348,16 @@ void Ping::flash(const QString& portLocation, const QString& firmwareFile)
 #else
     static QString binPath = QCoreApplication::applicationDirPath();
 #endif
-    static QString cmd = binPath + "/stm32flash -w %0 -v -g 0x0 %1";
+    static QString cmd = binPath + QStringLiteral("/stm32flash -w %0 %1 -g 0x0 -b %2 %3").arg(
+                             QFileInfo(firmwareFile).absoluteFilePath(), verify ? "-v" : "", QString::number(baud), portLocation
+                         );
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
     _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
     _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
     qCDebug(PING_PROTOCOL_PING) << "3... 2... 1...";
-    qCDebug(PING_PROTOCOL_PING) << cmd.arg(QFileInfo(firmwareFile).absoluteFilePath(), portLocation);
-    _firmwareProcess->start(cmd.arg(QFileInfo(firmwareFile).absoluteFilePath(), portLocation));
+    qCDebug(PING_PROTOCOL_PING) << cmd;
+    _firmwareProcess->start(cmd);
     emit flashProgress(0);
     connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, &Ping::firmwareUpdatePercentage);
 }
