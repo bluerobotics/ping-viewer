@@ -24,11 +24,12 @@ public:
     ~Ping() { _detector.terminate(); _detector.wait(); }
 
     /**
-     * @brief Add connection
+     * @brief Add new connection
      *
-     * @param connString Connection string defined as (int:string:arg)
+     * @param connType connection type
+     * @param connString arguments for the new connection
      */
-    Q_INVOKABLE void connectLink(const QStringList& connString);
+    Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString);
 
     /**
      * @brief debug function

@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import Util 1.0
 
+import AbstractLinkNamespace 1.0
 import Ping1DNamespace 1.0
 import SettingsManager 1.0
 
@@ -17,24 +18,21 @@ Item {
     property var ping: null
     property var serialPortList: null
 
-    function connect(first, second) {
+    function connect(connectionTypeEnum) {
         // Only connect from user input
         if(!firmwareUpdate.visible) {
             return;
         }
 
         // Do not connect if no valid type or input
-        if(conntype.currentIndex < 0 && first !== "" && second !== "") {
+        if(connectionTypeEnum < AbstractLinkNamespace.None || connectionTypeEnum >= AbstractLinkNamespace.Last) {
+            print("The connection configuration type is not valid!")
             return;
         }
 
-        // None = 0, File, Serial, Udp, Tcp, Sim
-        // Enum Type : arg[0] : arg[1s]
-        var connString = conntype.currentIndex == 2
-                            ? ["5", "-", "-"]
-                            : [(conntype.currentIndex + 2).toString(), first, second]
-
-        ping.connectLink(connString)
+        // Transform arguments to Array and remove connectionTypeEnum from it
+        var nextArgs = Array.prototype.slice.call(arguments).slice(1)
+        ping.connectLink(connectionTypeEnum, nextArgs)
     }
 
 
@@ -242,25 +240,27 @@ Item {
                     enabled: true
                     Layout.columnSpan:  4
                     Layout.fillWidth: true
+                    // Check AbstractLinkNamespace::LinkType for correct index type
+                    // None = 0, File, Serial, Udp, Tcp, Sim...
                     model: ["Serial (default)", "UDP", "Simulation"]
                     onActivated: {
                         switch(index) {
                             case 0: // Serial
                                 udpLayout.enabled = false
                                 serialLayout.enabled = true
-                                connect(serialPortsCB.currentText, baudrateBox.currentText)
+                                connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
                                 break
 
                             case 1: // UDP
                                 udpLayout.enabled = true
                                 serialLayout.enabled = false
-                                connect(udpIp.text, udpPort.text)
+                                connect(AbstractLinkNamespace.Udp, udpIp.text, udpPort.text)
                                 break
 
-                            case 2:
+                            case 2: // Simulation
                                 udpLayout.enabled = false
                                 serialLayout.enabled = false
-                                connect()
+                                connect(AbstractLinkNamespace.PingSimulation)
                         }
                     }
                 }
@@ -283,7 +283,7 @@ Item {
                         model: serialPortList
                         onActivated: {
                             if (currentIndex > -1) {
-                                connect(serialPortsCB.currentText, baudrateBox.currentText)
+                                connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
                             }
                         }
 
@@ -307,7 +307,7 @@ Item {
                         id: baudrateBox
                         model: [115200, 921600]
                         onActivated: {
-                            connect(serialPortsCB.currentText, baudrateBox.currentText)
+                            connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
                         }
                     }
                 }
@@ -332,7 +332,7 @@ Item {
                             if (udpIp.text == "0.0.0.0" || udpIp.text == "localhost") {
                                 udpIp.text = "127.0.0.1"
                             }
-                            connect(udpIp.text, udpPort.text)
+                            connect(AbstractLinkNamespace.Udp, udpIp.text, udpPort.text)
                         }
                     }
 
@@ -342,7 +342,7 @@ Item {
                         Layout.columnSpan:  2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            connect(udpIp.text, udpPort.text)
+                            connect(AbstractLinkNamespace.Udp, udpIp.text, udpPort.text)
                         }
                     }
                 }

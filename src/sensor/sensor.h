@@ -42,19 +42,19 @@ public:
     Q_PROPERTY(QString name READ name NOTIFY nameUpdate)
 
     /**
-     * @brief Add input link
+     * @brief Add new connection and log
      *
-     * @param connString Connection string defined as (int:string:arg)
-     * @param logConnString Log connection string defined as (int:string:arg)
+     * @param conConf connection configuration
+     * @param logConf log configuration
      */
-    void connectLink(QStringList connString, const QStringList& logConnString = QStringList());
+    void connectLink(const LinkConfiguration& conConf, const LinkConfiguration& logConf = LinkConfiguration());
 
     /**
-     * @brief Add log link
+     * @brief Add new log connection
      *
-     * @param connString Log connection string defined as (int:string:arg)
+     * @param logConf log configuration
      */
-    void connectLinkLog(QStringList connString);
+    void connectLinkLog(const LinkConfiguration& logConf);
 
     /**
      * @brief Set auto detect

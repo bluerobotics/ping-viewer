@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
+    qRegisterMetaType<AbstractLinkNamespace::LinkType>();
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
     qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", SettingsManager::qmlSingletonRegister);
@@ -39,6 +40,10 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableMetaObject(
         Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
+    );
+
+    qmlRegisterUncreatableMetaObject(
+        AbstractLinkNamespace::staticMetaObject, "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "This is another enum."
     );
 
     QApplication app(argc, argv);
