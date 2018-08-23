@@ -87,6 +87,7 @@ bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1,
     return rOk && gOk && bOk;
 }
 
+// TODO optimize from message data to draw: use integer math
 QColor WaterfallGradient::colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2)
 {
     float minimum = color1.first;
