@@ -104,6 +104,9 @@ void Ping::handleMessage(PingMessage msg)
 {
     qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id() << "Checksum Pass:" << msg.verifyChecksum();
 
+    uint8_t* payloadData = msg.payload_data();
+    auto pmsg((pingmsg*)msg.msgData);
+
     switch (msg.message_id()) {
 
     case Ping1DNamespace::Ack: {
@@ -127,11 +130,11 @@ void Ping::handleMessage(PingMessage msg)
     }
 
     case Ping1DNamespace::Fw_version: {
-        ping_msg_ping1D_fw_version m(msg);
-        _device_type = m.device_type();
-        _device_model = m.device_model();
-        _fw_version_major = m.fw_version_major();
-        _fw_version_minor = m.fw_version_minor();
+        auto m((message_fw_version*)msg.msgData);
+        _device_type = m->payload.device_type;
+        _device_model = m->payload.device_model;
+        _fw_version_major = m->payload.fw_version_major;
+        _fw_version_minor = m->payload.fw_version_minor;
 
         emit deviceTypeUpdate();
         emit deviceModelUpdate();
@@ -172,21 +175,23 @@ void Ping::handleMessage(PingMessage msg)
     break;
 
     case Ping1DNamespace::Profile: {
-        ping_msg_ping1D_profile m(msg);
-        _distance = m.distance();
-        _confidence = m.confidence();
-        _pulse_usec = m.pulse_usec();
-        _ping_number = m.ping_number();
-        _scan_start = m.scan_start();
-        _scan_length = m.scan_length();
-        _gain_index = m.gain_index();
+        profile_payload* m = (profile_payload*)(payloadData);
+        _distance = m->distance;
+        _confidence = m->confidence;
+        _pulse_usec = m->pulse_usec;
+        _ping_number = m->ping_number;
+        _scan_start = m->scan_start;
+        _scan_length = m->scan_length;
+        _gain_index = m->gain_index;
 //        num_points = m.num_points(); // const
 //        memcpy(_points.data(), m.data(), _num_points); // careful with constant
 
+        message_profile* pm = (message_profile*)msg.msgData;
+
         // This is necessary to convert <uint8_t> to <int>
         // QProperty only supports vector<int>, otherwise, we could use memcpy
-        for (int i = 0; i < m.num_points(); i++) {
-            _points.replace(i, m.data()[i] / 255.0); // TODO we should really be working in ints
+        for (int i = 0; i < pm->payload.num_points; i++) {
+            _points.replace(i, (&pm->payload.data)[i] / 255.0); // TODO we should really be working in ints
         }
 
         // TODO, change to distMsgUpdate() or similar
@@ -216,9 +221,9 @@ void Ping::handleMessage(PingMessage msg)
     break;
 
     case Ping1DNamespace::Range: {
-        ping_msg_ping1D_range m(msg);
-        _scan_start = m.scan_start();
-        _scan_length = m.scan_length();
+        range_payload* x = reinterpret_cast<range_payload*>(payloadData);
+        _scan_start = x->scan_start;
+        _scan_length = x->scan_length;
         emit scanLengthUpdate();
         emit scanStartUpdate();
     }
@@ -246,22 +251,22 @@ void Ping::handleMessage(PingMessage msg)
     break;
 
     case Ping1DNamespace::Processor_temperature: {
-        ping_msg_ping1D_processor_temperature m(msg);
-        _processor_temperature = m.temp();
+        auto m((processor_temperature_payload*)pmsg->payload_data());
+        _processor_temperature = m->temp;
         emit processorTemperatureUpdate();
     }
     break;
 
     case Ping1DNamespace::Pcb_temperature: {
-        ping_msg_ping1D_pcb_temperature m(msg);
-        _pcb_temperature = m.temp();
+        auto m((pcb_temperature_payload*)pmsg->payload_data());
+        _pcb_temperature = m->temp;
         emit pcbTemperatureUpdate();
     }
     break;
 
     case Ping1DNamespace::Voltage_5: {
-        ping_msg_ping1D_voltage_5 m(msg);
-        _board_voltage = m.mvolts(); // millivolts
+        auto m((voltage_5_payload*)pmsg->payload_data());
+        _board_voltage = m->mvolts; // millivolts
         emit boardVoltageUpdate();
     }
     break;
