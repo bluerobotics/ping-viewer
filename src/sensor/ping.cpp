@@ -102,10 +102,10 @@ void Ping::connectLink(const QStringList& connString)
 
 void Ping::handleMessage(PingMessage msg)
 {
-    qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id() << "Checksum Pass:" << msg.verifyChecksum();
-
     uint8_t* payloadData = msg.payload_data();
     auto pmsg((pingmsg*)msg.msgData);
+
+    qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id() << "Checksum" << msg.checksum() << "Struct:" << pmsg->calculateChecksum();
 
     switch (msg.message_id()) {
 
