@@ -2,11 +2,18 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 
 import Logger 1.0
+import SettingsManager 1.0
 
 Item {
     id: root
 
-    property bool scrollLockEnabled: true
+    property bool scrollLockEnabled: SettingsManager.logSCrollLock
+
+    onScrollLockEnabledChanged: {
+        if(scrollLockEnabled != SettingsManager.logSCrollLock) {
+            SettingsManager.logSCrollLock = scrollLockEnabled
+        }
+    }
 
     ListView {
         anchors.fill: parent
