@@ -8,6 +8,7 @@
 
 #include "abstractlink.h"
 #include "filemanager.h"
+#include "linkconfiguration.h"
 #include "logger.h"
 #include "ping.h"
 #include "settingsmanager.h"
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
+    qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
 
     qmlRegisterUncreatableMetaObject(
         Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."

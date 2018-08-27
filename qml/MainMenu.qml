@@ -35,6 +35,41 @@ Item {
         ping.connectLink(connectionTypeEnum, nextArgs)
     }
 
+    Connections {
+        target: ping
+        onLinkUpdate: {
+            // Connection update
+            // Update interface to make sure
+            switch(ping.link.configuration.type()) {
+                case AbstractLinkNamespace.Serial:
+                    conntype.currentIndex = 0
+                    udpLayout.enabled = false
+                    serialLayout.enabled = true
+                    serialPortsCB.currentText = ping.link.configuration.argsAsConst()[0]
+                    baudrateBox.currentText = ping.link.configuration.argsAsConst()[1]
+                    break;
+                case AbstractLinkNamespace.Udp:
+                    conntype.currentIndex = 1
+                    udpLayout.enabled = true
+                    serialLayout.enabled = false
+                    udpIp.text = ping.link.configuration.argsAsConst()[0]
+                    udpPort.text = ping.link.configuration.argsAsConst()[1]
+                    break;
+                case AbstractLinkNamespace.PinkSimulation:
+                    conntype.currentIndex = 2
+                    udpLayout.enabled = false
+                    serialLayout.enabled = false
+                    break;
+                default:
+                    print('Not valid link.')
+                    print(ping.link.configuration.name())
+                    print(ping.link.configuration.type())
+                    print(ping.link.configuration.argsAsConst())
+                    return;
+            }
+        }
+    }
+
 
     ColumnLayout {
         id: settingsLayout
