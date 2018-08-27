@@ -183,7 +183,11 @@ script:
     unzip stm32flash_osx.zip;
     chmod +x stm32flash;
     mv stm32flash pingviewer.app/;
-    macdeployqt pingviewer.app/ -qmldir=../qml -dmg;
+    if [ "${QT_CONFIG}" = "debug" ]; then
+      macdeployqt pingviewer.app/ -qmldir=../qml -dmg -use-debugs-libs;
+    else
+      macdeployqt pingviewer.app/ -qmldir=../qml -dmg;
+    fi;
     mv pingviewer.dmg pingviewer-${QT_CONFIG}.dmg;
   fi
 
