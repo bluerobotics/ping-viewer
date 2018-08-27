@@ -6,6 +6,7 @@ cache:
   - ccache
 matrix:
   include:
+    # Tests build
     - os: linux
       dist: trusty
       sudo: require
@@ -20,6 +21,7 @@ matrix:
         - DESC="Check code style && Doxygen"
         - TEST="true"
 
+    # AppImage deploy
     - os: linux
       dist: xenial
       sudo: require
@@ -34,6 +36,7 @@ matrix:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
         - QTV="qt511"
 
+    # AppImage with Qt5.9 for QGC
     - os: linux
       dist: trusty
       sudo: require
@@ -48,6 +51,7 @@ matrix:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
         - QTV="qt59"
 
+    # .dmg file deploy for Mac OS (release)
     - os: osx
       osx_image: xcode9.3
       compiler: clang
@@ -56,6 +60,7 @@ matrix:
         - MATRIX_EVAL="COMPILER=clang++"
         - QT_CONFIG="release"
 
+    # .dmg file deploy for Mac OS (debug)
     - os: osx
       osx_image: xcode9.3
       compiler: clang
@@ -65,7 +70,9 @@ matrix:
         - QT_CONFIG="debug"
 
 before_install:
+# This is necessary to solve https://github.com/travis-ci/travis-ci/issues/9649
 - eval "${MATRIX_EVAL}"
+# Install ccache for non test builds
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     sudo apt install ccache;
   fi
@@ -75,10 +82,15 @@ before_install:
   fi
 
 install:
+# Install necessary tools to compile the code
+# Install jinja2 for protocol generation
 - if [ -z $TEST ]; then
     pip install --user --upgrade pip;
     pip install --user jinja2;
   fi
+# For Linux
+# Update apt cache and search for all packages that contain $QTV
+# Install Qt5.11 or Qt5.9, there is different packages for Qt5.9 and Qt5.11
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     if [ "${QTV}" = "qt59" ]; then
       sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
@@ -96,6 +108,7 @@ install:
       sudo apt install ${QTV}base libgl1-mesa-dev;
     fi;
   fi
+# Install Qt in Mac OS
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew install qt@5.11;
     chmod -R 755 /usr/local/opt/qt5/*;
@@ -104,6 +117,9 @@ install:
   fi
 
 script:
+# Run tests
+# Check code style
+# Check doxygen comments
 - if [ ! -z $TEST ]; then
     ./tools/astyle.sh;
     git diff;
@@ -114,6 +130,12 @@ script:
     cd doc;
     ../tools/testdoxygen.sh;
   fi
+# Create AppImage for Linux
+# Use Gcc-7
+# Load Qt env variables
+# Compile ping-viewer
+# Move necessary files in deploy folder
+# Create AppImage with linuxdeployqt
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60;
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60;
@@ -147,6 +169,8 @@ script:
       mv pingviewer-x86_64.AppImage ./pingviewer-x86_64_QGC.AppImage;
     fi;
   fi
+# Create .dmg for Mac OS with macdeployqt
+# The steps are the same one in Linux
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     git submodule init;
     git submodule update;
@@ -164,6 +188,7 @@ script:
   fi
 
 after_success:
+# Upload files in GitHub
 - export DEPLOY_FILE="";
 - if [ -z $TEST ]; then
     wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
@@ -179,6 +204,7 @@ after_success:
     bash ./upload.sh pingviewer*.dmg*;
     export DEPLOY_FILE=${PWD}/pingviewer-${QT_CONFIG}.dmg;
   fi
+# Move files to s3 folder and send to amazon
 - echo "Deploy: ${DEPLOY_FILE}";
 - mkdir -p /tmp/deploy/s3;
 - mv ${DEPLOY_FILE} /tmp/deploy/s3;
