@@ -187,10 +187,10 @@ public:
     /**
      * @brief Return last array of points
      *
-     * @return QList<double>
+     * @return QVector<double>
      */
-    QList<double> points() { return _points; }
-    Q_PROPERTY(QList<double> points READ points NOTIFY pointsUpdate)
+    QVector<double> points() { return _points; }
+    Q_PROPERTY(QVector<double> points READ points NOTIFY pointsUpdate)
 
     /**
      * @brief Get auto mode status
@@ -441,7 +441,7 @@ private:
     // TODO maybe use vector or uint8_t[] here
     // QVector is only required if points need to be exposed to qml
     //QVector<int> _points;
-    QList<double> _points;
+    QVector<double> _points;
 
     bool _mode_auto;
     uint16_t _ping_rate;
