@@ -5,7 +5,7 @@
 #include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
-#include <QList>
+#include <QVector>
 
 PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 
@@ -193,7 +193,7 @@ float Waterfall::RGBToValue(const QColor& color)
     return _gradient.getValue(color);
 }
 
-void Waterfall::draw(const QList<double>& points, float confidence, float initPoint, float length, float distance)
+void Waterfall::draw(const QVector<double>& points, float confidence, float initPoint, float length, float distance)
 {
     /*
         initPoint: The lowest point of the last sample in meters
@@ -241,7 +241,7 @@ void Waterfall::draw(const QList<double>& points, float confidence, float initPo
     // Declare oldImage variable to do image spins
     static QImage old = _image;
     // Declare oldPoints variable to do some filter
-    static QList<double> oldPoints = points;
+    static QVector<double> oldPoints = points;
 
     // This ring vector will store variables of the last n samples for user access
     _DCRing.append({initPoint, length, confidence, distance});

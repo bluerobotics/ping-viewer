@@ -5,13 +5,13 @@
 
 PING_LOGGING_CATEGORY(waterfallGradient, "ping.waterfallGradient")
 
-WaterfallGradient::WaterfallGradient(QString name, QList<QColor> colors):
+WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors):
     _name(name)
 {
     setColors(colors);
 }
 
-void WaterfallGradient::setColors(const QList<QColor>& colors)
+void WaterfallGradient::setColors(const QVector<QColor>& colors)
 {
     float stepSize = 1.0/(colors.length() - 1);
     float step = 0;

@@ -124,7 +124,7 @@ public:
     Q_INVOKABLE float getMinDepthToDraw() {return _minDepthToDraw;}
     Q_PROPERTY(float minDepthToDraw READ getMinDepthToDraw NOTIFY minDepthToDrawChanged)
 
-    QList<WaterfallGradient> _gradients;
+    QVector<WaterfallGradient> _gradients;
     WaterfallGradient _gradient;
     QImage _image;
     QPainter *_painter;
@@ -141,7 +141,7 @@ public:
     bool _smooth;
     QTimer* _updateTimer;
     QString _theme;
-    QList<QString> _themes;
+    QStringList _themes;
     static uint16_t displayWidth;
     uint16_t currentDrawIndex;
     float _waterfallDepth;
@@ -243,7 +243,7 @@ public:
      * @param length
      * @param distance
      */
-    Q_INVOKABLE void draw(const QList<double>& points, float confidence = 0, float initPoint = 0, float length = 50, float distance = 0);
+    Q_INVOKABLE void draw(const QVector<double>& points, float confidence = 0, float initPoint = 0, float length = 50, float distance = 0);
 
     /**
      * @brief Function that deals when the mouse is inside the waterfall
