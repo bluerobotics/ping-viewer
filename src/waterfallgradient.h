@@ -19,14 +19,14 @@ public:
      * @param name
      * @param colors
      */
-    WaterfallGradient(QString name = "", QList<QColor> colors = QList<QColor>());
+    WaterfallGradient(QString name = QString(), QVector<QColor> colors = QVector<QColor>());
 
     /**
      * @brief Set the Colors object
      *
      * @param colors
      */
-    void setColors(const QList<QColor>& colors);
+    void setColors(const QVector<QColor>& colors);
 
     /**
      * @brief Set the gradient name
