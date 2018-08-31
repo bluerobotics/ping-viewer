@@ -26,7 +26,7 @@ Waterfall::Waterfall(QQuickItem *parent):
 {
     // This is the max depth that ping returns
     setWaterfallMaxDepth(70);
-    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
+    _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, displayWidth);
     setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -46,7 +46,7 @@ void Waterfall::clear()
     _minDepthToDrawInPixels = 0;
     _mouseDepth = 0;
     _mouseStrength = 0;
-    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
+    _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, displayWidth);
     _image.fill(Qt::transparent);
 }
 
@@ -306,11 +306,11 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
 
         lastDynamicPixelsPerMeterScalar = dynamicPixelsPerMeterScalar;
     } else {
-        _maxDepthToDrawInPixels = ((_maxDepthToDraw  - _minDepthToDraw)*_minPixelsPerMeter);
+        _maxDepthToDrawInPixels = (_maxDepthToDraw  - _minDepthToDraw)*_minPixelsPerMeter;
     }
-    _minDepthToDrawInPixels = (_minDepthToDraw*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
-    int virtualFloor = (initPoint*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
-    int virtualHeight = ((length + initPoint - _minDepthToDraw)*_minPixelsPerMeter*dynamicPixelsPerMeterScalar);
+    _minDepthToDrawInPixels = _minDepthToDraw*_minPixelsPerMeter;
+    int virtualFloor = initPoint*_minPixelsPerMeter;
+    int virtualHeight = length*_minPixelsPerMeter*dynamicPixelsPerMeterScalar;
 
     // Copy tail to head
     // TODO can we get even better and allocate just once at initialization? ie circular buffering
@@ -331,7 +331,28 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
     }
 
     // Do up/downsampling
-    float factor = points.length()/((float)(virtualHeight - (virtualFloor - _minDepthToDrawInPixels)));
+    float factor = points.length()/((float)(virtualHeight));
+
+    // Check if everything is correct before the draw
+    if(floor(factor*virtualHeight) > points.length() || factor*virtualHeight < 0) {
+        qCWarning(waterfall) << "Wrong factor !";
+        qCDebug(waterfall).noquote() << QStringLiteral("virtualHeight: %1\t virtualFloor: %2\t factor: %3\t").
+                                     arg(virtualHeight).arg(virtualFloor).arg(factor);
+        return;
+    }
+
+    if(virtualFloor + virtualHeight > _image.height()
+            || virtualFloor + virtualHeight < 0
+            || virtualFloor < 0) {
+        qCWarning(waterfall) << "Wrong Floor Height";
+        qCDebug(waterfall).noquote() <<
+                                     QStringLiteral("virtualFloor: %1\t virtualHeight: %2\t _minDepthToDrawInPixels: %3\t _maxDepthToDrawInPixels: %4")
+                                     .arg(virtualFloor).arg(virtualHeight).arg(_minDepthToDrawInPixels).arg(_maxDepthToDrawInPixels);
+        qCDebug(waterfall).noquote() <<
+                                     QStringLiteral("initPoint: %1\t length: %2\t _minPixelsPerMeter: %3\t dynamicPixelsPerMeterScalar: %4")
+                                     .arg(initPoint).arg(length).arg(_minPixelsPerMeter).arg(dynamicPixelsPerMeterScalar);
+        return;
+    }
 
     if(smooth()) {
         #pragma omp for
