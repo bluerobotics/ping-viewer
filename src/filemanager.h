@@ -23,7 +23,7 @@ public:
      * @brief Manage file types
      */
     enum FileType {
-        LOG,
+        TXT,
         PICTURE,
         BINARY
     };
@@ -88,7 +88,7 @@ private:
      *
      */
     const QMap<FileType, QString> fileTypeExtension {
-        {LOG, ".txt"}
+        {TXT, ".txt"}
         , {PICTURE, ".png"}
         , {BINARY, ".bin"}
     };
@@ -98,7 +98,7 @@ private:
      *
      */
     const QMap<FileType, folder*> fileTypeFolder {
-        {LOG, &_guiLogDir}
+        {TXT, &_guiLogDir}
         , {PICTURE, &_picturesDir}
         , {BINARY, &_sensorLogDir}
     };
