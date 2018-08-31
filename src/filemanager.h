@@ -30,6 +30,19 @@ public:
     Q_ENUM(FileType)
 
     /**
+     * @brief Abstract folder names and struct access
+     */
+    enum Folder {
+        Documents,
+        Gradients,
+        GuiLogs,
+        Pictures,
+        PingDocuments,
+        SensorLog,
+    };
+    Q_ENUM(Folder)
+
+    /**
      * @brief Return FileManager singleton pointer
      *
      * @return FileManager*
@@ -44,6 +57,14 @@ public:
      * @return QString
      */
     Q_INVOKABLE QString createFileName(FileManager::FileType type);
+
+    /**
+     * @brief Get the files from folder
+     *
+     * @param folderType
+     * @return QFileInfoList List of files in folder
+     */
+    QFileInfoList getFilesFrom(Folder folderType);
 
     /**
      * @brief Return a pointer of this singleton to the qml register function
@@ -79,9 +100,22 @@ private:
 
     folder _docDir;
     folder _fmDir;
+    folder _gradientsDir;
     folder _guiLogDir;
     folder _picturesDir;
     folder _sensorLogDir;
+
+    /**
+     * @brief Manage all folders access
+     */
+    QMap<Folder, folder*> folderMap{
+        {Documents, &_fmDir},
+        {Gradients, &_gradientsDir},
+        {GuiLogs, &_guiLogDir},
+        {Pictures, &_picturesDir},
+        {PingDocuments, &_docDir},
+        {SensorLog, &_sensorLogDir}
+    };
 
     /**
      * @brief Manage file extensions
@@ -98,8 +132,9 @@ private:
      *
      */
     const QMap<FileType, folder*> fileTypeFolder {
-        {TXT, &_guiLogDir}
-        , {PICTURE, &_picturesDir}
-        , {BINARY, &_sensorLogDir}
+        {TXT, &_gradientsDir},
+        {TXT, &_guiLogDir},
+        {PICTURE, &_picturesDir},
+        {BINARY, &_sensorLogDir},
     };
 };

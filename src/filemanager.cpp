@@ -9,13 +9,14 @@ PING_LOGGING_CATEGORY(FILEMANAGER, "ping.filemanager");
 FileManager::FileManager()
     : _docDir{.dir = QDir(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0])}
     , _fmDir{.dir = _docDir.dir.filePath(QStringLiteral("PingViewer"))}
+    , _gradientsDir{.dir = _fmDir.dir.filePath(QStringLiteral("Waterfall_Gradients"))}
     , _guiLogDir{.dir = _fmDir.dir.filePath(QStringLiteral("Gui_Log"))}
     , _picturesDir{.dir = _fmDir.dir.filePath(QStringLiteral("Pictures"))}
     , _sensorLogDir{.dir = _fmDir.dir.filePath(QStringLiteral("Sensor_Log"))}
 {
     // Check for folders and create if necessary
     auto rootDir = QDir();
-    for(auto f : {&_fmDir, &_guiLogDir, &_picturesDir, &_sensorLogDir}) {
+    for(auto f : {&_fmDir, &_guiLogDir, &_picturesDir, &_sensorLogDir, &_gradientsDir}) {
         qCDebug(FILEMANAGER) << "Folder: " << f->dir;
         if(!f->dir.exists()) {
             qCDebug(FILEMANAGER) << "Create folder" << f->dir.path();
@@ -30,6 +31,17 @@ FileManager::FileManager()
         // Everything is fine, but we need to make sure !
         f->ok = QFileInfo(f->dir.path()).isWritable();
     }
+}
+
+QFileInfoList FileManager::getFilesFrom(Folder folderType)
+{
+    if(!folderMap[folderType]->ok) {
+        return {};
+    }
+    auto dir = &folderMap[folderType]->dir;
+    dir->setSorting(QDir::Name);
+    dir->setFilter(QDir::Files);
+    return dir->entryInfoList();
 }
 
 QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
