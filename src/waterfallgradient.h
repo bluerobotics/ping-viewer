@@ -22,6 +22,21 @@ public:
     WaterfallGradient(QString name = QString(), QVector<QColor> colors = QVector<QColor>());
 
     /**
+     * @brief Construct a new Waterfall Gradient object with QFile
+     *
+     * @param file
+     */
+    WaterfallGradient(QFile &file);
+
+    /**
+     * @brief Check if gradient is valid
+     *
+     * @return true
+     * @return false
+     */
+    bool isOk() { return (stops().size() > 1) && !_name.isEmpty(); };
+
+    /**
      * @brief Set the Colors object
      *
      * @param colors

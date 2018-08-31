@@ -258,4 +258,11 @@ public:
      * @param event
      */
     void hoverLeaveEvent(QHoverEvent *event);
+
+private:
+    /**
+     * @brief Load user gradients
+     *
+     */
+    void loadUserGradients();
 };

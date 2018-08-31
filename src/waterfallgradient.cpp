@@ -1,4 +1,6 @@
 #include <QLinearGradient>
+#include <QFileInfo>
+#include <QRegularExpression>
 #include <QtDebug>
 
 #include "waterfallgradient.h"
@@ -9,6 +11,49 @@ WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors):
     _name(name)
 {
     setColors(colors);
+}
+
+WaterfallGradient::WaterfallGradient(QFile &file)
+{
+    /*
+        1. Filenames need to have .txt extension.
+        2. Filenames will be used as gradient name.
+        3. Filenames with underscores will be replaced with spaces.
+        4. Lines that do not start with # will not be processed.
+        4. Color values need to follow: http://doc.qt.io/qt-5/qcolor.html#setNamedColor
+        5. First value will represent 0.0
+        6. The last value will represent 1.0
+        7. The value of any other color will be 1.0*((color position) - 1)/(number of colors)
+    */
+
+    if(!file.open(QIODevice::ReadOnly)) {
+        qCWarning(waterfallGradient) << "It's not possible to open file:" << file.fileName();
+        return;
+    }
+    QTextStream textStream(&file);
+    QVector<QColor> colors;
+    while(!textStream.atEnd()) {
+        QString line = file.readLine();
+        line = line.remove('\n');
+        line = line.remove('\r');
+        for(auto i : {2, 5, 8, 11}) {
+            /*
+                Check for:
+                #RGB
+                #RRGGBB
+                #RRRGGGBBB
+                #RRRRGGGGBBBB
+            */
+            QRegularExpression regex(QStringLiteral("^#\\S[0-9,a-f]{%1}\\b").arg(i));
+            QRegularExpressionMatch match = regex.match(line);
+            if(match.hasMatch()) {
+                qCDebug(waterfallGradient) << "New color:" << match.capturedTexts();
+                colors.append(match.capturedTexts()[0]);
+            }
+        }
+    }
+    setColors(colors);
+    setName(QFileInfo(file).fileName().split('.')[0].replace('_', ' '));
 }
 
 void WaterfallGradient::setColors(const QVector<QColor>& colors)

@@ -1,3 +1,4 @@
+#include "filemanager.h"
 #include "waterfall.h"
 
 #include <limits>
@@ -128,11 +129,28 @@ void Waterfall::setGradients()
     });
     _gradients.append(rainbow);
 
+    loadUserGradients();
+
     for(auto &gradient : _gradients) {
         _themes.append(gradient.name());
     }
     qCDebug(waterfall) << "Gradients:" << _themes;
     emit themesChanged();
+}
+
+void Waterfall::loadUserGradients()
+{
+    auto fileInfoList = FileManager::self()->getFilesFrom(FileManager::Folder::Gradients);
+    for(auto& fileInfo : fileInfoList) {
+        qCDebug(waterfall) << fileInfo.fileName();
+        QFile file(fileInfo.absoluteFilePath());
+        WaterfallGradient gradient(file);
+        if(!gradient.isOk()) {
+            qCDebug(waterfall) << "Invalid gradient file:" << fileInfo.fileName();
+            continue;
+        }
+        _gradients.append(gradient);
+    }
 }
 
 void Waterfall::setWaterfallMaxDepth(float maxDepth)
