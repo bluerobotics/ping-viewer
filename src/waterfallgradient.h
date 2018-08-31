@@ -22,6 +22,21 @@ public:
     WaterfallGradient(QString name = QString(), QVector<QColor> colors = QVector<QColor>());
 
     /**
+     * @brief Construct a new Waterfall Gradient object with QFile
+     *
+     * @param file
+     */
+    WaterfallGradient(QFile &file);
+
+    /**
+     * @brief Check if gradient is valid
+     *
+     * @return true
+     * @return false
+     */
+    bool isOk() { return (stops().size() > 1) && !_name.isEmpty(); };
+
+    /**
      * @brief Set the Colors object
      *
      * @param colors
@@ -40,7 +55,7 @@ public:
      *
      * @return QString
      */
-    QString name();
+    QString name() const;
 
     /**
      * @brief Get color from float value 0-1
@@ -48,7 +63,7 @@ public:
      * @param value
      * @return QColor
      */
-    QColor getColor(float value);
+    QColor getColor(float value) const;
 
     /**
      * @brief Get value from color 0-0-0 to 255-255-255
@@ -56,7 +71,7 @@ public:
      * @param color
      * @return float
      */
-    float getValue(const QColor& color);
+    float getValue(const QColor& color) const;
 
     /**
      * @brief Check if color exist between color1 and color2
@@ -67,7 +82,7 @@ public:
      * @return true when color in between color1 and color2
      * @return false when color is not between color1 and color2
      */
-    bool colorsInRange(const QColor& color, const QColor& color1, const QColor& color2);
+    bool colorsInRange(const QColor& color, const QColor& color1, const QColor& color2) const;
 
     /**
      * @brief Get a QColor from a linear interpolation from color1 and color2 using the value
@@ -78,7 +93,7 @@ public:
      * @param color2
      * @return QColor
      */
-    QColor colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2);
+    QColor colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2) const;
 
     /**
      * @brief Get value from color interpolation
@@ -89,5 +104,5 @@ public:
      * @param color2
      * @return float
      */
-    float valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2);
+    float valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2) const;
 };
