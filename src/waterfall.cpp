@@ -26,7 +26,7 @@ Waterfall::Waterfall(QQuickItem *parent):
 {
     // This is the max depth that ping returns
     setWaterfallMaxDepth(70);
-    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
+    _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, displayWidth);
     setAntialiasing(_smooth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -46,7 +46,7 @@ void Waterfall::clear()
     _minDepthToDrawInPixels = 0;
     _mouseDepth = 0;
     _mouseStrength = 0;
-    _DCRing.fill({static_cast<const float>(_image.height()), 0, 0, 0}, displayWidth);
+    _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, displayWidth);
     _image.fill(Qt::transparent);
 }
 
