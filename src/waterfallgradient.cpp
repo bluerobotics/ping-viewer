@@ -25,12 +25,12 @@ void WaterfallGradient::setName(const QString& name)
     _name = name;
 }
 
-QString WaterfallGradient::name()
+QString WaterfallGradient::name() const
 {
     return _name;
 }
 
-QColor WaterfallGradient::getColor(float value)
+QColor WaterfallGradient::getColor(float value) const
 {
     if((value < 0 || value > 1) && !qIsNaN(value)) {
         qCWarning(waterfallGradient) << "Color position must be specified in the range 0 to 1.";
@@ -52,7 +52,7 @@ QColor WaterfallGradient::getColor(float value)
     return QColor(0, 0, 0);
 }
 
-float WaterfallGradient::getValue(const QColor& color)
+float WaterfallGradient::getValue(const QColor& color) const
 {
     if(color.spec() == QColor::Invalid) {
         qCWarning(waterfallGradient) << "Invalid color.";
@@ -69,7 +69,7 @@ float WaterfallGradient::getValue(const QColor& color)
     return 0.0f;
 }
 
-bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1, const QColor& color2)
+bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1, const QColor& color2) const
 {
     QColor maxColor;
     maxColor.setRed(color1.red() < color2.red() ? color2.red() : color1.red());
@@ -87,7 +87,7 @@ bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1,
     return rOk && gOk && bOk;
 }
 
-QColor WaterfallGradient::colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2)
+QColor WaterfallGradient::colorLinearInterpolation(const float value, const QGradientStop& color1, const QGradientStop& color2) const
 {
     float minimum = color1.first;
     float maximum = color2.first;
@@ -99,7 +99,7 @@ QColor WaterfallGradient::colorLinearInterpolation(float value, const QGradientS
     return QColor(r, g, b);
 }
 
-float WaterfallGradient::valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2)
+float WaterfallGradient::valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2) const
 {
     float ratio = 0;
     float value = 0;
