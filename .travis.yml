@@ -124,70 +124,36 @@ script:
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60;
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60;
-    gcc --version;
-    g++ --version;
     source /opt/qt*/bin/qt*-env.sh;
-    git submodule init;
-    git submodule update;
-    mkdir build;
-    cd build;
-    qmake ..;
-    make -j3 || travis_terminate 1;
-    mkdir deploy;
-    ls ../qml/;
-    ls ../qml/imgs;
-    cp ../qml/imgs/pingviewer.png deploy/;
-    cp ../deploy/pingviewer.desktop deploy/;
-    mv pingviewer deploy/;
-    wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip;
-    unzip stm32flash_linux.zip;
-    chmod +x stm32flash;
-    mv stm32flash deploy/;
-    ls deploy;
-    wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
-    chmod a+x linuxdeployqt*.AppImage;
-    unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
-    ./linuxdeployqt*.AppImage deploy/pingviewer -verbose=2 -qmldir=../qml -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so;
-    ./linuxdeployqt*.AppImage deploy/pingviewer.desktop -verbose=2 -qmldir=../qml -appimage;
-    find . | grep AppImage;
+    ./tools/compile.sh || travis_terminate 1;
     if [ "${QTV}" = "qt59" ]; then
-      mv pingviewer-x86_64.AppImage ./pingviewer-x86_64_QGC.AppImage;
+      mv /tmp/pingviewer-x86_64.AppImage /tmp/pingviewer-x86_64_QGC.AppImage;
     fi;
   fi
 # Create .dmg for Mac OS with macdeployqt
 # The steps are the same one in Linux
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-    git submodule init;
-    git submodule update;
-    mkdir build;
-    cd build;
-    qmake .. CONFIG+=${QT_CONFIG};
-    make -j3 || travis_terminate 1;
-    find .;
-    wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_osx.zip;
-    unzip stm32flash_osx.zip;
-    chmod +x stm32flash;
-    mv stm32flash pingviewer.app/;
-    macdeployqt pingviewer.app/ -qmldir=../qml -dmg;
-    mv pingviewer.dmg pingviewer-${QT_CONFIG}.dmg;
+    ./tools/compile.sh || travis_terminate 1;
   fi
 
 after_success:
 # Upload files in GitHub
 - export DEPLOY_FILE="";
 - if [ -z $TEST ]; then
+    ls /tmp/pingviewer*;
     wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
   fi
 - if [ ! -z $TRAVIS_BRANCH ] && [ "$TRAVIS_BRANCH" != "master" ] ; then
     export UPLOADTOOL_SUFFIX=$TRAVIS_BRANCH;
   fi
 - if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
-    bash ./upload.sh ./pingviewer*.AppImage;
-    export DEPLOY_FILE=${PWD}/pingviewer*.AppImage;
+    export DEPLOY_FILE=/tmp/pingviewer*.AppImage;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-    bash ./upload.sh pingviewer*.dmg*;
-    export DEPLOY_FILE=${PWD}/pingviewer-${QT_CONFIG}.dmg;
+    export DEPLOY_FILE=/tmp/pingviewer*.dmg;
+  fi
+- if [ -z $TEST  ]; then
+    bash ./upload.sh ${DEPLOY_FILE};
   fi
 # Move files to s3 folder and send to amazon
 - echo "Deploy: ${DEPLOY_FILE}";
