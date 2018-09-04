@@ -3,13 +3,15 @@
 # Variables
 bold=$(tput bold)
 normal=$(tput sgr0)
+scriptpath="$( cd "$(dirname "$0")" ; pwd -P )"
+docpath=${scriptpath}/doc
 
 # Functions
 echob() {
     echo "${bold}${1}${normal}"
 }
 
-doccmd="doxygen "${PWD}/Doxyfile" 2>&1 \
+doccmd="doxygen "${docpath}/Doxyfile" 2>&1 \
     | grep -v protocol \
     | grep -v \(signal\) \
     | grep -v \(property\) \
