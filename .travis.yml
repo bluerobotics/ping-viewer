@@ -29,8 +29,14 @@ matrix:
         apt:
           sources:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
+            - sourceline: 'ppa:beineri/opt-qt-5.11.1-xenial'
           packages:
             - g++-7
+            - git
+            - build-essential
+            - qt511base
+            - qt511charts-no-lgpl qt511graphicaleffects qt511quickcontrols qt511quickcontrols2 qt511scxml qt511serialport qt511svg
+            - libgl1-mesa-dev
       env:
         - DESC="AppImage deploy"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
@@ -44,8 +50,13 @@ matrix:
         apt:
           sources:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
+            - sourceline: 'ppa:beineri/opt-qt594-trusty'
           packages:
             - g++-7
+            - git
+            - build-essential
+            - qt59-meta-minimal
+            - qt59charts-no-lgpl qt59graphicaleffects qt59quickcontrols qt59quickcontrols2 qt59scxml qt59serialport qt59svg
       env:
         - DESC="AppImage deploy for QGC"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
@@ -88,26 +99,7 @@ install:
     pip install --user --upgrade pip;
     pip install --user jinja2;
   fi
-# For Linux
-# Update apt cache and search for all packages that contain $QTV
-# Install Qt5.11 or Qt5.9, there is different packages for Qt5.9 and Qt5.11
-- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
-    if [ "${QTV}" = "qt59" ]; then
-      sudo add-apt-repository --yes ppa:beineri/opt-qt594-trusty;
-    else
-      sudo add-apt-repository --yes ppa:beineri/opt-qt-5.11.1-xenial;
-    fi;
-    sudo apt update -qq;
-    sudo apt search ${QTV};
-    sudo apt install build-essential ${QTV}charts-no-lgpl
-    ${QTV}quickcontrols ${QTV}quickcontrols2 ${QTV}serialport
-    ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml git;
-    if [ "${QTV}" = "qt59" ]; then
-      sudo apt install ${QTV}-meta-minimal;
-    else
-      sudo apt install ${QTV}base libgl1-mesa-dev;
-    fi;
-  fi
+
 # Install Qt in Mac OS
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew install qt@5.11;
