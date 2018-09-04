@@ -113,14 +113,7 @@ script:
 # Check code style
 # Check doxygen comments
 - if [ ! -z $TEST ]; then
-    ./tools/astyle.sh;
-    git diff;
-    if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
-      echo "Style error ! Run astyle in tools. (./tools/astyle.sh)";
-      exit 1;
-    fi;
-    cd doc;
-    ../tools/testdoxygen.sh;
+    ./tools/runtests.sh || travis_terminate 1;
   fi
 # Create AppImage for Linux
 # Use Gcc-7
