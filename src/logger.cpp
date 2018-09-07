@@ -14,7 +14,7 @@ PING_LOGGING_CATEGORY(logger, "ping.logger")
 static QtMessageHandler originalHandler = nullptr;
 
 Logger::Logger()
-    : _file(FileManager::self()->createFileName(FileManager::FileType::TXT))
+    : _file(FileManager::self()->createFileName(FileManager::Folder::GuiLogs))
     , _fileStream(&_file)
     , _settings(SettingsManager::self()->settings())
 {
