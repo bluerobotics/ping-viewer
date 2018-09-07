@@ -58,10 +58,9 @@ WaterfallGradient::WaterfallGradient(QFile &file)
 
 void WaterfallGradient::setColors(const QVector<QColor>& colors)
 {
-    float stepSize = 1.0/(colors.length() - 1);
-    float step = 0;
-    for(const auto& color : colors) {
-        setColorAt(stepSize*step++, color);
+    float numberOfColors = colors.length() - 1;
+    for(int i = 0; i < colors.size(); i++) {
+        setColorAt(i/numberOfColors, colors[i]);
     }
 }
 
