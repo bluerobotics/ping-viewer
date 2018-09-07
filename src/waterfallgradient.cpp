@@ -37,6 +37,10 @@ WaterfallGradient::WaterfallGradient(QFile &file)
         QString line = file.readLine();
         line = line.remove('\n');
         line = line.remove('\r');
+        if(line.isEmpty()) {
+            continue;
+        }
+        qCDebug(waterfallGradient) << "Check line:" << line;
         for(auto i : {2, 5, 8, 11}) {
             /*
                 Check for:
