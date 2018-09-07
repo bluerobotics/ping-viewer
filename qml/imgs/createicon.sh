@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ -z "$1" ]; then
     echo "No argument supplied: createicon.sh file.svg"
     exit 1
@@ -26,7 +28,7 @@ mkdir $icnstempfolder
 echo "Convert files.."
 for size in 1024 512 256 64 32; do
     echo "icon_${size}x${size}.png"
-    convert -background none -size ${size}x${size} $inputfile "${icnstempfolder}/icon_${size}x${size}.png"
+    convert -background none -size ${size}x${size} "$inputfile" "${icnstempfolder}/icon_${size}x${size}.png"
 done
 echo "Create icns file."
 iconutil --convert icns $icnstempfolder

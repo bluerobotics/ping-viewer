@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-ccache $IOS_CCACHE_CC "$@"
+ccache "$IOS_CCACHE_CC" "$@"
