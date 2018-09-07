@@ -289,8 +289,8 @@ Item {
 
             root.grabToImage(function(result) {
                 print("Grab screen image callback")
-                print(FileManager.createFileName(FileManager.PICTURE))
-                result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
+                print(FileManager.createFileName(FileManager.Pictures))
+                result.saveToFile(FileManager.createFileName(FileManager.Pictures))
             });
         } else if (event.key == Qt.Key_W) {
             print("Grab waterfall image")
@@ -298,8 +298,8 @@ Item {
 
             ping1DVisualizer.waterfallItem.grabToImage(function(result) {
                 print("Grab waterfall image callback")
-                print(FileManager.createFileName(FileManager.PICTURE))
-                result.saveToFile(FileManager.createFileName(FileManager.PICTURE))
+                print(FileManager.createFileName(FileManager.Pictures))
+                result.saveToFile(FileManager.createFileName(FileManager.Pictures))
             });
         } else if (event.key == Qt.Key_R) {
             print("Clear waterfall")
