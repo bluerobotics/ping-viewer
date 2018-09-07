@@ -94,7 +94,7 @@ void Ping::connectLink(LinkType connType, const QStringList& connString)
         _detector.requestInterruption();
     }
     setAutoDetect(false);
-    Sensor::connectLink(LinkConfiguration{connType, connString}, {LinkType::File, {FileManager::self()->createFileName(FileManager::FileType::BINARY), QStringLiteral("w")}});
+    Sensor::connectLink(LinkConfiguration{connType, connString}, {LinkType::File, {FileManager::self()->createFileName(FileManager::Folder::SensorLog), QStringLiteral("w")}});
     _periodicRequestTimer.start();
 }
 
