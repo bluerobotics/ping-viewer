@@ -57,8 +57,15 @@ WaterfallGradient::WaterfallGradient(QFile &file)
             }
         }
     }
+    const QString name = QFileInfo(file).fileName().split('.')[0].replace('_', ' ');
+    qCDebug(waterfallGradient) << "Creating gradient" << name << "with colors:" << colors;
+    _isOk = colors.length() > 1 && !name.isEmpty();
+    if(!_isOk) {
+        qCWarning(waterfallGradient) << "Invalid color or name";
+        return;
+    }
     setColors(colors);
-    setName(QFileInfo(file).fileName().split('.')[0].replace('_', ' '));
+    setName(name);
 }
 
 void WaterfallGradient::setColors(const QVector<QColor>& colors)
