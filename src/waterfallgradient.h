@@ -12,6 +12,7 @@ Q_DECLARE_LOGGING_CATEGORY(waterfallGradient)
 class WaterfallGradient : public QLinearGradient
 {
     QString _name;
+    bool _isOk = false;
 public:
     /**
      * @brief Construct a new Waterfall Gradient object
@@ -34,7 +35,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOk() { return (stops().size() > 1) && !_name.isEmpty(); };
+    bool isOk() { return _isOk; };
 
     /**
      * @brief Set the Colors object

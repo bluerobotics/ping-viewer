@@ -32,10 +32,15 @@ WaterfallGradient::WaterfallGradient(QFile &file)
     }
     QTextStream textStream(&file);
     QVector<QColor> colors;
-    while(!textStream.atEnd()) {
+    int maxNumberOfLines = 50;
+    while(!textStream.atEnd() && maxNumberOfLines--) {
         QString line = file.readLine();
         line = line.remove('\n');
         line = line.remove('\r');
+        if(line.isEmpty()) {
+            continue;
+        }
+        qCDebug(waterfallGradient) << "Check line:" << line;
         for(auto i : {2, 5, 8, 11}) {
             /*
                 Check for:
@@ -52,8 +57,15 @@ WaterfallGradient::WaterfallGradient(QFile &file)
             }
         }
     }
+    const QString name = QFileInfo(file).fileName().split('.')[0].replace('_', ' ');
+    qCDebug(waterfallGradient) << "Creating gradient" << name << "with colors:" << colors;
+    _isOk = colors.length() > 1 && !name.isEmpty();
+    if(!_isOk) {
+        qCWarning(waterfallGradient) << "Invalid color or name";
+        return;
+    }
     setColors(colors);
-    setName(QFileInfo(file).fileName().split('.')[0].replace('_', ' '));
+    setName(name);
 }
 
 void WaterfallGradient::setColors(const QVector<QColor>& colors)
