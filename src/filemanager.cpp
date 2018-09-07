@@ -7,12 +7,12 @@
 PING_LOGGING_CATEGORY(FILEMANAGER, "ping.filemanager");
 
 FileManager::FileManager()
-    : _docDir{.dir = QDir(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0])}
-    , _fmDir{.dir = _docDir.dir.filePath(QStringLiteral("PingViewer"))}
-    , _gradientsDir{.dir = _fmDir.dir.filePath(QStringLiteral("Waterfall_Gradients"))}
-    , _guiLogDir{.dir = _fmDir.dir.filePath(QStringLiteral("Gui_Log"))}
-    , _picturesDir{.dir = _fmDir.dir.filePath(QStringLiteral("Pictures"))}
-    , _sensorLogDir{.dir = _fmDir.dir.filePath(QStringLiteral("Sensor_Log"))}
+    : _docDir(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0])
+    , _fmDir(_docDir.dir.filePath(QStringLiteral("PingViewer")))
+    , _gradientsDir(_fmDir.dir.filePath(QStringLiteral("Waterfall_Gradients")), fileTypeExtension[TXT])
+    , _guiLogDir(_fmDir.dir.filePath(QStringLiteral("Gui_Log")), fileTypeExtension[TXT])
+    , _picturesDir(_fmDir.dir.filePath(QStringLiteral("Pictures")), fileTypeExtension[PICTURE])
+    , _sensorLogDir(_fmDir.dir.filePath(QStringLiteral("Sensor_Log")), fileTypeExtension[BINARY])
 {
     // Check for folders and create if necessary
     auto rootDir = QDir();
@@ -35,13 +35,17 @@ FileManager::FileManager()
 
 QFileInfoList FileManager::getFilesFrom(Folder folderType)
 {
-    if(!folderMap[folderType]->ok) {
+    FolderStruct* folder = folderMap[folderType];
+    if(!folder) {
+        qCWarning(FILEMANAGER) << "Folder pointer does not exist.";
         return {};
     }
-    auto dir = &folderMap[folderType]->dir;
-    dir->setSorting(QDir::Name);
-    dir->setFilter(QDir::Files);
-    return dir->entryInfoList();
+    if(!folder->ok) {
+        return {};
+    }
+    folder->dir.setSorting(QDir::Name);
+    folder->dir.setFilter(QDir::Files);
+    return folder->dir.entryInfoList();
 }
 
 QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
@@ -52,13 +56,18 @@ QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* script
     return self();
 }
 
-QString FileManager::createFileName(FileManager::FileType type)
+QString FileManager::createFileName(FileManager::Folder folderType)
 {
-    QString path = fileTypeFolder[type]->dir.path();
+    FolderStruct* folder = folderMap[folderType];
+    if(!folder) {
+        qCWarning(FILEMANAGER) << "Folder pointer does not exist!";
+        return {};
+    }
+    QString path = folder->dir.path();
     QString result = path + "/" \
                      + QDateTime::currentDateTime().toString(_fileName) \
-                     + fileTypeExtension[type];
-    qCDebug(FILEMANAGER) << result;
+                     + folder->extension;
+    qCDebug(FILEMANAGER) << "Creating file name:" << result;
     return result;
 }
 
