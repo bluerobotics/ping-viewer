@@ -11,6 +11,11 @@ WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors):
     _name(name)
 {
     setColors(colors);
+
+    _isOk = colors.length() > 1 && !name.isEmpty();
+    if(!_isOk) {
+        qCWarning(waterfallGradient) << "Invalid color or name";
+    }
 }
 
 WaterfallGradient::WaterfallGradient(QFile &file)
