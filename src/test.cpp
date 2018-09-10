@@ -26,6 +26,7 @@
 void Test::initTestCase()
 {
     FileManager::self();
+    SettingsManager::self();
 }
 
 void Test::fileManager()
@@ -93,6 +94,42 @@ void Test::ringVector()
         QVERIFY2(ring[i] == size - 1 - i,
                  qPrintable(QString("Ring is not working: Ring[%2]=%1").arg(ring[i]).arg(i)));
     }
+}
+
+void Test::settingsManager()
+{
+    auto settingsManager = SettingsManager::self();
+    // Check if settings is working
+    // Bool
+    QVERIFY2(!settingsManager->debugMode(), qPrintable("Debug mode should be false [Default value]."));
+    settingsManager->debugMode(true);
+    QVERIFY2(settingsManager->debugMode(), qPrintable("Debug mode should be true [Changed from false]."));
+    settingsManager->debugMode(false);
+    QVERIFY2(!settingsManager->debugMode(), qPrintable("Debug mode should be false [Changed from true]."));
+
+    // JSONMODEL
+    auto index = settingsManager->distanceUnitsIndex();
+    // Check default distance unit
+    QVERIFY2(index == 0,
+             qPrintable(QString("Meters is not default: %1").arg(index)));
+    auto name = settingsManager->distanceUnits()[QString("name")].toString();
+    QVERIFY2(name.contains("Metric"),
+             qPrintable(QString("Distance unit name is wrong: %1").arg(name)));
+    auto scalar = settingsManager->distanceUnits()[QString("distanceScalar")].toDouble();
+    QVERIFY2(qFuzzyCompare(scalar, 1),
+             qPrintable(QString("Distance scalar in meters is wrong: %1").arg(scalar)));
+
+    // Change to imperial
+    settingsManager->distanceUnitsIndex(1);
+    index = settingsManager->distanceUnitsIndex();
+    QVERIFY2(index == 1,
+             qPrintable(QString("Not changed to impérial: %1").arg(index)));
+    name = settingsManager->distanceUnits()[QString("name")].toString();
+    QVERIFY2(name.contains("Imperial"),
+             qPrintable(QString("Distance unit name is wrong: %1").arg(name)));
+    scalar = settingsManager->distanceUnits()[QString("distanceScalar")].toDouble();
+    QVERIFY2(qFuzzyCompare(scalar, 3.280839895),
+             qPrintable(QString("Distance scalar in meters is wrong: %1").arg(scalar)));
 }
 
 QTEST_MAIN(Test)

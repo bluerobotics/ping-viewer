@@ -7,4 +7,5 @@ private slots:
     void initTestCase();
     void fileManager();
     void ringVector();
+    void settingsManager();
 };
