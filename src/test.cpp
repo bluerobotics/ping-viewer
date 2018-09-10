@@ -132,4 +132,43 @@ void Test::settingsManager()
              qPrintable(QString("Distance scalar in meters is wrong: %1").arg(scalar)));
 }
 
+void Test::waterfallGradient()
+{
+    QVector<QColor> colorList = {Qt::black, Qt::white};
+    // Check name and validation
+    auto testName = QString("Test");
+    auto gradient = WaterfallGradient(testName, colorList);
+    QVERIFY2(gradient.isOk(), qPrintable("Basic gradient is not ok!"));
+    QVERIFY2(gradient.name().contains(testName),
+             qPrintable(QString("Name does not match: %1 != %2.").arg(gradient.name(), testName)));
+
+    // Check if colors and values are correct
+    QColor color0 = gradient.getColor(0);
+    QColor color05 = gradient.getColor(0.5);
+    QColor color1 = gradient.getColor(1);
+
+    QVERIFY2(color0 == QColor(Qt::black),
+             qPrintable(QString("Color does not match: %1").arg(color0.name())));
+
+    QVERIFY2(color05 == QColor("#7f7f7f"),
+             qPrintable(QString("Color does not match: %1").arg(color05.name())));
+
+    QVERIFY2(color1 == QColor(Qt::white),
+             qPrintable(QString("Color does not match: %1").arg(color1.name())));
+
+    float value0 = gradient.getValue(color0);
+    float value05 = gradient.getValue(color05);
+    float value1 = gradient.getValue(color1);
+
+    QVERIFY2(qFuzzyCompare(value0, 0),
+             qPrintable(QString("Value does not match: %1").arg(value0)));
+
+    QVERIFY2(abs(value05 - 0.5) < 0.05,
+             qPrintable(QString("Value does not match: %1").arg(value05)));
+
+    QVERIFY2(qFuzzyCompare(value1, 1),
+             qPrintable(QString("Value does not match: %1").arg(value1)));
+
+}
+
 QTEST_MAIN(Test)

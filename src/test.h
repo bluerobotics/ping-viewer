@@ -8,4 +8,5 @@ private slots:
     void fileManager();
     void ringVector();
     void settingsManager();
+    void waterfallGradient();
 };
