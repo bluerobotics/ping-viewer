@@ -20,16 +20,6 @@ class FileManager : public QObject
     Q_OBJECT
 public:
     /**
-     * @brief Manage file types
-     */
-    enum FileType {
-        TXT,
-        PICTURE,
-        BINARY
-    };
-    Q_ENUM(FileType)
-
-    /**
      * @brief Abstract folder names and struct access
      */
     enum Folder {
@@ -53,10 +43,10 @@ public:
     /**
      * @brief Return filename from type of file
      *
-     * @param type
+     * @param folderType
      * @return QString
      */
-    Q_INVOKABLE QString createFileName(FileManager::FileType type);
+    Q_INVOKABLE QString createFileName(FileManager::Folder folderType);
 
     /**
      * @brief Get the files from folder
@@ -77,6 +67,25 @@ public:
 
 private:
     /**
+     * @brief Manage file types
+     */
+    enum FileType {
+        TXT,
+        PICTURE,
+        BINARY
+    };
+
+    /**
+     * @brief Manage file extensions
+     *
+     */
+    const QMap<FileType, QString> fileTypeExtension {
+        {TXT, ".txt"}
+        , {PICTURE, ".png"}
+        , {BINARY, ".bin"}
+    };
+
+    /**
      * @brief Construct a new File Manager object
      *
      */
@@ -93,22 +102,25 @@ private:
      * @brief Structure to check folder existence
      *
      */
-    struct folder {
+    struct FolderStruct {
+        FolderStruct(QDir _dir, QString _extension = QString())
+            : dir(_dir), extension(_extension) {};
         QDir dir;
+        QString extension;
         bool ok = false;
     };
 
-    folder _docDir;
-    folder _fmDir;
-    folder _gradientsDir;
-    folder _guiLogDir;
-    folder _picturesDir;
-    folder _sensorLogDir;
+    FolderStruct _docDir;
+    FolderStruct _fmDir;
+    FolderStruct _gradientsDir;
+    FolderStruct _guiLogDir;
+    FolderStruct _picturesDir;
+    FolderStruct _sensorLogDir;
 
     /**
      * @brief Manage all folders access
      */
-    QMap<Folder, folder*> folderMap{
+    QMap<Folder, FolderStruct*> folderMap{
         {Documents, &_fmDir},
         {Gradients, &_gradientsDir},
         {GuiLogs, &_guiLogDir},
@@ -118,20 +130,10 @@ private:
     };
 
     /**
-     * @brief Manage file extensions
-     *
-     */
-    const QMap<FileType, QString> fileTypeExtension {
-        {TXT, ".txt"}
-        , {PICTURE, ".png"}
-        , {BINARY, ".bin"}
-    };
-
-    /**
      * @brief Manage file directories
      *
      */
-    const QMap<FileType, folder*> fileTypeFolder {
+    const QMap<FileType, FolderStruct*> fileTypeFolder {
         {TXT, &_gradientsDir},
         {TXT, &_guiLogDir},
         {PICTURE, &_picturesDir},
