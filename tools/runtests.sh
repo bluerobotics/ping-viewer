@@ -21,3 +21,11 @@ fi
 
 echob "Running style script:"
 ${scriptpath}/testdoxygen.sh
+
+echob "Compile code in test mode:"
+build_test="$projectpath/build_test"
+rm -rf $build_test
+mkdir -p ${build_test}
+qmake -o ${build_test} -r -Wall -Wlogic -Wparser CONFIG+=test ${projectpath}
+make -C ${build_test}
+xvfb-run $build_test/pingviewer
