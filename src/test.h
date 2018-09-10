@@ -6,4 +6,5 @@ class Test: public QObject
 private slots:
     void initTestCase();
     void fileManager();
+    void ringVector();
 };

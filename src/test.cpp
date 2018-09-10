@@ -73,4 +73,26 @@ void Test::fileManager()
     // TODO: Populate gradients folder and test FileManager.getFilesFrom
 }
 
+void Test::ringVector()
+{
+    // Create RingVector
+    RingVector<int> ring;
+    int size = 100;
+    // Populate and test it
+    ring.fill(0, size);
+    for(auto item : ring) {
+        QVERIFY2(item == 0, qPrintable("Ring is not populated."));
+    }
+
+    // Add more $size numbers and check if it's working
+    for(int i{0}; i < ring.length(); i++) {
+        ring.append(i);
+    }
+    // The first element is in 99 and the last in 0
+    for(int i{0}; i < ring.length(); i++) {
+        QVERIFY2(ring[i] == size - 1 - i,
+                 qPrintable(QString("Ring is not working: Ring[%2]=%1").arg(ring[i]).arg(i)));
+    }
+}
+
 QTEST_MAIN(Test)
