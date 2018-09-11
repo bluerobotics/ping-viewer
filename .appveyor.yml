@@ -40,7 +40,7 @@ install:
   # - If building a tag: Upload the build using the tag name
   # - When building master: Upload the build to the continuous tag
   # - When building a branch: Upload using the branch name
-  - if %APPVEYOR_REPO_TAG%==true (set RELEASE_NAME=%APPVEYOR_REPO_TAG_NAME%) else set RELEASE_NAME=%APPVEYOR_REPO_BRANCH%
+  - if %APPVEYOR_REPO_TAG%==true (set RELEASE_NAME=%APPVEYOR_REPO_TAG_NAME%) else set RELEASE_NAME=continuous-%APPVEYOR_REPO_BRANCH%
   - if %RELEASE_NAME%==master (set RELEASE_NAME=continuous)
 
 before_build:
@@ -80,6 +80,7 @@ artifacts:
 
 deploy:
   - provider: GitHub
+    tag: $(RELEASE_NAME)
     release: $(RELEASE_NAME)
     artifact: PingViewer
     draft: false
