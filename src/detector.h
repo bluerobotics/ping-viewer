@@ -13,11 +13,13 @@ class ProtocolDetector : public QThread
 {
     Q_OBJECT
 public:
-    ProtocolDetector(){
-        connect(this, &QThread::finished, this, [this]{ _active = false; });
+    ProtocolDetector()
+    {
+        connect(this, &QThread::finished, this, [this] { _active = false; });
     };
 
-    static const QStringList& invalidSerialPortNames() {
+    static const QStringList& invalidSerialPortNames()
+    {
         return _invalidSerialPortNames;
     };
     bool isValidPort(QSerialPortInfo& serialPortInfo);

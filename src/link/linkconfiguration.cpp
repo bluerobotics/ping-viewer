@@ -10,19 +10,22 @@ const QMap<LinkConfiguration::Error, QString> LinkConfiguration::errorMap {
     {ArgsAreEmpty, "Link configuration arguments are empty."},
 };
 
-const QString LinkConfiguration::createFullConfString() const {
+const QString LinkConfiguration::createFullConfString() const
+{
     QStringList args{_linkConf.args};
     args.prepend(QString::number(_linkConf.type));
     return args.join(":");
 }
 
-const QStringList LinkConfiguration::createFullConfStringList() const {
+const QStringList LinkConfiguration::createFullConfStringList() const
+{
     QStringList args{_linkConf.args};
     args.prepend(QString::number(_linkConf.type));
     return args;
 }
 
-LinkConfiguration::Error LinkConfiguration::error() const {
+LinkConfiguration::Error LinkConfiguration::error() const
+{
     // No type, no valid connection
     if(_linkConf.type == LinkType::None) {
         return NoType;
@@ -64,7 +67,8 @@ LinkConfiguration::Error LinkConfiguration::error() const {
 }
 
 //Todo: move to `operator QString()`
-QString LinkConfiguration::toString() const {
+QString LinkConfiguration::toString() const
+{
     QString text(QStringLiteral("LinkConfiguration{Name: %1, LinkType: %2, Arguments: (%3)}"));
     return text.arg(name(), QString::number(type()), args()->join(":"));
 }

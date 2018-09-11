@@ -27,7 +27,7 @@ void FileLink::_writeData(const QByteArray& data)
     // Check if we have already opened the file
     if(!_file.isOpen()) {
         qCDebug(PING_PROTOCOL_FILELINK) << "File will be opened.";
-        if(!_file.open(QIODevice::ReadWrite)){
+        if(!_file.open(QIODevice::ReadWrite)) {
             qCDebug(PING_PROTOCOL_FILELINK) << "File was not open.";
             return;
         }
@@ -65,7 +65,8 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
     return true;
 }
 
-bool FileLink::startConnection() {
+bool FileLink::startConnection()
+{
     // WriteOnly is used only to save data
     if(_openModeFlag == QIODevice::WriteOnly) {
         // The file will be created when something is received
@@ -108,11 +109,12 @@ bool FileLink::startConnection() {
     return ok;
 };
 
-bool FileLink::isOpen() {
+bool FileLink::isOpen()
+{
     // If filelink exist to create a log, the file will be only created after receiving the first data
     // To return at least a good answer, we do check the path to see if it's writable
     return (QFileInfo(QFileInfo(_file).canonicalPath()).isWritable() && _openModeFlag == QIODevice::WriteOnly)
-        || _file.isReadable(); // If file is readable it's already opened and working
+           || _file.isReadable(); // If file is readable it's already opened and working
 };
 
 bool FileLink::finishConnection()

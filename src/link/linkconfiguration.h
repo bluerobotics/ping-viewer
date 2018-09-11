@@ -62,7 +62,8 @@ public:
     //Todo: move to `operator QString()`
     Q_INVOKABLE QString toString() const;
 
-    LinkConfiguration& operator = (const LinkConfiguration& other) {
+    LinkConfiguration& operator = (const LinkConfiguration& other)
+    {
         this->_linkConf = other.configurationStruct();
         return *this;
     }

@@ -15,13 +15,14 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_PROTOCOLDETECTOR, "ping.protocol.protocoldetect
 
 
 const QStringList ProtocolDetector::_invalidSerialPortNames(
-    {
+{
 #ifdef Q_OS_OSX
-        "cu.", "SPPDev", "iPhone", "Bluetooth",
+    "cu.", "SPPDev", "iPhone", "Bluetooth",
 #endif
-    });
+});
 
-void ProtocolDetector::scan() {
+void ProtocolDetector::scan()
+{
     _active = true;
 
     // To find a ping, we this message on a link, then wait for a reply
@@ -139,9 +140,10 @@ void ProtocolDetector::scan() {
     }
 }
 
-bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout) {
+bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
+{
     // Call function asynchronously:
-    auto checkPort = [](const QSerialPortInfo& portInfo){
+    auto checkPort = [](const QSerialPortInfo& portInfo) {
         QSerialPort port(portInfo);
         bool ok = port.open(QIODevice::ReadWrite);
         // Close will check if is open
@@ -165,7 +167,8 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout) {
     return ok;
 }
 
-bool ProtocolDetector::isValidPort(QSerialPortInfo& serialPortInfo) {
+bool ProtocolDetector::isValidPort(QSerialPortInfo& serialPortInfo)
+{
     for(const auto& name : _invalidSerialPortNames) {
         if(serialPortInfo.portName().contains(name, Qt::CaseInsensitive)) {
             return false;

@@ -23,17 +23,17 @@ SerialLink::SerialLink(QObject* parent)
 
     connect(_port, &QSerialPort::errorOccurred, this, [this](QSerialPort::SerialPortError error) {
         switch(error) {
-            case QSerialPort::NoError:
-                break;
-            case QSerialPort::DeviceNotFoundError...QSerialPort::UnknownError:
-                qCWarning(PING_PROTOCOL_SERIALLINK) << "Error is critical ! Port need to be closed.";
-                qCWarning(PING_PROTOCOL_SERIALLINK) << "Error:" << error;
-                finishConnection();
-                break;
-            default:
-                qCDebug(PING_PROTOCOL_SERIALLINK) << "Error appear to be not critical. Nothing will be done about it.";
-                qCWarning(PING_PROTOCOL_SERIALLINK) << "Error:" << error;
-                break;
+        case QSerialPort::NoError:
+            break;
+        case QSerialPort::DeviceNotFoundError...QSerialPort::UnknownError:
+            qCWarning(PING_PROTOCOL_SERIALLINK) << "Error is critical ! Port need to be closed.";
+            qCWarning(PING_PROTOCOL_SERIALLINK) << "Error:" << error;
+            finishConnection();
+            break;
+        default:
+            qCDebug(PING_PROTOCOL_SERIALLINK) << "Error appear to be not critical. Nothing will be done about it.";
+            qCWarning(PING_PROTOCOL_SERIALLINK) << "Error:" << error;
+            break;
         }
     });
 }

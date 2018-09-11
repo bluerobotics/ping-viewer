@@ -17,21 +17,21 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
     , _abstractLink(nullptr)
 {
     switch(linkType) {
-        case LinkType::File :
-            _abstractLink = new FileLink();
-            break;
-        case LinkType::Serial :
-            _abstractLink = new SerialLink();
-            break;
-        case LinkType::Udp :
-            _abstractLink = new UDPLink();
-            break;
-        case LinkType::PingSimulation :
-            _abstractLink = new PingSimulationLink();
-            break;
-        default :
-            qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
-            return;
+    case LinkType::File :
+        _abstractLink = new FileLink();
+        break;
+    case LinkType::Serial :
+        _abstractLink = new SerialLink();
+        break;
+    case LinkType::Udp :
+        _abstractLink = new UDPLink();
+        break;
+    case LinkType::PingSimulation :
+        _abstractLink = new PingSimulationLink();
+        break;
+    default :
+        qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
+        return;
     }
 
     _abstractLink->setParent(this);
@@ -43,21 +43,21 @@ Link::Link(const LinkConfiguration& linkConfiguration, QObject* parent)
     , _abstractLink(nullptr)
 {
     switch(linkConfiguration.type()) {
-        case LinkType::File :
-            _abstractLink = new FileLink();
-            break;
-        case LinkType::Serial :
-            _abstractLink = new SerialLink();
-            break;
-        case LinkType::Udp :
-            _abstractLink = new UDPLink();
-            break;
-        case LinkType::PingSimulation :
-            _abstractLink = new PingSimulationLink();
-            break;
-        default :
-            qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
-            return;
+    case LinkType::File :
+        _abstractLink = new FileLink();
+        break;
+    case LinkType::Serial :
+        _abstractLink = new SerialLink();
+        break;
+    case LinkType::Udp :
+        _abstractLink = new UDPLink();
+        break;
+    case LinkType::PingSimulation :
+        _abstractLink = new PingSimulationLink();
+        break;
+    default :
+        qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
+        return;
     }
 
     _abstractLink->setParent(this);
