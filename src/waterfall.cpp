@@ -53,16 +53,7 @@ void Waterfall::clear()
 
 void Waterfall::setGradients()
 {
-    WaterfallGradient thermal5Grad(QStringLiteral("Thermal 5"), {
-        Qt::blue,
-        Qt::cyan,
-        Qt::green,
-        Qt::yellow,
-        Qt::red,
-    });
-    _gradients.append(thermal5Grad);
-
-    WaterfallGradient thermal5Blue(QStringLiteral("Thermal 5 blue"), {
+    WaterfallGradient thermal5Blue(QStringLiteral("Thermal blue"), {
         QColor("#05225f"),
         QColor("#6aa84f"),
         QColor("#ffff00"),
@@ -71,7 +62,7 @@ void Waterfall::setGradients()
     });
     _gradients.append(thermal5Blue);
 
-    WaterfallGradient thermal5Black(QStringLiteral("Thermal 5 black"), {
+    WaterfallGradient thermal5Black(QStringLiteral("Thermal black"), {
         Qt::black,
         QColor("#6aa84f"),
         QColor("#ffff00"),
@@ -80,7 +71,7 @@ void Waterfall::setGradients()
     });
     _gradients.append(thermal5Black);
 
-    WaterfallGradient thermal5White(QStringLiteral("Thermal 5 white"), {
+    WaterfallGradient thermal5White(QStringLiteral("Thermal white"), {
         Qt::white,
         QColor("#6aa84f"),
         QColor("#ffff00"),
@@ -88,27 +79,6 @@ void Waterfall::setGradients()
         QColor("#5c0f08"),
     });
     _gradients.append(thermal5White);
-
-    WaterfallGradient thermal6Grad(QStringLiteral("Thermal 6"), {
-        Qt::black,
-        Qt::blue,
-        Qt::cyan,
-        Qt::green,
-        Qt::yellow,
-        Qt::red,
-    });
-    _gradients.append(thermal6Grad);
-
-    WaterfallGradient thermal7Grad(QStringLiteral("Thermal 7"), {
-        Qt::black,
-        Qt::blue,
-        Qt::cyan,
-        Qt::green,
-        Qt::yellow,
-        Qt::red,
-        Qt::white,
-    });
-    _gradients.append(thermal7Grad);
 
     WaterfallGradient monochromeBlack(QStringLiteral("Monochrome black"), {
         Qt::black,
@@ -127,46 +97,6 @@ void Waterfall::setGradients()
         QColor("#e8c943"),
     });
     _gradients.append(monochromeSepia);
-
-    WaterfallGradient ocean(QStringLiteral("Ocean"), {
-        QColor(48,12,64),
-        QColor(86,30,111),
-        QColor(124,85,135),
-        QColor(167,114,130),
-        QColor(206,154,132),
-    });
-    _gradients.append(ocean);
-
-    WaterfallGradient transparent(QStringLiteral("Transparent"), {
-        QColor(20, 0, 120),
-        QColor(200, 30, 140),
-        QColor(255, 100, 0),
-        QColor(255, 255, 40),
-        QColor(255, 255, 255),
-    });
-    _gradients.append(transparent);
-
-    WaterfallGradient fishfinder(QStringLiteral("Fishfinder"), {
-        QColor(0, 0, 60),
-        QColor(61, 6, 124),
-        QColor(212, 45, 107),
-        QColor(255, 102, 0),
-        QColor(255, 227, 32),
-        Qt::white,
-    });
-    _gradients.append(fishfinder);
-
-    WaterfallGradient rainbow(QStringLiteral("Rainbow"), {
-        Qt::black,
-        Qt::magenta,
-        Qt::blue,
-        Qt::cyan,
-        Qt::darkGreen,
-        Qt::yellow,
-        Qt::red,
-        Qt::white,
-    });
-    _gradients.append(rainbow);
 
     loadUserGradients();
 
