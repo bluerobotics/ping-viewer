@@ -34,7 +34,7 @@ WaterfallGradient::WaterfallGradient(QFile &file)
     QVector<QColor> colors;
     int maxNumberOfLines = 50;
     while(!textStream.atEnd() && maxNumberOfLines--) {
-        QString line = file.readLine();
+        QString line = file.readLine().toLower();
         line = line.remove('\n');
         line = line.remove('\r');
         if(line.isEmpty()) {
