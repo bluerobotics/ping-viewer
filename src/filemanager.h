@@ -96,7 +96,7 @@ private:
     /**
      * @brief Filename structure
      */
-    const QString _fileName{QStringLiteral("yyyyMMdd-hhmmsszzz")};
+    const QString _fileName {QStringLiteral("yyyyMMdd-hhmmsszzz")};
 
     /**
      * @brief Structure to check folder existence
