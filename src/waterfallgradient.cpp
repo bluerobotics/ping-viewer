@@ -62,6 +62,7 @@ WaterfallGradient::WaterfallGradient(QFile &file)
     _isOk = colors.length() > 1 && !name.isEmpty();
     if(!_isOk) {
         qCWarning(waterfallGradient) << "Invalid color or name";
+        qCDebug(waterfallGradient) << "Name:" << name << "\tColors:" << colors;
         return;
     }
     setColors(colors);
