@@ -17,13 +17,14 @@
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
-Ping::Ping() : Sensor()
+Ping::Ping()
+    : Sensor()
+    , _parser(new PingParser())
 {
     _points.reserve(_num_points);
     for (int i = 0; i < _num_points; i++) {
         _points.append(0);
     }
-    _parser = new PingParser();
     connect(dynamic_cast<PingParser*>(_parser), &PingParser::newMessage, this, &Ping::handleMessage);
     connect(dynamic_cast<PingParser*>(_parser), &PingParser::parseError, this, &Ping::parserErrorsUpdate);
     connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
