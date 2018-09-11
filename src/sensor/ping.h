@@ -4,11 +4,11 @@
 #include <QSharedPointer>
 #include <QTimer>
 
-#include "sensor.h"
+#include "detector.h"
 #include "parsers/parser.h"
 #include "parsers/parser_ping.h"
-#include "parsers/detector.h"
 #include "pingmessage/pingmessage_all.h"
+#include "sensor.h"
 
 /**
  * @brief Define ping sensor
