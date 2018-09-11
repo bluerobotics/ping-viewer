@@ -14,12 +14,22 @@ matrix:
         apt:
           sources:
             - sourceline: 'ppa:cs50/ppa'
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+            - sourceline: 'ppa:beineri/opt-qt594-trusty'
           packages:
             - astyle
             - doxygen
+            - g++-7
+            - git
+            - build-essential
+            - qt59-meta-minimal
+            - qt59charts-no-lgpl qt59graphicaleffects qt59quickcontrols qt59quickcontrols2 qt59scxml qt59serialport qt59svg
+            - xvfb
       env:
         - DESC="Check code style && Doxygen"
-        - TEST="true"
+        - PINGTEST="true"
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - QTV="qt59"
 
     # AppImage deploy
     - os: linux
@@ -84,10 +94,10 @@ before_install:
 # This is necessary to solve https://github.com/travis-ci/travis-ci/issues/9649
 - eval "${MATRIX_EVAL}"
 # Install ccache for non test builds
-- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
+- if [[ "${TRAVIS_OS_NAME}" == "linux" && "$PINGTEST" != "true" ]]; then
     sudo apt install ccache;
   fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+- if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     brew update > /dev/null;
     brew install ccache;
   fi
@@ -95,13 +105,11 @@ before_install:
 install:
 # Install necessary tools to compile the code
 # Install jinja2 for protocol generation
-- if [ -z $TEST ]; then
-    pip install --user --upgrade pip;
-    pip install --user jinja2;
-  fi
+- pip install --user --upgrade pip;
+- pip install --user jinja2;
 
 # Install Qt in Mac OS
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+- if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     brew install qt@5.11;
     chmod -R 755 /usr/local/opt/qt5/*;
     export QTDIR="/usr/local/opt/qt5";
@@ -109,22 +117,29 @@ install:
   fi
 
 script:
-# Run tests
-# Check code style
-# Check doxygen comments
-- if [ ! -z $TEST ]; then
-    ./tools/runtests.sh || travis_terminate 1;
-  fi
-# Create AppImage for Linux
 # Use Gcc-7
 # Load Qt env variables
-# Compile ping-viewer
-# Move necessary files in deploy folder
-# Create AppImage with linuxdeployqt
-- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
+- echo $PINGTEST
+- if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60;
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60;
     source /opt/qt*/bin/qt*-env.sh;
+  fi
+
+# Run tests
+# Check code style
+# Check doxygen comments
+# Run unittests with fake xserver
+- echo $PINGTEST
+- if [ "$PINGTEST" == "true" ]; then
+    ./tools/runtests.sh || travis_terminate 1;
+  fi
+
+# Create AppImage for Linux
+# Compile ping-viewer
+# Move necessary files in deploy folder
+# Create AppImage with linuxdeployqt
+- if [[ "${TRAVIS_OS_NAME}" == "linux" && "$PINGTEST" != "true" ]]; then
     ./tools/compile.sh || travis_terminate 1;
     if [ "${QTV}" = "qt59" ]; then
       mv /tmp/pingviewer-x86_64.AppImage /tmp/pingviewer-x86_64_QGC.AppImage;
@@ -132,27 +147,27 @@ script:
   fi
 # Create .dmg for Mac OS with macdeployqt
 # The steps are the same one in Linux
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+- if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     ./tools/compile.sh || travis_terminate 1;
   fi
 
 after_success:
 # Upload files in GitHub
 - export DEPLOY_FILE="";
-- if [ -z $TEST ]; then
+- if [ "$PINGTEST" != "true" ]; then
     ls /tmp/pingviewer*;
     wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
   fi
 - if [ ! -z $TRAVIS_BRANCH ] && [ "$TRAVIS_BRANCH" != "master" ] ; then
     export UPLOADTOOL_SUFFIX=$TRAVIS_BRANCH;
   fi
-- if [[ "${TRAVIS_OS_NAME}" = "linux" && -z $TEST ]]; then
+- if [[ "${TRAVIS_OS_NAME}" == "linux" && "$PINGTEST" != "true" ]]; then
     export DEPLOY_FILE=/tmp/pingviewer*.AppImage;
   fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+- if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     export DEPLOY_FILE=/tmp/pingviewer*.dmg;
   fi
-- if [ -z $TEST  ]; then
+- if [ "$PINGTEST" != "true" ]; then
     bash ./upload.sh ${DEPLOY_FILE};
   fi
 # Move files to s3 folder and send to amazon
