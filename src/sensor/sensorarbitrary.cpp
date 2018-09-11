@@ -3,8 +3,8 @@
 #include "parsers/parser_json.h"
 
 SensorArbitrary::SensorArbitrary()
+    : _parser(new JsonParser())
 {
-    _parser = new JsonParser();
     connect(dynamic_cast<JsonParser*>(_parser), &JsonParser::newJsonObject, this, &SensorArbitrary::handleJsonObject);
     connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
 }
