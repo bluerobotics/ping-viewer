@@ -8,3 +8,4 @@ SOURCES += \
 
 include($$PWD/sensor/sensor.pri)
 include($$PWD/settings/settings.pri)
+include($$PWD/link/link.pri)
