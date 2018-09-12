@@ -41,7 +41,7 @@ SerialLink::SerialLink(QObject* parent)
 bool SerialLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 {
     _linkConfiguration = linkConfiguration;
-    qCDebug(PING_PROTOCOL_SERIALLINK) << linkConfiguration.toString();
+    qCDebug(PING_PROTOCOL_SERIALLINK) << linkConfiguration;
     if(!linkConfiguration.isValid()) {
         qCDebug(PING_PROTOCOL_SERIALLINK) << LinkConfiguration::errorToString(linkConfiguration.error());
         return false;

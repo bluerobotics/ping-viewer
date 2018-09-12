@@ -48,7 +48,7 @@ void FileLink::_writeData(const QByteArray& data)
 bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 {
     _linkConfiguration = linkConfiguration;
-    qCDebug(PING_PROTOCOL_FILELINK) << linkConfiguration.toString();
+    qCDebug(PING_PROTOCOL_FILELINK) << linkConfiguration;
     if(!linkConfiguration.isValid()) {
         qCDebug(PING_PROTOCOL_FILELINK) << LinkConfiguration::errorToString(linkConfiguration.error());
         return false;
