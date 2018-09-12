@@ -59,13 +59,16 @@ public:
 
     static QString errorToString(Error error) { return errorMap[error]; }
 
-    //Todo: move to `operator QString()`
-    Q_INVOKABLE QString toString() const;
-
     LinkConfiguration& operator = (const LinkConfiguration& other)
     {
         this->_linkConf = other.configurationStruct();
         return *this;
+    }
+
+    operator QString() const
+    {
+        QString text(QStringLiteral("LinkConfiguration{Name: %1, LinkType: %2, Arguments: (%3)}"));
+        return text.arg(name(), QString::number(type()), args()->join(":"));
     }
 
 private:

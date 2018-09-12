@@ -65,10 +65,3 @@ LinkConfiguration::Error LinkConfiguration::error() const
 
     return NoErrors;
 }
-
-//Todo: move to `operator QString()`
-QString LinkConfiguration::toString() const
-{
-    QString text(QStringLiteral("LinkConfiguration{Name: %1, LinkType: %2, Arguments: (%3)}"));
-    return text.arg(name(), QString::number(type()), args()->join(":"));
-}
