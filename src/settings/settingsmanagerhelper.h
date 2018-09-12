@@ -5,14 +5,20 @@
 /**
  * @brief Defines a simple propriety
  * The output will be something like:
- * AUTO_PROPERTY(myType, myName):
+ * AUTO_PROPERTY(myType, myName, defaultValue):
  *    Q_PROPERTY(myType myName READ myName WRITE myName NOTIFY myNameChanged)
  *public:
  *    // Get property
  *    myType myName() {
  *        // Always check settings content, make sure that everything is updated
- *        _myName = _settings.value(QStringLiteral("myName")).value<myType>();
- *        return _myName;
+ *        QVariant variant = _settings.value(QStringLiteral(myName)); \
+ *        if(variant.isValid()) { \
+ *            _myName = variant.value<TYPE>(); \
+ *        } else { \
+ *            _myName = defaultValue; \
+ *            myType(_myType); \
+ *        } \
+ *        return _myType; \
  *    }
  *    // Change property value
  *    void myName(myType value) {
@@ -27,10 +33,19 @@
  *    // Define internal variable
  *    myType _myName;
  */
-#define AUTO_PROPERTY(TYPE, NAME) \
+#define AUTO_PROPERTY(TYPE, NAME, DEFAULT_VALUE) \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME ## Changed ) \
 public: \
-    TYPE NAME() { _ ## NAME = _settings.value(QStringLiteral(#NAME)).value<TYPE>(); return _ ## NAME ; } \
+    TYPE NAME() { \
+        QVariant variant = _settings.value(QStringLiteral(#NAME)); \
+        if(variant.isValid()) { \
+            _ ## NAME = variant.value<TYPE>(); \
+        } else { \
+            _ ## NAME = DEFAULT_VALUE; \
+            NAME(_ ## NAME); \
+        } \
+        return _ ## NAME; \
+    } \
     void NAME(TYPE value) { \
         if(_ ## NAME == value) { return; }\
         _ ## NAME = value; \
