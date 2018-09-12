@@ -74,9 +74,9 @@ private:
 
     // Everything after this line should be AUTO_PROPERTY
     AUTO_PROPERTY(bool, debugMode)
+    AUTO_PROPERTY(bool, logScrollLock)
     AUTO_PROPERTY(bool, replayMenu)
     AUTO_PROPERTY(bool, reset)
-    AUTO_PROPERTY(bool, logSCrollLock)
     //AUTO_PROPERTY_MODEL(QString, adistanceUnits, QStringList, MODEL({"Metric", "Imperial"})) // Example
     AUTO_PROPERTY_JSONMODEL(distanceUnits, QByteArrayLiteral(R"({
             "settings": [
