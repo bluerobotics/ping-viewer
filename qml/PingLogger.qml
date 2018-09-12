@@ -7,11 +7,11 @@ import SettingsManager 1.0
 Item {
     id: root
 
-    property bool scrollLockEnabled: SettingsManager.logSCrollLock
+    property bool scrollLockEnabled: SettingsManager.logScrollLock
 
     onScrollLockEnabledChanged: {
-        if(scrollLockEnabled != SettingsManager.logSCrollLock) {
-            SettingsManager.logSCrollLock = scrollLockEnabled
+        if(scrollLockEnabled != SettingsManager.logScrollLock) {
+            SettingsManager.logScrollLock = scrollLockEnabled
         }
     }
 
