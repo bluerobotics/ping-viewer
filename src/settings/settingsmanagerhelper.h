@@ -28,19 +28,19 @@
  *    myType _myName;
  */
 #define AUTO_PROPERTY(TYPE, NAME) \
-   Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME ## Changed ) \
+    Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME ## Changed ) \
 public: \
-TYPE NAME() { _ ## NAME = _settings.value(QStringLiteral(#NAME)).value<TYPE>(); return _ ## NAME ; } \
-   void NAME(TYPE value) { \
-       if(_ ## NAME == value) { return; }\
-       _ ## NAME = value; \
-       _settings.setValue(QStringLiteral(#NAME), value); \
-       qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
-       emit NAME ## Changed(); \
-   } \
-   Q_SIGNAL void NAME ## Changed();\
+    TYPE NAME() { _ ## NAME = _settings.value(QStringLiteral(#NAME)).value<TYPE>(); return _ ## NAME ; } \
+    void NAME(TYPE value) { \
+        if(_ ## NAME == value) { return; }\
+        _ ## NAME = value; \
+        _settings.setValue(QStringLiteral(#NAME), value); \
+        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
+        emit NAME ## Changed(); \
+    } \
+    Q_SIGNAL void NAME ## Changed();\
 private: \
-   TYPE _ ## NAME;
+    TYPE _ ## NAME;
 
 /**
  * @brief Create a model property for qml connections
