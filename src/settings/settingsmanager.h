@@ -7,6 +7,8 @@
 #include "qjsonsettings.h"
 #include "settingsmanagerhelper.h"
 
+#include "linkconfiguration.h"
+
 class QJSEngine;
 class QQmlEngine;
 

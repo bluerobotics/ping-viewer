@@ -18,6 +18,7 @@
  *            _myName = defaultValue; \
  *            myType(_myType); \
  *        } \
+ *        qCDebug(SETTINGSMANAGER) << QStringLiteral("Load %1 with:").arg("myName") << _myName;\
  *        return _myType; \
  *    }
  *    // Change property value
@@ -44,13 +45,14 @@ public: \
             _ ## NAME = DEFAULT_VALUE; \
             NAME(_ ## NAME); \
         } \
+        qCDebug(SETTINGSMANAGER) << QStringLiteral("Load %1 with:").arg(#NAME) << _ ## NAME;\
         return _ ## NAME; \
     } \
     void NAME(TYPE value) { \
         if(_ ## NAME == value) { return; }\
         _ ## NAME = value; \
         _settings.setValue(QStringLiteral(#NAME), qVariantFromValue(value)); \
-        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
+        qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
         emit NAME ## Changed(); \
     } \
     Q_SIGNAL void NAME ## Changed();\
@@ -76,7 +78,7 @@ private: \
  *        if(_myName == value) { return; }
  *        _myName = value;
  *        _settings.setValue(QStringLiteral("myName"), value);
- *        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg("myName") << value;
+ *        qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg("myName") << value;
  *        emit myNameChanged();
  *    }
  *    // Get myName model
@@ -96,7 +98,7 @@ public: \
         if(_ ## NAME == value) { return; }\
         _ ## NAME = value; \
         _settings.setValue(QStringLiteral(#NAME), value); \
-        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
+        qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
         emit NAME ## Changed(); \
     } \
     const MODEL_TYPE* NAME ## Model() { return _ ## NAME ## Model; }\
@@ -118,7 +120,7 @@ private: \
  *        if(_myNameIndex == value) { return; }\
  *        _myNameIndex = value; \
  *        _settings.setValue(QStringLiteral(myName), value); \
- *        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(myName) << value;\
+ *        qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(myName) << value;\
  *        emit myNameIndexChanged(); \
  *    } \
  *    const QJsonSettings* myNameModel() { return _myNameModel; }\
@@ -138,7 +140,7 @@ public: \
         if(_ ## NAME ## Index == value) { return; }\
         _ ## NAME ## Index = value; \
         _settings.setValue(QStringLiteral(#NAME), value); \
-        qDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
+        qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
         emit NAME ## Index ## Changed(); \
     } \
     const QJsonSettings* NAME ## Model() { return _ ## NAME ## Model; }\
