@@ -27,6 +27,7 @@ Logger::Logger()
         QLoggingCategory::setFilterRules(filter);
     }
 
+    registerCategory("default");
     registerCategory("qml");
 }
 
