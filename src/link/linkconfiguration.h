@@ -69,12 +69,19 @@ public:
         return *this;
     }
 
-    operator QString() const
-    {
-        QString text(QStringLiteral("LinkConfiguration{Name: %1, LinkType: %2, Arguments: (%3)}"));
-        return text.arg(name(), QString::number(type()), args()->join(":"));
-    }
+    bool checkType(LinkType type) { return _linkConf.type == type; };
+
+    QString serialPort();
+    int serialBaudrate();
+
+    QString udpHost();
+    int udpPort();
 
 private:
     LinkConf _linkConf;
 };
+
+bool operator==(const LinkConfiguration& first, const LinkConfiguration& second);
+QDebug operator<<(QDebug d, const LinkConfiguration& other);
+QDataStream& operator<<(QDataStream &out, const LinkConfiguration linkConfiguration);
+QDataStream& operator>>(QDataStream &in, LinkConfiguration &linkConfiguration);
