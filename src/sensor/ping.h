@@ -31,13 +31,6 @@ public:
     Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString);
 
     /**
-     * @brief Add new connection
-     *
-     * @param linkConfig Link Configuration structure
-     */
-    Q_INVOKABLE void connectLink2(LinkConfiguration linkConfig);
-
-    /**
      * @brief debug function
      */
     void printStatus();

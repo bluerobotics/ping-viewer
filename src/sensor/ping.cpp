@@ -1,4 +1,3 @@
-#include "filemanager.h"
 #include "ping.h"
 
 #include <QCoreApplication>
@@ -14,6 +13,7 @@
 #include "link/seriallink.h"
 #include "pingmessage/pingmessage.h"
 #include "pingmessage/pingmessage_ping1D.h"
+#include "settingsmanager.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
@@ -72,38 +72,34 @@ Ping::Ping() : Sensor()
 
     //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
-    connect(_detector, &ProtocolDetector::connectionDetected, this, &Ping::connectLink2);
+    connect(_detector, &ProtocolDetector::connectionDetected, this, [this] {
+        setAutoDetect(false);
+        SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
+    });
 
     connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {
         if(!autodetect) {
-            if(_detector->isRunning()) {
-                _detector->stop();
+            if(detector()->isRunning()) {
+                detector()->stop();
             }
         } else {
-            if(!_detector->isRunning()) {
-                _detector->scan();
+            if(!detector()->isRunning()) {
+                detector()->scan();
             }
         }
     });
+
+    // Load last successful connection
+    auto config = SettingsManager::self()->lastLinkConfiguration();
+    qCDebug(PING_PROTOCOL_PING) << "Loading last configuration connection from settings:" << config;
+    if(!detector()->checkLink(config)) {
+        detectorThread()->start();
+    }
 }
 
 void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
-    if(_detector->isRunning()) {
-        _detector->stop();
-    }
-    setAutoDetect(false);
-    Sensor::connectLink(LinkConfiguration{connType, connString}, {LinkType::File, {FileManager::self()->createFileName(FileManager::Folder::SensorLog), QStringLiteral("w")}});
-    _periodicRequestTimer.start();
-}
-
-void Ping::connectLink2(LinkConfiguration linkConfig)
-{
-    if(_detector->isRunning()) {
-        _detector->stop();
-    }
-    setAutoDetect(false);
-    Sensor::connectLink(linkConfig, {LinkType::File, {FileManager::self()->createFileName(FileManager::Folder::SensorLog), QStringLiteral("w")}});
+    Sensor::connectLink(LinkConfiguration{connType, connString});
     _periodicRequestTimer.start();
 }
 
@@ -382,7 +378,7 @@ void Ping::firmwareUpdatePercentage()
             if (_fw_update_perc > 99.99) {
                 emit flashComplete();
                 QThread::msleep(500);
-                _detector->scan();
+                detector()->scan();
             } else {
                 emit flashProgress(_fw_update_perc);
             }
