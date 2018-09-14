@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
+#include "filemanager.h"
 #include "sensor.h"
 
 #include "pingmessage/pingmessage.h"
@@ -12,6 +13,8 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 Sensor::Sensor() :
     _autodetect(true)
     ,_connected(false)
+    ,_detector(new ProtocolDetector())
+    ,_detectorThread(new QThread(this))
     ,_linkIn(new Link(LinkType::Serial, "Default"))
     ,_linkOut(nullptr)
     ,_parser(nullptr)
@@ -25,11 +28,23 @@ Sensor::Sensor() :
         this->_connected = false;
         emit this->connectionUpdate();
     });
+
+    _detector->moveToThread(_detectorThread);
+    connect(_detectorThread, &QThread::finished, _detector, &QObject::deleteLater);
+    connect(_detectorThread, &QThread::started, _detector, &ProtocolDetector::scan);
+    connect(_detectorThread, &QThread::finished, _detectorThread, &QObject::deleteLater);
+    connect(_detector, &ProtocolDetector::connectionDetected, this, [this](const LinkConfiguration& conConf) {
+        connectLink(conConf);
+    });
 }
 
 // TODO rework this after sublasses and parser rework
 void Sensor::connectLink(const LinkConfiguration& conConf, const LinkConfiguration& logConf)
 {
+    if(_detector->isRunning()) {
+        _detector->stop();
+    }
+
     if(link()->isOpen()) {
         link()->finishConnection();
     }
@@ -60,6 +75,7 @@ void Sensor::connectLink(const LinkConfiguration& conConf, const LinkConfigurati
     emit connectionOpen();
 
     // Disable log if playing one
+    // Only save last link configuration if it's not a log
     if(link()->type() == LinkType::File) {
         if(!linkLog()) {
             return;
@@ -69,10 +85,9 @@ void Sensor::connectLink(const LinkConfiguration& conConf, const LinkConfigurati
             linkLog()->finishConnection();
             _linkOut.clear();
         }
-    } else { // Start log, if not playing one
+    } else {
         if(!logConf.isValid()) {
-            QString fileName = QStringLiteral("%1.%2").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmsszzz")), "bin");
-            connectLinkLog({LinkType::File, {fileName, QStringLiteral("w")}});
+            connectLinkLog({LinkType::File, {FileManager::self()->createFileName(FileManager::Folder::SensorLog), QStringLiteral("w")}});
         } else {
             connectLinkLog(logConf);
         }
@@ -117,4 +132,7 @@ void Sensor::setAutoDetect(bool autodetect)
 
 Sensor::~Sensor()
 {
+    _detector->stop();
+    _detectorThread->terminate();
+    _detectorThread->wait();
 }
