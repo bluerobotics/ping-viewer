@@ -72,17 +72,16 @@ Ping::Ping() : Sensor()
 
     //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
-    connect(&_detector, &ProtocolDetector::connectionDetected, this, &Ping::connectLink);
-    _detector.start();
+    connect(_detector, &ProtocolDetector::connectionDetected, this, &Ping::connectLink2);
 
     connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {
         if(!autodetect) {
-            if(_detector.isRunning()) {
-                _detector.exit();
+            if(_detector->isRunning()) {
+                _detector->stop();
             }
         } else {
-            if(!_detector.isRunning()) {
-                _detector.start();
+            if(!_detector->isRunning()) {
+                _detector->scan();
             }
         }
     });
@@ -90,11 +89,21 @@ Ping::Ping() : Sensor()
 
 void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
-    if(_detector.isRunning()) {
-        _detector.requestInterruption();
+    if(_detector->isRunning()) {
+        _detector->stop();
     }
     setAutoDetect(false);
     Sensor::connectLink(LinkConfiguration{connType, connString}, {LinkType::File, {FileManager::self()->createFileName(FileManager::Folder::SensorLog), QStringLiteral("w")}});
+    _periodicRequestTimer.start();
+}
+
+void Ping::connectLink2(LinkConfiguration linkConfig)
+{
+    if(_detector->isRunning()) {
+        _detector->stop();
+    }
+    setAutoDetect(false);
+    Sensor::connectLink(linkConfig, {LinkType::File, {FileManager::self()->createFileName(FileManager::Folder::SensorLog), QStringLiteral("w")}});
     _periodicRequestTimer.start();
 }
 
@@ -372,8 +381,8 @@ void Ping::firmwareUpdatePercentage()
 
             if (_fw_update_perc > 99.99) {
                 emit flashComplete();
-                QThread::usleep(500e3);
-                _detector.start();
+                QThread::msleep(500);
+                _detector->scan();
             } else {
                 emit flashProgress(_fw_update_perc);
             }
