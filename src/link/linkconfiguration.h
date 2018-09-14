@@ -55,6 +55,7 @@ public:
     const QStringList createFullConfStringList() const;
 
     LinkConf configurationStruct() const { return _linkConf; };
+    const LinkConf* configurationStructPtr() const { return &_linkConf; };
 
     Q_INVOKABLE bool isValid() const { return error() <= NoErrors; }
 
