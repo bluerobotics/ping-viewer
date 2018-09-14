@@ -34,6 +34,9 @@ public:
         : _linkConf{args, name, linkType} {};
     LinkConfiguration(LinkConf& confLinkStructure)
         : _linkConf{confLinkStructure} {};
+    LinkConfiguration(const LinkConfiguration& other, QObject* parent = nullptr)
+        : QObject(parent)
+        , _linkConf{other.configurationStruct()} {};
     ~LinkConfiguration() = default;
 
     const QStringList* args() const { return &_linkConf.args; };
