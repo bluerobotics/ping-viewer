@@ -1,11 +1,5 @@
 INCLUDEPATH += $$PWD
 
-HEADERS += \
-    $$PWD/util.h \
-
-SOURCES += \
-    $$PWD/util.cpp \
-
 test {
     message(Configuring test build...)
 
@@ -26,4 +20,5 @@ include($$PWD/link/link.pri)
 include($$PWD/logger/logger.pri)
 include($$PWD/sensor/sensor.pri)
 include($$PWD/settings/settings.pri)
+include($$PWD/util/util.pri)
 include($$PWD/waterfall/waterfall.pri)
