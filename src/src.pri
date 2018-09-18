@@ -2,13 +2,11 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/filemanager.h \
-    $$PWD/log*.h \
     $$PWD/util.h \
     $$PWD/waterfall*.h \
 
 SOURCES += \
     $$PWD/filemanager.cpp \
-    $$PWD/log*.cpp \
     $$PWD/util.cpp \
     $$PWD/waterfall*.cpp \
 
@@ -28,5 +26,6 @@ test {
 }
 
 include($$PWD/link/link.pri)
+include($$PWD/logger/logger.pri)
 include($$PWD/sensor/sensor.pri)
 include($$PWD/settings/settings.pri)
