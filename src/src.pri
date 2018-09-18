@@ -1,14 +1,12 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/detector.h \
     $$PWD/filemanager.h \
     $$PWD/log*.h \
     $$PWD/util.h \
     $$PWD/waterfall*.h \
 
 SOURCES += \
-    $$PWD/detector.cpp \
     $$PWD/filemanager.cpp \
     $$PWD/log*.cpp \
     $$PWD/util.cpp \
