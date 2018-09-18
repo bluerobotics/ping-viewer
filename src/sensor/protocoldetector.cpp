@@ -7,13 +7,11 @@
 #include <QSerialPortInfo>
 #include <QUdpSocket>
 
-#include "abstractlinknamespace.h"
-#include "detector.h"
 #include "pingmessage/pingmessage.h"
 #include "pingmessage/pingmessage_ping1D.h"
+#include "protocoldetector.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PROTOCOLDETECTOR, "ping.protocol.protocoldetector")
-
 
 const QStringList ProtocolDetector::_invalidSerialPortNames(
 {

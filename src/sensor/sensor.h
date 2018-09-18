@@ -2,9 +2,9 @@
 
 #include <QPointer>
 
-#include "detector.h"
 #include "link.h"
 #include "parsers/parser.h"
+#include "protocoldetector.h"
 
 // TODO rename to Device?
 /**
