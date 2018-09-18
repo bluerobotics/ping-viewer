@@ -409,29 +409,29 @@ private:
      * @brief Sensor variables
      */
 ///@{
-    QString _ascii_text;
-    QString _nack_msg;
+    QString _ascii_text = QString();
+    QString _nack_msg = QString();
 
-    uint8_t _srcId;
-    uint8_t _dstId;
+    uint8_t _srcId = 0;
+    uint8_t _dstId = 0;
 
-    uint8_t _device_type;
-    uint8_t _device_model;
-    uint16_t _fw_version_major;
-    uint16_t _fw_version_minor;
+    uint8_t _device_type = 0;
+    uint8_t _device_model = 0;
+    uint16_t _fw_version_major = 0;
+    uint16_t _fw_version_minor = 0;
 
-    uint32_t _distance; // mm
-    uint8_t _confidence; // 0-100%
-    uint16_t _pulse_usec;
-    uint32_t _ping_number;
-    uint32_t _scan_start;
-    uint32_t _scan_length;
-    uint32_t _gain_index;
-    uint32_t _speed_of_sound;
+    uint32_t _distance = 0; // mm
+    uint8_t _confidence = 0; // 0-100%
+    uint16_t _pulse_usec = 0;
+    uint32_t _ping_number = 0;
+    uint32_t _scan_start = 0;
+    uint32_t _scan_length = 0;
+    uint32_t _gain_index = 0;
+    uint32_t _speed_of_sound = 0;
 
-    uint16_t _processor_temperature;
-    uint16_t _pcb_temperature;
-    uint16_t _board_voltage;
+    uint16_t _processor_temperature = 0;
+    uint16_t _pcb_temperature = 0;
+    uint16_t _board_voltage = 0;
 ///@}
 
     float _fw_update_perc;
@@ -443,8 +443,8 @@ private:
     //QVector<int> _points;
     QVector<double> _points;
 
-    bool _mode_auto;
-    uint16_t _ping_rate;
+    bool _mode_auto = 0;
+    uint16_t _ping_rate = 0;
 
     // TODO const &
     void handleMessage(PingMessage msg); // handle incoming message
