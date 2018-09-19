@@ -55,7 +55,7 @@ Item {
                         enabled: false
                         Layout.columnSpan: SettingsManager.debugMode ? 3 : 9
                         Layout.fillWidth: true
-                        text: ping.fw_version_major + "." + ping.fw_version_minor
+                        text: ping.firmware_version_major + "." + ping.firmware_version_minor
                     }
 
                     ComboBox {

@@ -24,7 +24,7 @@ Item {
             anchors.margins: marginPix
             Row {
                 Text {
-                    text: "FW: " + ping.fw_version_major + "." + ping.fw_version_minor
+                    text: "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -80,7 +80,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Pulse durantion (μs): " + ping.pulse_usec
+                    text: "Pulse duration (μs): " + ping.pulse_duration
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
@@ -88,7 +88,7 @@ Item {
             }
             Row {
                 Text {
-                    text: "Ping interval (ms): " + ping.msec_per_ping
+                    text: "Ping interval (ms): " + ping.ping_interval
                     color: "white"
                     font.family: "unicode"
                     font.pointSize: 8
