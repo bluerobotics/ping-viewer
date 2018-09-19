@@ -97,7 +97,7 @@ Item {
             item: InfoPage {
                 id: infoPage
                 anchors.fill: parent
-                deviceFirmware: ping.fw_version_major + "." + ping.fw_version_minor
+                deviceFirmware: ping.firmware_version_major + "." + ping.firmware_version_minor
                 deviceID: ping.srcId
                 deviceModel: ping.device_model
                 deviceType: ping.device_type

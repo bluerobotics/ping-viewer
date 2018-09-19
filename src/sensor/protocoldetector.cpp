@@ -88,7 +88,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 {
     // To find a ping, we this message on a link, then wait for a reply
     ping_msg_ping1D_empty req;
-    req.set_id(Ping1DNamespace::Fw_version);
+    req.set_id(Ping1DNamespace::Firmware_version);
     req.updateChecksum();
 
     QSerialPortInfo portInfo(linkConf.serialPort());
@@ -138,7 +138,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 {
     // To find a ping, we this message on a link, then wait for a reply
     ping_msg_ping1D_empty req;
-    req.set_id(Ping1DNamespace::Fw_version);
+    req.set_id(Ping1DNamespace::Firmware_version);
     req.updateChecksum();
 
     QUdpSocket socket;

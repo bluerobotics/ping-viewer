@@ -59,16 +59,16 @@ public:
      *
      * @return uint16_t firmware major version number
      */
-    uint16_t fw_version_major() { return _fw_version_major; }
-    Q_PROPERTY(int fw_version_major READ fw_version_major NOTIFY fwVersionMajorUpdate)
+    uint16_t firmware_version_major() { return _firmware_version_major; }
+    Q_PROPERTY(int firmware_version_major READ firmware_version_major NOTIFY firmwareVersionMajorUpdate)
 
     /**
      * @brief Return firmware minor version
      *
      * @return uint16_t firmware minor version number
      */
-    uint16_t fw_version_minor() { return _fw_version_minor; }
-    Q_PROPERTY(int fw_version_minor READ fw_version_minor NOTIFY fwVersionMinorUpdate)
+    uint16_t firmware_version_minor() { return _firmware_version_minor; }
+    Q_PROPERTY(int firmware_version_minor READ firmware_version_minor NOTIFY firmwareVersionMinorUpdate)
 
     /**
      * @brief Return device type number
@@ -115,8 +115,8 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t pulse_usec() { return _pulse_usec; }
-    Q_PROPERTY(int pulse_usec READ pulse_usec NOTIFY pulseUsecUpdate)
+    uint16_t pulse_duration() { return _pulse_duration; }
+    Q_PROPERTY(int pulse_duration READ pulse_duration NOTIFY pulseDurationUpdate)
 
     /**
      * @brief Return start distance of sonar points in mm
@@ -248,22 +248,22 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t msec_per_ping() { return _ping_rate; }
+    uint16_t ping_interval() { return _ping_interval; }
 
     /**
      * @brief Set time between pings in ms
      *
-     * @param msec_per_ping
+     * @param ping_interval
      */
-    void set_msec_per_ping(uint16_t msec_per_ping)
+    void set_ping_interval(uint16_t ping_interval)
     {
-        ping_msg_ping1D_set_ping_rate m;
-        m.set_ping_rate(msec_per_ping);
+        ping_msg_ping1D_set_ping_interval m;
+        m.set_ping_interval(ping_interval);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::Ping_rate);
+        request(Ping1DNamespace::Ping_interval);
     }
-    Q_PROPERTY(int msec_per_ping READ msec_per_ping WRITE set_msec_per_ping NOTIFY pingRateUpdate)
+    Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalUpdate)
 
     /**
      * @brief Get the speed of sound (mm/s) used for calculating the distance from time-of-flight
@@ -316,7 +316,7 @@ public:
      *
      * @return float
      */
-    float pingFrequency() { return _ping_rate ? static_cast<int>(1000/_ping_rate) : 0; };
+    float pingFrequency() { return _ping_interval ? static_cast<int>(1000/_ping_interval) : 0; };
 
     /**
      * @brief Set ping frequency
@@ -324,7 +324,7 @@ public:
      * @param pingFrequency
      */
     void setPingFrequency(float pingFrequency);
-    Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingRateUpdate)
+    Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingIntervalUpdate)
 
     /**
      * @brief Return the max frequency that the sensor can work
@@ -398,20 +398,20 @@ signals:
     void dstIdUpdate();
     void deviceTypeUpdate();
     void deviceModelUpdate();
-    void fwVersionMajorUpdate();
-    void fwVersionMinorUpdate();
+    void firmwareVersionMajorUpdate();
+    void firmwareVersionMinorUpdate();
 
     void distanceUpdate();
     void pingNumberUpdate();
     void confidenceUpdate();
-    void pulseUsecUpdate();
+    void pulseDurationUpdate();
     void scanStartUpdate();
     void scanLengthUpdate();
     void gainIndexUpdate();
     void pointsUpdate();
 
     void modeAutoUpdate();
-    void pingRateUpdate();
+    void pingIntervalUpdate();
     void speedOfSoundUpdate();
 
     void processorTemperatureUpdate();
@@ -448,12 +448,12 @@ private:
 
     uint8_t _device_type = 0;
     uint8_t _device_model = 0;
-    uint16_t _fw_version_major = 0;
-    uint16_t _fw_version_minor = 0;
+    uint16_t _firmware_version_major = 0;
+    uint16_t _firmware_version_minor = 0;
 
     uint32_t _distance = 0; // mm
     uint8_t _confidence = 0; // 0-100%
-    uint16_t _pulse_usec = 0;
+    uint16_t _pulse_duration = 0;
     uint32_t _ping_number = 0;
     uint32_t _scan_start = 0;
     uint32_t _scan_length = 0;
@@ -475,7 +475,7 @@ private:
     QVector<double> _points;
 
     bool _mode_auto = 0;
-    uint16_t _ping_rate = 0;
+    uint16_t _ping_interval = 0;
     static const int _pingMaxFrequency;
 
     // TODO const &
@@ -533,10 +533,10 @@ private:
                 [this](long long int value) {set_length_mm(value);}
             }
         },
-        {   {"msecPerPing"}, {
+        {   {"pingInterval"}, {
                 66, 20, 1000,
-                std::bind(&Ping::msec_per_ping, this),
-                [this](long long int value) {set_msec_per_ping(value);}
+                std::bind(&Ping::ping_interval, this),
+                [this](long long int value) {set_ping_interval(value);}
             }
         },
         {   {"speedOfSound"}, {
