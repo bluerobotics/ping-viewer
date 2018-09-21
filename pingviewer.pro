@@ -18,7 +18,7 @@ RESOURCES += \
     resources.qrc
 
 *-g++ {
-    QMAKE_CXXFLAGS += -fopenmp
+    QMAKE_CXXFLAGS += -fopenmp -fdiagnostics-color=always
     QMAKE_LFLAGS += -fopenmp
 }
 
