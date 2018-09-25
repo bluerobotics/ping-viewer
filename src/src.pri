@@ -1,19 +1,5 @@
 INCLUDEPATH += $$PWD
 
-HEADERS += \
-    $$PWD/detector.h \
-    $$PWD/filemanager.h \
-    $$PWD/log*.h \
-    $$PWD/util.h \
-    $$PWD/waterfall*.h \
-
-SOURCES += \
-    $$PWD/detector.cpp \
-    $$PWD/filemanager.cpp \
-    $$PWD/log*.cpp \
-    $$PWD/util.cpp \
-    $$PWD/waterfall*.cpp \
-
 test {
     message(Configuring test build...)
 
@@ -29,6 +15,10 @@ test {
         $$PWD/main.cpp
 }
 
+include($$PWD/filemanager/filemanager.pri)
 include($$PWD/link/link.pri)
+include($$PWD/logger/logger.pri)
 include($$PWD/sensor/sensor.pri)
 include($$PWD/settings/settings.pri)
+include($$PWD/util/util.pri)
+include($$PWD/waterfall/waterfall.pri)

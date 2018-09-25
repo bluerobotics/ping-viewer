@@ -7,6 +7,7 @@
 #include "parsers/parser.h"
 #include "parsers/parser_ping.h"
 #include "pingmessage/pingmessage_all.h"
+#include "protocoldetector.h"
 #include "sensor.h"
 
 /**
