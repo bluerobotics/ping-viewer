@@ -62,14 +62,6 @@ public:
     Q_PROPERTY(QPoint mousePos READ mousePos NOTIFY mousePosChanged)
 
     /**
-     * @brief Get signal confidence from mouse column
-     *
-     * @return float
-     */
-    float mouseStrength() {return _mouseStrength;}
-    Q_PROPERTY(float mouseStrength READ mouseStrength NOTIFY mouseStrengthChanged)
-
-    /**
      * @brief Get theme name used in the waterfall
      *  Check WaterfallGradient
      *
@@ -137,7 +129,6 @@ public:
     float _mouseColumnDepth;
     float _mouseDepth;
     QPoint _mousePos;
-    float _mouseStrength;
     bool _smooth;
     QTimer* _updateTimer;
     QString _theme;
@@ -169,7 +160,6 @@ signals:
     void mouseColumnDepthChanged();
     void mouseMove();
     void mousePosChanged();
-    void mouseStrengthChanged();
     void mouseLeave();
     void themeChanged();
     void themesChanged();

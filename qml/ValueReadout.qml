@@ -15,7 +15,6 @@ Item {
     property real scalar: SettingsManager.distanceUnits['distanceScalar']
     property real precision: 2
     property int margin: 10
-    property real strength: -1
     property real confidence: 0
     property int parentWidth: 0
     property int parentHeight: 0
@@ -64,7 +63,7 @@ Item {
                 x: readout.width - width
                 y: readout.height*4/5
                 text: "Confidence: " + transformValue(confidence) + "%"
-                visible: typeof(strength) == "number"
+                visible: typeof(confidence) == "number"
                 color: confidenceToColor(confidence)
                 font.family: "Arial"
                 font.pointSize: readout.font.pointSize/3
