@@ -43,9 +43,6 @@ Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 350
             Layout.minimumWidth: 350
-            onMouseMove: {
-                readout.strength = Math.max(waterfall.mouseStrength, 0)
-            }
 
             Rectangle {
                 x: waterfall.mousePos.x - width/2 + height/2

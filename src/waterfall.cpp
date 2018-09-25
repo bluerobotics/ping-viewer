@@ -20,7 +20,6 @@ Waterfall::Waterfall(QQuickItem *parent):
     _maxDepthToDrawInPixels(0),
     _minDepthToDrawInPixels(0),
     _mouseDepth(0),
-    _mouseStrength(0),
     _smooth(true),
     _updateTimer(new QTimer(this)),
     currentDrawIndex(displayWidth)
@@ -46,7 +45,6 @@ void Waterfall::clear()
     _maxDepthToDrawInPixels = 0;
     _minDepthToDrawInPixels = 0;
     _mouseDepth = 0;
-    _mouseStrength = 0;
     _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, displayWidth);
     _image.fill(Qt::transparent);
 }
@@ -383,9 +381,6 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
     pos.setX(pos.x()*displayWidth/width() + first);
     pos.setY(pos.y()*(_maxDepthToDrawInPixels-_minDepthToDrawInPixels)/(float)height());
 
-    // signal strength
-    _mouseStrength = RGBToValue(_image.pixelColor(pos));
-
     // depth
     _mouseDepth = pos.y()/(float)_minPixelsPerMeter;
     emit mouseMove();
@@ -401,6 +396,5 @@ void Waterfall::hoverLeaveEvent(QHoverEvent *event)
 {
     Q_UNUSED(event)
     emit mouseLeave();
-    _mouseStrength = -1;
     _mouseDepth = -1;
 }
