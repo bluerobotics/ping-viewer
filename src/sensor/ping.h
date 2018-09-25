@@ -4,7 +4,6 @@
 #include <QSharedPointer>
 #include <QTimer>
 
-#include "detector.h"
 #include "parsers/parser.h"
 #include "parsers/parser_ping.h"
 #include "pingmessage/pingmessage_all.h"
@@ -21,7 +20,7 @@ class Ping : public Sensor
 public:
 
     Ping();
-    ~Ping() { _detector.terminate(); _detector.wait(); }
+    ~Ping() = default;
 
     /**
      * @brief Add new connection
@@ -453,7 +452,6 @@ private:
     void firmwareUpdatePercentage();
     void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
 
-    ProtocolDetector _detector;
     QTimer _requestTimer;
     QTimer _periodicRequestTimer; // For automatic periodic updates (board voltage and temperature)
 

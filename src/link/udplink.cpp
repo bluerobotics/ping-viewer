@@ -24,7 +24,7 @@ UDPLink::UDPLink(QObject* parent)
 bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 {
     _linkConfiguration = linkConfiguration;
-    qCDebug(PING_PROTOCOL_UDPLINK) << linkConfiguration.toString();
+    qCDebug(PING_PROTOCOL_UDPLINK) << linkConfiguration;
     if(!linkConfiguration.isValid()) {
         qCDebug(PING_PROTOCOL_UDPLINK) << LinkConfiguration::errorToString(linkConfiguration.error());
         return false;

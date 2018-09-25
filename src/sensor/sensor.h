@@ -2,6 +2,7 @@
 
 #include <QPointer>
 
+#include "detector.h"
 #include "link.h"
 #include "parsers/parser.h"
 
@@ -79,9 +80,25 @@ public:
     bool connected() { return _connected; };
     Q_PROPERTY(bool connected READ connected NOTIFY connectionUpdate)
 
+    /**
+     * @brief Return protocol detector
+     *
+     * @return const ProtocolDetector*
+     */
+    ProtocolDetector* detector() { return _detector; };
+
+    /**
+     * @brief Return protocol detector thread
+     *
+     * @return const QThread*
+     */
+    QThread* detectorThread() { return _detectorThread; };
+
 protected:
     bool _autodetect;
     bool _connected;
+    ProtocolDetector* _detector;
+    QThread* _detectorThread;
     QSharedPointer<Link> _linkIn;
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation

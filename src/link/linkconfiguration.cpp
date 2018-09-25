@@ -66,9 +66,73 @@ LinkConfiguration::Error LinkConfiguration::error() const
     return NoErrors;
 }
 
-//Todo: move to `operator QString()`
-QString LinkConfiguration::toString() const
+QString LinkConfiguration::serialPort()
+{
+    if(!checkType(LinkType::Serial) || !_linkConf.args.size()) {
+        return QString();
+    }
+    return _linkConf.args[0];
+}
+
+int LinkConfiguration::serialBaudrate()
+{
+    if(!checkType(LinkType::Serial) || _linkConf.args.size() < 1) {
+        return 0;
+    }
+
+    return _linkConf.args[1].toInt();
+}
+
+QString LinkConfiguration::udpHost()
+{
+    if(!checkType(LinkType::Udp) || !_linkConf.args.size()) {
+        return QString();
+    }
+
+    return _linkConf.args[0];
+}
+
+int LinkConfiguration::udpPort()
+{
+    if(!checkType(LinkType::Udp) || _linkConf.args.size() < 1) {
+        return 0;
+    }
+
+    return _linkConf.args[1].toInt();
+}
+
+bool operator==(const LinkConfiguration& first, const LinkConfiguration& second)
+{
+    auto firstLinkconf = first.configurationStruct();
+    auto secondLinkconf = second.configurationStruct();
+    return (firstLinkconf.name == secondLinkconf.name)
+           && (firstLinkconf.type == secondLinkconf.type)
+           && (firstLinkconf.args == secondLinkconf.args)
+           ;
+}
+
+QDebug operator<<(QDebug d, const LinkConfiguration& other)
 {
     QString text(QStringLiteral("LinkConfiguration{Name: %1, LinkType: %2, Arguments: (%3)}"));
-    return text.arg(name(), QString::number(type()), args()->join(":"));
+    d << text.arg(other.name(), QString::number(other.type()), other.args()->join(":"));;
+    return d;
+}
+
+QDataStream& operator<<(QDataStream &out, const LinkConfiguration linkConfiguration)
+{
+    out << linkConfiguration.configurationStructPtr()->name;
+    out << QVariant(linkConfiguration.configurationStructPtr()->args);
+    out << QVariant(linkConfiguration.configurationStructPtr()->type);
+    return out;
+}
+
+QDataStream& operator>>(QDataStream &in, LinkConfiguration &linkConfiguration)
+{
+    QString name;
+    QVariant variantArgs, variantType;
+    in >> name;
+    in >> variantArgs;
+    in >> variantType;
+    linkConfiguration = LinkConfiguration(variantType.value<LinkType>(), variantArgs.toStringList(), name);
+    return in;
 }
