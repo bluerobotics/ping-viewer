@@ -13,7 +13,7 @@
  *        // Always check settings content, make sure that everything is updated
  *        QVariant variant = _settings.value(QStringLiteral(myName)); \
  *        if(variant.isValid()) { \
- *            _myName = variant.value<TYPE>(); \
+ *            _myName = variant.value<myType>(); \
  *        } else { \
  *            _myName = defaultValue; \
  *            myType(_myType); \
@@ -62,7 +62,7 @@ private: \
 /**
  * @brief Create a model property for qml connections
  * The output will be something like:
- * AUTO_PROPERTY_MODEL(TYPE, NAME, MODEL_TYPE, {model_var_1, model_var_2}):
+ * AUTO_PROPERTY_MODEL(myType, myName, myModelType, {model_var_1, model_var_2}):
  *    Q_PROPERTY(myType myName READ myName WRITE myName NOTIFY myNameChanged)
  *    Q_PROPERTY(const myModelType* myNameModel READ myNameModel)
  *public:
@@ -110,7 +110,7 @@ private: \
 /**
  * @brief Create a model property for qml connections with QJsonSettings
  * The output will be something like:
- * #define AUTO_PROPERTY_JSONMODEL(NAME, JSON) \
+ * #define AUTO_PROPERTY_JSONMODEL(myName, myJson) \
  *    Q_PROPERTY(int myNameIndex READ myNameIndex WRITE myNameIndex NOTIFY myNameIndexChanged ) \
  *    Q_PROPERTY(const QJsonSettings* myNameModel READ myNameModel ) \
  *    Q_PROPERTY(QJsonObject myName READ myName NOTIFY myNameIndexChanged ) \
@@ -128,7 +128,7 @@ private: \
  *    Q_SIGNAL void myNameIndexChanged();\
 private: \
     int _myNameIndex; \
-    const QJsonSettings* _myNameModel{new QJsonSettings(JSON)};
+    const QJsonSettings* _myNameModel{new QJsonSettings(myJson)};
  */
 #define AUTO_PROPERTY_JSONMODEL(NAME, JSON) \
     Q_PROPERTY(int NAME ## Index READ NAME ## Index WRITE NAME ## Index NOTIFY NAME ## Index ## Changed ) \
