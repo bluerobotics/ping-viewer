@@ -125,7 +125,7 @@ void Ping::handleMessage(PingMessage msg)
 
     // needs dynamic-payload patch
     case Ping1DNamespace::Ascii_text: {
-        _ascii_text = QString((const char*)ping_msg_ping1D_ascii_text(msg).msg());
+        _ascii_text = ping_msg_ping1D_ascii_text(msg).msg();
         qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << _ascii_text;
         emit asciiTextUpdate();
         break;
