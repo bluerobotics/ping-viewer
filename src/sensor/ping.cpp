@@ -56,6 +56,14 @@ Ping::Ping() : Sensor()
     connect(detector(), &ProtocolDetector::connectionDetected, this, [this] {
         setAutoDetect(false);
         SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
+
+        // Request device information
+        request(Ping1DNamespace::Mode_auto);
+        request(Ping1DNamespace::Profile);
+        request(Ping1DNamespace::Fw_version);
+        request(Ping1DNamespace::Device_id);
+        request(Ping1DNamespace::Speed_of_sound);
+        setPollFrequency(15);
     });
 
     connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {

@@ -217,22 +217,6 @@ Item {
     Ping {
         id: ping
 
-        onConnectionOpen: {
-            firstRequest()
-        }
-
-        onLinkUpdate: {
-            if(ping.link.isOpen()) {
-                firstRequest()
-            }
-        }
-
-        Component.onCompleted: {
-            if(ping.link.isOpen()) {
-                firstRequest()
-            }
-        }
-
         onPointsUpdate: {
             // Move from mm to m
             ping1DVisualizer.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
@@ -244,15 +228,6 @@ Item {
 
         onConfidenceUpdate: {
             ping1DVisualizer.setConfidence(ping.confidence)
-        }
-
-        function firstRequest() {
-            ping.request(Ping1DNamespace.Mode)
-            ping.request(Ping1DNamespace.Profile)
-            ping.request(Ping1DNamespace.Fw_version)
-            ping.request(Ping1DNamespace.Device_id)
-            ping.request(Ping1DNamespace.Speed_of_sound)
-            ping.pingFrequency = 15
         }
     }
 
