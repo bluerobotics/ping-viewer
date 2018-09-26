@@ -115,10 +115,10 @@ void Ping::handleMessage(PingMessage msg)
     }
 
     case Ping1DNamespace::Nack: {
-        ping_msg_ping1D_nack nackMEssage{msg};
+        ping_msg_ping1D_nack nackMessage{msg};
         qCCritical(PING_PROTOCOL_PING) << "Sensor NACK!";
-        qCDebug(PING_PROTOCOL_PING) << "NACK message ID:" << nackMEssage.nacked_id();
-        qCDebug(PING_PROTOCOL_PING) << "NACK message:" << nackMEssage.nack_msg();
+        _nack_msg = QString("%1: %2").arg(nackMessage.nack_msg()).arg(nackMessage.nacked_id());
+        qCDebug(PING_PROTOCOL_PING) << "NACK message:" << _nack_msg;
         emit nackMsgUpdate();
         break;
     }
