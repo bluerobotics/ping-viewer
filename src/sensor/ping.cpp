@@ -319,7 +319,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
     qCDebug(PING_PROTOCOL_PING) << "Finish connection.";
     // TODO: Move thread delay to something more.. correct.
-    QThread::usleep(500e3);
+    QThread::msleep(500);
     link()->finishConnection();
 
 
@@ -327,7 +327,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
     QString portLocation = pInfo.systemLocation();
 
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
-    QThread::usleep(500e3);
+    QThread::msleep(500);
     flash(portLocation, QUrl(fileUrl).toLocalFile(), baud, verify);
 }
 
