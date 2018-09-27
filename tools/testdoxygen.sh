@@ -14,6 +14,7 @@ echob() {
 doccmd="doxygen "${docpath}/Doxyfile" 2>&1 \
     | grep -v protocol \
     | grep -v \(signal\) \
+    | grep -v \(slot\) \
     | grep -v \(property\) \
     | grep -v \(variable\) \
     | grep warning
