@@ -11,8 +11,6 @@
 #include <QUrl>
 
 #include "link/seriallink.h"
-#include "pingmessage/pingmessage.h"
-#include "pingmessage/pingmessage_ping1D.h"
 #include "settingsmanager.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
