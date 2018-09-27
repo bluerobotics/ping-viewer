@@ -20,7 +20,7 @@ if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
 fi
 
 echob "Running style script:"
-${scriptpath}/testdoxygen.sh
+${scriptpath}/testdoxygen.sh || exit 1
 
 echob "Compile code in test mode:"
 build_test="$projectpath/build_test"
