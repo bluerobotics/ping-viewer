@@ -28,8 +28,6 @@ public:
         ArgsAreEmpty,
     };
 
-    static const QMap<Error, QString> errorMap;
-
     LinkConfiguration(LinkType linkType = LinkType::None, QStringList args = QStringList(), QString name = QString())
         : _linkConf{args, name, linkType} {};
     LinkConfiguration(LinkConf& confLinkStructure)
@@ -78,6 +76,7 @@ public:
     int udpPort();
 
 private:
+    static const QMap<Error, QString> _errorMap;
     LinkConf _linkConf;
 };
 

@@ -1,6 +1,6 @@
 #include "linkconfiguration.h"
 
-const QMap<LinkConfiguration::Error, QString> LinkConfiguration::errorMap {
+const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
     {NoErrors, "No link configuration errors."},
     {MissingConfiguration, "Warning: Link configuration is missing."},
     {NoType, "Link configuration Type is None."},
