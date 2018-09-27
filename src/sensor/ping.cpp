@@ -15,6 +15,8 @@
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
+const int Ping::_pingMaxFrequency = 50;
+
 Ping::Ping() : Sensor()
 {
     _points.reserve(_num_points);
@@ -26,25 +28,6 @@ Ping::Ping() : Sensor()
     connect(dynamic_cast<PingParser*>(_parser), &PingParser::parseError, this, &Ping::parserErrorsUpdate);
     connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
     emit linkUpdate();
-
-    _requestTimer.setInterval(1000);
-    connect(&_requestTimer, &QTimer::timeout, this, [this] {
-        if(!link()->isWritable())
-        {
-            qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
-            _requestTimer.stop();
-            return;
-        }
-
-        if(!link()->isOpen())
-        {
-            qCCritical(PING_PROTOCOL_PING) << "Can't write, port is not open!";
-            _requestTimer.stop();
-            return;
-        }
-
-        request(Ping1DNamespace::Profile);
-    });
 
     _periodicRequestTimer.setInterval(1000);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
@@ -310,7 +293,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
         return;
     }
 
-    setPollFrequency(0);
+    setPingFrequency(0);
 
     if (sendPingGotoBootloader) {
         qCDebug(PING_PROTOCOL_PING) << "Put it in bootloader mode.";
@@ -401,34 +384,18 @@ void Ping::request(int id)
     writeMessage(m);
 }
 
-float Ping::pollFrequency()
+void Ping::setPingFrequency(float pingFrequency)
 {
-    if (!_requestTimer.isActive()) {
-        return 0;
-    }
-    return 1000.0f / _requestTimer.interval();
-}
-
-void Ping::setPollFrequency(float pollFrequency)
-{
-    if (pollFrequency <= 0 || pollFrequency > 30) {
-        qCWarning(PING_PROTOCOL_PING) << "Invalid frequency:" << pollFrequency;
-        if (_requestTimer.isActive()) {
-            _requestTimer.stop();
-        }
+    if (pingFrequency <= 0 || pingFrequency > _pingMaxFrequency) {
+        qCWarning(PING_PROTOCOL_PING) << "Invalid frequency:" << pingFrequency;
+        do_continuous_stop(Ping1DNamespace::Profile);
     } else {
-        int period_ms = 1000.0f / pollFrequency;
-        qCDebug(PING_PROTOCOL_PING) << "Setting frequency(Hz) and period(ms):" << pollFrequency << period_ms;
-        _requestTimer.setInterval(period_ms);
-        if (!_requestTimer.isActive()) {
-            _requestTimer.start();
-        }
-
-        set_msec_per_ping(period_ms);
+        int periodMilliseconds = 1000.0f / pingFrequency;
+        qCDebug(PING_PROTOCOL_PING) << "Setting frequency(Hz) and period(ms):" << pingFrequency << periodMilliseconds;
+        set_msec_per_ping(periodMilliseconds);
+        do_continuous_start(Ping1DNamespace::Profile);
     }
-
-    qCDebug(PING_PROTOCOL_PING) << "Poll period" << pollFrequency;
-    emit pollFrequencyUpdate();
+    qCDebug(PING_PROTOCOL_PING) << "Ping frequency" << pingFrequency;
 }
 
 void Ping::printStatus()

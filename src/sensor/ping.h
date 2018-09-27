@@ -216,6 +216,32 @@ public:
     Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
 
     /**
+     * @brief Do continuous start
+     *
+     * @param id
+     */
+    void do_continuous_start(Ping1DNamespace::msg_ping1D_id id)
+    {
+        ping_msg_ping1D_continuous_start m;
+        m.set_id(static_cast<int>(id));
+        m.updateChecksum();
+        writeMessage(m);
+    }
+
+    /**
+     * @brief Do continuous stop
+     *
+     * @param id
+     */
+    void do_continuous_stop(Ping1DNamespace::msg_ping1D_id id)
+    {
+        ping_msg_ping1D_continuous_stop m;
+        m.set_id(static_cast<int>(id));
+        m.updateChecksum();
+        writeMessage(m);
+    }
+
+    /**
      * @brief Get time between pings in ms
      *
      * @return uint16_t
@@ -284,20 +310,22 @@ public:
     Q_PROPERTY(int board_voltage READ board_voltage NOTIFY boardVoltageUpdate)
 
     /**
-     * @brief Return poll frequency
+     * @brief Return ping frequency
      *
      * @return float
      */
-    float pollFrequency();
+    float pingFrequency() { return _ping_rate ? static_cast<int>(1000/_ping_rate) : 0; };
 
     /**
-     * @brief Set poll frequency
+     * @brief Set ping frequency
      *
-     * @param pollFrequency
+     * @param pingFrequency
      */
-    void setPollFrequency(float pollFrequency);
-    Q_PROPERTY(float pollFrequency READ pollFrequency WRITE setPollFrequency NOTIFY pollFrequencyUpdate)
+    void setPingFrequency(float pingFrequency);
+    Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingRateUpdate)
 
+    int pingMaxFrequency() { return _pingMaxFrequency; }
+    Q_PROPERTY(int pingMaxFrequency READ pingMaxFrequency CONSTANT)
     /**
      * @brief Return last ascii_text message
      *
@@ -399,11 +427,6 @@ signals:
      */
     void flashComplete();
 
-    /**
-     * @brief Emit when poll frequency changes
-     *
-     */
-    void pollFrequencyUpdate();
 private:
     /**
      * @brief Sensor variables
@@ -445,6 +468,7 @@ private:
 
     bool _mode_auto = 0;
     uint16_t _ping_rate = 0;
+    static const int _pingMaxFrequency;
 
     // TODO const &
     void handleMessage(PingMessage msg); // handle incoming message
@@ -453,8 +477,8 @@ private:
     void firmwareUpdatePercentage();
     void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
 
-    QTimer _requestTimer;
-    QTimer _periodicRequestTimer; // For automatic periodic updates (board voltage and temperature)
+    // For automatic periodic updates (board voltage and temperature)
+    QTimer _periodicRequestTimer;
 
     QSharedPointer<QProcess> _firmwareProcess;
 };
