@@ -53,7 +53,7 @@ Ping::Ping() : Sensor()
 
     //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
-    connect(_detector, &ProtocolDetector::connectionDetected, this, [this] {
+    connect(detector(), &ProtocolDetector::connectionDetected, this, [this] {
         setAutoDetect(false);
         SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
     });
