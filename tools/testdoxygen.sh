@@ -4,7 +4,7 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 scriptpath="$( cd "$(dirname "$0")" ; pwd -P )"
-docpath=${scriptpath}/doc
+docpath=${scriptpath}/../doc
 
 # Functions
 echob() {
