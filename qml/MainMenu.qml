@@ -98,18 +98,18 @@ Item {
                         id: pingHzSlider
                         from: 0
                         stepSize: 1
-                        to: 30
-                        value: ping.pollFrequency;
+                        to: ping.pingMaxFrequency
+                        value: ping.pingFrequency;
                         onValueChanged: {
-                            if (ping.pollFrequency !== value) {
-                                ping.pollFrequency = value
+                            if (ping.pingFrequency !== value) {
+                                ping.pingFrequency = value
                             }
                         }
                     }
 
                     Text {
                         id: pingPerSecond
-                        text: Math.round(ping.pollFrequency) + " ping/s"
+                        text: Math.round(ping.pingFrequency) + " ping/s"
                         color: Style.textColor
                     }
                 }
