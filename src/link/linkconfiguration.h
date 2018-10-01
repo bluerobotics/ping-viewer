@@ -7,17 +7,29 @@
 
 #include "abstractlinknamespace.h"
 
+/**
+ * @brief Link configuration class
+ *
+ */
 class LinkConfiguration : public QObject
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Link configuration structure
+     *
+     */
     struct LinkConf {
         QStringList args;
         QString name;
         LinkType type = LinkType::None;
     };
 
+    /**
+     * @brief Link configuration errors
+     *
+     */
     enum Error {
         MissingConfiguration, // This can be used in future for warnings and not real errors
         NoErrors = 0,
@@ -28,56 +40,197 @@ public:
         ArgsAreEmpty,
     };
 
-    static const QMap<Error, QString> errorMap;
-
+    /**
+     * @brief Construct a new Link Configuration object
+     *
+     * @param linkType
+     * @param args
+     * @param name
+     */
     LinkConfiguration(LinkType linkType = LinkType::None, QStringList args = QStringList(), QString name = QString())
         : _linkConf{args, name, linkType} {};
+
+    /**
+     * @brief Construct a new Link Configuration object
+     *
+     * @param confLinkStructure
+     */
     LinkConfiguration(LinkConf& confLinkStructure)
         : _linkConf{confLinkStructure} {};
+
+    /**
+     * @brief Construct a new Link Configuration object
+     *
+     * @param other
+     * @param parent
+     */
     LinkConfiguration(const LinkConfiguration& other, QObject* parent = nullptr)
         : QObject(parent)
         , _linkConf{other.configurationStruct()} {};
+
+    /**
+     * @brief Destroy the Link Configuration object
+     *
+     */
     ~LinkConfiguration() = default;
 
+    /**
+     * @brief Return a list with the arguments
+     *
+     * @return const QStringList*
+     */
     const QStringList* args() const { return &_linkConf.args; };
+
+    /**
+     * @brief Return list as copy
+     *
+     * @return Q_INVOKABLE argsAsConst
+     */
     Q_INVOKABLE QStringList argsAsConst() const { return _linkConf.args; };
 
-    Q_INVOKABLE QString name() const { return _linkConf.name; };
-    void setName(QString name) { _linkConf.name = name; };
+    /**
+     * @brief Check if type is the one in the configuration
+     *
+     * @param type
+     * @return true
+     * @return false
+     */
+    bool checkType(LinkType type) { return _linkConf.type == type; };
 
-    Q_INVOKABLE AbstractLinkNamespace::LinkType type() const { return _linkConf.type; };
-    void setType(LinkType type) { _linkConf.type = type; };
-
-    const QString createConfString() const { return _linkConf.args.join(":"); };
-    const QStringList createConfStringList() const { return _linkConf.args; };
-
-    const QString createFullConfString() const;
-    const QStringList createFullConfStringList() const;
-
+    /**
+     * @brief Return configuration as structure
+     *
+     * @return LinkConf
+     */
     LinkConf configurationStruct() const { return _linkConf; };
+
+    /**
+     * @brief Return a pointer for the configuration structure
+     *
+     * @return const LinkConf*
+     */
     const LinkConf* configurationStructPtr() const { return &_linkConf; };
 
-    Q_INVOKABLE bool isValid() const { return error() <= NoErrors; }
+    /**
+     * @brief Create and return a configuration string
+     *
+     * @return const QString
+     */
+    const QString createConfString() const { return _linkConf.args.join(":"); };
 
+    /**
+     * @brief Create and return a configuration in string list format
+     *
+     * @return const QStringList
+     */
+    const QStringList createConfStringList() const { return _linkConf.args; };
+
+    /**
+     * @brief Create and return old style configuration link
+     *
+     * @return const QString
+     */
+    const QString createFullConfString() const;
+
+    /**
+     * @brief Create a full configuration in string list format
+     *
+     * @return const QStringList
+     */
+    const QStringList createFullConfStringList() const;
+
+    /**
+     * @brief Return error numbers
+     *
+     * @return Error
+     */
     Error error() const;
 
-    static QString errorToString(Error error) { return errorMap[error]; }
+    /**
+     * @brief Convert error number in a friendly human message
+     *
+     * @param error
+     * @return QString
+     */
+    static QString errorToString(Error error) { return _errorMap[error]; }
 
+    /**
+     * @brief Check if configuration is correct
+     *
+     * @return bool
+     */
+    Q_INVOKABLE bool isValid() const { return error() <= NoErrors; }
+
+    /**
+     * @brief Return configuration name
+     *
+     * @return Q_INVOKABLE name
+     */
+    Q_INVOKABLE QString name() const { return _linkConf.name; };
+
+    /**
+     * @brief Set configuration name
+     *
+     * @param name
+     */
+    void setName(QString name) { _linkConf.name = name; };
+
+    /**
+     * @brief Return serialport system path
+     *
+     * @return QString
+     */
+    QString serialPort();
+
+    /**
+     * @brief Return serial baudrate
+     *
+     * @return int
+     */
+    int serialBaudrate();
+
+    /**
+     * @brief Set the Type object
+     *
+     * @param type
+     */
+    void setType(LinkType type) { _linkConf.type = type; };
+
+    /**
+     * @brief Return link configuration type
+     *
+     * @return AbstractLinkNamespace::LinkType
+     */
+    Q_INVOKABLE AbstractLinkNamespace::LinkType type() const { return _linkConf.type; };
+
+    /**
+     * @brief Will return argument with UDP host name
+     *
+     * @return QString
+     */
+    QString udpHost();
+
+    /**
+     * @brief Will return port used in UDP connection
+     *
+     * @return int
+     */
+    int udpPort();
+
+    /**
+     * @brief Copy operator
+     *
+     * @param other
+     * @return LinkConfiguration&
+     */
     LinkConfiguration& operator = (const LinkConfiguration& other)
     {
         this->_linkConf = other.configurationStruct();
         return *this;
     }
 
-    bool checkType(LinkType type) { return _linkConf.type == type; };
-
-    QString serialPort();
-    int serialBaudrate();
-
-    QString udpHost();
-    int udpPort();
-
 private:
+    static const QMap<Error, QString> _errorMap;
     LinkConf _linkConf;
 };
 

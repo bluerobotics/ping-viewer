@@ -324,6 +324,11 @@ public:
     void setPingFrequency(float pingFrequency);
     Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingRateUpdate)
 
+    /**
+     * @brief Return the max frequency that the sensor can work
+     *
+     * @return int
+     */
     int pingMaxFrequency() { return _pingMaxFrequency; }
     Q_PROPERTY(int pingMaxFrequency READ pingMaxFrequency CONSTANT)
     /**

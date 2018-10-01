@@ -4,7 +4,7 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 scriptpath="$( cd "$(dirname "$0")" ; pwd -P )"
-docpath=${scriptpath}/doc
+docpath=${scriptpath}/../doc
 
 # Functions
 echob() {
@@ -14,6 +14,7 @@ echob() {
 doccmd="doxygen "${docpath}/Doxyfile" 2>&1 \
     | grep -v protocol \
     | grep -v \(signal\) \
+    | grep -v \(slot\) \
     | grep -v \(property\) \
     | grep -v \(variable\) \
     | grep warning
