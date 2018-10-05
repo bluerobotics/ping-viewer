@@ -381,7 +381,8 @@ public:
      * @param baud baud rate value
      * @param verify this variable is true when all
      */
-    Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600, bool verify = true);
+    Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
+                                    bool verify = true);
 
 signals:
     /**
