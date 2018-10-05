@@ -149,7 +149,8 @@ bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1,
     return rOk && gOk && bOk;
 }
 
-QColor WaterfallGradient::colorLinearInterpolation(const float value, const QGradientStop& color1, const QGradientStop& color2) const
+QColor WaterfallGradient::colorLinearInterpolation(const float value, const QGradientStop& color1,
+        const QGradientStop& color2) const
 {
     float minimum = color1.first;
     float maximum = color2.first;
@@ -161,7 +162,8 @@ QColor WaterfallGradient::colorLinearInterpolation(const float value, const QGra
     return QColor(r, g, b);
 }
 
-float WaterfallGradient::valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2) const
+float WaterfallGradient::valueLinearInterpolation(const QColor& color, const QGradientStop& color1,
+        const QGradientStop& color2) const
 {
     float ratio = 0;
     float value = 0;

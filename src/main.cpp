@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
     qRegisterMetaType<AbstractLinkNamespace::LinkType>();
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
-    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager", SettingsManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager",
+            SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");

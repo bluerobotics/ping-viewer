@@ -284,7 +284,8 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
             QPainter painter(&_image);
             // Clean everything and start from zero
             painter.fillRect(_image.rect(), Qt::transparent);
-            painter.drawImage(QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar/lastDynamicPixelsPerMeterScalar),
+            painter.drawImage(QRect(0, 0, _image.width(),
+                                    _image.height()*dynamicPixelsPerMeterScalar/lastDynamicPixelsPerMeterScalar),
                               old.scaled(_image.width(), _image.height()));
             painter.end();
         }
