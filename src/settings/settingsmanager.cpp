@@ -13,6 +13,9 @@ SettingsManager::SettingsManager()
             _settings.clear();
         }
     }
+    if(_settings.contains("settingsTree")) {
+        _tree.setMap(_settings.value("settingsTree").toMap());
+    }
     qRegisterMetaType<QJsonSettings*>("const QJsonSettings*");
 }
 
