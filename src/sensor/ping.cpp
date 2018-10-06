@@ -63,7 +63,28 @@ Ping::Ping() : Sensor()
         request(Ping1DNamespace::Fw_version);
         request(Ping1DNamespace::Device_id);
         request(Ping1DNamespace::Speed_of_sound);
-        setPollFrequency(15);
+    });
+
+    connect(this, &Ping::srcIdUpdate, this, [this] {
+        // Wait for device id to load the correct settings
+        static bool once = false;
+        if(!once)
+        {
+            once = true;
+            // Load previous configuration with device id
+            loadLastPingConfigurationSettings();
+
+            // Print last configuration
+            QString output = QStringLiteral("\nPingConfiguration {\n");
+            for(const auto& key : _pingConfiguration.keys()) {
+                output += QString("\t%1: %2\n").arg(key).arg(_pingConfiguration[key].value);
+            }
+            output += QStringLiteral("}");
+            qCDebug(PING_PROTOCOL_PING).noquote() << output;
+
+            // Set loaded configuration in device
+            setLastPingConfiguration();
+        }
     });
 
     connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {
@@ -83,6 +104,37 @@ Ping::Ping() : Sensor()
     qCDebug(PING_PROTOCOL_PING) << "Loading last configuration connection from settings:" << config;
     if(!detector()->checkLink(config)) {
         detectorThread()->start();
+    }
+}
+
+void Ping::loadLastPingConfigurationSettings()
+{
+    // Set default values
+    for(const auto& key : _pingConfiguration.keys()) {
+        _pingConfiguration[key].value = _pingConfiguration[key].defaultValue;
+    }
+
+    // Load settings for device using device id
+    QVariant pingConfigurationVariant = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString(_srcId)});
+    if(pingConfigurationVariant.type() != QVariant::Map) {
+        qCWarning(PING_PROTOCOL_PING) << "No valid PingConfiguration in settings." << pingConfigurationVariant.type();
+        return;
+    }
+
+    // Get the value of each configuration and set it on device
+    auto map = pingConfigurationVariant.toMap();
+    for(const auto& key : _pingConfiguration.keys()) {
+        _pingConfiguration[key].set(map[key]);
+    }
+}
+
+void Ping::updatePingConfigurationSettings()
+{
+    // Save all sensor configurations
+    for(const auto& key : _pingConfiguration.keys()) {
+        auto& dataStruct = _pingConfiguration[key];
+        dataStruct.set(dataStruct.getClassValue());
+        SettingsManager::self()->setMapValue({"Ping", "PingConfiguration", QString(_srcId), key}, dataStruct.value);
     }
 }
 
@@ -392,6 +444,40 @@ void Ping::request(int id)
     writeMessage(m);
 }
 
+void Ping::setLastPingConfiguration()
+{
+    static QString debugMessage =
+        QStringLiteral("Device configuration does not match. Waiting for (%1), got (%2) for %3");
+    static auto lastPingConfigurationTimer = new QTimer();
+    connect(lastPingConfigurationTimer, &QTimer::timeout, this, [this] {
+        bool stopLastPingConfigurationTimer = true;
+        for(const auto& key : _pingConfiguration.keys())
+        {
+            auto& dataStruct = _pingConfiguration[key];
+            if(dataStruct.value != dataStruct.getClassValue()) {
+                qCDebug(PING_PROTOCOL_PING) <<
+                                            debugMessage.arg(dataStruct.value).arg(dataStruct.getClassValue()).arg(key);
+                dataStruct.setClassValue(dataStruct.value);
+                stopLastPingConfigurationTimer = false;
+            }
+            if(key.contains("automaticMode") && dataStruct.value) {
+                qCDebug(PING_PROTOCOL_PING) << "Device was running with last configuration in auto mode.";
+                // If it's running in automatic mode
+                // no further configuration is necessary
+                break;
+            }
+        }
+        if(stopLastPingConfigurationTimer)
+        {
+            qCDebug(PING_PROTOCOL_PING) << "Last configuration done, timer will stop now.";
+            lastPingConfigurationTimer->stop();
+            do_continuous_start(Ping1DNamespace::Profile);
+        }
+    });
+    lastPingConfigurationTimer->start(500);
+    lastPingConfigurationTimer->start();
+}
+
 void Ping::setPingFrequency(float pingFrequency)
 {
     if (pingFrequency <= 0 || pingFrequency > _pingMaxFrequency) {
@@ -435,4 +521,9 @@ void Ping::writeMessage(const PingMessage &msg)
             emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength()));
         }
     }
+}
+
+Ping::~Ping()
+{
+    updatePingConfigurationSettings();
 }
