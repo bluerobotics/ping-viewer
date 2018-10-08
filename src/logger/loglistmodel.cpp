@@ -6,20 +6,19 @@ LogListModel::LogListModel(QObject* parent)
     _roleNames.unite(QStringListModel::roleNames());
 }
 
-QVariant LogListModel::data(const QModelIndex & index, int role) const
+QVariant LogListModel::data(const QModelIndex& index, int role) const
 {
-    switch (role) {
+    const int indexRow = index.row();
+    switch(role) {
     case Qt::ForegroundRole : {
-        auto itr = _rowColors.find(index.row());
-        if (itr != _rowColors.end()) {
-            return itr->second;
+        if(indexRow > 0 && indexRow < _rowColors.size()) {
+            return _rowColors[indexRow];
         }
     }
     break;
     case LogListModel::TimeRole : {
-        auto itr = _rowTimes.find(index.row());
-        if (itr != _rowTimes.end()) {
-            return itr->second;
+        if(indexRow > 0 && indexRow < _rowTimes.size()) {
+            return _rowTimes[indexRow];
         }
     }
     break;
@@ -30,15 +29,28 @@ QVariant LogListModel::data(const QModelIndex & index, int role) const
     return QStringListModel::data(index, role);
 }
 
-bool LogListModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool LogListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+    int indexRow = index.row();
     switch (role) {
-    case (Qt::ForegroundRole) :
-        _rowColors[index.row()] = value.value<QColor>();
+    case Qt::ForegroundRole :
+        if(indexRow > 0 && indexRow < _rowColors.size()) {
+            _rowColors[indexRow] = value;
+        } else if(indexRow == _rowColors.size()) {
+            _rowColors.append(value);
+        } else {
+            return true;
+        }
         emit dataChanged(index, index, _roles);
         return true;
-    case (LogListModel::TimeRole) :
-        _rowTimes[index.row()] = value.toString();
+    case LogListModel::TimeRole :
+        if(indexRow > 0 && indexRow < _rowTimes.size()) {
+            _rowTimes[indexRow] = value;
+        } else if(indexRow == _rowTimes.size()) {
+            _rowTimes.append(value);
+        } else {
+            return true;
+        }
         emit dataChanged(index, index, _roles);
         return true;
     default :

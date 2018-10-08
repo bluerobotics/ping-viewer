@@ -5,7 +5,8 @@
 
 /**
  * @brief Model for qml log interface
- * Thank you very much https://stackoverflow.com/questions/37781426/how-to-change-the-color-of-qstringlistmodel-items
+ * Initially based on:
+ * https://stackoverflow.com/questions/37781426/how-to-change-the-color-of-qstringlistmodel-items
  *
  */
 class LogListModel : public QStringListModel
@@ -27,7 +28,7 @@ public:
      * @param role
      * @return QVariant
      */
-    QVariant data(const QModelIndex & index, int role) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
 
     /**
      * @brief Set the data
@@ -38,7 +39,7 @@ public:
      * @return true
      * @return false
      */
-    bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 
     /**
      * @brief Get role names
@@ -56,6 +57,6 @@ private:
         {{Qt::ForegroundRole}, {"foreground"}},
         {{LogListModel::TimeRole}, {"time"}},
     };
-    std::map<int, QColor> _rowColors;
-    std::map<int, QString> _rowTimes;
+    QVector<QVariant> _rowColors;
+    QVector<QVariant> _rowTimes;
 };
