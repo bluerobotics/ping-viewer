@@ -284,10 +284,14 @@ Item {
                 model: Logger.registeredCategory
                 CheckBox {
                     text: modelData
-                    checked: Logger.getCategory(modelData)
+                    checked: SettingsManager.enabledCategories & Logger.getCategoryIndex(modelData.toString())
                     Layout.columnSpan: 1
                     onCheckedChanged: {
-                        Logger.setCategory(modelData.toString(), checked)
+                        if(checked) {
+                            log.enabledCategories |= Logger.getCategoryIndex(modelData.toString())
+                        } else {
+                            log.enabledCategories ^= Logger.getCategoryIndex(modelData.toString())
+                        }
                     }
                 }
                 onModelChanged: {

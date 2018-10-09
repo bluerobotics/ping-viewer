@@ -7,7 +7,16 @@ import SettingsManager 1.0
 Item {
     id: root
 
+    // Enable all categories
+    property int enabledCategories: SettingsManager.enabledCategories
     property bool scrollLockEnabled: SettingsManager.logScrollLock
+
+    onEnabledCategoriesChanged: {
+        if(enabledCategories != SettingsManager.enabledCategories) {
+            SettingsManager.enabledCategories = enabledCategories
+        }
+        listView.positionViewAtEnd()
+    }
 
     onScrollLockEnabledChanged: {
         if(scrollLockEnabled != SettingsManager.logScrollLock) {
@@ -16,6 +25,7 @@ Item {
     }
 
     ListView {
+        id: listView
         anchors.fill: parent
         contentWidth: parent.width
         clip: true
@@ -27,12 +37,14 @@ Item {
             Text {
                 id: leftText
                 text: time
+                visible: enabledCategories & category
                 color: foreground == undefined ? "purple" : foreground
             }
             Text {
                 width: parent.width - leftText.width
                 wrapMode: Text.WordWrap
                 text: display
+                visible: enabledCategories & category
                 color: foreground == undefined ? "purple" : foreground
             }
         }
