@@ -19,7 +19,10 @@ public:
      */
     LogListModel(QObject* parent = nullptr);
 
-    enum { TimeRole = Qt::UserRole + 0x10 };
+    enum {
+        TimeRole = Qt::UserRole + 0x10,
+        CategoryRole,
+    };
 
     /**
      * @brief Return data
@@ -56,7 +59,9 @@ private:
     QHash<int, QByteArray> _roleNames{
         {{Qt::ForegroundRole}, {"foreground"}},
         {{LogListModel::TimeRole}, {"time"}},
+        {{LogListModel::CategoryRole}, {"category"}},
     };
+    QVector<QVariant> _rowCategory;
     QVector<QVariant> _rowColors;
     QVector<QVariant> _rowTimes;
 };
