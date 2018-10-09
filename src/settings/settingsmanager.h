@@ -76,6 +76,7 @@ private:
 
     // Everything after this line should be AUTO_PROPERTY
     AUTO_PROPERTY(bool, debugMode, false)
+    AUTO_PROPERTY(uint, enabledCategories, 0)
     AUTO_PROPERTY(LinkConfiguration, lastLinkConfiguration, {})
     AUTO_PROPERTY(bool, logScrollLock, true)
     AUTO_PROPERTY(bool, replayMenu, false)
