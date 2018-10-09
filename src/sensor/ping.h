@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <QProcess>
 #include <QSharedPointer>
 #include <QTimer>
@@ -21,7 +23,7 @@ class Ping : public Sensor
 public:
 
     Ping();
-    ~Ping() = default;
+    ~Ping();
 
     /**
      * @brief Add new connection
@@ -483,8 +485,71 @@ private:
     void firmwareUpdatePercentage();
     void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
 
+    void loadLastPingConfigurationSettings();
+    void updatePingConfigurationSettings();
+    void setLastPingConfiguration();
+
     // For automatic periodic updates (board voltage and temperature)
     QTimer _periodicRequestTimer;
 
     QSharedPointer<QProcess> _firmwareProcess;
+
+    struct settingsConfiguration {
+        /*
+        Data need to be long long int:
+            - Otherwise an error can happen if we are using uint32 with int 32 arch
+            - If we send the value to QVariant, that does not know what to do with long int
+        */
+        long long int defaultValue = 0;
+        long long int minValue = INT_MIN;
+        long long int maxValue = INT_MAX;
+        std::function<long long int(void)> getClassValue;
+        std::function<void(long long int)> setClassValue;
+        long long int value = 0;
+        void set(QVariant variantValue)
+        {
+            int testValue = variantValue.toInt();
+            value = testValue < minValue || testValue > maxValue ?
+                    defaultValue : testValue;
+        }
+    };
+
+    QMap<QString, settingsConfiguration> _pingConfiguration {
+        {   {"automaticMode"}, {
+                true, false, true,
+                std::bind(&Ping::mode_auto, this),
+                [this](long long int value) {set_mode_auto(value);}
+            }
+        },
+        {   {"gainIndex"}, {
+                0, 0, 6,
+                std::bind(&Ping::gain_index, this),
+                [this](long long int value) {set_gain_index(value);}
+            }
+        },
+        {   {"lengthDistance"}, {
+                5000, 500, 70000,
+                std::bind(&Ping::length_mm, this),
+                [this](long long int value) {set_length_mm(value);}
+            }
+        },
+        {   {"msecPerPing"}, {
+                66, 20, 1000,
+                std::bind(&Ping::msec_per_ping, this),
+                [this](long long int value) {set_msec_per_ping(value);}
+            }
+        },
+        {   {"speedOfSound"}, {
+                1500000, 50000, 10000000,
+                std::bind(&Ping::speed_of_sound, this),
+                [this](long long int value) {set_speed_of_sound(value);}
+            }
+        },
+        {   {"startDistance"}, {
+                0, 0, 70000,
+                std::bind(&Ping::start_mm, this),
+                [this](long long int value) {set_start_mm(value);}
+            }
+        },
+    };
 };

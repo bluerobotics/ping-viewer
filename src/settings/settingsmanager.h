@@ -4,10 +4,10 @@
 #include <QSettings>
 #include <QStringListModel>
 
+#include "linkconfiguration.h"
 #include "qjsonsettings.h"
 #include "settingsmanagerhelper.h"
-
-#include "linkconfiguration.h"
+#include "varianttree.h"
 
 class QJSEngine;
 class QQmlEngine;
@@ -24,6 +24,17 @@ class SettingsManager : public QObject
 public:
 
     /**
+     * @brief Get value from path
+     *
+     * @param path
+     * @return Q_INVOKABLE getMapValue
+     */
+    Q_INVOKABLE QVariant getMapValue(QStringList path)
+    {
+        return _tree.get(path);
+    }
+
+    /**
      * @brief Get variable value
      *
      * @param settingName
@@ -38,6 +49,18 @@ public:
      * @param value
      */
     Q_INVOKABLE void set(QString& settingName, QVariant& value);
+
+    /**
+     * @brief Set map value from path
+     *
+     * @param path
+     * @param value
+     */
+    Q_INVOKABLE void setMapValue(QStringList path, QVariant value)
+    {
+        _tree.get(path) = value;
+        _settings.setValue("settingsTree", _tree.map());
+    }
 
     /**
      * @brief Return QSettings reference
@@ -69,6 +92,7 @@ private:
     SettingsManager();
 
     QSettings _settings;
+    VariantTree _tree;
 
     /**
      * @brief This will create all gets, sets, signals and private variables,
