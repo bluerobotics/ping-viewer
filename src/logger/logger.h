@@ -64,19 +64,12 @@ public:
     Q_PROPERTY(QStringList registeredCategory READ registeredCategory NOTIFY registeredCategoryChanged)
 
     /**
-     * @brief Set category state
+     * @brief Return the index of the category
      *
      * @param category
-     * @param enable
+     * @return uint
      */
-    Q_INVOKABLE void setCategory(QString category, bool enable);
-
-    /**
-     * @brief Check if category is enable
-     *
-     * @param category
-     */
-    Q_INVOKABLE bool getCategory(QString category);
+    Q_INVOKABLE uint getCategoryIndex(QString category);
 
     /**
      * @brief Register this class to handle the messages
@@ -121,12 +114,12 @@ private:
      * @param msg
      * @param type
      */
-    void logMessage(const QString& msg, QtMsgType type);
+    void logMessage(const QString& msg, const QtMsgType& type, const QMessageLogContext& context);
 
+    QMap<QString, uint> _categoryIndexer;
     QFile _file;
     QTextStream _fileStream;
     QStringList _registeredCategories;
-    QSettings& _settings;
     LogListModel _logModel;
 };
 

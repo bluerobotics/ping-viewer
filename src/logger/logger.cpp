@@ -1,6 +1,5 @@
 #include "filemanager.h"
 #include "logger.h"
-#include "settingsmanager.h"
 
 #include <iostream>
 #include <QDebug>
@@ -16,15 +15,9 @@ static QtMessageHandler originalHandler = nullptr;
 Logger::Logger()
     : _file(FileManager::self()->createFileName(FileManager::Folder::GuiLogs))
     , _fileStream(&_file)
-    , _settings(SettingsManager::self()->settings())
 {
     if(!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         qCWarning(logger) << "A file with the gui log will not be available !";
-    }
-
-    if(_settings.contains("filter")) {
-        QString filter = _settings.value("filter").toString();
-        QLoggingCategory::setFilterRules(filter);
     }
 
     registerCategory("default");
@@ -48,21 +41,22 @@ QObject* Logger::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngin
     return self();
 }
 
-void Logger::logMessage(const QString& msg, QtMsgType type)
+void Logger::logMessage(const QString& msg, const QtMsgType& type, const QMessageLogContext& context)
 {
     const QString time = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz]"));
 
     // Save the message into the file
     _fileStream << QString("%1 %2\n").arg(time, msg);
 
-    const int line = _logModel.rowCount();
     // Debug, Warning, Critical, Fatal, Info
     static const QColor colors[] = { QColor("DarkGray"), QColor("orange"), QColor("red"), QColor("red"), QColor("LimeGreen") };
 
+    const int line = _logModel.rowCount();
     _logModel.insertRows(line, 1);
     _logModel.setData(_logModel.index(line), time, LogListModel::TimeRole);
     _logModel.setData(_logModel.index(line), msg, Qt::DisplayRole);
     _logModel.setData(_logModel.index(line), colors[type], Qt::ForegroundRole);
+    _logModel.setData(_logModel.index(line), _categoryIndexer[context.category], LogListModel::CategoryRole);
 }
 
 void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg)
@@ -79,7 +73,7 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
 
     const QString logMsg = QString("%1[%2]: %3%4").arg(context.category, msgTypes[type], fileInfo, msg);
 
-    Logger::self()->logMessage(logMsg, type);
+    Logger::self()->logMessage(logMsg, type, context);
     if (originalHandler) {
         originalHandler(type, context, logMsg);
     }
@@ -90,32 +84,18 @@ void Logger::registerCategory(const char* category)
     if (_registeredCategories.contains(category)) {
         return;
     }
+    // Register each category in a bit, this will help the qml element to be faster when searching between categories
+    _categoryIndexer[category] = 1 << _categoryIndexer.size();
+
     qCDebug(logger) << "New category registered: " << category;
     _registeredCategories << category;
-    qCDebug(logger) << category << _settings.value(category).toBool();
     emit registeredCategoryChanged();
 }
 
-void Logger::setCategory(QString category, bool enable)
+uint Logger::getCategoryIndex(QString category)
 {
-    qCDebug(logger) << category << enable;
-    _settings.setValue(category, enable);
-
-    QString filter;
-    for(const auto& ourCategory : qAsConst(_registeredCategories)) {
-        filter += QStringLiteral("%1.debug=%2\n").arg(ourCategory, _settings.value(ourCategory).toBool() ? "true" : "false");
-    }
-
-    qCDebug(logger) << "filter" << filter;
-    QLoggingCategory::setFilterRules(filter);
-    _settings.setValue("filter", filter);
+    return _categoryIndexer[category];
 }
-
-bool Logger::getCategory(QString category)
-{
-    qCDebug(logger) << category << _settings.value(category).toBool();
-    return _settings.value(category).toBool();
-};
 
 Logger* Logger::self()
 {

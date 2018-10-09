@@ -10,15 +10,21 @@ QVariant LogListModel::data(const QModelIndex& index, int role) const
 {
     const int indexRow = index.row();
     switch(role) {
-    case Qt::ForegroundRole : {
+    case Qt::ForegroundRole: {
         if(indexRow > 0 && indexRow < _rowColors.size()) {
             return _rowColors[indexRow];
         }
     }
     break;
-    case LogListModel::TimeRole : {
+    case LogListModel::TimeRole: {
         if(indexRow > 0 && indexRow < _rowTimes.size()) {
             return _rowTimes[indexRow];
+        }
+    }
+    break;
+    case LogListModel::CategoryRole: {
+        if(indexRow > 0 && indexRow < _rowCategory.size()) {
+            return _rowCategory[indexRow];
         }
     }
     break;
@@ -48,6 +54,16 @@ bool LogListModel::setData(const QModelIndex& index, const QVariant& value, int 
             _rowTimes[indexRow] = value;
         } else if(indexRow == _rowTimes.size()) {
             _rowTimes.append(value);
+        } else {
+            return true;
+        }
+        emit dataChanged(index, index, _roles);
+        return true;
+    case LogListModel::CategoryRole :
+        if(indexRow > 0 && indexRow < _rowCategory.size()) {
+            _rowCategory[indexRow] = value;
+        } else if(indexRow == _rowCategory.size()) {
+            _rowCategory.append(value);
         } else {
             return true;
         }
