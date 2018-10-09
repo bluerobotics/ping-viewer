@@ -10,6 +10,7 @@ deployfolder=${buildfolder}/deploy
 scriptname=$(basename "$0")
 qtconfig="release"
 numberofthreads=1
+verboseoutput="/tmp/compile_output.txt"
 
 linuxdeployfiles=(
     "${projectpath}/qml/imgs/pingviewer.png"
@@ -51,10 +52,11 @@ checktool() {
         name=( $1 )
     fi
     printfb "$name: "
-    eval "$1" >/dev/null 2>&1
+    eval "$1" >>$verboseoutput 2>&1
 
     [ $? == 0 ] || {
         echob "✖"
+        cat $verboseoutput
         error "$name is not available." $errormsg
     }
     echob "✔"
@@ -65,9 +67,10 @@ runstep() {
     okmessage=$2
     errormsg=$3
     printfb "$okmessage: "
-    eval "$1" >/dev/null 2>&1
+    eval "$1" >>$verboseoutput 2>&1
     [ $? == 0 ] || {
         echob "✖"
+        cat $verboseoutput
         error "$name failed." $errormsg
     }
     echob "✔"
@@ -100,6 +103,9 @@ if $help; then
     usage
     exit 1
 fi
+
+# Remove last compile output
+rm $verboseoutput
 
 echob "Project will be:"
 printf "\t- Compiled in "
