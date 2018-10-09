@@ -11,6 +11,7 @@ scriptname=$(basename "$0")
 qtconfig="release"
 numberofthreads=1
 verboseoutput="/tmp/compile_output.txt"
+qmakeconfig=""
 
 linuxdeployfiles=(
     "${projectpath}/qml/imgs/pingviewer.png"
@@ -18,6 +19,7 @@ linuxdeployfiles=(
     "${buildfolder}/pingviewer"
 )
 
+clangbuild=false
 deploy=true
 debug=false
 help=false
@@ -37,7 +39,7 @@ error() {
 }
 
 usage() {
-    echo "USAGE: $scriptname --no-deploy, --debug, --help"
+    echo "USAGE: $scriptname --no-deploy, --wich-clang, --debug, --help"
 }
 
 checktool() {
@@ -87,6 +89,10 @@ case $i in
 
     --no-deploy)
     deploy=false
+    shift ;;
+
+    --with-clang)
+    clangbuild=true
     shift ;;
 
     --help|-h)
@@ -158,7 +164,12 @@ runstep "git submodule init" "Init submodule" "Failed to init submodule"
 runstep "git submodule update" "Update submodule" "Failed to update submodule"
 runstep "rm -rf ${buildfolder}" "Check for old build folder" "Failed to delete old build folder"
 runstep "mkdir -p ${buildfolder}" "Build folder created" "Failed to create build folder in ${buildfolder}"
-runstep "qmake -o ${buildfolder} -r -Wall -Wlogic -Wparser CONFIG+=${qtconfig} ${projectpath}" "Run qmake" "Qmake failed."
+
+if $clangbuild; then
+    qmakeconfig="${qmakeconfig} ""-spec linux-clang"
+fi
+
+runstep "qmake -o ${buildfolder} ${qmakeconfig} -r -Wall -Wlogic -Wparser CONFIG+=${qtconfig} ${projectpath}" "Run qmake" "Qmake failed."
 runstep "make -C ${buildfolder} -j${numberofthreads}" "Project compiled" "Failed to compile project"
 
 if [ "$deploy" == "false" ]; then
