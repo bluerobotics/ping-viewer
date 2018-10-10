@@ -10,6 +10,7 @@
 #include "filemanager.h"
 #include "linkconfiguration.h"
 #include "logger.h"
+#include "notificationmanager.h"
 #include "ping.h"
 #include "settingsmanager.h"
 #include "util.h"
@@ -38,6 +39,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
     qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager",
             SettingsManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<NotificationManager>("NotificationManager", 1, 0, "NotificationManager",
+            NotificationManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
