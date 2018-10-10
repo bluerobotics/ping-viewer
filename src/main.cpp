@@ -49,7 +49,8 @@ int main(int argc, char *argv[])
     );
 
     qmlRegisterUncreatableMetaObject(
-        AbstractLinkNamespace::staticMetaObject, "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "This is another enum."
+        AbstractLinkNamespace::staticMetaObject,
+        "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "This is another enum."
     );
 
     QApplication app(argc, argv);
