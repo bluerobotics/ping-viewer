@@ -24,6 +24,9 @@ PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
 int main(int argc, char *argv[])
 {
+    // Start logger ASAP
+    Logger::installHandler();
+
     QCoreApplication::setOrganizationName("Blue Robotics Inc.");
     QCoreApplication::setOrganizationDomain("bluerobotics.com");
     QCoreApplication::setApplicationName("Ping Viewer");
@@ -79,7 +82,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("GitUserRepo", gitUserRepo);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-    Logger::installHandler();
     qCInfo(mainCategory) << "Git version:" << GIT_VERSION;
     qCInfo(mainCategory) << "Git version date:" << GIT_VERSION_DATE;
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
