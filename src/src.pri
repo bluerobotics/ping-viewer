@@ -18,6 +18,7 @@ test {
 include($$PWD/filemanager/filemanager.pri)
 include($$PWD/link/link.pri)
 include($$PWD/logger/logger.pri)
+include($$PWD/notification/notification.pri)
 include($$PWD/sensor/sensor.pri)
 include($$PWD/settings/settings.pri)
 include($$PWD/util/util.pri)
