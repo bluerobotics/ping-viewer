@@ -22,6 +22,9 @@ fi
 echob "Running style script:"
 ${scriptpath}/testdoxygen.sh || exit 1
 
+echob "Check comments:"
+${scriptpath}/testcomments.sh || exit 1
+
 echob "Compile code in test mode:"
 build_test="$projectpath/build_test"
 rm -rf $build_test
