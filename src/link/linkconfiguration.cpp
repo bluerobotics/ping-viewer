@@ -1,3 +1,5 @@
+#include <QUrl>
+
 #include "linkconfiguration.h"
 
 const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
@@ -8,6 +10,7 @@ const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
     {NoArgs, "Link configuration does not have arguments."},
     {InvalidArgsNumber, "Link configuration have a invalid number of arguments"},
     {ArgsAreEmpty, "Link configuration arguments are empty."},
+    {InvalidUrl, "Url not formatted properly."}
 };
 
 const QString LinkConfiguration::createFullConfString() const
@@ -60,6 +63,12 @@ LinkConfiguration::Error LinkConfiguration::error() const
     for( const auto& arg : _linkConf.args) {
         if(arg.isEmpty()) {
             return InvalidArgsNumber;
+        }
+    }
+
+    if(_linkConf.type == LinkType::Udp) {
+        if(!QUrl(_linkConf.args[0]).isValid()) {
+            return InvalidUrl;
         }
     }
 
