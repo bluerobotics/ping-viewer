@@ -54,6 +54,7 @@ Ping::Ping() : Sensor()
     //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
     connect(detector(), &ProtocolDetector::connectionDetected, this, [this] {
+        qCDebug(PING_PROTOCOL_PING) << "New device detected";
         setAutoDetect(false);
         SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 
