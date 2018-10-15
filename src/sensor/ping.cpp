@@ -141,6 +141,21 @@ void Ping::updatePingConfigurationSettings()
     }
 }
 
+void Ping::addDetectionLink(const LinkConfiguration& linkConfiguration)
+{
+    if(linkConfiguration.isValid()) {
+        detector()->appendConfiguration(linkConfiguration);
+    } else {
+        qCDebug(PING_PROTOCOL_PING) << "Invalid configuration:" << linkConfiguration.errorToString();
+    }
+}
+
+void Ping::addDetectionLink(LinkType connType, const QStringList& connString)
+{
+    LinkConfiguration linkConfiguration{connType, connString};
+    addDetectionLink(linkConfiguration);
+}
+
 void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
     Sensor::connectLink(LinkConfiguration{connType, connString});
