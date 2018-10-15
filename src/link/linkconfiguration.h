@@ -38,6 +38,7 @@ public:
         NoArgs,
         InvalidArgsNumber,
         ArgsAreEmpty,
+        InvalidUrl,
     };
 
     /**
