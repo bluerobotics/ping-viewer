@@ -30,6 +30,9 @@ public:
      */
     void appendConfiguration(LinkConfiguration& linkConfig)
     {
+        if(_linkConfigs.contains(linkConfig)) {
+            return;
+        }
         _linkConfigs.append(linkConfig);
     }
 
