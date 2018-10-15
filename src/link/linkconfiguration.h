@@ -156,6 +156,13 @@ public:
     static QString errorToString(Error error) { return _errorMap[error]; }
 
     /**
+     * @brief Return error in a friendly human message
+     *
+     * @return QString
+     */
+    QString errorToString() const { return errorToString(error()); }
+
+    /**
      * @brief Check if configuration is correct
      *
      * @return bool
