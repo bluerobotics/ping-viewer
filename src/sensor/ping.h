@@ -26,6 +26,21 @@ public:
     ~Ping();
 
     /**
+     * @brief Add configuration to be detected by detector
+     *
+     * @param linkConfiguration
+     */
+    void addDetectionLink(const LinkConfiguration& linkConfiguration);
+
+    /**
+     * @brief Add configuration to be detected by detector
+     *
+     * @param connType connection type
+     * @param connString arguments for the new connection
+     */
+    Q_INVOKABLE void addDetectionLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString);
+
+    /**
      * @brief Add new connection
      *
      * @param connType connection type
