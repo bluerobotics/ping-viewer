@@ -28,7 +28,7 @@ public:
      *
      * @param linkConfig
      */
-    void appendConfiguration(LinkConfiguration& linkConfig)
+    void appendConfiguration(const LinkConfiguration& linkConfig)
     {
         if(_linkConfigs.contains(linkConfig)) {
             return;
