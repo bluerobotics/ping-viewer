@@ -106,9 +106,8 @@ Ping::Ping() : Sensor()
     // Load last successful connection
     auto config = SettingsManager::self()->lastLinkConfiguration();
     qCDebug(PING_PROTOCOL_PING) << "Loading last configuration connection from settings:" << config;
-    if(!detector()->checkLink(config)) {
-        detectorThread()->start();
-    }
+    addDetectionLink(config);
+    detectorThread()->start();
 }
 
 void Ping::loadLastPingConfigurationSettings()
