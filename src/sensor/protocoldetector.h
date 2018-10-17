@@ -33,7 +33,7 @@ public:
         if(_linkConfigs.contains(linkConfig)) {
             return;
         }
-        _linkConfigs.append(linkConfig);
+        _linkConfigs.prepend(linkConfig);
     }
 
     /**
