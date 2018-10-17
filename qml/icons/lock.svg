@@ -4,7 +4,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   fill="#FFFFFF"
+   fill="#000000"
    height="36"
    viewBox="0 0 24 24"
    width="36"
@@ -13,7 +13,7 @@
    sodipodi:docname="lock_white.svg"
    inkscape:version="0.92.2 2405546, 2018-03-11">
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
