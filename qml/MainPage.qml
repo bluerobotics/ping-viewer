@@ -207,8 +207,8 @@ Item {
         }
     }
 
-    PingRelease {
-        id: pingRelease
+    PingNotificationArea {
+        id: pingNotificationArea
         z: 2
         anchors.right: parent.right
         anchors.bottom: parent.bottom
