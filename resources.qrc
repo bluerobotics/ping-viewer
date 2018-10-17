@@ -24,20 +24,20 @@
         <file alias="PingTextField.qml">qml/PingTextField.qml</file>
     </qresource>
     <qresource prefix="/icons">
-        <file alias="arrow_right_white.svg">qml/icons/arrow_right_white.svg</file>
-        <file alias="bell_white.svg">qml/icons/bell_white.svg</file>
-        <file alias="chat_white.svg">qml/icons/chat_white.svg</file>
-        <file alias="chip_white.svg">qml/icons/chip_white.svg</file>
-        <file alias="clear_all_black.svg">qml/icons/clear_all_black.svg</file>
-        <file alias="close_white.svg">qml/icons/close_white.svg</file>
-        <file alias="sun_white.svg">qml/icons/sun_white.svg</file>
-        <file alias="disk_black.svg">qml/icons/disk.svg</file>
-        <file alias="info_white.svg">qml/icons/info_white.svg</file>
-        <file alias="lock_white.svg">qml/icons/lock_white.svg</file>
-        <file alias="report_white.svg">qml/icons/report_white.svg</file>
-        <file alias="settings_white.svg">qml/icons/settings_white.svg</file>
-        <file alias="settings_reset_black.svg">qml/icons/settings_reset_black.svg</file>
-        <file alias="unlock_white.svg">qml/icons/unlock_white.svg</file>
+        <file alias="arrow.svg">qml/icons/arrow.svg</file>
+        <file alias="bell.svg">qml/icons/bell.svg</file>
+        <file alias="chat.svg">qml/icons/chat.svg</file>
+        <file alias="chip.svg">qml/icons/chip.svg</file>
+        <file alias="clear.svg">qml/icons/clear.svg</file>
+        <file alias="close.svg">qml/icons/close.svg</file>
+        <file alias="disk.svg">qml/icons/disk.svg</file>
+        <file alias="info.svg">qml/icons/info.svg</file>
+        <file alias="lock.svg">qml/icons/lock.svg</file>
+        <file alias="report.svg">qml/icons/report.svg</file>
+        <file alias="reset.svg">qml/icons/reset.svg</file>
+        <file alias="settings.svg">qml/icons/settings.svg</file>
+        <file alias="sun.svg">qml/icons/sun.svg</file>
+        <file alias="unlock.svg">qml/icons/unlock.svg</file>
     </qresource>
     <qresource prefix="/imgs">
         <file alias="br_icon.png">qml/imgs/br_icon.png</file>
