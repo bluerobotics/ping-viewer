@@ -8,6 +8,7 @@ import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
     id: window
+    objectName: "window"
     title: "Ping Interface"
     visible: true
     height: 600
