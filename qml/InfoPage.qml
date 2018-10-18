@@ -7,6 +7,7 @@ import Qt.labs.settings 1.0
 
 import Logger 1.0
 import SettingsManager 1.0
+import StyleManager 1.0
 
 Item {
     id: root
@@ -160,7 +161,7 @@ Item {
 
             PingImage {
                 id: scrollLock
-                source: log.scrollLockEnabled ? "/icons/lock_white.svg" : "/icons/unlock_white.svg"
+                source: log.scrollLockEnabled ? StyleManager.lockIcon() : StyleManager.unlockIcon()
                 height: 50
                 width: 50
 
@@ -187,7 +188,7 @@ Item {
 
             PingImage {
                 id: forumPost
-                source: "/icons/chat_white.svg"
+                source: StyleManager.chatIcon()
                 height: 50
                 width: 50
 
@@ -212,7 +213,7 @@ Item {
 
             PingImage {
                 id: issue
-                source: "/icons/report_white.svg"
+                source: StyleManager.reportIcon()
                 height: 50
                 width: 50
 
@@ -237,7 +238,7 @@ Item {
 
             PingImage {
                 id: resetSettings
-                source: "/icons/settings_reset_black.svg"
+                source: StyleManager.settingsIcon()
                 height: 50
                 width: 50
 

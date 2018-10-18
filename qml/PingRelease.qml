@@ -1,6 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
 
+import StyleManager 1.0
+
 Item {
     id: root
     height: pingItem.height
@@ -54,7 +56,7 @@ Item {
 
     PingItem {
         id: pingItem
-        icon: "/icons/bell_white.svg"
+        icon: StyleManager.bellIcon()
         state: "bottom-right"
         visible: false
         startAngle: -15

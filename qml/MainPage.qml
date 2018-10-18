@@ -10,6 +10,7 @@ import FileManager 1.0
 import Ping 1.0
 import Ping1DNamespace 1.0
 import SettingsManager 1.0
+import StyleManager 1.0
 
 Item {
     id: root
@@ -23,7 +24,7 @@ Item {
 
         PingItem {
             id: menuContainer
-            icon: "/icons/arrow_right_white.svg"
+            icon: StyleManager.arrowIcon()
             item: MainMenu {
                 ping: ping
             }
@@ -43,13 +44,13 @@ Item {
         PingItem {
             id: settingsMenu
             marginMult: 1
-            icon: "/icons/settings_white.svg"
+            icon: StyleManager.settingsIcon()
             item: ColumnLayout {
                 spacing: 0
                 PingItem {
                     id: displayItem
                     isSubItem: true
-                    icon: "/icons/sun_white.svg"
+                    icon: StyleManager.sunIcon()
 
                     item: DisplaySettings {
                         id: displaySettings
@@ -65,7 +66,7 @@ Item {
                 PingItem {
                     id: firmwareUpdate
                     isSubItem: true
-                    icon: "/icons/chip_white.svg"
+                    icon: StyleManager.chipIcon()
 
                     item: FirmwareUpdate {
                         ping: ping
@@ -92,7 +93,7 @@ Item {
 
         PingItem {
             id: infoMenu
-            icon: "/icons/info_white.svg"
+            icon: StyleManager.infoIcon()
             state: "fill-right"
             item: InfoPage {
                 id: infoPage
@@ -122,7 +123,7 @@ Item {
         anchors.bottom: parent.bottom
         state: "bottom-left"
         spin: true
-        icon: "/icons/disk_black.svg"
+        icon: StyleManager.diskIcon()
         item: RowLayout {
             PingButton {
                 id: replayStartBt
