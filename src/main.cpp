@@ -13,6 +13,7 @@
 #include "notificationmanager.h"
 #include "ping.h"
 #include "settingsmanager.h"
+#include "stylemanager.h"
 #include "util.h"
 #include "waterfall.h"
 
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
             SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<NotificationManager>("NotificationManager", 1, 0, "NotificationManager",
             NotificationManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<StyleManager>("StyleManager", 1, 0, "StyleManager", StyleManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
     qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
@@ -91,5 +93,8 @@ int main(int argc, char *argv[])
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
     qCInfo(mainCategory) << "Git url:" << GIT_URL;
     qCInfo(mainCategory) << "Git short origin:" << gitUserRepo;
+
+    StyleManager::self()->setApplication(&app);
+    StyleManager::self()->setQmlEngine(&engine);
     return app.exec();
 }
