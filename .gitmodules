@@ -1,3 +1,6 @@
 [submodule "lib/ping-protocol-cpp"]
 	path = lib/ping-protocol-cpp
 	url = https://github.com/bluerobotics/ping-protocol-cpp
+[submodule "lib/maddy/maddy"]
+	path = lib/maddy/maddy
+	url = https://github.com/progsource/maddy

@@ -23,6 +23,7 @@ RESOURCES += \
 }
 
 include(lib/ping-protocol-cpp/ping.pri)
+include(lib/maddy/maddy.pri)
 
 CONFIG(debug, debug|release) {
     message("Debug Build !")
