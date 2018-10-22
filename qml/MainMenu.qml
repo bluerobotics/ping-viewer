@@ -2,6 +2,7 @@ import QtGraphicalEffects 1.0
 import QtQml 2.2
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import Util 1.0
@@ -110,7 +111,7 @@ Item {
                     Text {
                         id: pingPerSecond
                         text: Math.round(ping.pingFrequency) + " ping/s"
-                        color: Style.textColor
+                        color: Material.primary
                     }
                 }
 
@@ -146,7 +147,7 @@ Item {
                     spacing: 2
                     Text {
                         text: "Speed of Sound (m/s):"
-                        color: Style.textColor
+                        color: Material.primary
                     }
 
                     PingTextField {
@@ -180,7 +181,7 @@ Item {
 
                     Text {
                         text: "Start/Length (mm):"
-                        color: Style.textColor
+                        color: Material.primary
                     }
 
                     PingTextField {
@@ -254,7 +255,7 @@ Item {
 
                 Text {
                     text: "Sonar Type:"
-                    color: Style.textColor
+                    color: Material.primary
                 }
 
                 ComboBox {
@@ -267,7 +268,7 @@ Item {
                 Text {
                     text: "Communication:"
                     enabled: true
-                    color: Style.textColor
+                    color: Material.primary
                 }
 
                 ComboBox {
@@ -308,7 +309,7 @@ Item {
                     Text {
                         id: font
                         text: "Serial Port / Baud:"
-                        color: Style.textColor
+                        color: Material.primary
                     }
 
                     ComboBox {
@@ -355,7 +356,7 @@ Item {
 
                     Text {
                         text: "UDP Host/Port:"
-                        color: Style.textColor
+                        color: Material.primary
                     }
 
                     PingTextField {

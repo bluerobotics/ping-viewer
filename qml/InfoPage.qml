@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
@@ -87,13 +88,13 @@ Item {
                 Text {
                     z: 1
                     text: 'Version: <b>' + (GitTag === "" ? "No tags!" : GitTag)
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     text: 'Repository: <b>' + createHyperLink(repository, repository.split('/')[4].toUpperCase())
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                     onLinkActivated: {
                         print('Open link ', link)
@@ -103,7 +104,7 @@ Item {
                 Text {
                     z: 1
                     text: 'Git commit: <b>' + commitIdToLink(GitVersion)
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                     onLinkActivated: {
                         print('Open link ', link)
@@ -113,7 +114,7 @@ Item {
                 Text {
                     z: 1
                     text: " From: " + GitVersionDate
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                 }
             }
@@ -128,26 +129,26 @@ Item {
                     z: 1
                     // Add link to store device
                     text: 'Device: <b>' + deviceType
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     // Add link to model in store
                     text: 'Model: <b>' + deviceModel
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     text: 'Firmware Version: ' + deviceFirmware
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                 }
                 Text {
                     z: 1
                     text: "ID: " + deviceID
-                    color: Style.textColor
+                    color: Material.primary
                     textFormat: Text.RichText
                 }
             }
@@ -265,7 +266,7 @@ Item {
             id: logLineDiv
             height: 2
             Layout.fillWidth: true
-            color: Style.textColor
+            color: Material.primary
         }
 
         PingLogger {
@@ -330,7 +331,7 @@ Item {
                     Layout.columnSpan: 5
                     horizontalAlignment: Text.AlignHCenter
                     Layout.alignment: Qt.AlignHCenter
-                    color: Style.textColor
+                    color: Material.primary
                     wrapMode: Text.WordWrap
                 }
 
