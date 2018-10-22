@@ -3,6 +3,8 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Material 2.2
 import QtGraphicalEffects 1.0
 
+import StyleManager 1.0
+
 Item {
     id: pingItem
     z: 1
@@ -23,8 +25,8 @@ Item {
     property int animationType: Easing.Linear
     property bool clicked: false
     property var color: hideItem ? colorUnselected : colorSelected
-    property var colorSelected: Style.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
-    property var colorUnselected: Style.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
+    property var colorSelected: StyleManager.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(1,1,1,0.75)
+    property var colorUnselected: StyleManager.isDark ? Qt.rgba(0,0,0,0.5) : Qt.rgba(1,1,1,0.5)
     property real finalAngle: 180
     property var finalAngleValue: spin && !pingpong ? 360 : finalAngle
     property var hoverParent: undefined
