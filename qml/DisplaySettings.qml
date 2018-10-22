@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
 import SettingsManager 1.0
+import StyleManager 1.0
 
 Item {
     id: displaySettings
@@ -74,13 +75,7 @@ Item {
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
                         model: ["Dark", "Light"]
-                        onCurrentTextChanged: {
-                            if (currentIndex) {
-                                Style.useLightStyle()
-                            } else {
-                                Style.useDarkStyle()
-                            }
-                        }
+                        onCurrentTextChanged: StyleManager.isDark = !currentIndex
                     }
 
                     CheckBox {

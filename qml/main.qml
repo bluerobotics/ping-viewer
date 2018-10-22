@@ -6,6 +6,8 @@ import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
 
+import StyleManager 1.0
+
 ApplicationWindow {
     id: window
     objectName: "window"
@@ -14,8 +16,8 @@ ApplicationWindow {
     height: 600
     width: 800
 
-    Material.theme: Style.theme
-    Material.primary: Style.primaryColor
+    Material.theme: StyleManager.theme
+    Material.primary: StyleManager.primaryColor
     Material.accent: Material.Blue
     Material.foreground: Material.Blue
 
