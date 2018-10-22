@@ -12,6 +12,7 @@ echob() {
 }
 
 doccmd="doxygen "${docpath}/Doxyfile" 2>&1 \
+    | grep -v \"ignoring unsupported tag\" \
     | grep -v maddy \
     | grep -v protocol \
     | grep -v \(signal\) \
