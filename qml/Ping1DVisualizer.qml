@@ -52,7 +52,7 @@ Item {
                 transform: Rotation { origin.x: height/2; angle: 90}
                 gradient: Gradient {
                     GradientStop { position: 0.3; color: "transparent" }
-                    GradientStop { position: 0.5; color: Style.color }
+                    GradientStop { position: 0.5; color: Style.primaryColor } // Not working with material
                     GradientStop { position: 0.8; color: "transparent" }
                 }
 

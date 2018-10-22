@@ -1,5 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
@@ -56,7 +57,7 @@ Item {
                 ColumnLayout {
                     Text {
                         text: "Notifications:"
-                        color: Style.textColor
+                        color: Material.primary
                         Layout.alignment: Qt.AlignHCenter
                         Layout.margins: 5
                     }
@@ -68,7 +69,7 @@ Item {
                             Rectangle {
                                 height: 1
                                 Layout.fillWidth: true
-                                color: Style.textColor
+                                color: Material.primary
                             }
 
                             RowLayout {

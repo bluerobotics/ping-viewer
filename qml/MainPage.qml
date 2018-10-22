@@ -1,6 +1,7 @@
 import QtGraphicalEffects 1.0
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
@@ -143,7 +144,7 @@ Item {
             Text {
                 id: timeText
                 text: "Time:"
-                color: Style.textColor
+                color: Material.primary
             }
 
             Slider {
@@ -164,13 +165,13 @@ Item {
             Text {
                 id: replayElapsed
                 text: ping.link.isWritable() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
-                color: Style.textColor
+                color: Material.primary
             }
 
             Text {
                 id: replayFileName
                 text: "File:"
-                color: Style.textColor
+                color: Material.primary
             }
 
             PingButton {

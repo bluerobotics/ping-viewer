@@ -1,26 +1,20 @@
 // Style.qml
 pragma Singleton
-import QtQuick 2.0
-import QtQuick.Controls.Material 2.1
+import QtQuick 2.11
+import QtQuick.Controls.Material 2.2
 
 QtObject {
-    property color textColor: 'linen'
-    property color iconColor: textColor
-    property color color: isDark ? "black" : "linen"
-    property string dark: "dark"
-    property string light: "light"
+    property color dark: "black"
+    property color light: "linen"
     property bool isDark: true
-    property int theme: Material.Dark
+    property color primaryColor: isDark ? light : dark
+    property int theme: isDark ? Material.Dark : Material.Light
 
     function useLightStyle() {
-        theme = Material.Light
-        textColor = 'black'
-        isDark = false;
+        isDark = false
     }
 
     function useDarkStyle() {
-        theme = Material.Dark
-        textColor = 'linen'
-        isDark = true;
+        isDark = true
     }
 }

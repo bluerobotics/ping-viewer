@@ -15,6 +15,7 @@ ApplicationWindow {
     width: 800
 
     Material.theme: Style.theme
+    Material.primary: Style.primaryColor
     Material.accent: Material.Blue
     Material.foreground: Material.Blue
 
