@@ -8,28 +8,28 @@ matrix:
   include:
     # Tests build
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: require
       addons:
         apt:
           sources:
             - sourceline: 'ppa:cs50/ppa'
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:beineri/opt-qt594-trusty'
+            - sourceline: 'ppa:beineri/opt-qt-5.11.1-xenial'
           packages:
             - astyle
             - doxygen
             - g++-7
             - git
             - build-essential
-            - qt59-meta-minimal
-            - qt59charts-no-lgpl qt59graphicaleffects qt59quickcontrols qt59quickcontrols2 qt59scxml qt59serialport qt59svg
+            - qt511base
+            - qt511charts-no-lgpl qt511graphicaleffects qt511quickcontrols qt511quickcontrols2 qt511scxml qt511serialport qt511svg
+            - libgl1-mesa-dev
             - xvfb
       env:
         - DESC="Check code style && Doxygen"
         - PINGTEST="true"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-        - QTV="qt59"
 
     # AppImage deploy
     - os: linux
@@ -50,27 +50,6 @@ matrix:
       env:
         - DESC="AppImage deploy"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-        - QTV="qt511"
-
-    # AppImage with Qt5.9 for QGC
-    - os: linux
-      dist: trusty
-      sudo: require
-      addons:
-        apt:
-          sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:beineri/opt-qt594-trusty'
-          packages:
-            - g++-7
-            - git
-            - build-essential
-            - qt59-meta-minimal
-            - qt59charts-no-lgpl qt59graphicaleffects qt59quickcontrols qt59quickcontrols2 qt59scxml qt59serialport qt59svg
-      env:
-        - DESC="AppImage deploy for QGC"
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-        - QTV="qt59"
 
     # .dmg file deploy for Mac OS (release)
     - os: osx
@@ -141,9 +120,6 @@ script:
 # Create AppImage with linuxdeployqt
 - if [[ "${TRAVIS_OS_NAME}" == "linux" && "$PINGTEST" != "true" ]]; then
     ./tools/compile.sh || travis_terminate 1;
-    if [ "${QTV}" = "qt59" ]; then
-      mv /tmp/pingviewer-x86_64.AppImage /tmp/pingviewer-x86_64_QGC.AppImage;
-    fi;
   fi
 # Create .dmg for Mac OS with macdeployqt
 # The steps are the same one in Linux
