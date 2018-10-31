@@ -63,6 +63,9 @@ Ping::Ping() : Sensor()
         request(Ping1DNamespace::Fw_version);
         request(Ping1DNamespace::Device_id);
         request(Ping1DNamespace::Speed_of_sound);
+
+        // Start periodic request timer
+        _periodicRequestTimer.start();
     });
 
     connect(this, &Ping::srcIdUpdate, this, [this] {
