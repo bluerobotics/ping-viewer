@@ -1,16 +1,17 @@
 #pragma once
 
+#include <math.h>
+
 #include <QColor>
-#include <QStringListModel>
+#include <QAbstractListModel>
 
 /**
  * @brief Model for qml log interface
- * Initially based on:
- * https://stackoverflow.com/questions/37781426/how-to-change-the-color-of-qstringlistmodel-items
  *
  */
-class LogListModel : public QStringListModel
+class LogListModel : public QAbstractListModel
 {
+    Q_OBJECT
 public:
     /**
      * @brief Construct a new LogListModel
@@ -19,10 +20,27 @@ public:
      */
     LogListModel(QObject* parent = nullptr);
 
-    enum {
-        TimeRole = Qt::UserRole + 0x10,
-        CategoryRole,
+    /**
+     * @brief Roles
+     *
+     */
+    enum Roles {
+        Category,
+        Display,
+        Foreground,
+        Time,
+        Visibility,
     };
+
+    /**
+     * @brief Append a new log message in model
+     *
+     * @param time
+     * @param text
+     * @param color
+     * @param category
+     */
+    void append(const QString& time, const QString& text, const QColor& color, int category);
 
     /**
      * @brief Return data
@@ -34,35 +52,43 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 
     /**
-     * @brief Set the data
-     *
-     * @param index
-     * @param value
-     * @param role
-     * @return true
-     * @return false
-     */
-    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-
-    /**
      * @brief Get role names
      *
      * @return QHash<int, QByteArray>
      */
     QHash<int, QByteArray> roleNames() const override;
 
+    /**
+     * @brief Apply filter in model
+     *
+     * @param categories
+     */
+    Q_INVOKABLE void filter(int categories);
+
+    /**
+     * @brief Return model size
+     *
+     * @param parent
+     * @return int
+     */
+    Q_INVOKABLE int rowCount(const QModelIndex& parent = QModelIndex()) const override
+    {
+        Q_UNUSED(parent);
+        return _size;
+    };
+
 private:
     Q_DISABLE_COPY(LogListModel)
-    QVector<int> _roles{
-        Qt::ForegroundRole,
-        LogListModel::TimeRole,
-    };
+
+    int _categories = 0;
+    QVector<int> _roles;
     QHash<int, QByteArray> _roleNames{
-        {{Qt::ForegroundRole}, {"foreground"}},
-        {{LogListModel::TimeRole}, {"time"}},
-        {{LogListModel::CategoryRole}, {"category"}},
+        {{LogListModel::Category}, {"category"}},
+        {{LogListModel::Display}, {"display"}},
+        {{LogListModel::Foreground}, {"foreground"}},
+        {{LogListModel::Time}, {"time"}},
+        {{LogListModel::Visibility}, {"visibity"}},
     };
-    QVector<QVariant> _rowCategory;
-    QVector<QVariant> _rowColors;
-    QVector<QVariant> _rowTimes;
+    int _size = 0;
+    QHash<int, QVector<QVariant>> _vectors;
 };
