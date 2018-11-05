@@ -12,6 +12,7 @@ Item {
     property bool scrollLockEnabled: SettingsManager.logScrollLock
 
     onEnabledCategoriesChanged: {
+        Logger.logModel.filter(enabledCategories)
         if(enabledCategories != SettingsManager.enabledCategories) {
             SettingsManager.enabledCategories = enabledCategories
         }
@@ -37,14 +38,14 @@ Item {
             Text {
                 id: leftText
                 text: time
-                visible: enabledCategories & category
+                visible: visibity
                 color: foreground == undefined ? "purple" : foreground
             }
             Text {
                 width: parent.width - leftText.width
                 wrapMode: Text.WordWrap
                 text: display
-                visible: enabledCategories & category
+                visible: visibity
                 color: foreground == undefined ? "purple" : foreground
             }
         }
