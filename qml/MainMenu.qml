@@ -303,6 +303,7 @@ Item {
 
                 RowLayout {
                     id: serialLayout
+                    visible: serialLayout.enabled
                     spacing: 5
                     Layout.columnSpan:  5
 
@@ -350,6 +351,7 @@ Item {
 
                 RowLayout {
                     id: udpLayout
+                    visible: udpLayout.enabled
                     spacing: 5
                     Layout.columnSpan:  5
                     enabled: false
