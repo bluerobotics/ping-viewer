@@ -51,12 +51,7 @@ void Logger::logMessage(const QString& msg, const QtMsgType& type, const QMessag
     // Debug, Warning, Critical, Fatal, Info
     static const QColor colors[] = { QColor("DarkGray"), QColor("orange"), QColor("red"), QColor("red"), QColor("LimeGreen") };
 
-    const int line = _logModel.rowCount();
-    _logModel.insertRows(line, 1);
-    _logModel.setData(_logModel.index(line), time, LogListModel::TimeRole);
-    _logModel.setData(_logModel.index(line), msg, Qt::DisplayRole);
-    _logModel.setData(_logModel.index(line), colors[type], Qt::ForegroundRole);
-    _logModel.setData(_logModel.index(line), _categoryIndexer[context.category], LogListModel::CategoryRole);
+    _logModel.append(time, msg, colors[type], _categoryIndexer[context.category]);
 }
 
 void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg)

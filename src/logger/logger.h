@@ -45,8 +45,8 @@ public:
      *
      * @return QStringListModel*
      */
-    QStringListModel* logModel() { return &_logModel; };
-    Q_PROPERTY(QStringListModel* logModel READ logModel CONSTANT)
+    LogListModel* logModel() { return &_logModel; };
+    Q_PROPERTY(LogListModel* logModel READ logModel CONSTANT)
 
     /**
      * @brief Register a new category to be tracked
