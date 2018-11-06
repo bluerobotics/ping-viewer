@@ -384,6 +384,14 @@ public:
     // TODO install filters here?
 
     /**
+     * @brief Return the number of messages that we requested and did not received
+     *
+     * @return int
+     */
+    int lostMessages() { return _lostMessages; }
+    Q_PROPERTY(int lost_messages READ lostMessages NOTIFY lostMessagesUpdate)
+
+    /**
      * @brief Request message id
      *
      * @param id
@@ -449,6 +457,12 @@ signals:
      *
      */
     void flashComplete();
+
+    /**
+     * @brief Emit when lost messages is updated
+     *
+     */
+    void lostMessagesUpdate();
 
 private:
     Q_DISABLE_COPY(Ping)
@@ -568,4 +582,18 @@ private:
             }
         },
     };
+
+    // total of lost messages
+    int _lostMessages = 0;
+
+    struct messageStatus {
+        // Requested and acknowledge
+        int ack = 0;
+        // Requested and not acknowledge
+        int nack = 0;
+        // Number of waiting replies
+        int waiting = 0;
+    };
+    friend QDebug operator<<(QDebug d, const Ping::messageStatus& other);
+    QHash<Ping1DNamespace::msg_ping1D_id, messageStatus> requestedIds;
 };
