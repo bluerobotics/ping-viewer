@@ -144,6 +144,14 @@ Item {
             }
             Row {
                 Text {
+                    text: "Lost messages (#): " + ping.lost_messages
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
+            }
+            Row {
+                Text {
                     text: "RX Packets (#): " + ping.parsed_msgs
                     color: "white"
                     font.family: "unicode"
