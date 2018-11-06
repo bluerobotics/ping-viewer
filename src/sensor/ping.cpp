@@ -45,6 +45,14 @@ Ping::Ping() : Sensor()
             return;
         }
 
+        // Update lost messages count
+        _lostMessages = 0;
+        for(const auto& requestedId : requestedIds)
+        {
+            _lostMessages += requestedId.waiting;
+        }
+        emit lostMessagesUpdate();
+
         request(Ping1DNamespace::Pcb_temperature);
         request(Ping1DNamespace::Processor_temperature);
         request(Ping1DNamespace::Voltage_5);
@@ -166,6 +174,12 @@ void Ping::handleMessage(PingMessage msg)
 {
     qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id() << "Checksum Pass:" << msg.verifyChecksum();
 
+    auto& requestedId = requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(msg.message_id())];
+    if(requestedId.waiting) {
+        requestedId.waiting--;
+        requestedId.ack++;
+    }
+
     switch (msg.message_id()) {
 
     case Ping1DNamespace::Ack: {
@@ -179,6 +193,12 @@ void Ping::handleMessage(PingMessage msg)
         _nack_msg = QString("%1: %2").arg(nackMessage.nack_message()).arg(nackMessage.nacked_id());
         qCDebug(PING_PROTOCOL_PING) << "NACK message:" << _nack_msg;
         emit nackMsgUpdate();
+
+        auto& nackRequestedId = requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(nackMessage.nacked_id())];
+        if(nackRequestedId.waiting) {
+            nackRequestedId.waiting--;
+            nackRequestedId.nack++;
+        }
         break;
     }
 
@@ -460,6 +480,9 @@ void Ping::request(int id)
     m.set_id(id);
     m.updateChecksum();
     writeMessage(m);
+
+    // Add requested id
+    requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(id)].waiting++;
 }
 
 void Ping::setLastPingConfiguration()
@@ -544,4 +567,9 @@ void Ping::writeMessage(const PingMessage &msg)
 Ping::~Ping()
 {
     updatePingConfigurationSettings();
+}
+
+QDebug operator<<(QDebug d, const Ping::messageStatus& other)
+{
+    return d << "waiting: " << other.waiting << ", ack: " << other.ack << ", nack: " << other.nack;
 }
