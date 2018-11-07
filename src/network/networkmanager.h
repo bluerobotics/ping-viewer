@@ -42,7 +42,10 @@ public:
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 private:
-    NetworkManager* operator = (NetworkManager& other) = delete;
-    NetworkManager(const NetworkManager& other) = delete;
+    Q_DISABLE_COPY(NetworkManager)
+    /**
+     * @brief Construct a new Network Manager object
+     *
+     */
     NetworkManager() = default;
 };
