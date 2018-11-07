@@ -104,8 +104,11 @@ signals:
     void registeredCategoryChanged();
 
 private:
-    Logger* operator = (Logger& other) = delete;
-    Logger(const Logger& other) = delete;
+    Q_DISABLE_COPY(Logger)
+    /**
+     * @brief Construct a new Logger object
+     *
+     */
     Logger();
 
     /**
