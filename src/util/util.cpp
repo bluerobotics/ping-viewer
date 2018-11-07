@@ -6,11 +6,6 @@
 
 PING_LOGGING_CATEGORY(util, "ping.util");
 
-Util::Util()
-{
-
-}
-
 QStringList Util::serialPortList()
 {
     static QSerialPortInfo serialPortInfo;

@@ -61,7 +61,10 @@ public:
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 private:
-    Util* operator = (Util& other) = delete;
-    Util(const Util& other) = delete;
-    Util();
+    Q_DISABLE_COPY(Util)
+    /**
+     * @brief Construct a new Util object
+     *
+     */
+    Util() = default;
 };
