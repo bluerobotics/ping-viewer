@@ -16,8 +16,8 @@ void NetworkTool::checkInterfaceUpdate()
 {
     static QString gitUserRepo;
     if(gitUserRepo.isEmpty()) {
-        //https://github.com/user/repo.git
-        const static QRegularExpression regex("github.com/(.*).git");
+        //*github.com/user/repo* results in user/repo
+        const static QRegularExpression regex(R"(github.com\/([^.]*))");
         QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
         // TODO: Check regex output
         if (regexMatch.hasMatch()) {
