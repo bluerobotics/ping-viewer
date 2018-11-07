@@ -119,6 +119,7 @@ public:
     Q_INVOKABLE QJsonObject object(QString& key) const;
 
 private:
+    Q_DISABLE_COPY(QJsonSettings)
     QJsonDocument _jsonDocument;
     QString _mainKey{QStringLiteral("settings")};
     QHash<int, QByteArray> _roles {
