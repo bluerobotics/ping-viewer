@@ -66,6 +66,13 @@ public:
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 private:
+    Q_DISABLE_COPY(FileManager)
+    /**
+     * @brief Construct a new File Manager object
+     *
+     */
+    FileManager();
+
     /**
      * @brief Manage file types
      */
@@ -84,14 +91,6 @@ private:
         , {PICTURE, ".png"}
         , {BINARY, ".bin"}
     };
-
-    /**
-     * @brief Construct a new File Manager object
-     *
-     */
-    FileManager();
-    FileManager(const FileManager& other) = delete;
-    FileManager* operator = (FileManager& other) = delete;
 
     /**
      * @brief Filename structure
