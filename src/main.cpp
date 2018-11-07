@@ -72,27 +72,17 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
     app.exec();
 #endif
-    // Main app
-    QString gitUserRepo;
-    //https://github.com/user/repo.git
-    QRegularExpression regex("github.com/(.*).git");
-    QRegularExpressionMatch match = regex.match(QStringLiteral(GIT_URL));
-    if (match.hasMatch()) {
-        gitUserRepo = match.capturedTexts()[1];
-    }
 
     engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
     engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
     engine.rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
     engine.rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
-    engine.rootContext()->setContextProperty("GitUserRepo", gitUserRepo);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     qCInfo(mainCategory) << "Git version:" << GIT_VERSION;
     qCInfo(mainCategory) << "Git version date:" << GIT_VERSION_DATE;
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
     qCInfo(mainCategory) << "Git url:" << GIT_URL;
-    qCInfo(mainCategory) << "Git short origin:" << gitUserRepo;
 
     StyleManager::self()->setApplication(&app);
     StyleManager::self()->setQmlEngine(&engine);
