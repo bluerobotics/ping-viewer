@@ -52,6 +52,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
+    Q_DISABLE_COPY(LogListModel)
     QVector<int> _roles{
         Qt::ForegroundRole,
         LogListModel::TimeRole,
