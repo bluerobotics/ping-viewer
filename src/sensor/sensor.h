@@ -117,4 +117,7 @@ signals:
 
     // Out
     void linkLogUpdate();
+
+private:
+    Q_DISABLE_COPY(Sensor)
 };
