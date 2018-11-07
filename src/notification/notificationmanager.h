@@ -55,8 +55,11 @@ signals:
     void modelUpdate();
 
 private:
-    NotificationManager* operator = (NotificationManager& other) = delete;
-    NotificationManager(const NotificationManager& other) = delete;
+    Q_DISABLE_COPY(NotificationManager)
+    /**
+     * @brief Construct a new Notification Manager object
+     *
+     */
     NotificationManager();
 
     NotificationModel _model;
