@@ -51,7 +51,10 @@ public:
      */
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 private:
-    NetworkTool* operator = (NetworkTool& other) = delete;
-    NetworkTool(const NetworkTool& other) = delete;
+    Q_DISABLE_COPY(NetworkTool)
+    /**
+     * @brief Construct a new Network Tool object
+     *
+     */
     NetworkTool() = default;
 };
