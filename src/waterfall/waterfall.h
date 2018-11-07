@@ -251,6 +251,7 @@ public:
     void hoverLeaveEvent(QHoverEvent *event);
 
 private:
+    Q_DISABLE_COPY(Waterfall)
     /**
      * @brief Load user gradients
      *
