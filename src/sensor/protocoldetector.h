@@ -98,6 +98,7 @@ protected:
     QVector<LinkConfiguration> updateLinkConfigurations(QVector<LinkConfiguration>& linkConfig) const;
 
 private:
+    Q_DISABLE_COPY(ProtocolDetector)
     bool _active { false };
     bool _detected { false };
     QVector<LinkConfiguration> _availableLinks;
