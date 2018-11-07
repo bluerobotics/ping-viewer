@@ -103,8 +103,11 @@ public:
     P_PROPERTY(int, theme, Theme::Dark)
 
 private:
-    StyleManager* operator = (StyleManager& other) = delete;
-    StyleManager(const StyleManager& other) = delete;
+    Q_DISABLE_COPY(StyleManager)
+    /**
+     * @brief Construct a new Style Manager object
+     *
+     */
     StyleManager();
 
     static QString iconNameHelper(QString functionName)
