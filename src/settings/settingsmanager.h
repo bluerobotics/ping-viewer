@@ -87,8 +87,11 @@ public:
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
 private:
-    SettingsManager* operator = (SettingsManager& other) = delete;
-    SettingsManager(const SettingsManager& other) = delete;
+    Q_DISABLE_COPY(SettingsManager)
+    /**
+     * @brief Construct a new Settings Manager object
+     *
+     */
     SettingsManager();
 
     QSettings _settings;
