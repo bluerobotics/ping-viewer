@@ -436,6 +436,7 @@ signals:
     void flashComplete();
 
 private:
+    Q_DISABLE_COPY(Ping)
     /**
      * @brief Sensor variables
      */
