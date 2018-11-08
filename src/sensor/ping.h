@@ -544,38 +544,48 @@ private:
         }
     };
 
+    /**
+     * @brief Map to do automatic configuration of the sensor
+     *
+     * The X_ prefix is to identify the order that this keys should be used.
+     * This is done by using method keys(), that will sort it.
+     * The only way to make it around of such approach is to use:
+     * QVector<QPair<QString, settingsConfiguration>>,
+     * but this will make further code boilerplate because of QPair access
+     *
+     */
     QMap<QString, settingsConfiguration> _pingConfiguration {
-        {   {"automaticMode"}, {
-                true, false, true,
-                std::bind(&Ping::mode_auto, this),
-                [this](long long int value) {set_mode_auto(value);}
-            }
-        },
-        {   {"gainIndex"}, {
-                0, 0, 6,
-                std::bind(&Ping::gain_index, this),
-                [this](long long int value) {set_gain_index(value);}
-            }
-        },
-        {   {"lengthDistance"}, {
-                5000, 500, 70000,
-                std::bind(&Ping::length_mm, this),
-                [this](long long int value) {set_length_mm(value);}
-            }
-        },
-        {   {"pingInterval"}, {
+        {   {"1_pingInterval"}, {
                 66, 20, 1000,
                 std::bind(&Ping::ping_interval, this),
                 [this](long long int value) {set_ping_interval(value);}
             }
         },
-        {   {"speedOfSound"}, {
+        {   {"1_speedOfSound"}, {
                 1500000, 50000, 10000000,
                 std::bind(&Ping::speed_of_sound, this),
                 [this](long long int value) {set_speed_of_sound(value);}
             }
         },
-        {   {"startDistance"}, {
+        {   {"2_automaticMode"}, {
+                true, false, true,
+                std::bind(&Ping::mode_auto, this),
+                [this](long long int value) {set_mode_auto(value);}
+            }
+        },
+        {   {"3_gainIndex"}, {
+                0, 0, 6,
+                std::bind(&Ping::gain_index, this),
+                [this](long long int value) {set_gain_index(value);}
+            }
+        },
+        {   {"3_lengthDistance"}, {
+                5000, 500, 70000,
+                std::bind(&Ping::length_mm, this),
+                [this](long long int value) {set_length_mm(value);}
+            }
+        },
+        {   {"3_startDistance"}, {
                 0, 0, 70000,
                 std::bind(&Ping::start_mm, this),
                 [this](long long int value) {set_start_mm(value);}
