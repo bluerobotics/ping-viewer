@@ -19,14 +19,12 @@ void NetworkTool::checkInterfaceUpdate()
         //*github.com/user/repo* results in user/repo
         const static QRegularExpression regex(R"(github.com\/([^.]*))");
         QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
-        // TODO: Check regex output
-        if (regexMatch.hasMatch()) {
-            gitUserRepo = regexMatch.capturedTexts()[1];
-        } else {
+        if (!regexMatch.hasMatch()) {
             qCWarning(NETWORKTOOL) <<
                                    "Fail to get github user and repository! It'll not be possible to check for updates";
             return;
         }
+        gitUserRepo = regexMatch.capturedTexts()[1];
     }
 
     const QUrl url{QStringLiteral("https://api.github.com/repos/%1/releases").arg(gitUserRepo)};
