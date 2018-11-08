@@ -38,19 +38,26 @@ void NetworkTool::checkNewVersionInGitHubPayload(QJsonDocument& jsonDocument)
 {
     const static QString projectTag = QStringLiteral(GIT_TAG);
 
+    auto semverToInt = [](const QString& version) -> int {
+        int major, minor, patch = 0;
+        std::sscanf(version.toStdString().c_str(), "%d.%d.%d", &major, &minor, &patch);
+        return (major << 24) + (minor << 16) + (patch << 8);
+    };
+
     // Check if version is a normal release
     // For everything else we can presume test release
-    static QRegularExpression releaseTagRegex(QStringLiteral(R"([v]\d+\.\d+)"));
+    // This regex will ONLY check for vX.X.X
+    static QRegularExpression releaseTagRegex(QStringLiteral(R"([v]\d+\.\d+\.\d+)"));
     QRegularExpressionMatch regexMatch = releaseTagRegex.match(projectTag);
     // Check if this actual version is a real release (normal or test)
     // Alarm people to download the correction version !
-    float actualVersion = regexMatch.hasMatch() ? projectTag.right(1).toFloat() : -1.0;
+    int actualVersion = regexMatch.hasMatch() ? semverToInt(projectTag) : -1.0;
 
     // If this version does not follow vd+.d+, this is a test or continuous release
     if(regexMatch.hasMatch()) {
         qCDebug(NETWORKTOOL) << "Running release version:" << projectTag;
     } else {
-        releaseTagRegex.setPattern(QStringLiteral(R"([v,t]\d+\.\d+)"));
+        releaseTagRegex.setPattern(QStringLiteral(R"([t,v]\d+\.\d+\.\d+)"));
         qCDebug(NETWORKTOOL) << "Running test version:" << projectTag;
     }
 
@@ -62,7 +69,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(QJsonDocument& jsonDocument)
     }
 
     struct {
-        float version;
+        int version;
         QString versionString;
         QJsonValue json;
     } lastReleaseAvailable;
@@ -80,7 +87,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(QJsonDocument& jsonDocument)
         }
         qCDebug(NETWORKTOOL) << "Possible new version.";
 
-        auto version = versionString.right(1).toFloat();
+        auto version = semverToInt(versionString.right(1));
         if(version > lastReleaseAvailable.version) {
             lastReleaseAvailable.version = version;
             lastReleaseAvailable.versionString = versionString;
