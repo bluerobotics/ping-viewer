@@ -126,7 +126,7 @@ public:
     Q_PROPERTY(int confidence READ confidence NOTIFY confidenceUpdate)
 
     /**
-     * @brief Return pulse emition in ms
+     * @brief Return pulse emission in ms
      *
      * @return uint16_t
      */
@@ -510,7 +510,7 @@ private:
 
     // TODO const &
     void handleMessage(PingMessage msg); // handle incoming message
-    void writeMessage(const PingMessage& msg); // write a messge to link
+    void writeMessage(const PingMessage& msg); // write a message to link
 
     void firmwareUpdatePercentage();
     void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
