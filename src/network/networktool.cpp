@@ -87,7 +87,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(QJsonDocument& jsonDocument)
         }
         qCDebug(NETWORKTOOL) << "Possible new version.";
 
-        auto version = semverToInt(versionString.right(1));
+        auto version = semverToInt(versionString.mid(1));
         if(version > lastReleaseAvailable.version) {
             lastReleaseAvailable.version = version;
             lastReleaseAvailable.versionString = versionString;
