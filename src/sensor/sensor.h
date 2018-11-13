@@ -92,13 +92,13 @@ public:
      *
      * @return const QThread*
      */
-    QThread* detectorThread() { return _detectorThread; };
+    QThread* detectorThread() { return &_detectorThread; };
 
 protected:
     bool _autodetect;
     bool _connected;
     ProtocolDetector* _detector;
-    QThread* _detectorThread;
+    QThread _detectorThread;
     QSharedPointer<Link> _linkIn;
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation

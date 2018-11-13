@@ -14,7 +14,6 @@ Sensor::Sensor() :
     _autodetect(true)
     ,_connected(false)
     ,_detector(new ProtocolDetector())
-    ,_detectorThread(new QThread(this))
     ,_linkIn(new Link(LinkType::Serial, "Default"))
     ,_linkOut(nullptr)
     ,_parser(nullptr)
@@ -29,9 +28,9 @@ Sensor::Sensor() :
         emit this->connectionUpdate();
     });
 
-    _detector->moveToThread(_detectorThread);
-    connect(_detectorThread, &QThread::finished, _detector, &QObject::deleteLater);
-    connect(_detectorThread, &QThread::started, _detector, &ProtocolDetector::scan);
+    _detector->moveToThread(&_detectorThread);
+    connect(&_detectorThread, &QThread::finished, _detector, &QObject::deleteLater);
+    connect(&_detectorThread, &QThread::started, _detector, &ProtocolDetector::scan);
     connect(_detector, &ProtocolDetector::connectionDetected, this, [this](const LinkConfiguration& conConf) {
         connectLink(conConf);
     });
@@ -132,6 +131,6 @@ void Sensor::setAutoDetect(bool autodetect)
 Sensor::~Sensor()
 {
     _detector->stop();
-    _detectorThread->quit();
-    _detectorThread->wait();
+    _detectorThread.quit();
+    _detectorThread.wait();
 }
