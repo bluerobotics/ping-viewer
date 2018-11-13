@@ -132,6 +132,6 @@ void Sensor::setAutoDetect(bool autodetect)
 Sensor::~Sensor()
 {
     _detector->stop();
-    _detectorThread->terminate();
+    _detectorThread->quit();
     _detectorThread->wait();
 }
