@@ -32,7 +32,6 @@ Sensor::Sensor() :
     _detector->moveToThread(_detectorThread);
     connect(_detectorThread, &QThread::finished, _detector, &QObject::deleteLater);
     connect(_detectorThread, &QThread::started, _detector, &ProtocolDetector::scan);
-    connect(_detectorThread, &QThread::finished, _detectorThread, &QObject::deleteLater);
     connect(_detector, &ProtocolDetector::connectionDetected, this, [this](const LinkConfiguration& conConf) {
         connectLink(conConf);
     });
