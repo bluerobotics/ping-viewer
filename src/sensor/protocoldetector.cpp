@@ -23,7 +23,7 @@ const QStringList ProtocolDetector::_invalidSerialPortNames(
 ProtocolDetector::ProtocolDetector()
 {
     _linkConfigs.append({
-        {LinkType::Udp, {"192.168.2.2", "9000"}, "BlueRov2 standard connection"},
+        {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 standard connection"},
         {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}
     });
 };
