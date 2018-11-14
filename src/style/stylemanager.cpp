@@ -13,8 +13,8 @@ StyleManager::StyleManager()
 {
     connect(this, &StyleManager::isDarkChanged, this, [this] {
         theme(isDark() ? Theme::Dark : Theme::Light);
-        primaryColor(isDark() ? light : dark);
-        secondaryColor(isDark() ? dark : light);
+        primaryColor(isDark() ? _light : _dark);
+        secondaryColor(isDark() ? _dark : _light);
     });
 
     isDark(SettingsManager::self()->darkTheme());
