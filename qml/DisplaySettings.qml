@@ -70,6 +70,7 @@ Item {
                         id: themeCB
                         Layout.columnSpan:  4
                         Layout.fillWidth: true
+                        currentIndex: !SettingsManager.darkTheme
                         model: ["Dark", "Light"]
                         onCurrentTextChanged: StyleManager.isDark = !currentIndex
                     }
@@ -121,7 +122,6 @@ Item {
     Settings {
         property alias plotThemeIndex: plotThemeCB.currentIndex
         property alias smoothDataState: smoothDataChB.checkState
-        property alias themeIndex: themeCB.currentIndex
         property alias waterfallAntialiasingData: antialiasingDataChB.checkState
     }
 

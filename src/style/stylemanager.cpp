@@ -11,13 +11,16 @@ PING_LOGGING_CATEGORY(STYLEMANAGER, "ping.stylemanager")
 
 StyleManager::StyleManager()
 {
-    connect(this, &StyleManager::isDarkChanged, this, [this] {
+    auto darkChanged = [this] {
         theme(isDark() ? Theme::Dark : Theme::Light);
         primaryColor(isDark() ? _light : _dark);
         secondaryColor(isDark() ? _dark : _light);
-    });
+        SettingsManager::self()->darkTheme(isDark());
+    };
+    connect(this, &StyleManager::isDarkChanged, this, darkChanged);
 
     isDark(SettingsManager::self()->darkTheme());
+    darkChanged();
 }
 
 QSize StyleManager::displaySize() const
