@@ -116,7 +116,7 @@ private:
     };
 
     QApplication* _app;
-    QColor dark = "black";
-    QColor light = "linen";
+    QColor _dark = "black";
+    QColor _light = "linen";
     QQmlApplicationEngine* _engine;
 };
