@@ -11,7 +11,7 @@ PING_LOGGING_CATEGORY(STYLEMANAGER, "ping.stylemanager")
 
 StyleManager::StyleManager()
 {
-    connect(this, &StyleManager::isDarkChanged, this, [&] {
+    connect(this, &StyleManager::isDarkChanged, this, [this] {
         theme(isDark() ? Theme::Dark : Theme::Light);
         primaryColor(isDark() ? light : dark);
         secondaryColor(isDark() ? dark : light);
