@@ -44,9 +44,7 @@ Item {
                         currentIndex: SettingsManager.distanceUnitsIndex
                         Layout.columnSpan: 4
                         Layout.fillWidth: true
-                        onCurrentIndexChanged: {
-                            SettingsManager.distanceUnitsIndex = currentIndex
-                        }
+                        onCurrentIndexChanged: SettingsManager.distanceUnitsIndex = currentIndex
                     }
 
                     Text {
@@ -60,9 +58,7 @@ Item {
                         Layout.fillWidth: true
                         Layout.minimumWidth: 200
                         model: waterfallItem.themes
-                        onCurrentTextChanged: {
-                            waterfallItem.theme = currentText
-                        }
+                        onCurrentTextChanged: waterfallItem.theme = currentText
                     }
 
                     Text {
