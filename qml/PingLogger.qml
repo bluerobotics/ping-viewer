@@ -52,12 +52,11 @@ Item {
         ScrollBar.horizontal: ScrollBar { }
         ScrollBar.vertical: ScrollBar { }
 
-        onCountChanged: {
-            if(scrollLockEnabled) {
-                // This appears to be better than positionViewAtEnd
-                // Less bug
-                positionViewAtIndex(count - 1, ListView.Beginning)
-            }
+        // After we moved from StringListModel to our own "QQmlListModel"
+        // We forgot to add the count signal to be able to do the scroll lock
+        Connections {
+            target: Logger.logModel
+            onCountChanged: listView.currentIndex = listView.count - 1
         }
     }
 }
