@@ -30,8 +30,9 @@ void LogListModel::append(const QString& time, const QString& text, const QColor
     _vectors[LogListModel::Visibility].append(category & _categories);
     _size++;
     const auto& indexRow = index(line);
-    emit dataChanged(indexRow, indexRow, _roles);
     endInsertRows();
+    emit dataChanged(indexRow, indexRow, _roles);
+    emit countChanged();
 }
 
 Q_INVOKABLE void LogListModel::filter(int categories)

@@ -77,8 +77,12 @@ public:
         return _size;
     };
 
+signals:
+    void countChanged();
+
 private:
     Q_DISABLE_COPY(LogListModel)
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
     int _categories = 0;
     QVector<int> _roles;
@@ -92,3 +96,5 @@ private:
     int _size = 0;
     QHash<int, QVector<QVariant>> _vectors;
 };
+
+Q_DECLARE_METATYPE(LogListModel*)
