@@ -70,7 +70,6 @@ Ping::Ping() : Sensor()
     connect(detector(), &ProtocolDetector::connectionDetected, this, [this] {
         qCDebug(PING_PROTOCOL_PING) << "New device detected";
         setAutoDetect(false);
-        SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 
         // Request device information
         request(Ping1DNamespace::Mode_auto);
@@ -79,31 +78,17 @@ Ping::Ping() : Sensor()
         request(Ping1DNamespace::Device_id);
         request(Ping1DNamespace::Speed_of_sound);
 
-        // Start periodic request timer
-        _periodicRequestTimer.start();
-    });
-
-    connect(this, &Ping::srcIdUpdate, this, [this] {
-        // Wait for device id to load the correct settings
-        static bool once = false;
-        if(!once)
+        if(link()->isWritable())
         {
-            once = true;
-            // Load previous configuration with device id
-            loadLastPingConfigurationSettings();
-
-            // Print last configuration
-            QString output = QStringLiteral("\nPingConfiguration {\n");
-            for(const auto& key : _pingConfiguration.keys()) {
-                output += QString("\t%1: %2\n").arg(key).arg(_pingConfiguration[key].value);
-            }
-            output += QStringLiteral("}");
-            qCDebug(PING_PROTOCOL_PING).noquote() << output;
-
-            // Set loaded configuration in device
-            setLastPingConfiguration();
+            // Save configuration
+            SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
+            // Start periodic request timer
+            _periodicRequestTimer.start();
         }
     });
+
+    // Wait for device id to load the correct settings
+    connect(this, &Ping::srcIdUpdate, this, &Ping::setLastPingConfiguration);
 
     connect(this, &Ping::firmwareVersionMinorUpdate, this, [this] {
         // Wait for firmware information to be available before looking for new versions
@@ -504,6 +489,30 @@ void Ping::request(int id)
 
 void Ping::setLastPingConfiguration()
 {
+    static int lastSrcId = -1;
+    if(lastSrcId == _srcId) {
+        return;
+    }
+    lastSrcId = _srcId;
+
+    if(!link()->isWritable()) {
+        qCDebug(PING_PROTOCOL_PING) << "It's not possible to set last configuration when link is writable.";
+        return;
+    }
+
+    // Load previous configuration with device id
+    loadLastPingConfigurationSettings();
+
+    // Print last configuration
+    QString output = QStringLiteral("\nPingConfiguration {\n");
+    for(const auto& key : _pingConfiguration.keys()) {
+        output += QString("\t%1: %2\n").arg(key).arg(_pingConfiguration[key].value);
+    }
+    output += QStringLiteral("}");
+    qCDebug(PING_PROTOCOL_PING).noquote() << output;
+
+
+    // Set loaded configuration in device
     static QString debugMessage =
         QStringLiteral("Device configuration does not match. Waiting for (%1), got (%2) for %3");
     static auto lastPingConfigurationTimer = new QTimer();
