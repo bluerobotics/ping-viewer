@@ -491,8 +491,8 @@ void Ping::request(int id)
     }
     qCDebug(PING_PROTOCOL_PING) << "Requesting:" << id;
 
-    ping_msg_ping1D_empty m;
-    m.set_id(id);
+    ping_msg_ping1D_general_request m;
+    m.set_requested_id(id);
     m.updateChecksum();
     writeMessage(m);
 
