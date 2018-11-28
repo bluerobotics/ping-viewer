@@ -520,6 +520,12 @@ private:
     void setLastPingConfiguration();
 
     /**
+     * @brief Start the pre configuration process of the sensor
+     *
+     */
+    void startPreConfigurationProcess();
+
+    /**
      * @brief Take care of github payload and detect new versions available
      *
      * @param jsonDocument
