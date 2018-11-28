@@ -67,25 +67,7 @@ Ping::Ping() : Sensor()
 
     //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
-    connect(detector(), &ProtocolDetector::connectionDetected, this, [this] {
-        qCDebug(PING_PROTOCOL_PING) << "New device detected";
-        setAutoDetect(false);
-
-        // Request device information
-        request(Ping1DNamespace::Mode_auto);
-        request(Ping1DNamespace::Profile);
-        request(Ping1DNamespace::Firmware_version);
-        request(Ping1DNamespace::Device_id);
-        request(Ping1DNamespace::Speed_of_sound);
-
-        if(link()->isWritable())
-        {
-            // Save configuration
-            SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
-            // Start periodic request timer
-            _periodicRequestTimer.start();
-        }
-    });
+    connect(this, &Sensor::connectionOpen, this, &Ping::startPreConfigurationProcess);
 
     // Wait for device id to load the correct settings
     connect(this, &Ping::srcIdUpdate, this, &Ping::setLastPingConfiguration);
@@ -118,6 +100,31 @@ Ping::Ping() : Sensor()
     qCDebug(PING_PROTOCOL_PING) << "Loading last configuration connection from settings:" << config;
     addDetectionLink(config);
     detectorThread()->start();
+}
+
+void Ping::startPreConfigurationProcess()
+{
+    qCDebug(PING_PROTOCOL_PING) << "Start pre configuration task and requests.";
+    if(!link()->isWritable()) {
+        qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
+        return;
+    }
+
+    setAutoDetect(false);
+    SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
+
+    // Request device information
+    request(Ping1DNamespace::Mode_auto);
+    request(Ping1DNamespace::Profile);
+    request(Ping1DNamespace::Firmware_version);
+    request(Ping1DNamespace::Device_id);
+    request(Ping1DNamespace::Speed_of_sound);
+
+    // Start periodic request timer
+    _periodicRequestTimer.start();
+
+    // Save configuration
+    SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 }
 
 void Ping::loadLastPingConfigurationSettings()
@@ -169,7 +176,7 @@ void Ping::addDetectionLink(LinkType connType, const QStringList& connString)
 void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
     Sensor::connectLink(LinkConfiguration{connType, connString});
-    _periodicRequestTimer.start();
+    startPreConfigurationProcess();
 }
 
 void Ping::handleMessage(PingMessage msg)
@@ -494,9 +501,8 @@ void Ping::setLastPingConfiguration()
         return;
     }
     lastSrcId = _srcId;
-
     if(!link()->isWritable()) {
-        qCDebug(PING_PROTOCOL_PING) << "It's not possible to set last configuration when link is writable.";
+        qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
         return;
     }
 
