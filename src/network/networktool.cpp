@@ -58,7 +58,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     // Alarm people to download the correction version !
     int actualVersion = regexMatch.hasMatch() ? semverToInt(projectTag) : -1.0;
 
-    // If this version does not follow vd+.d+, this is a test or continuous release
+    // If this version does not follow vd+.d+.d+, this is a test or continuous release
     if(regexMatch.hasMatch()) {
         qCDebug(NETWORKTOOL) << "Running release version:" << projectTag;
     } else {
