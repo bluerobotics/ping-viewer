@@ -106,7 +106,8 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
         return;
     }
 
-    if(actualVersion < 0) {
+    // If it's running a test release and this is not the last available
+    if(actualVersion < 0 && projectTag != lastReleaseAvailable.versionString) {
         NotificationManager::self()->create(
             "This isn't a release!\n\rPlease download a release version.", "red", StyleManager::reportIcon());
     }
