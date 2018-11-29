@@ -14,6 +14,7 @@ PING_LOGGING_CATEGORY(NETWORKTOOL, "ping.networktool")
 
 
 QString NetworkTool::_gitUserRepo = "bluerobotics/ping-viewer";
+QString NetworkTool::_gitUserRepoFirmware = "bluerobotics/ping-firmware";
 
 NetworkTool::NetworkTool()
 {
@@ -165,6 +166,12 @@ void NetworkTool::scheduleUpdateCheck()
     });
     timer->setSingleShot(true);
     timer->start(30000);
+}
+
+void NetworkTool::checkNewFirmware(const QString& sensorName, std::function<void(QJsonDocument&)> function)
+{
+    static const QUrl url{QStringLiteral("https://api.github.com/repos/%1/contents/%2").arg(_gitUserRepoFirmware, sensorName)};
+    NetworkManager::self()->requestJson(url, function);
 }
 
 QObject* NetworkTool::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
