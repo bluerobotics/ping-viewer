@@ -519,6 +519,13 @@ private:
     void updatePingConfigurationSettings();
     void setLastPingConfiguration();
 
+    /**
+     * @brief Take care of github payload and detect new versions available
+     *
+     * @param jsonDocument
+     */
+    void checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument);
+
     // For automatic periodic updates (board voltage and temperature)
     QTimer _periodicRequestTimer;
 
