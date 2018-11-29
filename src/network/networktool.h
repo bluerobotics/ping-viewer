@@ -34,7 +34,7 @@ public:
      *
      * @param jsonDocument
      */
-    static void checkNewVersionInGitHubPayload(QJsonDocument& jsonDocument);
+    static void checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocument);
 
     /**
      * @brief Schedule a update check
@@ -56,5 +56,7 @@ private:
      * @brief Construct a new Network Tool object
      *
      */
-    NetworkTool() = default;
+    NetworkTool();
+
+    static QString _gitUserRepo;
 };

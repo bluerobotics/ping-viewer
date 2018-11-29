@@ -12,29 +12,33 @@
 
 PING_LOGGING_CATEGORY(NETWORKTOOL, "ping.networktool")
 
+
+QString NetworkTool::_gitUserRepo = "bluerobotics/ping-viewer";
+
+NetworkTool::NetworkTool()
+{
+    //*github.com/user/repo* results in user/repo
+    const static QRegularExpression regex(R"(github.com\/([^.]*))");
+    QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
+    if (!regexMatch.hasMatch()) {
+        qCWarning(NETWORKTOOL) <<
+                               "Fail to get github user and repository! "
+                               "It'll not be possible to check for updates."
+                               "Using default value:" << _gitUserRepo;
+    }
+    _gitUserRepo = regexMatch.capturedTexts()[1];
+}
+
 void NetworkTool::checkInterfaceUpdate()
 {
-    static QString gitUserRepo;
-    if(gitUserRepo.isEmpty()) {
-        //*github.com/user/repo* results in user/repo
-        const static QRegularExpression regex(R"(github.com\/([^.]*))");
-        QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
-        if (!regexMatch.hasMatch()) {
-            qCWarning(NETWORKTOOL) <<
-                                   "Fail to get github user and repository! It'll not be possible to check for updates";
-            return;
-        }
-        gitUserRepo = regexMatch.capturedTexts()[1];
-    }
-
-    const QUrl url{QStringLiteral("https://api.github.com/repos/%1/releases").arg(gitUserRepo)};
+    static const QUrl url{QStringLiteral("https://api.github.com/repos/%1/releases").arg(_gitUserRepo)};
     NetworkManager::self()->requestJson(
         url,
         self()->checkNewVersionInGitHubPayload
     );
 }
 
-void NetworkTool::checkNewVersionInGitHubPayload(QJsonDocument& jsonDocument)
+void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocument)
 {
     const static QString projectTag = QStringLiteral(GIT_TAG);
 
