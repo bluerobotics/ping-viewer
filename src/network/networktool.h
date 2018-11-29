@@ -37,6 +37,14 @@ public:
     static void checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocument);
 
     /**
+     * @brief Check if a new firmware version is available
+     *
+     * @param sensorName
+     * @param function
+     */
+    void checkNewFirmware(const QString& sensorName, std::function<void(QJsonDocument&)> function);
+
+    /**
      * @brief Schedule a update check
      *
      */
@@ -59,4 +67,5 @@ private:
     NetworkTool();
 
     static QString _gitUserRepo;
+    static QString _gitUserRepoFirmware;
 };
