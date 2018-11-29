@@ -1,7 +1,11 @@
 #include "ping.h"
 
+#include <functional>
+
 #include <QCoreApplication>
 #include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QLoggingCategory>
 #include <QRegularExpression>
 #include <QSerialPort>
@@ -11,6 +15,8 @@
 #include <QUrl>
 
 #include "link/seriallink.h"
+#include "networktool.h"
+#include "notificationmanager.h"
 #include "settingsmanager.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
@@ -96,6 +102,17 @@ Ping::Ping() : Sensor()
 
             // Set loaded configuration in device
             setLastPingConfiguration();
+        }
+    });
+
+    connect(this, &Ping::firmwareVersionMinorUpdate, this, [this] {
+        // Wait for firmware information to be available before looking for new versions
+        static bool once = false;
+        if(!once)
+        {
+            once = true;
+            NetworkTool::self()->checkNewFirmware("ping1d", std::bind(&Ping::checkNewFirmwareInGitHubPayload, this,
+                                                  std::placeholders::_1));
         }
     });
 
@@ -561,6 +578,35 @@ void Ping::writeMessage(const PingMessage &msg)
             // todo add link::write(char*, int size)
             emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength()));
         }
+    }
+}
+
+void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
+{
+    struct {
+        float version = 0.0;
+        QString downloadUrl;
+    } versionAvailable;
+
+    auto filesPayload = jsonDocument.array();
+    for(const QJsonValue& filePayload : filesPayload) {
+        qCDebug(PING_PROTOCOL_PING) << filePayload["name"].toString();
+
+        // Get version from Ping_V(major).(patch)_115kb.hex where (major).(patch) is <version>
+        static const QRegularExpression versionRegex(QStringLiteral(R"(Ping_V(?<version>\d+\.\d+)_115kb\.hex)"));
+        auto filePayloadVersion = versionRegex.match(filePayload["name"].toString()).captured("version").toFloat();
+        if(filePayloadVersion > versionAvailable.version) {
+            versionAvailable.version = filePayloadVersion;
+            versionAvailable.downloadUrl = filePayload["download_url"].toString();
+        }
+    }
+
+    auto sensorVersion = QString("%1.%2").arg(_firmware_version_major).arg(_firmware_version_minor).toFloat();
+    if(versionAvailable.version > sensorVersion) {
+        QString newVersionText =
+            QStringLiteral("Firmware update for Ping available: %1<br>").arg(versionAvailable.version) +
+            QStringLiteral("<a href=\"%1\">DOWNLOAD IT HERE!</a>").arg(versionAvailable.downloadUrl);
+        NotificationManager::self()->create(newVersionText, "green", StyleManager::infoIcon());
     }
 }
 
