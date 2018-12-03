@@ -2,6 +2,8 @@
 
 #include <QObject>
 
+#include <memory>
+
 #include "abstractlink.h"
 #include "linkconfiguration.h"
 
@@ -36,8 +38,8 @@ public:
      *
      * @return AbstractLink*
      */
-    AbstractLink* self() { return _abstractLink; };
+    AbstractLink* self() { return _abstractLink.get(); };
 
 private:
-    AbstractLink* _abstractLink;
+    std::unique_ptr<AbstractLink> _abstractLink;
 };
