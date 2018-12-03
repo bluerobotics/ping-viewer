@@ -22,14 +22,14 @@ public:
      * @brief Destroy the Serial Link object
      *
      */
-    ~SerialLink();
+    ~SerialLink() = default;
 
     /**
      * @brief Human friendly error string
      *
      * @return QString
      */
-    QString errorString() final { return _port->errorString(); };
+    QString errorString() final { return _port.errorString(); };
 
     /**
      * @brief Finish connection
@@ -45,7 +45,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final { return _port->isWritable() && _port->isReadable(); };
+    bool isOpen() final { return _port.isWritable() && _port.isReadable(); };
 
     /**
      * @brief Return a list of all available connections
@@ -59,7 +59,7 @@ public:
      *
      * @return QSerialPort*
      */
-    QSerialPort* port() { return _port; };
+    QSerialPort* port() { return &_port; };
 
     /**
      * @brief Set link configuration
@@ -76,8 +76,8 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _port->open(QIODevice::ReadWrite); };
+    bool startConnection() final { return _port.open(QIODevice::ReadWrite); };
 
 private:
-    QSerialPort* _port;
+    QSerialPort _port;
 };
