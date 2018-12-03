@@ -18,16 +18,16 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
 {
     switch(linkType) {
     case LinkType::File :
-        _abstractLink = new FileLink();
+        _abstractLink.reset(new FileLink());
         break;
     case LinkType::Serial :
-        _abstractLink = new SerialLink();
+        _abstractLink.reset(new SerialLink());
         break;
     case LinkType::Udp :
-        _abstractLink = new UDPLink();
+        _abstractLink.reset(new UDPLink());
         break;
     case LinkType::PingSimulation :
-        _abstractLink = new PingSimulationLink();
+        _abstractLink.reset(new PingSimulationLink());
         break;
     default :
         qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
@@ -44,16 +44,16 @@ Link::Link(const LinkConfiguration& linkConfiguration, QObject* parent)
 {
     switch(linkConfiguration.type()) {
     case LinkType::File :
-        _abstractLink = new FileLink();
+        _abstractLink.reset(new FileLink());
         break;
     case LinkType::Serial :
-        _abstractLink = new SerialLink();
+        _abstractLink.reset(new SerialLink());
         break;
     case LinkType::Udp :
-        _abstractLink = new UDPLink();
+        _abstractLink.reset(new UDPLink());
         break;
     case LinkType::PingSimulation :
-        _abstractLink = new PingSimulationLink();
+        _abstractLink.reset(new PingSimulationLink());
         break;
     default :
         qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
