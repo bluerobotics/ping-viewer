@@ -120,6 +120,8 @@ private:
     void logMessage(const QString& msg, const QtMsgType& type, const QMessageLogContext& context);
 
     QMap<QString, uint> _categoryIndexer;
+    // Debug, Warning, Critical, Fatal, Info
+    QVector<QColor> _colors{QColor("gray"), QColor("orange"), QColor("red"), QColor("red"), QColor("LimeGreen")};
     QFile _file;
     QTextStream _fileStream;
     QStringList _registeredCategories;
