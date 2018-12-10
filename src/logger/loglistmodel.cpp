@@ -7,6 +7,12 @@ LogListModel::LogListModel(QObject* parent)
         _roles.append(key);
         _vectors.insert(key, {});
     }
+
+    /**
+     * @brief New logs should use append function, and this model will use the main eventloop to handle
+     * the multithread problem via signal/emit
+     */
+    connect(this, &LogListModel::append, this, &LogListModel::doAppend);
 }
 
 QVariant LogListModel::data(const QModelIndex& index, int role) const
@@ -19,7 +25,7 @@ QVariant LogListModel::data(const QModelIndex& index, int role) const
     return _vectors[role][indexRow];
 }
 
-void LogListModel::append(const QString& time, const QString& text, const QColor& color, int category)
+void LogListModel::doAppend(const QString& time, const QString& text, const QColor& color, int category)
 {
     const int line = rowCount();
     beginInsertRows(QModelIndex(), line, line);

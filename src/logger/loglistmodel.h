@@ -33,16 +33,6 @@ public:
     };
 
     /**
-     * @brief Append a new log message in model
-     *
-     * @param time
-     * @param text
-     * @param color
-     * @param category
-     */
-    void append(const QString& time, const QString& text, const QColor& color, int category);
-
-    /**
      * @brief Return data
      *
      * @param index
@@ -78,11 +68,36 @@ public:
     };
 
 signals:
+    /**
+     * @brief Append a new log message in model
+     *  This is a signal that will do a trig doAppend
+     *
+     * @param time
+     * @param text
+     * @param color
+     * @param category
+     */
+    void append(const QString& time, const QString& text, const QColor& color, int category);
+
     void countChanged();
 
 private:
     Q_DISABLE_COPY(LogListModel)
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
+
+    /**
+     * @brief Append a new log message in model
+     *  This message is used to avoid calls of begin/end insertRow from a second thread.
+     *  The connection between append and doAppend will be done by the eventloop,
+     *  avoiding any problem related to multthread calls, and as consequence
+     *  executing doAppend and the begin/end row insertion signals in the main thread.
+     *
+     * @param time
+     * @param text
+     * @param color
+     * @param category
+     */
+    void doAppend(const QString& time, const QString& text, const QColor& color, int category);
 
     int _categories = 0;
     QVector<int> _roles;
