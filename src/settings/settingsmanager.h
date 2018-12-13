@@ -109,6 +109,8 @@ private:
     AUTO_PROPERTY(bool, replayMenu, false)
     AUTO_PROPERTY(bool, reset, false)
     AUTO_PROPERTY(bool, darkTheme, false)
+    AUTO_PROPERTY(bool, enableConnectionOptions, false)
+    AUTO_PROPERTY(bool, enableSensorAdvancedConfiguration, false)
     //AUTO_PROPERTY_MODEL(QString, adistanceUnits, QStringList, MODEL({"Metric", "Imperial"})) // Example
     AUTO_PROPERTY_JSONMODEL(distanceUnits, QByteArrayLiteral(R"({
             "settings": [
