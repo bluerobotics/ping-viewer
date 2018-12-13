@@ -145,6 +145,7 @@ Item {
 
                 RowLayout {
                     spacing: 2
+                    visible: SettingsManager.sensorAdvancedConfiguration
                     Text {
                         text: "Speed of Sound (m/s):"
                         color: Material.primary
@@ -178,6 +179,7 @@ Item {
                 RowLayout {
                     spacing: 5
                     enabled: !autoGainChB.checked
+                    visible: SettingsManager.sensorAdvancedConfiguration
 
                     Text {
                         text: "Start/Length (mm):"
@@ -242,7 +244,8 @@ Item {
         GroupBox {
             id: connGroup
             title: "Connection"
-            enabled: true
+            visible: SettingsManager.connectionGroup
+            
             // Hack
             label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
