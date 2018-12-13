@@ -180,6 +180,9 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
     auto checkPort = [](const QSerialPortInfo& portInfo) {
         QSerialPort port(portInfo);
         bool ok = port.open(QIODevice::ReadWrite);
+        if(!ok) {
+            qCWarning(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to open serial port:" << port.error();
+        }
         // Close will check if is open
         port.close();
         return ok;
