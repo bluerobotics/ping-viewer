@@ -192,7 +192,8 @@ void Ping::handleMessage(PingMessage msg)
     switch (msg.message_id()) {
 
     case Ping1DNamespace::Ack: {
-        qCDebug(PING_PROTOCOL_PING) << "Sensor ACK.";
+        ping_msg_ping1D_ack ackMessage{msg};
+        qCDebug(PING_PROTOCOL_PING) << "ACK message:" << ackMessage.acked_id();
         break;
     }
 
