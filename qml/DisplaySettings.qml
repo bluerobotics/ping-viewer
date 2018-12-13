@@ -76,6 +76,24 @@ Item {
                     }
 
                     CheckBox {
+                        id: advancedSensorConfigurationChB
+                        text: "Enable sensor configuration"
+                        checked: SettingsManager.sensorAdvancedConfiguration
+                        Layout.columnSpan:  5
+                        Layout.fillWidth: true
+                        onCheckedChanged: SettingsManager.sensorAdvancedConfiguration = checked
+                    }
+
+                    CheckBox {
+                        id: connectionChB
+                        text: "Enable connection menu"
+                        checked: SettingsManager.connectionGroup
+                        Layout.columnSpan:  5
+                        Layout.fillWidth: true
+                        onCheckedChanged: SettingsManager.connectionGroup = checked
+                    }
+
+                    CheckBox {
                         id: replayChB
                         text: "Enable replay menu"
                         checked: SettingsManager.replayMenu
