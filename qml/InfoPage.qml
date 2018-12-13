@@ -310,7 +310,7 @@ Item {
         id: popup
 
         GroupBox {
-            id: connGroup
+            id: resetSettingsGroup
             title: "Reset settings"
             enabled: true
             // Hack
