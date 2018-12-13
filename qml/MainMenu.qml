@@ -238,6 +238,45 @@ Item {
                         }
                     }
                 }
+
+                RowLayout {
+                    spacing: 5
+                    visible: SettingsManager.sensorAdvancedConfiguration
+
+                    Text {
+                        text: "Device ID:"
+                        color: Material.primary
+                    }
+
+                    PingTextField {
+                        id: pingIDField
+                        text: ""
+                        validator: IntValidator {
+                            bottom: 0
+                            top: 255;
+                        }
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+                        onAccepted: {
+                            ping.srcId = pingIDField.text
+                        }
+                        Connections {
+                            target: ping
+                            onSrcIdUpdate: {
+                                if (!pingIDField.focus) {
+                                    pingIDField.text = ping.srcId
+                                }
+                            }
+                        }
+                    }
+
+                    Switch {
+                        text: "Ping Enabled"
+                        Layout.columnSpan: 1
+                        checked: ping.pingEnable
+                        onCheckedChanged: ping.pingEnable = checked
+                    }
+                }
             }
         }
 
