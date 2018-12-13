@@ -59,7 +59,46 @@ public:
      * @return uint8_t source id
      */
     uint8_t srcId() { return _srcId; }
-    Q_PROPERTY(int srcId READ srcId NOTIFY srcIdUpdate)
+
+    /** TODO: This is not working
+     * @brief Set device id
+     *
+     * @param id
+     */
+    void srcId(int id)
+    {
+        ping_msg_ping1D_set_device_id m;
+        m.set_device_id(id);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Device_id);
+    }
+
+    Q_PROPERTY(int srcId READ srcId WRITE srcId NOTIFY srcIdUpdate)
+
+    /**
+     * @brief Return if sensor is enabled
+     *
+     * @return true if enabled
+     * @return false if not enabled
+     */
+    bool pingEnable() { return _ping_enable; };
+
+    /**
+     * @brief Enable or disable the sensor
+     *
+     * @param enabled
+     */
+    void pingEnable(bool enabled)
+    {
+        ping_msg_ping1D_set_ping_enable m;
+        m.set_ping_enabled(enabled);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Ping_enable);
+    }
+
+    Q_PROPERTY(bool pingEnable READ pingEnable WRITE pingEnable NOTIFY pingEnableUpdate)
 
     /**
      * @brief Return destiny ID
@@ -441,6 +480,8 @@ signals:
     void pcbTemperatureUpdate();
     void boardVoltageUpdate();
 
+    void pingEnableUpdate();
+
     void parserErrorsUpdate();
     void parsedMsgsUpdate();
 ///@}
@@ -493,6 +534,8 @@ private:
     uint16_t _processor_temperature = 0;
     uint16_t _pcb_temperature = 0;
     uint16_t _board_voltage = 0;
+
+    bool _ping_enable = false;
 ///@}
 
     float _fw_update_perc;

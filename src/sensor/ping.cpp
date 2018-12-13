@@ -114,6 +114,7 @@ void Ping::startPreConfigurationProcess()
     SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 
     // Request device information
+    request(Ping1DNamespace::Ping_enable);
     request(Ping1DNamespace::Mode_auto);
     request(Ping1DNamespace::Profile);
     request(Ping1DNamespace::Firmware_version);
@@ -311,6 +312,13 @@ void Ping::handleMessage(PingMessage msg)
             _mode_auto = m.mode_auto();
             emit modeAutoUpdate();
         }
+    }
+    break;
+
+    case  Ping1DNamespace::Ping_enable: {
+        ping_msg_ping1D_ping_enable m(msg);
+        _ping_enable = m.ping_enabled();
+        emit pingEnableUpdate();
     }
     break;
 
