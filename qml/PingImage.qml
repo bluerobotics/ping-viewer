@@ -16,6 +16,10 @@ Item {
         antialiasing: true
         fillMode: Image.PreserveAspectFit
         anchors.fill: parent
+
+        // This resize the SVG in a correct way
+        sourceSize.width: parent.width
+        sourceSize.height: parent.height
     }
 
     ColorOverlay {
