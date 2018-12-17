@@ -161,7 +161,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
 void NetworkTool::scheduleUpdateCheck()
 {
     QTimer *timer = new QTimer(this);
-    QObject::connect(timer, &QTimer::timeout, this, [this, timer] {
+    QObject::connect(timer, &QTimer::timeout, this, [timer] {
         checkInterfaceUpdate();
         timer->deleteLater();
     });
