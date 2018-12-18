@@ -591,8 +591,7 @@ void Ping::writeMessage(const PingMessage &msg)
 {
     if(link()) {
         if(link()->isOpen() && link()->type() != LinkType::File) {
-            // todo add link::write(char*, int size)
-            emit link()->sendData(QByteArray(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength()));
+            link()->write(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength());
         }
     }
 }
