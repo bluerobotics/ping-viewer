@@ -96,7 +96,7 @@ public:
      * @return true
      * @return false
      */
-    bool checkType(LinkType type) { return _linkConf.type == type; };
+    bool checkType(LinkType type) const { return _linkConf.type == type; };
 
     /**
      * @brief Return configuration as structure
