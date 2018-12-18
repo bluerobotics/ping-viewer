@@ -473,8 +473,7 @@ void Ping::firmwareUpdatePercentage()
 
 void Ping::request(int id)
 {
-    if(link()->type() <= LinkType::File ||
-            link()->type() == LinkType::PingSimulation) {
+    if(!link()->isWritable()) {
         qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
         return;
     }
@@ -583,10 +582,8 @@ void Ping::printStatus()
 
 void Ping::writeMessage(const PingMessage &msg)
 {
-    if(link()) {
-        if(link()->isOpen() && link()->type() != LinkType::File) {
-            link()->write(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength());
-        }
+    if(link() && link()->isOpen() && link()->isWritable()) {
+        link()->write(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength());
     }
 }
 
