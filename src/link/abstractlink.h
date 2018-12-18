@@ -197,6 +197,26 @@ public:
     LinkType type() { return _type; };
 
     /**
+     * @brief Ask link to write the bytearray
+     *
+     * @param data
+     */
+    void write(const QByteArray& data) { emit sendData(data); };
+
+    /**
+     * @brief Ask link to write a char*
+     *
+     * @param data
+     * @param size
+     */
+    void write(const char* data, int size)
+    {
+        if(size > 0) {
+            emit sendData(QByteArray(data, size));
+        };
+    }
+
+    /**
      * @brief Copy operation
      *
      * @param other
