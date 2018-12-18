@@ -167,12 +167,6 @@ void Ping::addDetectionLink(const LinkConfiguration& linkConfiguration)
     }
 }
 
-void Ping::addDetectionLink(LinkType connType, const QStringList& connString)
-{
-    LinkConfiguration linkConfiguration{connType, connString};
-    addDetectionLink(linkConfiguration);
-}
-
 void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
     Sensor::connectLink(LinkConfiguration{connType, connString});
