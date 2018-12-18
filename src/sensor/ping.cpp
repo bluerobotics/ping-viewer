@@ -407,7 +407,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
         qCDebug(PING_PROTOCOL_PING) << "Put it in bootloader mode.";
         ping_msg_ping1D_goto_bootloader m;
         m.updateChecksum();
-        emit link()->sendData(QByteArray(reinterpret_cast<const char*>(m.msgData), m.msgDataLength()));
+        writeMessage(m);
     }
 
     // Wait for bytes to be written before finishing the connection
