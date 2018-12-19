@@ -110,7 +110,7 @@ Item {
                         text: "Firmware Update"
                         Layout.columnSpan:  10
                         Layout.fillWidth: true
-                        enabled: fileDialog.fileUrl.toString().length && flashProgress.indeterminate
+                        enabled: fileDialog.fileUrl != undefined && flashProgress.indeterminate
 
                         onClicked: {
                             var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
@@ -133,20 +133,11 @@ Item {
         }
     }
 
-    FileDialog {
+    PingFileDialog {
         id: fileDialog
         title: "Please choose a file"
         folder: shortcuts.home
         visible: false
-        property string fileName: ""
         nameFilters: ["Hex Files (*.hex)"]
-        onAccepted: {
-            console.log("You chose: " + fileDialog.fileUrls)
-            var sizeToRemove = fileDialog.folder.toString().length - fileDialog.fileUrl.toString().length + 1
-            fileName = fileDialog.fileUrl.toString().slice(sizeToRemove)
-        }
-        onRejected: {
-            console.log("Canceled")
-        }
     }
 }
