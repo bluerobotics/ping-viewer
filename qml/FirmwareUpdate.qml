@@ -115,7 +115,7 @@ Item {
                         onClicked: {
                             var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
                             var verify = SettingsManager.debugMode ? verifyCB.checked : true
-                            ping.firmwareUpdate(fileDialog.fileUrl, bootLoaderCB, baud, verifyCB.checked)
+                            ping.firmwareUpdate(fileDialog.fileUrl, bootLoaderCB.checked, baud, verifyCB.checked)
                         }
                     }
 
