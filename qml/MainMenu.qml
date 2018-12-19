@@ -101,6 +101,7 @@ Item {
                         stepSize: 1
                         to: ping.pingMaxFrequency
                         value: ping.pingFrequency;
+                        Layout.fillWidth: true
                         onValueChanged: {
                             if (ping.pingFrequency !== value) {
                                 ping.pingFrequency = value
