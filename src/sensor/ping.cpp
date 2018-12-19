@@ -430,7 +430,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
     QThread::msleep(500);
-    flash(portLocation, QUrl(fileUrl).toLocalFile(), baud, verify);
+    flash(portLocation, fileUrl, baud, verify);
 }
 
 void Ping::flash(const QString& portLocation, const QString& firmwareFile, int baud, bool verify)
