@@ -73,6 +73,8 @@ public:
     CREATE_ICON(chip)
     CREATE_ICON(clear)
     CREATE_ICON(close)
+    CREATE_ICON(configure)
+    CREATE_ICON(connect)
     CREATE_ICON(disk)
     CREATE_ICON(info)
     CREATE_ICON(lock)
