@@ -28,6 +28,8 @@
         <file alias="chip.svg">qml/icons/chip.svg</file>
         <file alias="clear.svg">qml/icons/clear.svg</file>
         <file alias="close.svg">qml/icons/close.svg</file>
+        <file alias="configure.svg">qml/icons/configure.svg</file>
+        <file alias="connect.svg">qml/icons/connect.svg</file>
         <file alias="disk.svg">qml/icons/disk.svg</file>
         <file alias="info.svg">qml/icons/info.svg</file>
         <file alias="lock.svg">qml/icons/lock.svg</file>
