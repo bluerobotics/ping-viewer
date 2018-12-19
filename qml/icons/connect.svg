@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="connect.svg"
+   inkscape:version="0.92.2 2405546, 2018-03-11">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1907"
+     inkscape:window-height="843"
+     id="namedview8"
+     showgrid="false"
+     showguides="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="-18.711864"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <path
+     fill="none"
+     d="M0 0h24v24H0V0zm0 0h24v24H0V0z"
+     id="path2" />
+  <path
+     d="M 15.888889,15.111111 12.777778,12 V 9.526666 C 13.68,9.2 14.333334,8.3444444 14.333334,7.3333334 14.333334,6.0422222 13.291112,5 12,5 10.708889,5 9.6666666,6.0422222 9.6666666,7.3333334 9.6666666,8.3444444 10.32,9.2 11.222222,9.526666 V 12 L 8.1111111,15.111111 H 5 V 19 H 8.8888888 V 16.627778 L 12,13.361112 15.111112,16.627778 V 19 H 19 v -3.888889 z"
+     id="path4"
+     inkscape:connector-curvature="0"
+     style="stroke-width:0.77777779" />
+</svg>
