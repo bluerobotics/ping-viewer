@@ -10,6 +10,7 @@ import Util 1.0
 import AbstractLinkNamespace 1.0
 import Ping1DNamespace 1.0
 import SettingsManager 1.0
+import StyleManager 1.0
 
 Item {
     id: firmwareUpdate
@@ -133,13 +134,43 @@ Item {
                         currentIndex: ping.gain_index ? ping.gain_index : 0
                         model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
                         enabled: !autoGainChB.checked
-                        Layout.columnSpan:  4
+                        Layout.columnSpan:  3
                         Layout.fillWidth: true
                         onCurrentIndexChanged: {
                             displayText = model[currentIndex] + " dB"
                         }
                         onActivated: {
                             ping.gain_index = currentIndex
+                        }
+                    }
+
+                    PingImage {
+                        id: advancedSettingsButton
+                        source: StyleManager.configureIcon()
+                        height: 50
+                        width: 50
+                        selected: SettingsManager.enableSensorAdvancedConfiguration
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                advancedSettingsButton.selected = !advancedSettingsButton.selected
+                                SettingsManager.enableSensorAdvancedConfiguration = advancedSettingsButton.selected
+                            }
+                        }
+                    }
+
+                    PingImage {
+                        id: connectionSettingsButton
+                        source: StyleManager.connectIcon()
+                        height: 50
+                        width: 50
+                        selected: SettingsManager.enableConnectionOptions
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                connectionSettingsButton.selected = !connectionSettingsButton.selected
+                                SettingsManager.enableConnectionOptions = connectionSettingsButton.selected
+                            }
                         }
                     }
                 }
