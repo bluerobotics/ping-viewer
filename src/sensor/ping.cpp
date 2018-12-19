@@ -435,6 +435,12 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
 void Ping::flash(const QString& portLocation, const QString& firmwareFile, int baud, bool verify)
 {
+    QFileInfo firmwareFileInfo(firmwareFile);
+    if(!firmwareFileInfo.exists()) {
+        qCCritical(PING_PROTOCOL_PING) << "Firmware file dows not exist:" << firmwareFile;
+        return;
+    }
+
 #ifdef Q_OS_OSX
     // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
     static QString binPath = '"' + QCoreApplication::applicationDirPath() + "/../..";
@@ -442,7 +448,7 @@ void Ping::flash(const QString& portLocation, const QString& firmwareFile, int b
     static QString binPath = '"' + QCoreApplication::applicationDirPath();
 #endif
     static QString cmd = binPath + QStringLiteral("/stm32flash\" -w \"%0\" %1 -g 0x0 -b %2 %3").arg(
-                             QFileInfo(firmwareFile).absoluteFilePath(), verify ? "-v" : "", QString::number(baud), portLocation
+                             firmwareFileInfo.absoluteFilePath(), verify ? "-v" : "", QString::number(baud), portLocation
                          );
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
