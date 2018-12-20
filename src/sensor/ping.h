@@ -62,6 +62,30 @@ public:
     Q_PROPERTY(int dstId READ dstId NOTIFY dstIdUpdate)
 
     /**
+     * @brief Return if sensor is enabled
+     *
+     * @return true if enabled
+     * @return false if not enabled
+     */
+    bool pingEnable() { return _ping_enable; };
+
+    /**
+     * @brief Enable or disable the sensor
+     *
+     * @param enabled
+     */
+    void pingEnable(bool enabled)
+    {
+        ping_msg_ping1D_set_ping_enable m;
+        m.set_ping_enabled(enabled);
+        m.updateChecksum();
+        writeMessage(m);
+        request(Ping1DNamespace::Ping_enable);
+    }
+
+    Q_PROPERTY(bool pingEnable READ pingEnable WRITE pingEnable NOTIFY pingEnableUpdate)
+
+    /**
      * @brief Return firmware major version
      *
      * @return uint16_t firmware major version number
@@ -433,6 +457,8 @@ signals:
     void pcbTemperatureUpdate();
     void boardVoltageUpdate();
 
+    void pingEnableUpdate();
+
     void parserErrorsUpdate();
     void parsedMsgsUpdate();
 ///@}
@@ -485,6 +511,8 @@ private:
     uint16_t _processor_temperature = 0;
     uint16_t _pcb_temperature = 0;
     uint16_t _board_voltage = 0;
+
+    bool _ping_enable = false;
 ///@}
 
     float _fw_update_perc;
