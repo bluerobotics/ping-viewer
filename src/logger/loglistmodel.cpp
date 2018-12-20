@@ -27,13 +27,19 @@ QVariant LogListModel::data(const QModelIndex& index, int role) const
 
 void LogListModel::doAppend(const QString& time, const QString& text, const QColor& color, int category)
 {
+    // Do not display more invisible items
+    // vvoiding an increate of memory while rendering all invisble items
+    bool visible = category & _categories;
+    if(!visible) {
+        return;
+    }
     const int line = rowCount();
     beginInsertRows(QModelIndex(), line, line);
     _vectors[LogListModel::Time].append(time);
     _vectors[LogListModel::Display].append(text);
     _vectors[LogListModel::Foreground].append(color);
     _vectors[LogListModel::Category].append(category);
-    _vectors[LogListModel::Visibility].append(category & _categories);
+    _vectors[LogListModel::Visibility].append(visible);
     _size++;
     const auto& indexRow = index(line);
     endInsertRows();
