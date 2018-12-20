@@ -206,6 +206,13 @@ Item {
                             }
                         }
                     }
+
+                    Switch {
+                        text: "Ping Enabled"
+                        Layout.columnSpan: 1
+                        checked: ping.pingEnable
+                        onCheckedChanged: ping.pingEnable = checked
+                    }
                 }
 
                 RowLayout {
