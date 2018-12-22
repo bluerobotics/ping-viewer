@@ -31,21 +31,19 @@ Item {
         contentWidth: parent.width
         clip: true
         flickableDirection: Flickable.HorizontalAndVerticalFlick
-        model: Logger.logModel
+        model: Logger.logModel.filteredModel
         delegate: Row {
             width: parent.width
             spacing: 10
             Text {
                 id: leftText
                 text: time
-                visible: visibity
                 color: foreground == undefined ? "purple" : foreground
             }
             Text {
                 width: parent.width - leftText.width
                 wrapMode: Text.WordWrap
                 text: display
-                visible: visibity
                 color: foreground == undefined ? "purple" : foreground
             }
         }
