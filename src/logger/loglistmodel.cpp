@@ -8,6 +8,10 @@ LogListModel::LogListModel(QObject* parent)
         _vectors.insert(key, {});
     }
 
+    _filter.setSourceModel(this);
+    _filter.setFilterRole(Roles::Visibility);
+    _filter.setFilterWildcard("true");
+
     /**
      * @brief New logs should use append function, and this model will use the main eventloop to handle
      * the multithread problem via signal/emit
@@ -27,12 +31,7 @@ QVariant LogListModel::data(const QModelIndex& index, int role) const
 
 void LogListModel::doAppend(const QString& time, const QString& text, const QColor& color, int category)
 {
-    // Do not display more invisible items
-    // vvoiding an increate of memory while rendering all invisble items
     bool visible = category & _categories;
-    if(!visible) {
-        return;
-    }
     const int line = rowCount();
     beginInsertRows(QModelIndex(), line, line);
     _vectors[LogListModel::Time].append(time);
