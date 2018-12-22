@@ -5,6 +5,8 @@
 #include <QColor>
 #include <QAbstractListModel>
 
+#include <QSortFilterProxyModel>
+
 /**
  * @brief Model for qml log interface
  *
@@ -67,6 +69,14 @@ public:
         return _size;
     };
 
+    /**
+     * @brief Model of visible items
+     *
+     * @return QSortFilterProxyModel*
+     */
+    QSortFilterProxyModel* filteredModel() { return &_filter; };
+    Q_PROPERTY(QSortFilterProxyModel* filteredModel READ filteredModel CONSTANT)
+
 signals:
     /**
      * @brief Append a new log message in model
@@ -110,6 +120,9 @@ private:
     };
     int _size = 0;
     QHash<int, QVector<QVariant>> _vectors;
+
+    QSortFilterProxyModel _filter;
 };
 
 Q_DECLARE_METATYPE(LogListModel*)
+Q_DECLARE_METATYPE(QSortFilterProxyModel*)
