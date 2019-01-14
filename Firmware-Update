@@ -15,3 +15,5 @@ Steps to flash the device:
 ![Progress bar in waiting state](imgs/firmware_update_waiting.gif)
 
 ![](imgs/settings_submenu_firmware_update.png)
+
+- explain bootloader process

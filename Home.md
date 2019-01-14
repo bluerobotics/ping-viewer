@@ -1,6 +1,8 @@
 # Welcome to the Ping Viewer wiki!
 
-Ping Viewer is the Graphical User Interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure and view data from a Ping device.
+## **This documentation is a work-in-progress. Content may not be accurate and is subject to change**
+
+Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure and view data from a Ping device.
 
 # Quick Start
 
@@ -93,7 +95,7 @@ The color scheme (gradient) of the Waterfall can be [customized](display-setting
 
 ***
 
-### Units Selection and Device Configuration
+### Application and Device Settings
 
 See [here](display-settings) for instructions to switch between meters and feet for the application display.
 
@@ -101,6 +103,6 @@ To adjust the update rate and other Ping device settings, visit the [device conf
 
 ### Interpreting Profile Data
 
-As the sound wave travels through water, it may encounter several 'reflective' objects like fish, or air bubbles. These smaller objects will also produce a measured return as energy is reflected back to the device. The energy that returns from these smaller objects is usually much less than the energy reflected off of a larger solid object like the sea floor. 
+As the sound wave travels through water, it may encounter several 'reflective' objects like fish, or air bubbles. These smaller objects will also produce a return signal as energy is reflected back to the device. The energy that returns from these smaller objects is usually much less than the energy reflected off of a larger solid object like the sea floor.
 
 contrive/obtain examples. Reflections, fish
