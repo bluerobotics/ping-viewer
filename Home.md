@@ -1,22 +1,33 @@
 # Welcome to the Ping Viewer wiki!
 
-Ping Viewer is the user interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure and view the data from the Ping device.
+Ping Viewer is the Graphic User Interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure and visualize data from the device.
 
 # Quick Start
 
 ## Installing and Running the Application
 
-- Windows
+- **Windows**
 
-    Download the executable (.exe). Open the application by double clicking the .exe file. Windows will ask you to trust the software, click run anyway.
+    Download the zipped (.zip) file and extract it in somewhere that is comfortable for you. 
+ Open the application by double clicking in the executable file (.exe). Windows will ask you to trust the software, Click in **More Info** → **Run Anyway**.
 
-- Mac
+<p align="center">
+  <img src="http://i.imgur.com/VKViZSgg.png">
+</p>
 
-    Download the .dmg. Mount the .dmg. Drag the icon to your *Applications* folder. Unmount the .dmg. Open the application by double clicking the icon in your *Applications* folder.
+- **Mac**
+
+    Download the Apple Disk file (.dmg). You execute Ping Viewer directly after opening the DMG file or by moving the executable (.app) to the **Applications** folder, and opening from there.
+
+<p align="center">
+  <img src="http://i.imgur.com/a4wM4Rfg.jpg">
+</p>
 
 - Linux
 
-    Download the .AppImage. Edit the permissions of the .AppImage file to have 'executable' permissions: `chmod +x ping-viewer-linux.AppImage`. Open the .AppImage file by double clicking it, or execute it from the command line: `./ping-viewer-linux.AppImage`.
+    Download the AppImage (.AppImage). Edit the permissions of the AppImage to have _executable_ permission with the terminal: `chmod +x ping-viewer-linux.AppImage`. Open the AppImage by double clicking it, or execute it from the command line: `./ping-viewer-linux.AppImage`.
+
+> Remember to run the commands in the same path where the Appimage file is.
 
 
 ## Connection Setup
