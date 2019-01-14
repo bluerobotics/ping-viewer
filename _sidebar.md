@@ -1,4 +1,11 @@
 # [Quick Start](https://github.com/jaxxzer/ping-viewer/wiki)
+ - [Installation](home#installation)
+ - [Connection Setup](home#connection-setup)
+ - [Usage](home#usage)
+    - [Principle of Operation](home#principle-of-operation)
+    - [Ping Viewer Display](home#ping-viewer-display)
+- [Application and Device Settings](home#application-and-device-settings)
+- [Interpreting Profile Data](home#interpreting-profile-data)
 
 # User Manual
 
