@@ -192,7 +192,7 @@ if [[ $machine = *"Linux"* ]]; then
     runstep "wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O /tmp/linuxdeployqt.AppImage" "Download linuxdeployqt" "Failed to download linuxdeployqt"
     runstep "chmod a+x /tmp/linuxdeployqt.AppImage" "Convert linuxdeployqt to executable" "Failed to turn linuxdeplopyqt in executable"
     runstep "unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;" "Unset some Qt variables" "Failed to unsed Qt variables"
-    runstep "/tmp/linuxdeployqt.AppImage ${deployfolder}/pingviewer.desktop -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -verbose=2 -qmldir=${projectpath}/qml -appimage" "Run linuxdeployqt" "Failed to run linuxdeployqt"
+    runstep "/tmp/linuxdeployqt.AppImage ${deployfolder}/pingviewer.desktop -unsupported-allow-new-glibc -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -verbose=2 -qmldir=${projectpath}/qml -appimage" "Run linuxdeployqt" "Failed to run linuxdeployqt"
     runstep "mv pingviewer*.AppImage /tmp/" "Move .AppImage folder to /tmp/" "Faile to move .AppImage file"
 else
     runstep "wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip -O /tmp/stm32flash_linux.zip" "Download stm32flash_linux" "Faile to download stm32flash_linux"
