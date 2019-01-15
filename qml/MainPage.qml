@@ -191,6 +191,10 @@ Item {
         id: replayFileDialog
         title: "Please choose a log file"
         nameFilters: ["Binary files (*.bin)"]
+        // Accessing folder variable directly does not work
+        // From: https://stackoverflow.com/questions/46672657/how-to-set-filedialogs-folder-from-a-unc-path-in-qml
+        // Bug: https://bugreports.qt.io/browse/QTBUG-63710
+        Component.onCompleted: folder = FileManager.getPathFrom(FileManager.SensorLog)
         onAccepted: {
             ping.connectLink(AbstractLinkNamespace.File, [fileUrl, "r"])
             replayFileName.text = "File: " + fileName
