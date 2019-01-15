@@ -11,7 +11,7 @@ import StyleManager 1.0
 ApplicationWindow {
     id: window
     objectName: "window"
-    title: "Ping Interface"
+    title: createTitle()
     visible: true
     height: 600
     width: 800
@@ -32,5 +32,13 @@ ApplicationWindow {
         property alias y: window.y
         property alias width: window.width
         property alias height: window.height
+    }
+
+    function createTitle() {
+        var applicationName = "Ping Viewer"
+        var tag = GitTag === "" ? "No tags!" : GitTag
+        var hash = GitVersion
+
+        return  applicationName + " - " + tag + " - " + hash
     }
 }
