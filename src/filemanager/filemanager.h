@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include <QUrl>
 
 Q_DECLARE_LOGGING_CATEGORY(FILEMANAGER);
 
@@ -55,6 +56,14 @@ public:
      * @return QFileInfoList List of files in folder
      */
     QFileInfoList getFilesFrom(Folder folderType);
+
+    /**
+     * @brief Get the path used by the program to this file type
+     *
+     * @param folderType
+     * @return QUrl
+     */
+    Q_INVOKABLE QUrl getPathFrom(FileManager::Folder folderType);
 
     /**
      * @brief Return a pointer of this singleton to the qml register function

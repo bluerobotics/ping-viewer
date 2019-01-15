@@ -48,6 +48,16 @@ QFileInfoList FileManager::getFilesFrom(Folder folderType)
     return folder->dir.entryInfoList();
 }
 
+QUrl FileManager::getPathFrom(FileManager::Folder folderType)
+{
+    FolderStruct* folder = folderMap[folderType];
+    if(!folder) {
+        qCWarning(FILEMANAGER) << "Folder pointer does not exist!";
+        return {};
+    }
+    return QUrl::fromLocalFile(folder->dir.path());
+}
+
 QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
 {
     Q_UNUSED(engine)
