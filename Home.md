@@ -36,7 +36,7 @@ Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosound
 
 ## Connection Setup
 
-To begin using the device, connect it to a USB - UART converter that operates on 5V like this Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
+To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
 
 ## Usage
 
@@ -44,7 +44,7 @@ To begin using the device, connect it to a USB - UART converter that operates on
 
 ### Principle of Operation
 
-The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and refelects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
+The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and reflects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
 
 <p align="center">
     <img src="wiki/images/echo.svg.png">
