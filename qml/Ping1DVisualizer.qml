@@ -87,6 +87,7 @@ Item {
             DepthAxis {
                 id: depthAxis
                 anchors.fill: parent
+                width: waterfall.width
                 start_mm: waterfall.minDepthToDraw
                 end_mm: waterfall.maxDepthToDraw
                 visible: start_mm != end_mm
