@@ -60,16 +60,17 @@ Item {
 
                     onHideItemChanged: {
                         if(hideItem == false) {
-                            firmwareUpdate.hideItem = true
+                            connectionMenu.hideItem = true
                         }
                     }
                 }
-                PingItem {
-                    id: firmwareUpdate
-                    isSubItem: true
-                    icon: StyleManager.chipIcon()
 
-                    item: FirmwareUpdate {
+                PingItem {
+                    id: connectionMenu
+                    isSubItem: true
+                    icon: StyleManager.connectIcon()
+
+                    item: ConnectionMenu {
                         ping: ping
                     }
 
