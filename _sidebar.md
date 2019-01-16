@@ -7,11 +7,11 @@
 - [Interpreting Profile Data](home#interpreting-profile-data)
 
 # User Manual
-- Application Settings
+- Application Settings ![](images/settings_black.svg.png)
     - [Display Settings](display-settings) ![](images/sun_black.svg.png)
-    - [Connection Settings](connection-settings)
+    - [Connection Settings](connection-settings) ![](images/connect.svg.png)
 
-- Device Settings
+- Device Settings ![](images/arrow.png)
     - [Ping Device Settings](device-settings)
     - [Firmware Update](firmware-update) ![](images/chip_black.svg.png)
 
