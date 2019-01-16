@@ -39,6 +39,8 @@ Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosound
 
 To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
 
+Visit the [Connection Settings](connection-settings) menu for more connection options.
+
 ***
 
 ## Principle of Operation
