@@ -1,4 +1,4 @@
-# [Quick Start](https://github.com/jaxxzer/ping-viewer/wiki)
+# [Quick Start](home)
 - [Installation](home#installation)
 - [Connection Setup](home#connection-setup)
 - [Principle of Operation](home#principle-of-operation)
