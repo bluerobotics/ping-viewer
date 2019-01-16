@@ -170,7 +170,6 @@ signals:
     // TODO: mouseMove should be renamed
     void mouseMove();
     void mousePosChanged();
-    void mouseLeave();
     void containsMouseChanged();
     void themeChanged();
     void themesChanged();
