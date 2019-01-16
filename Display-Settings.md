@@ -13,7 +13,6 @@ Select the application menu theme (light or dark)
 Enable the [Replay Menu](replay-data)
 
 - **Smooth Data:**
-
 Filter the [Waterfall](home#main-application-interface) data to smooth noise and fluctuations.
 
 - **Antialiasing:**
