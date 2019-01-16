@@ -18,6 +18,12 @@ Filter the [Waterfall](home#main-application-interface) data to smooth noise and
 - **Antialiasing:**
 Enable antialiasing in the Waterfall display rendering
 
+- **Debug Mode:**
+Enable Debug information and settings
+
+<p align="center">
+    <img src="wiki/images/display-settings.png">
+</p>
 
 #### User Gradients
 
