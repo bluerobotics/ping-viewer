@@ -4,6 +4,7 @@ PingViewer also attempts to connect to UDP port 9090 on the host at IP address 1
 
 The Ping device connection can also be configured explicitly in the Connection Settings menu:
 
+TODO take new shot without sonar type
 <p align="center">
     <img src="images/connection-settings.png">
 </p>
@@ -17,7 +18,7 @@ The Ping device connection can also be configured explicitly in the Connection S
 
     ```sh
     sudo pip install bluerobotics-ping
-    python -m brping/pingproxy --device *<device>*
+    python -m brping/pingproxy --device <device>
     ```
 
-    `*<device>*` is the serial port where the Ping device is connected (eg. `/dev/ttyUSB0`).
+    `<device>` is the serial port where the Ping device is connected (eg. `/dev/ttyUSB0`).
