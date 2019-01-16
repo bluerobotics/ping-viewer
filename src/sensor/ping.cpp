@@ -14,6 +14,7 @@
 #include <QThread>
 #include <QUrl>
 
+#include "hexvalidator.h"
 #include "link/seriallink.h"
 #include "networktool.h"
 #include "notificationmanager.h"
@@ -393,6 +394,11 @@ void Ping::handleMessage(PingMessage msg)
 
 void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
+    if(!HexValidator::isValidFile(fileUrl)) {
+        qCWarning(PING_PROTOCOL_PING) << "File does not contain a valid Intel Hex format:" << fileUrl;
+        return;
+    };
+
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
 
     if (!serialLink) {
