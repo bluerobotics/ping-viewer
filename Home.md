@@ -20,6 +20,9 @@ Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosound
 
     Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
 
+    TODO check security settings
+    TODO host images from local images folder
+
 <p align="center">
   <img src="http://i.imgur.com/a4wM4Rfg.jpg">
 </p>
@@ -33,7 +36,7 @@ Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosound
 
 ## Connection Setup
 
-To begin using the device, connect it to a USB - UART converter that operates on 5V like the BlUART. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
+To begin using the device, connect it to a USB - UART converter that operates on 5V like this Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
 
 ## Usage
 
@@ -43,13 +46,15 @@ To begin using the device, connect it to a USB - UART converter that operates on
 
 The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and refelects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
 
-![](images/echo.svg.png)
+<p align="center">
+    ![](images/echo.svg.png)
+</p>
 
 See the Wikipedia articles on [Echo sounding](https://en.wikipedia.org/wiki/Echo_sounding) and [Fishfinders](https://en.wikipedia.org/wiki/Fishfinder) for more information on how the device operates.
 
 #### Target locking
 
-The Ping device processes the data and attempts to lock on to the most likely target in view of the device. The algorithm for determining the target considers return strength (the strongest return is likely the target) and past measurements (ie. a low pass filter). The Ping device algorithm also produces a confidence measurement cooresponding to the probability that it has correctly identified the target. In noisy environments presenting a lower signal-to-noise ration, the confidence of the target lock may be reduced.
+The Ping device processes the data and attempts to lock on to the most likely target in view of the device. The algorithm for determining the target considers return strength (the strongest return is likely the target) and past measurements (ie. a low pass filter). The Ping device algorithm also produces a confidence measurement corresponding to the probability that it has correctly identified the target. In noisy environments presenting a lower signal-to-noise ratio, the confidence of the target lock may be reduced.
 
 #### Distance and Profile Measurements
 
@@ -65,6 +70,8 @@ The Ping Viewer window consists of four important components:
 3. [Return Plot](#return-plot)
 4. [Waterfall](#waterfall)
 
+TODO use default color gradient
+
 ![](images/interface-annotated.png)
 
 #### Distance Readout
@@ -77,7 +84,7 @@ The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcu
 
 #### Distance Axis
 
-The Distance Axis is labeled with bold numbers on the right-hand edge of the Waterfall. This axis represents the distance of an object from the Ping device transducer. The axis runs vertically down the screen, with the face of the transducer (zero distance) located at the top of the window. The deeper/farther an object is from the transducer, the closer its return will appear to the bottom of the window. The Distance Axis scale automatically adjusts to display the current scanning range of the Ping device.
+The Distance Axis is labeled with bold numbers on the right-hand edge of the Waterfall. This axis represents the distance from the Ping device transducer. The axis runs vertically down the screen, with the face of the transducer (zero distance) located at the top of the window. The deeper/farther an object is from the transducer, the closer its return will appear to the bottom of the window. The Distance Axis scale automatically adjusts to display the current scanning range of the Ping device.
 
 There is an orange arrow on the Distance Axis indicating the distance to the target in the most recent measurement (this is the same as the Distance Readout).
 
