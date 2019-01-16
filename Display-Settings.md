@@ -1,5 +1,28 @@
-#### User gradients
+## Menu Items
+
+- Units
+Select the units (meters or feet) for the application to display
+
+- Plot Theme
+Select the color swath/gradient to use for the [Waterfall](home#waterfall) display. Custom gradients can be created according to the [User Gradients](#user-gradients) section.
+
+- Theme:
+Select the application menu theme (light or dark)
+
+- Enable Replay Menu:
+Enable the [Replay Menu](replay-data)
+
+- Smooth Data:
+Filter the [Waterfall](home#waterfall) data to smooth noise and fluctuations.
+
+- Antialiasing:
+Enable antialiasing in the Waterfall display rendering
+
+
+#### User Gradients
+
 The user can create his own gradients for the waterfall, for this, it's necessary to create a file that follow some rules inside **Waterfall_Gradients** folder.
+
 1. Filenames need to have .txt extension.
 2. Filenames will be used as gradient name.
 3. Filenames with underscores will be replaced with spaces.
