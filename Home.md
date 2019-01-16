@@ -33,16 +33,15 @@ Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosound
 
 > Remember to run the commands in the same path where the Appimage file is.
 
+***
 
 ## Connection Setup
 
 To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
 
-## Usage
-
 ***
 
-### Principle of Operation
+## Principle of Operation
 
 The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and reflects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
 
@@ -62,7 +61,7 @@ The device outputs the distance to the most likely target with the associated co
 
 ***
 
-### Ping Viewer Display
+## Main Application Interface
 
 The Ping Viewer window consists of four important components:
 1. [Distance Readout](#distance-readout)
@@ -102,13 +101,15 @@ The color scheme (gradient) of the Waterfall can be [customized](display-setting
 
 ***
 
-### Application and Device Settings
+## Application and Device Settings
 
 See [here](display-settings) for instructions to switch between meters and feet for the application display.
 
 To adjust the update rate and other Ping device settings, visit the [device configuration](device-configuration) page.
 
-### Interpreting Profile Data
+***
+
+## Interpreting Profile Data
 
 As the sound wave travels through water, it may encounter several 'reflective' objects like fish, or air bubbles. These smaller objects will also produce a return signal as energy is reflected back to the device. The energy that returns from these smaller objects is usually much less than the energy reflected off of a larger solid object like the sea floor.
 
