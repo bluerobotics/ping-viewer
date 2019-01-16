@@ -20,6 +20,7 @@ Waterfall::Waterfall(QQuickItem *parent):
     _maxDepthToDrawInPixels(0),
     _minDepthToDrawInPixels(0),
     _mouseDepth(0),
+    _containsMouse(false),
     _smooth(true),
     _updateTimer(new QTimer(this)),
     currentDrawIndex(displayWidth)
@@ -397,5 +398,15 @@ void Waterfall::hoverLeaveEvent(QHoverEvent *event)
 {
     Q_UNUSED(event)
     emit mouseLeave();
+    // The mouse is not inside the waterfall area, so set the depth under the mouse to an invalid value
     _mouseDepth = -1;
+    _containsMouse = false;
+    emit containsMouseChanged();
+}
+
+void Waterfall::hoverEnterEvent(QHoverEvent *event)
+{
+    Q_UNUSED(event)
+    _containsMouse = true;
+    emit containsMouseChanged();
 }

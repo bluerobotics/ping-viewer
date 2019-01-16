@@ -62,6 +62,14 @@ public:
     Q_PROPERTY(QPoint mousePos READ mousePos NOTIFY mousePosChanged)
 
     /**
+     * @brief Return true if the mouse is currently inside the waterfall area
+     *
+     * @return bool
+     */
+    bool containsMouse() {return _containsMouse;}
+    Q_PROPERTY(bool containsMouse READ containsMouse NOTIFY containsMouseChanged)
+
+    /**
      * @brief Get theme name used in the waterfall
      *  Check WaterfallGradient
      *
@@ -128,6 +136,7 @@ public:
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
     float _mouseDepth;
+    bool _containsMouse;
     QPoint _mousePos;
     bool _smooth;
     QTimer* _updateTimer;
@@ -158,9 +167,11 @@ signals:
     void mouseDepthChanged();
     void mouseColumnConfidenceChanged();
     void mouseColumnDepthChanged();
+    // TODO: mouseMove should be renamed
     void mouseMove();
     void mousePosChanged();
     void mouseLeave();
+    void containsMouseChanged();
     void themeChanged();
     void themesChanged();
     void smoothChanged();
@@ -244,11 +255,18 @@ public:
     void hoverMoveEvent(QHoverEvent *event);
 
     /**
-     * @brief Function that deals when the mouse is outside the waterfall
+     * @brief Function that executes when the mouse leaves the waterfall area
      *
      * @param event
      */
     void hoverLeaveEvent(QHoverEvent *event);
+
+    /**
+     * @brief Function that executes when the mouse enters the waterfall area
+     *
+     * @param event
+     */
+    void hoverEnterEvent(QHoverEvent *event);
 
 private:
     Q_DISABLE_COPY(Waterfall)
