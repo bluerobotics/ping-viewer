@@ -1,10 +1,10 @@
 # [Quick Start](https://github.com/jaxxzer/ping-viewer/wiki)
- - [Installation](home#installation)
- - [Connection Setup](home#connection-setup)
- - [Principle of Operation](home#principle-of-operation)
- - [Main Application Interface](home#main-application-interface)
- - [Application and Device Settings](home#application-and-device-settings)
- - [Interpreting Profile Data](home#interpreting-profile-data)
+- [Installation](home#installation)
+- [Connection Setup](home#connection-setup)
+- [Principle of Operation](home#principle-of-operation)
+- [Main Application Interface](home#main-application-interface)
+- [Application and Device Settings](home#application-and-device-settings)
+- [Interpreting Profile Data](home#interpreting-profile-data)
 
 # User Manual
 - Application Settings
