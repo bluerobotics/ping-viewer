@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="images/display-settings.png">
+</p>
+
 ## Menu Items
 
 - **Units:**
@@ -20,10 +24,6 @@ Enable antialiasing in the Waterfall display rendering
 
 - **Debug Mode:**
 Enable Debug information and settings
-
-<p align="center">
-    <img src="images/display-settings.png">
-</p>
 
 #### User Gradients
 
