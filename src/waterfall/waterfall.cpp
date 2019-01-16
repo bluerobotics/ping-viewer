@@ -397,7 +397,6 @@ void Waterfall::hoverMoveEvent(QHoverEvent *event)
 void Waterfall::hoverLeaveEvent(QHoverEvent *event)
 {
     Q_UNUSED(event)
-    emit mouseLeave();
     // The mouse is not inside the waterfall area, so set the depth under the mouse to an invalid value
     _mouseDepth = -1;
     _containsMouse = false;
