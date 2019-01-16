@@ -13,7 +13,7 @@ import SettingsManager 1.0
 import StyleManager 1.0
 
 Item {
-    id: firmwareUpdate
+    id: root
     visible: false
     height: settingsLayout.height
     width: settingsLayout.width
@@ -22,7 +22,7 @@ Item {
 
     function connect(connectionTypeEnum) {
         // Only connect from user input
-        if(!firmwareUpdate.visible) {
+        if(!root.visible) {
             return;
         }
 
