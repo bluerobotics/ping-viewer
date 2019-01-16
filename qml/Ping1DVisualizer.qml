@@ -51,6 +51,7 @@ Item {
                 height: 15
                 width: waterfall.height
                 transform: Rotation { origin.x: height/2; angle: 90}
+                visible: waterfall.containsMouse
                 gradient: Gradient {
                     GradientStop { position: 0.3; color: "transparent" }
                     GradientStop { position: 0.5; color: StyleManager.secondaryColor } // Not working with material
