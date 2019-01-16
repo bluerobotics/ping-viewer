@@ -47,7 +47,7 @@ To begin using the device, connect it to a USB - UART converter that operates on
 The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and refelects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
 
 <p align="center">
-    <img src="wiki/images/interface-annotated.png">
+    <img src="wiki/images/echo.svg.png">
 </p>
 
 See the Wikipedia articles on [Echo sounding](https://en.wikipedia.org/wiki/Echo_sounding) and [Fishfinders](https://en.wikipedia.org/wiki/Fishfinder) for more information on how the device operates.
