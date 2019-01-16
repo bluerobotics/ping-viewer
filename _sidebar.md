@@ -8,12 +8,12 @@
 
 # User Manual
 - Application Settings
- - [Display Settings](display-settings) ![](images/sun_black.svg.png)
- - [Connection Settings](connection-settings)
+    - [Display Settings](display-settings) ![](images/sun_black.svg.png)
+    - [Connection Settings](connection-settings)
 
 - Device Settings
- - [Ping Device Settings](device-settings)
- - [Firmware Update](firmware-update) ![](images/chip_black.svg.png)
+    - [Ping Device Settings](device-settings)
+    - [Firmware Update](firmware-update) ![](images/chip_black.svg.png)
 
 - [Hotkeys and Shortcuts](hotkeys-and-shortcuts)
 - [Logging and User Files](logging-and-user-files)
