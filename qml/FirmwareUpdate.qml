@@ -10,7 +10,7 @@ import Qt.labs.settings 1.0
 import SettingsManager 1.0
 
 Item {
-    id: firmwareUpdate
+    id: root
     height: settingsLayout.height
     width: settingsLayout.width
     property var ping: null
