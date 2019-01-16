@@ -11,7 +11,6 @@ import SettingsManager 1.0
 
 Item {
     id: firmwareUpdate
-    visible: false
     height: settingsLayout.height
     width: settingsLayout.width
     property var ping: null
