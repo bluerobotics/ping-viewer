@@ -21,6 +21,14 @@ Enable antialiasing in the Waterfall display rendering
 - **Debug Mode:**
 Enable Debug information and settings
 
+![](images/display-settings.png)
+
+hello
+
+<p align="center">
+    <img src="images/display-settings.png">
+</p>
+helllo
 <p align="center">
     <img src="wiki/images/display-settings.png">
 </p>
