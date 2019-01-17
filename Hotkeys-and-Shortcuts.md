@@ -6,6 +6,6 @@
 
 # Mouse shortcuts
 
-* Click and drag the *Depth Readout* to move it.
-* Hover the mouse over the *Depth Readout* and use the mouse scroll to adjust the size of the Depth Readout
-* Click and drag the left edge of the *Return Plot* to adjust its width.
+* Click and drag the [*Depth Readout*](home#depth-readout) to move it.
+* Hover the mouse over the [*Depth Readout*](home#depth-readout) and use the mouse scroll to adjust the size of the Depth Readout
+* Click and drag the left edge of the [*Return Plot*](home#return-plot) to adjust its width.
