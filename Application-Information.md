@@ -6,7 +6,7 @@
 4. [**Application log**](#aplication-log)
 5. [**Log categories**](#log-categories)
 
-![](imgs/info.png)
+![](images/info.png)
 
 #### Application software information
 

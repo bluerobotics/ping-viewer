@@ -8,7 +8,7 @@
 Select the units (meters or feet) for the application to display
 
 - **Plot Theme:**
-Select the color swath/gradient to use for the [Waterfall](home#waterfall) display. Custom gradients can be created according to the [User Gradients](#user-gradients) section.
+Select the color swath/gradient to use for the [Waterfall](home#waterfall) display. Custom gradients can be created according to the [custom gradients](#custom-gradients) section.
 
 - **Theme:**
 Select the application menu theme (light or dark)
