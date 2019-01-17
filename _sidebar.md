@@ -11,8 +11,8 @@
     - [Display Settings](display-settings) ![](images/sun_black.svg.png)
     - [Connection Settings](connection-settings) ![](images/connect.svg.png)
 
-- Device Settings ![](images/arrow.png)
-    - [Ping Device Settings](device-settings)
+- [Device Settings](device-settings) ![](images/arrow.png)
+    - [Advanced Settings](device-settings#advanced-settings) ![](images/wrench.svg.png)
     - [Firmware Update](firmware-update) ![](images/chip_black.svg.png)
 
 - [Hotkeys and Shortcuts](hotkeys-and-shortcuts)
