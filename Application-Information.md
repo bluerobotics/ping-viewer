@@ -9,6 +9,7 @@
 <p align="center">
     <img src="images/application-information-annotated.png">
 </p>
+
 #### Application software information
 
 This area shows information about the Ping Viewer application software version.
@@ -19,8 +20,8 @@ This area shows information about the connected device.
 
 #### Header buttons
 - ![](images/lock.svg.png) Scroll lock for log window
-- ![](images/chat.svg.png) Blue Robotics Forum
-- ![](images/report.svg.png) Bug reports and feature requests
+- ![](images/chat.svg.png) [Blue Robotics Forum](https://discuss.bluerobotics.com)
+- ![](images/report.svg.png) [Bug reports and feature requests](https://github.com/bluerobotics/ping-viewer/issues)
 - ![](images/settings_black.svg.png) Reset application settings
 
 #### Application log
