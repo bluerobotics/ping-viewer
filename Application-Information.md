@@ -6,8 +6,9 @@
 4. [**Application log**](#aplication-log)
 5. [**Log categories**](#log-categories)
 
-![](images/info.png)
-
+<p align="center">
+    <img src="images/application-information-annotated.png">
+</p>
 #### Application software information
 
 This area shows information about the Ping Viewer application software version.
@@ -17,10 +18,10 @@ This area shows information about the Ping Viewer application software version.
 This area shows information about the connected device.
 
 #### Header buttons
-- Scroll lock for log window
-- Blue Robotics Forum
-- Bug reports and feature requests
-- Reset application settings
+- ![](images/lock.svg.png) Scroll lock for log window
+- ![](images/chat.svg.png) Blue Robotics Forum
+- ![](images/report.svg.png) Bug reports and feature requests
+- ![](images/settings_black.svg.png) Reset application settings
 
 #### Application log
 
