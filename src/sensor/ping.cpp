@@ -439,6 +439,9 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
     QSerialPortInfo pInfo(serialLink->port()->portName());
     QString portLocation = pInfo.systemLocation();
 
+    qCDebug(PING_PROTOCOL_PING) << "Save sensor configuration.";
+    updatePingConfigurationSettings();
+
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
     QThread::msleep(500);
     flash(portLocation, fileUrl, baud, verify);
@@ -495,6 +498,8 @@ void Ping::firmwareUpdatePercentage()
             if (_fw_update_perc > 99.99) {
                 emit flashComplete();
                 QThread::msleep(500);
+                // Clear last configuration src ID to detect device as a new one
+                resetSensorLocalVariables();
                 detector()->scan();
             } else {
                 emit flashProgress(_fw_update_perc);
@@ -524,11 +529,10 @@ void Ping::request(int id)
 
 void Ping::setLastPingConfiguration()
 {
-    static int lastSrcId = -1;
-    if(lastSrcId == _srcId) {
+    if(_lastPingConfigurationSrcId == _srcId) {
         return;
     }
-    lastSrcId = _srcId;
+    _lastPingConfigurationSrcId = _srcId;
     if(!link()->isWritable()) {
         qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
         return;
@@ -648,6 +652,39 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
             QStringLiteral("<a href=\"%1\">DOWNLOAD IT HERE!</a>").arg(versionAvailable.downloadUrl);
         NotificationManager::self()->create(newVersionText, "green", StyleManager::infoIcon());
     }
+}
+
+void Ping::resetSensorLocalVariables()
+{
+    _ascii_text = QString();
+    _nack_msg = QString();
+
+    _srcId = 0;
+    _dstId = 0;
+
+    _device_type = 0;
+    _device_model = 0;
+    _firmware_version_major = 0;
+    _firmware_version_minor = 0;
+
+    _distance = 0;
+    _confidence = 0;
+    _pulse_duration = 0;
+    _ping_number = 0;
+    _scan_start = 0;
+    _scan_length = 0;
+    _gain_index = 0;
+    _speed_of_sound = 0;
+
+    _processor_temperature = 0;
+    _pcb_temperature = 0;
+    _board_voltage = 0;
+
+    _ping_enable = false;
+    _mode_auto = 0;
+    _ping_interval = 0;
+
+    _lastPingConfigurationSrcId = -1;
 }
 
 Ping::~Ping()
