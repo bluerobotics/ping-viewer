@@ -2,7 +2,7 @@
 
 ## **This documentation is a work-in-progress. Content may not be accurate and is subject to change**
 
-Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure and view data from a Ping device.
+Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure, and view data from a Ping device.
 
 # Quick Start
 
