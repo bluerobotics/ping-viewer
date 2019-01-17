@@ -123,7 +123,7 @@ rm $verboseoutput
 
 echob "Project will be:"
 printf "\t- Compiled in "
-$debug && echo "debug mode." || echo "release mode."
+$debug && echo "Debug mode." || echo "Release mode."
 
 printf "\t- "
 $deploy && echo "Deployed." || echo "Not deployed."
