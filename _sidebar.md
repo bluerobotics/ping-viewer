@@ -17,7 +17,7 @@
 
 - [Hotkeys and Shortcuts](hotkeys-and-shortcuts)
 - [Logging and User Files](logging-and-user-files)
-- [Notifications and Updates](notifications-and-updates)
+- [Notifications and Updates](notifications-and-updates) ![](images/bell.svg.png)
 
 - [Replay Data](replay-data) ![](images/disk_black.svg.png)
 - [Application Information](application-information) ![](images/info_black.svg.png)
