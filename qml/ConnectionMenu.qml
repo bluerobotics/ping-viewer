@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
 import AbstractLinkNamespace 1.0
+import SettingsManager 1.0
 import Util 1.0
 
 Item {
@@ -93,7 +94,8 @@ Item {
                 Layout.minimumWidth: 150
                 // Check AbstractLinkNamespace::LinkType for correct index type
                 // None = 0, File, Serial, Udp, Tcp, Sim...
-                model: ["Serial (default)", "UDP", "Simulation"]
+                model: SettingsManager.debugMode ?
+                    ["Serial (default)", "UDP", "Simulation"] : ["Serial (default)", "UDP"]
                 onActivated: {
                     switch(index) {
                         case 0: // Serial
