@@ -4,7 +4,7 @@ When notifications are available, you can display them by clicking on the bell i
 
 ## Application Updates
 
-When the Ping Viewer application opens, it checks for application updates (requires an internet connection). If there is an update available, a notification will be displayed. To update the application, follow the [installation instructions](home#installation).
+When the Ping Viewer application opens, it checks for application updates (requires an internet connection). If there is an update available, a notification will be displayed. To update the application, follow the [installation instructions](home#installing-and-running-the-application).
 
 ## Firmware Updates
 
