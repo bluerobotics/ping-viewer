@@ -4,17 +4,17 @@ This section describes the user-accessible files used by the Ping Viewer applica
 
 > All files are timestamped with the format `YMD-hmsl`, where Year(Y), Month(M), Day(D), Hour(h), Minute(m), second(s) and milisecond(l).
 
-### Folder structure
+### Folder Structure
 
-Ping Viewer will create 3 folders under your user documents folder.
+Ping Viewer will create a folder called `PingViewer` in your user documents folder:
 
 TODO use full path
 
-* Windows: `~/My Documents`
-* Mac: `~/Documents`
-* Linux: `~/Documents`
+* Windows: `~/My Documents/PingViewer`
+* Mac: `~/Documents/PingViewer`
+* Linux: `~/Documents/PingViewer`
 
-These folders are created in the documents folder
+The Ping Viewer application uses these folders inside of the `PingViewer` folder:
 
 * [**Gui_Log**](#gui-logs)
 * [**Sensor_Log**](#sensor-logs)
