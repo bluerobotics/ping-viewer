@@ -1,3 +1,7 @@
+## Notifications
+
+When notifications are available, you can display them by clicking on the bell icon in the bottom right hand corner of the Ping Viewer application window. To dismiss a single notification, click the 'x' icon on the notification. To dismiss all notifications, click the &#9776; icon at the bottom of the notification list.
+
 ## Application Updates
 
 When the Ping Viewer application opens, it checks for application updates (requires an internet connection). If there is an update available, a notification will be displayed. To update the application, follow the [installation instructions](home#installation).
