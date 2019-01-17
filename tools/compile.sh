@@ -8,6 +8,7 @@ projectpath=${scriptpath}/..
 buildfolder=${projectpath}/build
 deployfolder=${buildfolder}/deploy
 scriptname=$(basename "$0")
+qtdefines=""
 qtconfig="release"
 numberofthreads=1
 verboseoutput="/tmp/compile_output.txt"
@@ -19,6 +20,7 @@ linuxdeployfiles=(
     "${buildfolder}/pingviewer"
 )
 
+autokill=false
 clangbuild=false
 deploy=true
 debug=false
@@ -39,7 +41,7 @@ error() {
 }
 
 usage() {
-    echo "USAGE: $scriptname --no-deploy, --wich-clang, --debug, --help"
+    echo "USAGE: $scriptname --no-deploy, --wich-clang, --debug, --autokill, --help"
 }
 
 checktool() {
@@ -82,6 +84,12 @@ runstep() {
 for i in "$@"
 do
 case $i in
+    --autokill)
+    autokill=true
+    qtdefines="AUTO_KILL"
+    qtconfig="debug"
+    shift ;;
+
     --debug)
     debug=true
     qtconfig="debug"
@@ -119,6 +127,8 @@ $debug && echo "debug mode." || echo "release mode."
 
 printf "\t- "
 $deploy && echo "Deployed." || echo "Not deployed."
+
+$autokill && printf "\t- " && echo "Auto kill enabled ☠."
 
 echo ""
 
@@ -169,7 +179,7 @@ if $clangbuild; then
     qmakeconfig="${qmakeconfig} ""-spec linux-clang"
 fi
 
-runstep "qmake -o ${buildfolder} ${qmakeconfig} -r -Wall -Wlogic -Wparser CONFIG+=${qtconfig} ${projectpath}" "Run qmake" "Qmake failed."
+runstep "qmake -o ${buildfolder} ${qmakeconfig} -r -Wall -Wlogic -Wparser DEFINES=${qtdefines} CONFIG+=${qtconfig} ${projectpath}" "Run qmake" "Qmake failed."
 runstep "make -C ${buildfolder} -j${numberofthreads}" "Project compiled" "Failed to compile project"
 
 if [ "$deploy" == "false" ]; then
