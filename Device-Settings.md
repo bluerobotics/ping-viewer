@@ -12,7 +12,7 @@ TODO update image after layout rework
 
 #### Advanced Settings
 
-Click the wrench on the Device Settings menu to access these advanced settings
+> Click the wrench on the Device Settings menu to access these advanced settings
 
 - **Auto Gain:** Enable automatic gain and range adjustments (ENABLED is the recommended default settings).
 - **Gain Selection:** Manual gain control (automatic mode must be disabled). Adjust the sensitivity of the device; larger numbers indicate greater sensitivity.
