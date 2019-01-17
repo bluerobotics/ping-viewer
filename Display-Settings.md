@@ -25,7 +25,7 @@ Enable antialiasing in the Waterfall display rendering
 - **Debug Mode:**
 Enable Debug information and settings
 
-#### User Gradients
+#### Custom Gradients
 
 The user can create his own gradients for the waterfall, for this, it's necessary to create a file that follow some rules inside **Waterfall_Gradients** folder.
 
