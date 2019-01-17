@@ -541,6 +541,24 @@ private:
     void setLastPingConfiguration();
 
     /**
+     * @brief Reset sensor local variables
+     *  TODO: This variables should be moved to a structure
+     *
+     */
+    void resetSensorLocalVariables();
+
+    /**
+     * @brief This saves the last configuration ID
+     *  This value need to be set as an invalid one (-1)
+     *  To allow sensor reconfiguration.
+     *
+     *  This should be removed after creating a PingSensor class that does not deal with connections and
+     *  Firmware update.
+     *  Check: https://github.com/bluerobotics/ping-viewer/issues/406
+     */
+    int _lastPingConfigurationSrcId = -1;
+
+    /**
      * @brief Start the pre configuration process of the sensor
      *
      */
