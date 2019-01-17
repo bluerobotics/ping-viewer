@@ -73,6 +73,21 @@ int main(int argc, char *argv[])
     app.exec();
 #endif
 
+    // Function used in CI to test runtime errors
+    // After 5 seconds, check if qml engine was loaded
+#ifdef AUTO_KILL
+    QTimer *timer = new QTimer();
+    QObject::connect(timer, &QTimer::timeout, [&app, &engine]() {
+        if(engine.rootObjects().isEmpty()) {
+            printf("Application failed to load GUI!");
+            app.exit(-1);
+        } else {
+            app.exit(0);
+        }
+    });
+    timer->start(5000);
+#endif
+
     engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
     engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
     engine.rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
