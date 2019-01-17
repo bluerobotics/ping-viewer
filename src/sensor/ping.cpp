@@ -399,6 +399,11 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
         return;
     };
 
+    if(!QFile::exists(stm32flashPath())) {
+        qCWarning(PING_PROTOCOL_PING) << "stm32flash is not available! Flash procedure will abort.";
+        return;
+    }
+
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
 
     if (!serialLink) {
@@ -439,6 +444,17 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
     flash(portLocation, fileUrl, baud, verify);
 }
 
+const QString Ping::stm32flashPath()
+{
+#ifdef Q_OS_OSX
+    // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
+    static QString binPath = QCoreApplication::applicationDirPath() + "/../..";
+#else
+    static QString binPath = QCoreApplication::applicationDirPath();
+#endif
+    return binPath + "/stm32flash";
+}
+
 void Ping::flash(const QString& portLocation, const QString& firmwareFile, int baud, bool verify)
 {
     QFileInfo firmwareFileInfo(firmwareFile);
@@ -447,14 +463,12 @@ void Ping::flash(const QString& portLocation, const QString& firmwareFile, int b
         return;
     }
 
-#ifdef Q_OS_OSX
-    // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-    static QString binPath = '"' + QCoreApplication::applicationDirPath() + "/../..";
-#else
-    static QString binPath = '"' + QCoreApplication::applicationDirPath();
-#endif
-    static QString cmd = binPath + QStringLiteral("/stm32flash\" -w \"%0\" %1 -g 0x0 -b %2 %3").arg(
-                             firmwareFileInfo.absoluteFilePath(), verify ? "-v" : "", QString::number(baud), portLocation
+    static QString cmd = QStringLiteral("\"%0\" -w \"%1\" %2 -g 0x0 -b %3 %4").arg(
+                             stm32flashPath(),
+                             firmwareFileInfo.absoluteFilePath(),
+                             verify ? "-v" : "",
+                             QString::number(baud),
+                             portLocation
                          );
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
