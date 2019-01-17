@@ -12,7 +12,7 @@
     - [Connection Settings](connection-settings) ![](images/connect.svg.png)
 
 - [Device Settings](device-settings) ![](images/arrow.png)
-    - [Advanced Settings](device-settings#advanced-settings) ![](images/wrench.svg.png)
+    - [Advanced Settings](device-settings#advanced-settings) ![](images/configure.svg.png)
     - [Firmware Update](firmware-update) ![](images/chip_black.svg.png)
 
 - [Hotkeys and Shortcuts](hotkeys-and-shortcuts)
