@@ -532,6 +532,7 @@ private:
     void handleMessage(PingMessage msg); // handle incoming message
     void writeMessage(const PingMessage& msg); // write a message to link
 
+    static const QString stm32flashPath();
     void firmwareUpdatePercentage();
     void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
 
