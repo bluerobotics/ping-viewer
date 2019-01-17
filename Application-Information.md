@@ -21,6 +21,7 @@ This page has 3 important parts:
         * Warning: Open issue list for reports.
         * Reset: Reset interface settings.
 * Log: Shows all events emitted by the interface with the selected categories.
-* Log categories: List of all available categories to be selected for debug.
+
+#### Log categories: List of all available categories to be selected for debug.
 
 ![](imgs/info.png)

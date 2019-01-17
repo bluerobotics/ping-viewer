@@ -6,7 +6,7 @@ This section describes the user-accessible files used by the Ping Viewer applica
 
 ### Folder structure
 
-Ping-Viewer will create 3 folders under your user documents folder.
+Ping Viewer will create 3 folders under your user documents folder.
 
 TODO use full path
 
@@ -27,7 +27,7 @@ The GUI log files (.txt) contain debug log output from the Ping Viewer applicati
 
 #### Sensor Logs
 
-The sensor log files (.bin) contain all of the raw binary communications received from the device. These binary communications are in Ping Protocol format. The logs can be [replayed](replay-data) by Ping Viewer application.
+The sensor log files (.bin) contain all of the raw binary communications received from the device. These binary communications are in [Ping Protocol](https://github.com/bluerobotics/ping-protocol) format. The logs can be [replayed](replay-data) by Ping Viewer application.
 
 #### Pictures
 
