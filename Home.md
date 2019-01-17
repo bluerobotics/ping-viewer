@@ -81,6 +81,10 @@ TODO add closeups for each
 
 #### Distance Readout
 
+<p align="center">
+    <img src="wiki/images/distance-readout-closeup.png">
+</p>
+
 The Distance Readout displays the distance to the target in the most recent measurement. This is the distance to the seafloor in [depth sounding](https://en.wikipedia.org/wiki/Depth_sounding) applications.
 
 The confidence measurement for the most recent sample is displayed below the distance in the Distance readout. The color of the Distance Readout reflects the current confidence measurement, where red = 0% <-> green = 100%. // TODO better gradient explanation (picture)
@@ -89,17 +93,29 @@ The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcu
 
 #### Distance Axis
 
+<p align="center">
+    <img src="wiki/images/distance-axis-closeup.png">
+</p>
+
 The Distance Axis is labeled with bold numbers on the right-hand edge of the Waterfall. This axis represents the distance from the Ping device transducer. The axis runs vertically down the screen, with the face of the transducer (zero distance) located at the top of the window. The deeper/farther an object is from the transducer, the closer its return will appear to the bottom of the window. The Distance Axis scale automatically adjusts to display the current scanning range of the Ping device.
 
 There is an orange arrow on the Distance Axis indicating the distance to the target in the most recent measurement (this is the same as the Distance Readout).
 
 #### Return Plot
 
+<p align="center">
+    <img src="wiki/images/return-plot-closeup.png">
+</p>
+
 The Return Plot displays the return strength vs distance of the most recent [**Profile**](#distance-and-profile-measurements) sample. The plot displays the measurement of only a single dependent variable (return strength), and is simply mirrored for ease of viewing. Stronger returns appear as wider traces.
 
 **Note** You may observe a very strong return at the top of the screen (at zero distance, essentially touching the device); this return is from the Ping device itself. When the Ping device emits the acoustic pulse, the device is still vibrating or 'ringing' like a bell when it begins measuring the return signal. This residual energy in the vibrations of the Ping device body is picked up as a return signal until it decays away.
 
 #### Waterfall
+
+<p align="center">
+    <img src="wiki/images/waterfall-closeup.png">
+</p>
 
 The Waterfall is a three dimensional plot that occupies the main portion of the application window. The Waterfall plots consecutive [**Profile**](#distance-and-profile-measurements) samples (distance running vertically and color indicating signal strength). The horizontal axis is time; new data is displayed on the right edge of the Waterfall as older data moves to the left.
 
