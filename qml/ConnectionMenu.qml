@@ -80,18 +80,6 @@ Item {
             columnSpacing: 5
 
             Text {
-                text: "Sonar Type:"
-                color: Material.primary
-            }
-
-            ComboBox {
-                displayText: "Ping Echosounder"
-                enabled: false
-                Layout.columnSpan:  4
-                Layout.fillWidth: true
-            }
-
-            Text {
                 text: "Communication:"
                 enabled: true
                 color: Material.primary
