@@ -7,20 +7,20 @@
 - [Interpreting Profile Data](home#interpreting-profile-data)
 
 # User Manual
-- Application Settings ![](images/settings_black.svg.png)
-    - [Display Settings](display-settings) ![](images/sun_black.svg.png)
-    - [Connection Settings](connection-settings) ![](images/connect.svg.png)
+- ![](images/settings_black.svg.png) Application Settings
+    - ![](images/sun_black.svg.png) [Display Settings](display-settings)
+    - ![](images/connect.svg.png) [Connection Settings](connection-settings)
 
-- [Device Settings](device-settings) ![](images/arrow.png)
-    - [Advanced Settings](device-settings#advanced-settings) ![](images/configure.svg.png)
-    - [Firmware Update](firmware-update) ![](images/chip_black.svg.png)
+- ![](images/arrow.png) [Device Settings](device-settings)
+    - ![](images/configure.svg.png) [Advanced Settings](device-settings#advanced-settings)
+    - ![](images/chip_black.svg.png) [Firmware Update](firmware-update)
 
 - [Hotkeys and Shortcuts](hotkeys-and-shortcuts)
 - [Logging and User Files](logging-and-user-files)
-- [Notifications and Updates](notifications-and-updates) ![](images/bell.svg.png)
+- ![](images/bell.svg.png) [Notifications and Updates](notifications-and-updates)
 
-- [Replay Data](replay-data) ![](images/disk_black.svg.png)
-- [Application Information](application-information) ![](images/info_black.svg.png)
+- ![](images/disk_black.svg.png) [Replay Data](replay-data)
+- ![](images/info_black.svg.png) [Application Information](application-information)
 
 - [FAQ and Troubleshooting](faq-and-troubleshooting)
 - [Developers and OEMs](developers-and-oems)
