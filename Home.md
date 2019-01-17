@@ -73,7 +73,11 @@ The Ping Viewer window consists of four important components:
 
 TODO use default color gradient
 
-![](images/interface-annotated.png)
+<p align="center">
+    <img src="wiki/images/interface-annotated.png">
+</p>
+
+TODO add closeups for each
 
 #### Distance Readout
 
