@@ -28,4 +28,4 @@ rm -rf $build_test
 mkdir -p ${build_test}
 qmake -o ${build_test} -r -Wall -Wlogic -Wparser CONFIG+=test ${projectpath}
 make -C ${build_test}
-xvfb-run $build_test/pingviewer
+$build_test/pingviewer
