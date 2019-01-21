@@ -66,7 +66,7 @@ message("Check for GIT version and tag:")
 exists ($$_PRO_FILE_PWD_/.git) {
     GIT_VERSION = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD log -1 --format=%h)
     GIT_VERSION_DATE = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD log -1 --format=%aI)
-    GIT_TAG = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD describe --abbrev=0 --tags --exclude continuous)
+    GIT_TAG = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD describe --tags --exclude "continuous*" --exact-match)
     GIT_URL = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$PWD remote get-url origin)
     DEFINES += 'GIT_VERSION=\\"$$GIT_VERSION\\"'
     DEFINES += 'GIT_VERSION_DATE=\\"$$GIT_VERSION_DATE\\"'
