@@ -37,7 +37,7 @@ signals:
 
 private:
     Q_DISABLE_COPY(SensorArbitrary)
-    // TODO maybe QMap<QString, QVariant>
+    // TODO: maybe QMap<QString, QVariant>
     QString _name;
     QVariant _value;
 

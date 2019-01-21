@@ -300,7 +300,7 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
     int virtualHeight = length*_minPixelsPerMeter*dynamicPixelsPerMeterScalar;
 
     // Copy tail to head
-    // TODO can we get even better and allocate just once at initialization? ie circular buffering
+    // TODO: can we get even better and allocate just once at initialization? ie circular buffering
     if (currentDrawIndex >= _image.width()) {
         //Swap is faster
         _image.swap(old);
