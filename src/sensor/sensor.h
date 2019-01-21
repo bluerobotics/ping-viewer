@@ -6,7 +6,7 @@
 #include "parsers/parser.h"
 #include "protocoldetector.h"
 
-// TODO rename to Device?
+// TODO: rename to Device?
 /**
  * @brief Manage sensor connection
  *
@@ -103,7 +103,7 @@ protected:
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation
 
-    QString _name; // TODO populate
+    QString _name; // TODO: populate
 
 signals:
     void autoDetectUpdate(bool autodetect);

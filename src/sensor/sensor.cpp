@@ -36,7 +36,7 @@ Sensor::Sensor() :
     });
 }
 
-// TODO rework this after sublasses and parser rework
+// TODO: rework this after sublasses and parser rework
 void Sensor::connectLink(const LinkConfiguration& conConf, const LinkConfiguration& logConf)
 {
     if(_detector->isRunning()) {

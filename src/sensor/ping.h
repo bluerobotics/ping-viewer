@@ -395,9 +395,9 @@ public:
      */
     int parsedMsgs() { return _parser ? _parser->parsed : 0; }
     Q_PROPERTY(int parsed_msgs READ parsedMsgs NOTIFY parsedMsgsUpdate)
-    // TODO, maybe store history/filtered history of values in this
+    // TODO: maybe store history/filtered history of values in this
     // object for access by different visual elements without need to recompute
-    // TODO install filters here?
+    // TODO: install filters here?
 
     /**
      * @brief Return the number of messages that we requested and did not received
@@ -519,7 +519,7 @@ private:
 
     static const uint16_t _num_points = 200;
 
-    // TODO maybe use vector or uint8_t[] here
+    // TODO: maybe use vector or uint8_t[] here
     // QVector is only required if points need to be exposed to qml
     //QVector<int> _points;
     QVector<double> _points;
@@ -528,7 +528,7 @@ private:
     uint16_t _ping_interval = 0;
     static const int _pingMaxFrequency;
 
-    // TODO const &
+    // TODO: const &
     void handleMessage(PingMessage msg); // handle incoming message
     void writeMessage(const PingMessage& msg); // write a message to link
 

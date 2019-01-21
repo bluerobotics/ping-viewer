@@ -250,7 +250,7 @@ void Ping::handleMessage(PingMessage msg)
         _scan_length = m.scan_length();
         _gain_index = m.gain_index();
 
-        // TODO, change to distMsgUpdate() or similar
+        // TODO: change to distMsgUpdate() or similar
         emit distanceUpdate();
         emit pingNumberUpdate();
         emit confidenceUpdate();
@@ -289,7 +289,7 @@ void Ping::handleMessage(PingMessage msg)
             _points.replace(i, m.profile_data()[i] / 255.0);
         }
 
-        // TODO, change to distMsgUpdate() or similar
+        // TODO: change to distMsgUpdate() or similar
         emit distanceUpdate();
         emit pingNumberUpdate();
         emit confidenceUpdate();
@@ -380,7 +380,7 @@ void Ping::handleMessage(PingMessage msg)
         break;
     }
 
-    // TODO is this signalling expensive?
+    // TODO: is this signalling expensive?
     // we can cut down on this a lot in general
     _dstId = msg.dst_device_id();
     _srcId = msg.src_device_id();
