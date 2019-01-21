@@ -36,9 +36,15 @@ ApplicationWindow {
 
     function createTitle() {
         var applicationName = "Ping Viewer"
-        var tag = GitTag === "" ? "No tags!" : GitTag
-        var hash = GitVersion
 
-        return  applicationName + " - " + tag + " - " + hash
+        var versionInfo = GitTag
+
+        if (versionInfo === "") {
+            versionInfo = GitVersion
+        }
+
+        var title = applicationName + " - " + versionInfo
+
+        return  title
     }
 }
