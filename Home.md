@@ -7,6 +7,7 @@ Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosound
 # Quick Start
 
 ## Installing and Running the Application
+TODO: Driver installation
 
 - **Windows**
 
