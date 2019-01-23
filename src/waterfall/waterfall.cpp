@@ -266,36 +266,40 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
     emit minDepthToDrawChanged();
     emit maxDepthToDrawChanged();
 
-    // Calculate new resolution for small distances range
-    static float lastDynamicPixelsPerMeterScalar = 0;
-    float dynamicPixelsPerMeterScalar = 1.0;
-    // Fix min resolution to be 400 pixels
-    if((_maxDepthToDraw - _minDepthToDraw)*_minPixelsPerMeter < 400) {
-        dynamicPixelsPerMeterScalar = 400/((_maxDepthToDraw - _minDepthToDraw)*_minPixelsPerMeter);
-        if(!lastDynamicPixelsPerMeterScalar) {
-            lastDynamicPixelsPerMeterScalar = dynamicPixelsPerMeterScalar;
-        }
-        _maxDepthToDrawInPixels = 400;
+    static bool inDynamic = false;
+    static float dynamicPixelsPerMeterScalar = 1.0;
+    // If the points/resolution is **NOT** bigger than 1pixel/point
+    if((_maxDepthToDraw - _minDepthToDraw)*_minPixelsPerMeter < 200) {
+        if(!inDynamic) {
+            inDynamic = true;
+            dynamicPixelsPerMeterScalar = 200/_minPixelsPerMeter;
 
-        // Rescale everything when resolution changes
-        if(lastDynamicPixelsPerMeterScalar != dynamicPixelsPerMeterScalar) {
             //Swap is faster
             _image.swap(old);
             _image.fill(Qt::transparent);
             QPainter painter(&_image);
             // Clean everything and start from zero
             painter.fillRect(_image.rect(), Qt::transparent);
-            painter.drawImage(QRect(0, 0, _image.width(),
-                                    _image.height()*dynamicPixelsPerMeterScalar/lastDynamicPixelsPerMeterScalar),
-                              old.scaled(_image.width(), _image.height()));
+            painter.drawImage(QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar), old);
             painter.end();
         }
-
-        lastDynamicPixelsPerMeterScalar = dynamicPixelsPerMeterScalar;
     } else {
-        _maxDepthToDrawInPixels = (_maxDepthToDraw  - _minDepthToDraw)*_minPixelsPerMeter;
+        // If the points/resolution is bigger than 1pixel/point
+        if(inDynamic) {
+            //Swap is faster
+            _image.swap(old);
+            _image.fill(Qt::transparent);
+            QPainter painter(&_image);
+            // Clean everything and start from zero
+            painter.fillRect(_image.rect(), Qt::transparent);
+            painter.drawImage(QRect(0, 0, _image.width(), _image.height()/dynamicPixelsPerMeterScalar), old);
+            painter.end();
+        }
+        inDynamic = false;
+        dynamicPixelsPerMeterScalar = 1;
     }
     _minDepthToDrawInPixels = _minDepthToDraw*_minPixelsPerMeter;
+    _maxDepthToDrawInPixels = (_maxDepthToDraw  - _minDepthToDraw)*_minPixelsPerMeter*dynamicPixelsPerMeterScalar;
     int virtualFloor = initPoint*_minPixelsPerMeter;
     int virtualHeight = length*_minPixelsPerMeter*dynamicPixelsPerMeterScalar;
 
