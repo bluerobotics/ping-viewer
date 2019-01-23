@@ -78,8 +78,11 @@ QVector<LinkConfiguration> ProtocolDetector::updateLinkConfigurations(QVector<Li
             continue;
         }
 
-        // Add valid port
-        tempConfigs.append({LinkType::Serial, {portInfo.portName(), "115200"}, QString("Detector serial link")});
+        // Add valid port and baudrate
+        for(auto baud : {9600, 115200}) {
+            auto config = {portInfo.portName(), QString::number(baud)};
+            tempConfigs.append({LinkType::Serial, config, QString("Detector serial link")});
+        }
     }
     return linkConfig + tempConfigs;
 }
