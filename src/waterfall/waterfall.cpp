@@ -259,6 +259,32 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
         }
         return minDepth;
     };
+
+    /**
+     * @brief Do a fast scale of image, but without changing the default size
+     *
+     * dst is the rectangle that will be used to draw old in `image`.
+     * src is the rectangle that will be used as source to be drawed in `image`,
+     *        the default value is old.rect().
+     *
+     */
+    static auto redrawImage = [this](const QRect& dst, QRect src = QRect()) {
+        // Use old as default rect
+        if(src.isEmpty()) {
+            src = old.rect();
+        }
+
+        //Swap is faster
+        _image.swap(old);
+        _image.fill(Qt::transparent);
+        QPainter painter(&_image);
+        // Clean everything and start from zero
+        painter.fillRect(_image.rect(), Qt::transparent);
+        //QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar), old
+        painter.drawImage(dst, old, src);
+        painter.end();
+    };
+
     static DCPack _maxDC;
     _maxDC = lastMaxDC();
     _minDepthToDraw = lastMinDepth();
@@ -274,26 +300,12 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
             inDynamic = true;
             dynamicPixelsPerMeterScalar = 200/_minPixelsPerMeter;
 
-            //Swap is faster
-            _image.swap(old);
-            _image.fill(Qt::transparent);
-            QPainter painter(&_image);
-            // Clean everything and start from zero
-            painter.fillRect(_image.rect(), Qt::transparent);
-            painter.drawImage(QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar), old);
-            painter.end();
+            redrawImage(QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar));
         }
     } else {
         // If the points/resolution is bigger than 1pixel/point
         if(inDynamic) {
-            //Swap is faster
-            _image.swap(old);
-            _image.fill(Qt::transparent);
-            QPainter painter(&_image);
-            // Clean everything and start from zero
-            painter.fillRect(_image.rect(), Qt::transparent);
-            painter.drawImage(QRect(0, 0, _image.width(), _image.height()/dynamicPixelsPerMeterScalar), old);
-            painter.end();
+            redrawImage(QRect(0, 0, _image.width(), _image.height()/dynamicPixelsPerMeterScalar));
         }
         inDynamic = false;
         dynamicPixelsPerMeterScalar = 1;
@@ -306,16 +318,8 @@ void Waterfall::draw(const QVector<double>& points, float confidence, float init
     // Copy tail to head
     // TODO: can we get even better and allocate just once at initialization? ie circular buffering
     if (currentDrawIndex >= _image.width()) {
-        //Swap is faster
-        _image.swap(old);
-        _image.fill(Qt::transparent);
-        QPainter painter(&_image);
-        // Clean everything and start from zero
-        painter.fillRect(_image.rect(), Qt::transparent);
-        painter.drawImage(QRect(0, 0, displayWidth, _image.height()),
-                          old, QRect(old.width() - displayWidth, 0, displayWidth, old.height()),
-                          Qt::NoFormatConversion);
-        painter.end();
+        redrawImage(QRect(0, 0, displayWidth, _image.height()),
+                    QRect(old.width() - displayWidth, 0, displayWidth, old.height()));
 
         // Start painting from the beginning
         currentDrawIndex = displayWidth;
