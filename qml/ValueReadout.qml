@@ -57,6 +57,8 @@ Item {
             font.family: "Arial"
             font.pointSize: 48
             font.bold: true
+            style: Text.Outline
+            styleColor: "black"
 
              Text {
                 id: confidenceText
@@ -68,6 +70,8 @@ Item {
                 font.family: "Arial"
                 font.pointSize: readout.font.pointSize/3
                 font.bold: true
+                style: Text.Outline
+                styleColor: "black"
                 anchors.margins: 0
             }
         }
