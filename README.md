@@ -34,7 +34,7 @@ Take a look at [our documentation with **installation steps** and **technical in
 
 * [Application Documentation][2]
 * [API Reference][1]
-* [Device Specifications](https://www.bluerobotics.com/store/electronics/ping/#tab-technical-details)
+* [Device Specifications](https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/#tab-technical-details)
 * [Forum][5]
 * [License](http://github.com/bluerobotics/ping-viewer/blob/master/LICENSE.md)
 * [Store][4]
@@ -42,5 +42,5 @@ Take a look at [our documentation with **installation steps** and **technical in
 [1]: https://github.com/bluerobotics/ping-protocol
 [2]: https://github.com/bluerobotics/ping-viewer/wiki
 [3]: https://github.com/bluerobotics/software-guidelines
-[4]: https://www.bluerobotics.com/store/electronics/ping
+[4]: https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/
 [5]: https://discuss.bluerobotics.com/
