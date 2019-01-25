@@ -1,6 +1,12 @@
 ## FAQ
 
-TODO
+### System Requirements
+
+Ping Viewer should run on any modern computer.
+
+- Mac: OSX 10.12 or later
+- Windows: Windows 10
+- Linux: --
 
 ## Troubleshooting
 
