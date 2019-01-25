@@ -93,21 +93,19 @@ Item {
 
             Text {
                 id: label
-//              anchors.fill:parent
-//              horizontalAlignment: Text.AlignRight // There is some bug around using text alignment
-//              verticalAlignment: Text.AlignBottom
+                color: root.color
+                visible: parent.height >= height
+                font.bold: true
+                font.pointSize: 22
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom // Use layout alignement instead (no anchors)
                 Layout.bottomMargin: 5
                 Layout.rightMargin: 7
+
                 text: lastIndex
                       ? (scalar*end_mm).toFixed(1)
                       : increment < 1
                         ? (scalar*(start_mm + (index + 1) * increment)).toFixed(1)
                         : (scalar*(start_mm + (index + 1) * increment)).toFixed(0)
-                color: root.color
-                font.bold: true
-                font.pointSize: 22
-                visible: parent.height >= height
             }
         }
     }
