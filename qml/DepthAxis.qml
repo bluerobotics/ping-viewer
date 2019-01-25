@@ -101,6 +101,9 @@ Item {
                 Layout.bottomMargin: 5
                 Layout.rightMargin: 7
 
+                style: Text.Outline
+                styleColor: "black"
+
                 text: lastIndex
                       ? (scalar*end_mm).toFixed(1)
                       : increment < 1
