@@ -145,11 +145,16 @@ Item {
         onPaint: {
             print(width, height)
             var ctx = getContext("2d")
+
             ctx.fillStyle = "red"
+            ctx.strokeStyle = "black"
+
             ctx.beginPath()
             ctx.moveTo(0, 0)
             ctx.lineTo(width, height/2)
             ctx.lineTo(0, height)
+            ctx.lineTo(0, 0)
+            ctx.stroke()
             ctx.fill()
         }
     }
