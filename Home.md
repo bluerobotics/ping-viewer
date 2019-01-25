@@ -1,15 +1,17 @@
-# Welcome to the Ping Viewer wiki!
+# *Ping Viewer* Documentation Wiki
 
-## **This documentation is a work-in-progress. Content may not be accurate and is subject to change**
+**Note: This documentation is a work-in-progress. Content may not be accurate and is subject to change.**
 
-Ping Viewer is the graphical user interface for the Blue Robotics Ping Echosounder. This application allows you to connect, configure, and view data from a Ping device.
+*Ping Viewer* is the graphical user interface for the [Blue Robotics *Ping* Altimeter and Echosounder](https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/). The application allows you to connect, configure, view data, and record data from a *Ping* device.
+
+![Ping Viewer main display](https://www.bluerobotics.com/wp-content/uploads/2019/01/ping-viewer-1.jpg)
 
 # Quick Start
 
 ## Installing and Running the Application
 TODO: Driver installation
 
-- **Windows**
+### Windows
 
     Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer_release.zip), open the download location in the File Explorer, and extract it. Open the application by double clicking the executable file (pingviewer.exe). Windows will ask you to trust the software; click **More Info** → **Run Anyway**.
 
@@ -17,7 +19,7 @@ TODO: Driver installation
   <img src="http://i.imgur.com/VKViZSgg.png">
 </p>
 
-- **Mac**
+### Mac
 
     Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
 
@@ -28,7 +30,7 @@ TODO: Driver installation
   <img src="http://i.imgur.com/a4wM4Rfg.jpg">
 </p>
 
-- Linux
+### Linux
 
     Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer-x86_64.AppImage). Edit the permissions of the .AppImage to have _executable_ permission with the command line: `chmod +x ping-viewer-linux.AppImage`. Open the AppImage by double clicking it, or execute it from the command line: `./ping-viewer-linux.AppImage`.
 
