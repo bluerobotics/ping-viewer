@@ -1,3 +1,6 @@
+*Ping Viewer* Documentation
+===========================
+
 *Ping Viewer* is the graphical user interface for the [Blue Robotics *Ping* Altimeter and Echosounder](https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/). The application allows you to connect, configure, view data, and record data from a *Ping* device.
 
 ![Ping Viewer main display](https://www.bluerobotics.com/wp-content/uploads/2019/01/ping-viewer-1.jpg)
