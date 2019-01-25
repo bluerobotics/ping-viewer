@@ -18,13 +18,13 @@ Item {
     Connections {
         target: ping
         onFlashProgress: {
-            flashProgress.indeterminate = false;
-            flashProgress.value = progress;
+            flashProgress.indeterminate = false
+            flashProgress.value = progress
         }
         onFlashComplete: {
             console.log("flash complete!")
-            flashProgress.value = 0.0;
-            flashProgress.indeterminate = true;
+            flashProgress.value = 0.0
+            flashProgress.indeterminate = true
         }
     }
 

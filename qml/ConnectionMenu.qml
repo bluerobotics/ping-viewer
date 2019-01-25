@@ -17,13 +17,13 @@ Item {
     function connect(connectionTypeEnum) {
         // Only connect from user input
         if(!parent.visible) {
-            return;
+            return
         }
 
         // Do not connect if no valid type or input
         if(connectionTypeEnum < AbstractLinkNamespace.None || connectionTypeEnum >= AbstractLinkNamespace.Last) {
             print("The connection configuration type is not valid!")
-            return;
+            return
         }
 
         // Transform arguments to Array and remove connectionTypeEnum from it
@@ -43,25 +43,25 @@ Item {
                     serialLayout.enabled = true
                     serialPortsCB.currentText = ping.link.configuration.argsAsConst()[0]
                     baudrateBox.currentText = ping.link.configuration.argsAsConst()[1]
-                    break;
+                    break
                 case AbstractLinkNamespace.Udp:
                     conntype.currentIndex = 1
                     udpLayout.enabled = true
                     serialLayout.enabled = false
                     udpIp.text = ping.link.configuration.argsAsConst()[0]
                     udpPort.text = ping.link.configuration.argsAsConst()[1]
-                    break;
+                    break
                 case AbstractLinkNamespace.PinkSimulation:
                     conntype.currentIndex = 2
                     udpLayout.enabled = false
                     serialLayout.enabled = false
-                    break;
+                    break
                 default:
                     print('Not valid link.')
                     print(ping.link.configuration.name())
                     print(ping.link.configuration.type())
                     print(ping.link.configuration.argsAsConst())
-                    return;
+                    return
             }
         }
     }

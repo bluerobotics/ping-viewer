@@ -261,7 +261,7 @@ Item {
                 print("Grab screen image callback")
                 print(FileManager.createFileName(FileManager.Pictures))
                 result.saveToFile(FileManager.createFileName(FileManager.Pictures))
-            });
+            })
         } else if (event.key == Qt.Key_W) {
             print("Grab waterfall image")
             event.accepted = true
@@ -270,7 +270,7 @@ Item {
                 print("Grab waterfall image callback")
                 print(FileManager.createFileName(FileManager.Pictures))
                 result.saveToFile(FileManager.createFileName(FileManager.Pictures))
-            });
+            })
         } else if (event.key == Qt.Key_R) {
             print("Clear waterfall")
             ping1DVisualizer.waterfallItem.clear()

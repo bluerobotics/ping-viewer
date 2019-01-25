@@ -45,7 +45,7 @@ Item {
                         from: 0
                         stepSize: 1
                         to: SettingsManager.debugMode ? ping.pingMaxFrequency : 30
-                        value: ping.pingFrequency;
+                        value: ping.pingFrequency
                         Layout.fillWidth: true
                         onValueChanged: {
                             if (ping.pingFrequency !== value) {
@@ -174,7 +174,7 @@ Item {
                         text: ""
                         validator: IntValidator {
                             bottom: 0
-                            top: SettingsManager.debugMode ? 1e6 : 7e5;
+                            top: SettingsManager.debugMode ? 1e6 : 7e5
                         }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
@@ -198,7 +198,7 @@ Item {
                         text: ""
                         validator: IntValidator {
                             bottom: 0
-                            top: SettingsManager.debugMode ? 1e6 : 7e5;
+                            top: SettingsManager.debugMode ? 1e6 : 7e5
                         }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
