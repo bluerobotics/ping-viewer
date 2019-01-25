@@ -24,6 +24,12 @@ All of the code is open-source, so you can modify it and contribute. Follow [Blu
 
 Take a look at [our documentation with **installation steps** and **technical information** about ping][2].
 
+## Downloads :package:
+
+- :computer: [Windows](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer_release.zip)
+- :apple: [Apple](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-release.dmg)
+- :penguin: [Linux](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-x86_64.AppImage)
+
 ## Resources
 
 * [Application Documentation][2]
