@@ -20,7 +20,7 @@ All of the code is open-source, so you can modify it and contribute. Follow [Blu
 
 <br/>
 
-## Quick Start
+## Quick Start :blue_book:
 
 Take a look at [our documentation with **installation steps** and **technical information** about ping][2].
 
@@ -30,7 +30,7 @@ Take a look at [our documentation with **installation steps** and **technical in
 - :apple: [Apple](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-release.dmg)
 - :penguin: [Linux](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-x86_64.AppImage)
 
-## Resources
+## Resources :paperclip:
 
 * [Application Documentation][2]
 * [API Reference][1]
