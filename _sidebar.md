@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-[Installation](home#installation)<br />
+[Installation](home#installing-and-running-the-application)<br />
 [Connection Setup](home#connection-setup)<br />
 [Principle of Operation](home#principle-of-operation)<br />
 [Main Application Interface](home#main-application-interface)<br />
