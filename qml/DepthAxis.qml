@@ -71,11 +71,11 @@ Item {
             Rectangle {
                 id: tick
                 width: 15
-                height: 2
+                height: 4
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 color: root.color
-                border.color: root.color
-                border.width: 1
+                border.color: "black"
+                border.width: 0.5
                 visible: parent.height > 0
             }
         }
