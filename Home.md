@@ -42,15 +42,11 @@ Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/relea
 
 > Remember to run the commands in the same path where the Appimage file is.
 
-***
-
 ## Connection Setup
 
 To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
 
 Visit the [Connection Settings](connection-settings) menu for more connection options.
-
-***
 
 ## Principle of Operation
 
@@ -69,8 +65,6 @@ The Ping device processes the data and attempts to lock on to the most likely ta
 #### Distance and Profile Measurements
 
 The device outputs the distance to the most likely target with the associated confidence. The device additionally outputs **Profile** samples, which consist of 200 signal strength measurements at regular distance intervals across the current scan range. These **Profile** samples provide a more detailed view of what might be in front of the Ping device. With the **Profile** data you can see fish in the water, determine if the device is picking up multiple reflections or interference from other acoustic devices, and possibly differentiate between eg. bare sand and plant life.
-
-***
 
 ## Main Application Interface
 
@@ -130,15 +124,11 @@ The Waterfall is a three dimensional plot that occupies the main portion of the 
 
 The color scheme (gradient) of the Waterfall can be [customized](display-settings).
 
-***
-
 ## Application and Device Settings
 
 See [here](display-settings) for instructions to switch between meters and feet for the application display.
 
 To adjust the update rate and other Ping device settings, visit the [device configuration](device-configuration) page.
-
-***
 
 ## Interpreting Profile Data
 
