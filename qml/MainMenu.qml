@@ -44,7 +44,7 @@ Item {
                         id: pingHzSlider
                         from: 0
                         stepSize: 1
-                        to: ping.pingMaxFrequency
+                        to: SettingsManager.debugMode ? ping.pingMaxFrequency : 30
                         value: ping.pingFrequency;
                         Layout.fillWidth: true
                         onValueChanged: {
