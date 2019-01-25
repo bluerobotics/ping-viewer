@@ -24,14 +24,14 @@ Item {
     property real scalar: SettingsManager.distanceUnits['distanceScalar']
 
     function getIncrement() {
-        var inc;
+        var inc
         for (var i = 0; i < validIncrements.length; i++) {
-            inc = validIncrements[i];
+            inc = validIncrements[i]
             if (length_mm / inc <= maxTicks) {
-                break;
+                break
             }
         }
-        return inc;
+        return inc
     }
 
     // Update increment size and number of ticks to display

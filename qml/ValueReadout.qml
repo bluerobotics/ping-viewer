@@ -86,7 +86,7 @@ Item {
     }
 
     MouseArea {
-        anchors.fill: parent;
+        anchors.fill: parent
         z: 1
         //acceptedButtons: Qt.LeftButton
         property var previousPosition
