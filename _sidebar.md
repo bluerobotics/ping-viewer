@@ -11,22 +11,21 @@
 
 ## Viewer Guide
 
-![](images/settings_black.svg.png) Application Settings<br />
-&nbsp;&nbsp;![](images/sun_black.svg.png) [Display Settings](display-settings)<br />
-&nbsp;&nbsp;![](images/connect.svg.png) [Connection Settings](connection-settings)
+<img src="images/settings_black.svg.png" height="14px"/> **Application Settings**<br />
+&nbsp;&nbsp;<img src="images/sun_black.svg.png" height="14px"/> [Display Settings](display-settings)<br />
+&nbsp;&nbsp;<img src="images/connect.svg.png" height="14px"/> [Connection Settings](connection-settings)
 
-![](images/arrow.png) [Device Settings](device-settings)<br />
-&nbsp;&nbsp;![](images/configure.svg.png) [Advanced Settings](device-settings#advanced-settings)<br />
-&nbsp;&nbsp;![](images/chip_black.svg.png) [Firmware Update](firmware-update)<br />
+<img src="images/arrow.png" height="14px"/> [**Device Settings**](device-settings)<br />
+&nbsp;&nbsp;<img src="images/configure.svg.png" height="14px"/> [Advanced Settings](device-settings#advanced-settings)<br />
+&nbsp;&nbsp;<img src="images/chip_black.svg.png" height="14px"/> [Firmware Update](firmware-update)<br />
 
-[Hotkeys and Shortcuts](hotkeys-and-shortcuts)<br />
-[Logging and User Files](logging-and-user-files)<br />
-![](images/bell.svg.png) [Notifications and Updates](notifications-and-updates)<br />
-
-![](images/disk_black.svg.png) [Replay Data](replay-data)<br />
-![](images/info_black.svg.png) [Application Information](application-information)
+<img src="images/bell.svg.png" height="14px"/> [Notifications and Updates](notifications-and-updates)<br />
+<img src="images/disk_black.svg.png" height="14px"/> [Replay Data](replay-data)<br />
+<img src="images/info_black.svg.png" height="14px"/> [Application Information](application-information)
 
 ## Advanced
 
-[FAQ and Troubleshooting](faq-and-troubleshooting)
+[Hotkeys and Shortcuts](hotkeys-and-shortcuts)<br />
+[Logging and User Files](logging-and-user-files)<br />
+[FAQ and Troubleshooting](faq-and-troubleshooting)<br />
 [Developers and OEMs](developers-and-oems)
