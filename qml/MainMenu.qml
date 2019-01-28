@@ -62,29 +62,41 @@ Item {
                 }
 
                 RowLayout {
-                    spacing: 5
+                    spacing: 2
 
-                    CheckBox {
-                        id: autoGainChB
-                        text: "Auto Gain"
-                        checked: ping.mode_auto
-                        onCheckedChanged: {
-                            ping.mode_auto = checked
-                        }
+                    Switch {
+                        text: "Ping Enabled"
+                        Layout.columnSpan: 1
+                        checked: ping.pingEnable
+                        onCheckedChanged: ping.pingEnable = checked
                     }
 
-                    ComboBox {
-                        id: gainCB
-                        currentIndex: ping.gain_index ? ping.gain_index : 0
-                        model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
-                        enabled: !autoGainChB.checked
-                        Layout.columnSpan:  3
-                        Layout.fillWidth: true
-                        onCurrentIndexChanged: {
-                            displayText = model[currentIndex] + " dB"
+                    Text {
+                        text: "Speed of Sound (m/s):"
+                        color: Material.primary
+                    }
+
+                    PingTextField {
+                        id: speedOfSound
+                        text: ""
+                        validator: DoubleValidator {
+                            // Values in m/s
+                            bottom: SettingsManager.debugMode ? 0 : 1400
+                            top: SettingsManager.debugMode ? 1e5 : 1600
                         }
-                        onActivated: {
-                            ping.gain_index = currentIndex
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+                        onEditingFinished: {
+                            var speed_of_sound = parseFloat(speedOfSound.text)
+                            ping.speed_of_sound = speed_of_sound * 1000 // mm/s
+                        }
+                        Connections {
+                            target: ping
+                            onSpeedOfSoundUpdate: {
+                                if (!speedOfSound.focus) {
+                                    speedOfSound.text = ping.speed_of_sound / 1000
+                                }
+                            }
                         }
                     }
 
@@ -120,42 +132,32 @@ Item {
                 }
 
                 RowLayout {
-                    spacing: 2
+                    spacing: 5
                     visible: SettingsManager.enableSensorAdvancedConfiguration
-                    Text {
-                        text: "Speed of Sound (m/s):"
-                        color: Material.primary
+
+
+                    CheckBox {
+                        id: autoGainChB
+                        text: "Auto Gain"
+                        checked: ping.mode_auto
+                        onCheckedChanged: {
+                            ping.mode_auto = checked
+                        }
                     }
 
-                    PingTextField {
-                        id: speedOfSound
-                        text: ""
-                        validator: DoubleValidator {
-                            // Values in m/s
-                            bottom: SettingsManager.debugMode ? 0 : 1400
-                            top: SettingsManager.debugMode ? 1e5 : 1600
-                        }
-                        Layout.columnSpan: 2
+                    ComboBox {
+                        id: gainCB
+                        currentIndex: ping.gain_index ? ping.gain_index : 0
+                        model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
+                        enabled: !autoGainChB.checked
+                        Layout.columnSpan:  1
                         Layout.fillWidth: true
-                        onEditingFinished: {
-                            var speed_of_sound = parseFloat(speedOfSound.text)
-                            ping.speed_of_sound = speed_of_sound * 1000 // mm/s
+                        onCurrentIndexChanged: {
+                            displayText = model[currentIndex] + " dB"
                         }
-                        Connections {
-                            target: ping
-                            onSpeedOfSoundUpdate: {
-                                if (!speedOfSound.focus) {
-                                    speedOfSound.text = ping.speed_of_sound / 1000
-                                }
-                            }
+                        onActivated: {
+                            ping.gain_index = currentIndex
                         }
-                    }
-
-                    Switch {
-                        text: "Ping Enabled"
-                        Layout.columnSpan: 1
-                        checked: ping.pingEnable
-                        onCheckedChanged: ping.pingEnable = checked
                     }
                 }
 
@@ -165,7 +167,7 @@ Item {
                     visible: SettingsManager.enableSensorAdvancedConfiguration
 
                     Text {
-                        text: "Start/Length (mm):"
+                        text: "Scan start point (mm):"
                         color: Material.primary
                     }
 
@@ -191,6 +193,11 @@ Item {
                                 }
                             }
                         }
+                    }
+
+                    Text {
+                        text: "Length (mm):"
+                        color: Material.primary
                     }
 
                     PingTextField {
