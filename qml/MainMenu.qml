@@ -63,14 +63,10 @@ Item {
 
                 RowLayout {
                     spacing: 2
-                    Text {
-                        text: "Speed of Sound (m/s):"
-                        color: Material.primary
-                    }
 
                     PingTextField {
                         id: speedOfSound
-                        text: ""
+                        title: "Speed of Sound (m/s):"
                         validator: DoubleValidator {
                             // Values in m/s
                             bottom: SettingsManager.debugMode ? 0 : 1400
@@ -164,14 +160,14 @@ Item {
                         }
                     }
 
-                    Text {
-                        text: "Scan start point (mm):"
-                        color: Material.primary
-                    }
+                RowLayout {
+                    spacing: 5
+                    enabled: !autoGainChB.checked
+                    visible: SettingsManager.enableSensorAdvancedConfiguration
 
                     PingTextField {
                         id: startLength
-                        text: ""
+                        title: "Scan start point (mm):"
                         validator: IntValidator {
                             bottom: 0
                             top: SettingsManager.debugMode ? 1e6 : 7e5
@@ -193,14 +189,9 @@ Item {
                         }
                     }
 
-                    Text {
-                        text: "Length (mm):"
-                        color: Material.primary
-                    }
-
                     PingTextField {
                         id: totalLength
-                        text: ""
+                        title: "Length (mm):"
                         validator: IntValidator {
                             bottom: 0
                             top: SettingsManager.debugMode ? 1e6 : 7e5
