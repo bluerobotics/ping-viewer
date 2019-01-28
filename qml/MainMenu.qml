@@ -157,7 +157,7 @@ Item {
                         Layout.columnSpan:  1
                         Layout.fillWidth: true
                         onCurrentIndexChanged: {
-                            displayText = model[currentIndex] + " dB"
+                            displayText = model[currentIndex]
                         }
                         onActivated: {
                             ping.gain_index = currentIndex
