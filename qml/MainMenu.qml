@@ -65,7 +65,7 @@ Item {
                     spacing: 2
 
                     Text {
-                        text: "Ping Enabled"
+                        text: "Ping Enabled:"
                         color: Material.primary
                     }
 
@@ -140,7 +140,7 @@ Item {
                     visible: SettingsManager.enableSensorAdvancedConfiguration
 
                     Text {
-                        text: "Auto Gain"
+                        text: "Auto Gain:"
                         color: Material.primary
                     }
 
