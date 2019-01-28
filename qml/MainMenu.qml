@@ -132,7 +132,6 @@ Item {
 
                 RowLayout {
                     spacing: 5
-                    enabled: !autoGainChB.checked
                     visible: SettingsManager.enableSensorAdvancedConfiguration
 
 
@@ -148,13 +147,19 @@ Item {
                         indicator.x: width - indicator.width - rightPadding - spacing
                     }
 
+                    Label {
+                        text: "Current Gain Setting:"
+                        enabled: !autoGainChB.checked
+                        color: Material.accent
+                        font.pixelSize: Text.font.pixelSize
+                    }
+
                     ComboBox {
                         id: gainCB
                         currentIndex: ping.gain_index ? ping.gain_index : 0
                         model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
                         enabled: !autoGainChB.checked
                         Layout.columnSpan:  1
-                        Layout.fillWidth: true
                         onCurrentIndexChanged: {
                             displayText = model[currentIndex]
                         }
@@ -162,6 +167,7 @@ Item {
                             ping.gain_index = currentIndex
                         }
                     }
+                }
 
                 RowLayout {
                     spacing: 5
