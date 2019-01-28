@@ -89,7 +89,7 @@ Item {
                     }
 
                     Switch {
-                        text: "Ping Enabled"
+                        text: "Ping Enabled:"
                         Layout.columnSpan: 1
                         checked: ping.pingEnable
                         onCheckedChanged: ping.pingEnable = checked
@@ -138,7 +138,7 @@ Item {
 
                     CheckBox {
                         id: autoGainChB
-                        text: "Auto Gain"
+                        text: "Auto Gain:"
                         checked: ping.mode_auto
                         onCheckedChanged: {
                             ping.mode_auto = checked
