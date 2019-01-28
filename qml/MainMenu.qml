@@ -64,8 +64,12 @@ Item {
                 RowLayout {
                     spacing: 2
 
-                    Switch {
+                    Text {
                         text: "Ping Enabled"
+                        color: Material.primary
+                    }
+
+                    Switch {
                         Layout.columnSpan: 1
                         checked: ping.pingEnable
                         onCheckedChanged: ping.pingEnable = checked
@@ -135,14 +139,22 @@ Item {
                     spacing: 5
                     visible: SettingsManager.enableSensorAdvancedConfiguration
 
+                    Text {
+                        text: "Auto Gain"
+                        color: Material.primary
+                    }
 
                     CheckBox {
                         id: autoGainChB
-                        text: "Auto Gain"
                         checked: ping.mode_auto
                         onCheckedChanged: {
                             ping.mode_auto = checked
                         }
+                    }
+
+                    Text {
+                        text: "Current Gain Setting:"
+                        color: Material.primary
                     }
 
                     ComboBox {
