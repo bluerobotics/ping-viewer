@@ -162,8 +162,7 @@ Item {
                         currentIndex: ping.gain_index ? ping.gain_index : 0
                         model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
                         enabled: !autoGainChB.checked
-                        Layout.columnSpan:  1
-                        Layout.fillWidth: true
+                        Layout.columnSpan: 1
                         onCurrentIndexChanged: {
                             displayText = model[currentIndex]
                         }
