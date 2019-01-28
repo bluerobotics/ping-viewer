@@ -143,6 +143,9 @@ Item {
                         onCheckedChanged: {
                             ping.mode_auto = checked
                         }
+                        contentItem.anchors.right: indicator.left
+                        contentItem.anchors.margins: spacing
+                        indicator.x: width - indicator.width - rightPadding - spacing
                     }
 
                     ComboBox {
