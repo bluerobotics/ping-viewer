@@ -62,66 +62,7 @@ Item {
                 }
 
                 RowLayout {
-                    spacing: 5
-
-                    CheckBox {
-                        id: autoGainChB
-                        text: "Auto Gain"
-                        checked: ping.mode_auto
-                        onCheckedChanged: {
-                            ping.mode_auto = checked
-                        }
-                    }
-
-                    ComboBox {
-                        id: gainCB
-                        currentIndex: ping.gain_index ? ping.gain_index : 0
-                        model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
-                        enabled: !autoGainChB.checked
-                        Layout.columnSpan:  3
-                        Layout.fillWidth: true
-                        onCurrentIndexChanged: {
-                            displayText = model[currentIndex] + " dB"
-                        }
-                        onActivated: {
-                            ping.gain_index = currentIndex
-                        }
-                    }
-
-                    PingImage {
-                        id: advancedSettingsButton
-                        source: StyleManager.configureIcon()
-                        height: 50
-                        width: 50
-                        selected: SettingsManager.enableSensorAdvancedConfiguration
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                advancedSettingsButton.selected = !advancedSettingsButton.selected
-                                SettingsManager.enableSensorAdvancedConfiguration = advancedSettingsButton.selected
-                            }
-                        }
-                    }
-
-                    PingImage {
-                        id: firmwareUpdateButton
-                        source: StyleManager.chipIcon()
-                        height: 50
-                        width: 50
-                        selected: false
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                firmwareUpdateButton.selected = !firmwareUpdateButton.selected
-                                firmwareUpdate.visible = firmwareUpdateButton.selected
-                            }
-                        }
-                    }
-                }
-
-                RowLayout {
                     spacing: 2
-                    visible: SettingsManager.enableSensorAdvancedConfiguration
                     Text {
                         text: "Speed of Sound (m/s):"
                         color: Material.primary
@@ -157,6 +98,37 @@ Item {
                         checked: ping.pingEnable
                         onCheckedChanged: ping.pingEnable = checked
                     }
+
+
+                    PingImage {
+                        id: advancedSettingsButton
+                        source: StyleManager.configureIcon()
+                        height: 50
+                        width: 50
+                        selected: SettingsManager.enableSensorAdvancedConfiguration
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                advancedSettingsButton.selected = !advancedSettingsButton.selected
+                                SettingsManager.enableSensorAdvancedConfiguration = advancedSettingsButton.selected
+                            }
+                        }
+                    }
+
+                    PingImage {
+                        id: firmwareUpdateButton
+                        source: StyleManager.chipIcon()
+                        height: 50
+                        width: 50
+                        selected: false
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                firmwareUpdateButton.selected = !firmwareUpdateButton.selected
+                                firmwareUpdate.visible = firmwareUpdateButton.selected
+                            }
+                        }
+                    }
                 }
 
                 RowLayout {
@@ -164,8 +136,33 @@ Item {
                     enabled: !autoGainChB.checked
                     visible: SettingsManager.enableSensorAdvancedConfiguration
 
+
+                    CheckBox {
+                        id: autoGainChB
+                        text: "Auto Gain"
+                        checked: ping.mode_auto
+                        onCheckedChanged: {
+                            ping.mode_auto = checked
+                        }
+                    }
+
+                    ComboBox {
+                        id: gainCB
+                        currentIndex: ping.gain_index ? ping.gain_index : 0
+                        model: [-4.4, 5.2, 14.8, 22.2, 29.6, 36.4, 43.2]
+                        enabled: !autoGainChB.checked
+                        Layout.columnSpan:  1
+                        Layout.fillWidth: true
+                        onCurrentIndexChanged: {
+                            displayText = model[currentIndex] + " dB"
+                        }
+                        onActivated: {
+                            ping.gain_index = currentIndex
+                        }
+                    }
+
                     Text {
-                        text: "Start/Length (mm):"
+                        text: "Scan start point (mm):"
                         color: Material.primary
                     }
 
@@ -191,6 +188,11 @@ Item {
                                 }
                             }
                         }
+                    }
+
+                    Text {
+                        text: "Length (mm):"
+                        color: Material.primary
                     }
 
                     PingTextField {
