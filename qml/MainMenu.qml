@@ -97,6 +97,9 @@ Item {
                         Layout.columnSpan: 1
                         checked: ping.pingEnable
                         onCheckedChanged: ping.pingEnable = checked
+                        contentItem.anchors.right: indicator.left
+                        contentItem.anchors.margins: spacing
+                        indicator.x: width - indicator.width - rightPadding
                     }
 
 
