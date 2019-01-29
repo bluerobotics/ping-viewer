@@ -2,7 +2,7 @@
 
 [![Travis Build Status](https://travis-ci.org/bluerobotics/ping-viewer.svg?branch=master)](https://travis-ci.org/bluerobotics/ping-viewer)
 [![Build status](https://ci.appveyor.com/api/projects/status/y4nl4spd3yw1s4bn/branch/master?svg=true)](https://ci.appveyor.com/project/blueroboticsappveyor/ping-viewer/branch/master)
-[![Gitter](https://img.shields.io/badge/gitter-online-green.svg)](https://gitter.im/bluerobotics/ardusub/)
+[![Gitter](https://img.shields.io/badge/gitter-online-green.svg)](https://gitter.im/bluerobotics/discussion/)
 ![](https://img.shields.io/github/commit-activity/4w/bluerobotics/ping-viewer.svg)
 ![](https://img.shields.io/github/search/bluerobotics/ping-viewer/TODO:.svg)
 
