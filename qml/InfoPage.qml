@@ -239,7 +239,7 @@ Item {
 
             PingImage {
                 id: resetSettings
-                source: StyleManager.settingsIcon()
+                source: StyleManager.resetIcon()
                 height: 50
                 width: 50
 
