@@ -67,6 +67,7 @@ Item {
                     PingTextField {
                         id: speedOfSound
                         title: "Speed of Sound (m/s):"
+                        text: ping.speed_of_sound / 1000
                         validator: DoubleValidator {
                             // Values in m/s
                             bottom: SettingsManager.debugMode ? 0 : 1400
@@ -77,12 +78,6 @@ Item {
                         onEditingFinished: {
                             var speed_of_sound = parseFloat(input)
                             ping.speed_of_sound = speed_of_sound * 1000 // mm/s
-                        }
-                        Connections {
-                            target: ping
-                            onSpeedOfSoundUpdate: {
-                                speedOfSound.text = ping.speed_of_sound / 1000
-                            }
                         }
                     }
 
@@ -175,6 +170,7 @@ Item {
                     PingTextField {
                         id: startLength
                         title: "Scan start point (mm):"
+                        text: ping.start_mm
                         validator: IntValidator {
                             bottom: 0
                             top: SettingsManager.debugMode ? 1e6 : 7e5
@@ -186,17 +182,12 @@ Item {
                             text = start_mm
                             ping.start_mm = start_mm
                         }
-                        Connections {
-                            target: ping
-                            onScanStartUpdate: {
-                                startLength.text = ping.start_mm
-                            }
-                        }
                     }
 
                     PingTextField {
                         id: totalLength
                         title: "Length (mm):"
+                        text: ping.length_mm
                         validator: IntValidator {
                             bottom: 0
                             top: SettingsManager.debugMode ? 1e6 : 7e5
@@ -211,12 +202,6 @@ Item {
                             }
                             text = length_mm
                             ping.length_mm = length_mm
-                        }
-                        Connections {
-                            target: ping
-                            onScanLengthUpdate: {
-                                totalLength.text = ping.length_mm
-                            }
                         }
                     }
                 }
