@@ -75,7 +75,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var speed_of_sound = parseFloat(speedOfSound.text)
+                            var speed_of_sound = parseFloat(input)
                             ping.speed_of_sound = speed_of_sound * 1000 // mm/s
                         }
                         Connections {
@@ -182,7 +182,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var start_mm = parseInt(text)
+                            var start_mm = parseInt(input)
                             text = start_mm
                             ping.start_mm = start_mm
                         }
@@ -204,8 +204,8 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var start_mm = parseInt(startLength.text)
-                            var length_mm = Math.min(parseInt(text), 50000 - start_mm)
+                            var start_mm = parseInt(input)
+                            var length_mm = Math.min(parseInt(input), 50000 - start_mm)
                             if(isNaN(length_mm)) {
                                 length_mm = 500
                             }
