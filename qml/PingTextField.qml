@@ -28,7 +28,6 @@ Item {
     Label {
         id: text
         color: Material.accent
-        font.pixelSize: textField.text.font.pixelSize
     }
 
     TextField {
