@@ -177,7 +177,7 @@ void Ping::connectLink(LinkType connType, const QStringList& connString)
 
 void Ping::handleMessage(PingMessage msg)
 {
-    qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id() << "Checksum Pass:" << msg.verifyChecksum();
+    qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id();
 
     auto& requestedId = requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(msg.message_id())];
     if(requestedId.waiting) {
