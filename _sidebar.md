@@ -26,5 +26,5 @@
 
 [Hotkeys and Shortcuts](hotkeys-and-shortcuts)<br />
 [Logging and User Files](logging-and-user-files)<br />
-[FAQ and Troubleshooting](faq-and-troubleshooting)<br />
+[**FAQ and Troubleshooting**](faq-and-troubleshooting)<br />
 [Developers and OEMs](developers-and-oems)
