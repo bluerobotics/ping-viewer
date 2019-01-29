@@ -12,7 +12,8 @@ Item {
     width: text.width + textField.width
     height: text.height
 
-    signal editingFinished()
+    // Emited when edition if finished with enter/return key or when TextField loses focus
+    signal editingFinished(var input)
 
     // This avoid connection interactions while user input is on
     onTextChanged: {
@@ -41,7 +42,7 @@ Item {
         onEditingFinished: {
             focus = false
             mainPage.forceActiveFocus()
-            root.editingFinished()
+            root.editingFinished(textField.text)
         }
 
         onActiveFocusChanged: {
