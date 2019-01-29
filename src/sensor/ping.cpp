@@ -455,7 +455,11 @@ const QString Ping::stm32flashPath()
 #else
     static QString binPath = QCoreApplication::applicationDirPath();
 #endif
+#ifdef Q_OS_WIN
+    return binPath + "/stm32flash.exe";
+#else
     return binPath + "/stm32flash";
+#endif
 }
 
 void Ping::flash(const QString& portLocation, const QString& firmwareFile, int baud, bool verify)
