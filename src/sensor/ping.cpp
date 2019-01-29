@@ -401,6 +401,7 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
     if(!QFile::exists(stm32flashPath())) {
         qCWarning(PING_PROTOCOL_PING) << "stm32flash is not available! Flash procedure will abort.";
+        qCWarning(PING_PROTOCOL_PING) << "Searching in: " << stm32flashPath();
         return;
     }
 
