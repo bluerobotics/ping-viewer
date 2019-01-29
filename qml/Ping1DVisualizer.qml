@@ -112,6 +112,8 @@ Item {
 
     ValueReadout {
         id: readout
+        x: 50
+        y: visualizer.height - height - 50
     }
 
     function confidenceToColor(confidence) {
