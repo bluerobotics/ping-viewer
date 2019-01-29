@@ -13,7 +13,7 @@ Ping Viewer should run on any modern computer.
 ### No Connection to the Device
 
 - Ensure that you have [installed the necessary drivers](home#installing-and-running-the-application)
-- Ensure that you have the [necessary permissions to access the usb device. Add your user to the correct group in order to gain access to the usb device.
+- Ensure that you have the necessary permissions to access the usb device. Add your user to the correct group in order to gain access to the usb device.
 
    - Ubuntu: `sudo usermod -a -G dialout $USER`
    - Archlinux: `sudo usermod -a -G uucp $USER`
