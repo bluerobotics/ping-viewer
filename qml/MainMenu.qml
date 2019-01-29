@@ -81,9 +81,7 @@ Item {
                         Connections {
                             target: ping
                             onSpeedOfSoundUpdate: {
-                                if (!speedOfSound.focus) {
-                                    speedOfSound.text = ping.speed_of_sound / 1000
-                                }
+                                speedOfSound.text = ping.speed_of_sound / 1000
                             }
                         }
                     }
@@ -191,9 +189,7 @@ Item {
                         Connections {
                             target: ping
                             onScanStartUpdate: {
-                                if (!startLength.focus) {
-                                    startLength.text = ping.start_mm
-                                }
+                                startLength.text = ping.start_mm
                             }
                         }
                     }
@@ -219,9 +215,7 @@ Item {
                         Connections {
                             target: ping
                             onScanLengthUpdate: {
-                                if (!totalLength.focus) {
-                                    totalLength.text = ping.length_mm
-                                }
+                                totalLength.text = ping.length_mm
                             }
                         }
                     }
