@@ -56,11 +56,12 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     QRegularExpressionMatch regexMatch = releaseTagRegex.match(projectTag);
     // Check if this actual version is a real release (normal or test)
     // Alarm people to download the correction version !
-    int actualVersion = regexMatch.hasMatch() ? semverToInt(projectTag) : -1.0;
+    // strip leading character with .mid(1)
+    int actualVersion = regexMatch.hasMatch() ? semverToInt(projectTag.mid(1)) : -1.0;
 
     // If this version does not follow vd+.d+.d+, this is a test or continuous release
     if(regexMatch.hasMatch()) {
-        qCDebug(NETWORKTOOL) << "Running release version:" << projectTag;
+        qCDebug(NETWORKTOOL) << "Running release version:" << projectTag << "#" << actualVersion;
     } else {
         releaseTagRegex.setPattern(QStringLiteral(R"([t,v]\d+\.\d+\.\d+)"));
         qCDebug(NETWORKTOOL) << "Running test version:" << projectTag;
@@ -92,7 +93,9 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
         }
         qCDebug(NETWORKTOOL) << "Possible new version.";
 
+        // strip leading character with .mid(1)
         auto version = semverToInt(versionString.mid(1));
+        qCDebug(NETWORKTOOL) << "comparing version:" << versionString << "#" << version;
         if(version > lastReleaseAvailable.version) {
             lastReleaseAvailable.version = version;
             lastReleaseAvailable.versionString = versionString;
