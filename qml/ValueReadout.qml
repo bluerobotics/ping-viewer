@@ -50,8 +50,6 @@ Item {
         id: mainLayout
         Text {
             id: readout
-            width: textMetrics.width
-            height: textMetrics.height
             text: (scalar*value).toFixed(precision) + units
             color: confidenceToColor(confidence)
             font.family: "Arial"
