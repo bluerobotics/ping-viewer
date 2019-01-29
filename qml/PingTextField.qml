@@ -6,13 +6,22 @@ import QtQuick.Layouts 1.3
 Item {
     id: root
     property alias title: text.text
-    property alias text: textField.text
+    property var text: ""
     property alias validator: textField.validator
 
     width: text.width + textField.width
     height: text.height
 
     signal editingFinished()
+
+    // This avoid connection interactions while user input is on
+    onTextChanged: {
+        if(textField.focus) {
+            return
+        }
+
+        textField.text = root.text
+    }
 
 
     Label {
