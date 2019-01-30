@@ -18,7 +18,7 @@ Follow the setup instructions for your operating system:
 
 ### Windows
 
-Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer_release.zip), open the download location in the File Explorer, and extract it. Open the application by double clicking the executable file (pingviewer.exe). Windows will ask you to trust the software; click **More Info** → **Run Anyway**.
+Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer_release.zip), open the download location in the File Explorer, and extract it. Open the application by double clicking the executable file (pingviewer.exe). Windows will ask you to trust the software; click **More Info** → **Run Anyway**.
 
 <p align="center">
   <img src="http://i.imgur.com/VKViZSgg.png">
@@ -26,7 +26,7 @@ Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/d
 
 ### Mac
 
-Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
+Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
 
 TODO check security settings
 TODO host images from local images folder
@@ -37,7 +37,7 @@ TODO host images from local images folder
 
 ### Linux
 
-Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/releases/download/t0.8.4/pingviewer-x86_64.AppImage). Edit the permissions of the .AppImage to have _executable_ permission with the command line: `chmod +x ping-viewer-linux.AppImage`. Open the AppImage by double clicking it, or execute it from the command line: `./ping-viewer-linux.AppImage`.
+Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-x86_64.AppImage). Edit the permissions of the .AppImage to have _executable_ permission with the command line: `chmod +x ping-viewer-linux.AppImage`. Open the AppImage by double clicking it, or execute it from the command line: `./ping-viewer-linux.AppImage`.
 
 > Remember to run the commands in the same path where the Appimage file is.
 
