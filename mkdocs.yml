@@ -1,0 +1,18 @@
+site_name: Ping Viewer
+theme: material
+nav:
+    - Quick Start: Home.md
+    - Viewer Guide:
+        - Device Settings:
+            - Settings: Device-Settings.md
+            - Firmware Update: Firmware-Update.md
+        - Application Settings:
+            - Display Settings: Display-Settings.md
+            - Connection Settings: Connection-Settings.md
+        - Notificiations and Updates: Notifications-and-Updates.md
+        - Replay Data: Replay-Data.md
+        - Application Information: Application-Information.md
+        - Hotkeys and Shortcuts: Hotkeys-and-Shortcuts.md
+        - Logging and User Files: Logging-and-User-Files.md
+        - FAQ and Troubleshooting: FAQ-and-Troubleshooting.md
+        - Developers and OEMs: Developers-and-OEMs.md
