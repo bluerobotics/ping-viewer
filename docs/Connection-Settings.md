@@ -6,7 +6,7 @@ The Ping device connection can also be configured explicitly in the Connection S
 
 TODO take new shot without sonar type
 <p align="center">
-    <img src="images/connection-settings.png">
+    <img src="../images/viewer/connection-settings.png">
 </p>
 
 ## Connection Types

@@ -1,6 +1,6 @@
 ## Notifications
 
-When notifications are available, you can display them by clicking on the bell icon in the bottom right hand corner of the Ping Viewer application window. To dismiss a single notification, click the ![](images/close.svg.png) icon on the notification. To dismiss all notifications, click the ![](images/clear.svg.png) icon at the bottom of the notification list.
+When notifications are available, you can display them by clicking on the bell icon in the bottom right hand corner of the Ping Viewer application window. To dismiss a single notification, click the ![](images/icons/close.png) icon on the notification. To dismiss all notifications, click the ![](images/icons/clear.png) icon at the bottom of the notification list.
 
 ## Application Updates
 

@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/display-settings.png">
+    <img src="../images/viewer/display-settings.png">
 </p>
 
 ## Menu Items

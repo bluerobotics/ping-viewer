@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/replay-data.png">
+    <img src="../images/viewer/replay-data.png">
 </p>
 
 The data from the Ping device is saved to a [log file](logging-and-user-files#sensor-logs). The data in these log files can be played back by the Ping Viewer application, and the result is that the data is displayed just the same as it was originally captured.

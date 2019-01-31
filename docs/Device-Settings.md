@@ -1,6 +1,6 @@
 TODO update image after layout rework
 <p align="center">
-    <img src="images/ping-settings.png">
+    <img src="../images/viewer/ping-settings.png">
 </p>
 
 ## Menu Items

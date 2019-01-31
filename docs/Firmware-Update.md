@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/firmware-update.png">
+    <img src="../images/viewer/firmware-update.png">
 </p>
 
 The Firmware Update menu allows you to update the programming on a Ping device.
@@ -12,6 +12,6 @@ Steps to flash the device:
 
 > Wait for the update process to complete before unplugging the device!
 
-![Progress bar in waiting state](images/firmware_update_waiting.gif)
+![Progress bar in waiting state](images/viewer/firmware-update-waiting.gif)
 
 TODO explain bootloader process and device recovery
