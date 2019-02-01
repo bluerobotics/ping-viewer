@@ -36,21 +36,25 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
+    // Singleton register
     qRegisterMetaType<AbstractLinkNamespace::LinkType>();
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
-    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager",
-            SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<NotificationManager>("NotificationManager", 1, 0, "NotificationManager",
             NotificationManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager",
+            SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<StyleManager>("StyleManager", 1, 0, "StyleManager", StyleManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
-    qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
-    qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
-    qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
-    qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
-    qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
 
+    // Normal register
+    qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
+    qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
+    qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
+    qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
+    qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
+
+    // Uncreatable register
     qmlRegisterUncreatableMetaObject(
         Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
     );
