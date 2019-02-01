@@ -5,7 +5,7 @@ theme:
     primary: 'light blue'
     accent: 'blue'
 nav:
-    - Quick Start: Home.md
+    - Quick Start: index.md
     - Viewer Guide:
         - Device Settings:
             - Settings: Device-Settings.md
