@@ -7,8 +7,6 @@
 
 **Note: This documentation is a work-in-progress. Content may not be accurate and is subject to change.**
 
-# Quick Start
-
 ## Installing and Running the Application
 
 Follow the setup instructions for your operating system:
