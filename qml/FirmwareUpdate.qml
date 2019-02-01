@@ -7,6 +7,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
+import Flasher 1.0
 import SettingsManager 1.0
 
 Item {
@@ -14,17 +15,31 @@ Item {
     height: settingsLayout.height
     width: settingsLayout.width
     property var ping: null
+    property var running: false
 
     Connections {
-        target: ping
+        target: ping.flasher
         onFlashProgress: {
-            flashProgress.indeterminate = false
+            running = true
             flashProgress.value = progress
         }
-        onFlashComplete: {
-            console.log("flash complete!")
-            flashProgress.value = 0.0
-            flashProgress.indeterminate = true
+        onFlashStateChanged: {
+            switch(state) {
+                case Flasher.Error:
+                    print("Flash procedure failed!")
+                    print("Error: ", ping.flasher.error)
+
+                case Flasher.FlashFinished:
+                    running = false
+                    flashProgress.value = 0.0
+                    break;
+                case Flasher.Flashing:
+                case Flasher.StartingFlash:
+                    running = true
+                    break;
+                default:
+                    running = true
+            }
         }
     }
 
@@ -40,88 +55,98 @@ Item {
                 label.x: width/2 - label.contentWidth/2
                 Layout.fillWidth: true
 
-                GridLayout {
+                ColumnLayout {
                     anchors.fill: parent
-                    columns: 10
-                    rowSpacing: 5
-                    columnSpacing: 5
 
-                    Text {
-                        text: "Current Firmware:"
-                        color: Material.primary
-                    }
-
-                    PingTextField {
-                        enabled: false
-                        Layout.columnSpan: SettingsManager.debugMode ? 3 : 9
+                    RowLayout {
                         Layout.fillWidth: true
-                        text: ping.firmware_version_major + "." + ping.firmware_version_minor
+
+                        ComboBox {
+                            id: automaticUpdateCB
+                            model: ["Automatic Update", "Manual Update"]
+                            Layout.fillWidth: true
+                        }
+
+                        ComboBox {
+                            id: baudComboBox
+                            // This should use the same values in Flasher::_validBaudRates
+                            model: [57600, 115200, 230400]
+                            Layout.fillWidth: true
+                            visible: SettingsManager.debugMode
+                        }
+
+                        CheckBox {
+                            id: verifyCB
+                            text: "Verify"
+                            visible: SettingsManager.debugMode
+                            checked: true
+                        }
+
+                        CheckBox {
+                            id: bootLoaderCB
+                            text: "Send reset"
+                            visible: SettingsManager.debugMode
+                            checked: true
+                        }
                     }
 
-                    ComboBox {
-                        id: baudComboBox
-                        // This should use the same values in Ping::FlashBaudrate
-                        model: [57600, 115200, 230400]
-                        Layout.columnSpan: 3
+                    RowLayout {
                         Layout.fillWidth: true
-                        visible: SettingsManager.debugMode
-                    }
 
-                    CheckBox {
-                        id: verifyCB
-                        text: "Verify"
-                        visible: SettingsManager.debugMode
-                        Layout.columnSpan: 2
-                        checked: true
-                    }
+                        Label {
+                            text: "Current Firmware: " + ping.firmware_version_major + "." + ping.firmware_version_minor
+                        }
 
-                    CheckBox {
-                        id: bootLoaderCB
-                        text: "Send reset"
-                        visible: SettingsManager.debugMode
-                        Layout.columnSpan: 1
-                        checked: true
-                    }
+                        Label {
+                            id: firmwareLabel
+                            text: "Firmware File: " + fileDialog.fileName
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignRight
+                            visible: automaticUpdateCB.currentIndex === 1
+                        }
 
-                    Text {
-                        id: firmwareLabel
-                        text: "Firmware File:"
-                        color: Material.primary
-                    }
+                        Label {
+                            text: "Latest version: "
+                            visible: automaticUpdateCB.currentIndex === 0
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignRight
+                        }
 
-                    PingTextField {
-                        id: firmwareFileName
-                        enabled: false
-                        Layout.columnSpan:  8
-                        Layout.fillWidth: true
-                        text: fileDialog.fileName
-                    }
+                        ComboBox {
+                            id: fwCombo
+                            visible: automaticUpdateCB.currentIndex === 0
+                            model: Object.keys(ping.firmwaresAvailable)
+                            Layout.minimumWidth: 220
+                        }
 
-                    PingButton {
-                        text: "Browse.."
-                        enabled: flashProgress.indeterminate
-                        onClicked: {
-                            fileDialog.visible = true
+                        PingButton {
+                            id: browseBt
+                            text: "Browse.."
+                            enabled: !running
+                            visible: automaticUpdateCB.currentIndex === 1
+                            onClicked: {
+                                fileDialog.visible = true
+                            }
                         }
                     }
 
                     PingButton {
                         text: "Firmware Update"
-                        Layout.columnSpan:  10
                         Layout.fillWidth: true
-                        enabled: fileDialog.fileUrl != undefined && flashProgress.indeterminate
+                        enabled: !running && ((fwCombo.currentText != "" && !browseBt.visible) || (fileDialog.fileName != "" && browseBt.visible))
 
                         onClicked: {
                             var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
                             var verify = SettingsManager.debugMode ? verifyCB.checked : true
-                            ping.firmwareUpdate(fileDialog.fileUrl, bootLoaderCB.checked, baud, verifyCB.checked)
+                            var path = automaticUpdateCB.currentIndex ? fileDialog.fileUrl : ping.firmwaresAvailable[fwCombo.currentText]
+                            running = true
+                            ping.firmwareUpdate(path, bootLoaderCB.checked, baud, verifyCB.checked)
                         }
                     }
 
                     ProgressBar {
                         id: flashProgress
-                        indeterminate: true
-                        Layout.columnSpan: 10
+                        indeterminate: !running
                         Layout.fillWidth: true
                         value: 0.0
                         from: 0.0
