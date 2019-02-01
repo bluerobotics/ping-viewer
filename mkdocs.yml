@@ -1,5 +1,9 @@
 site_name: Ping Viewer
-theme: material
+theme:
+  name: material
+  palette:
+    primary: 'light blue'
+    accent: 'blue'
 nav:
     - Quick Start: Home.md
     - Viewer Guide:
