@@ -1,0 +1,10 @@
+dist: xenial
+
+language: minimal
+
+install:
+  - sudo pip install mkdocs-material
+
+script:
+  - git remote set-url origin https://${GITHUB_TOKEN}@github.com/bluerobotics/ping-viewer
+  - mkdocs gh-deploy --force
