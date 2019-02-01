@@ -8,8 +8,8 @@ Item {
     property alias folder: fileDialog.folder
     property alias title: fileDialog.title
 
-    property var fileName
-    property var fileUrl
+    property var fileName: ""
+    property var fileUrl: ""
     property alias nameFilters: fileDialog.nameFilters
 
     signal accepted(var file)
