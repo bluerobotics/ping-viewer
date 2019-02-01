@@ -464,22 +464,9 @@ signals:
 ///@}
 
     /**
-     * @brief Emit firmware update progress
-     *
-     * @param progress
-     */
-    void flashProgress(float progress);
-
-    /**
-     * @brief Emit when firmware update finished
-     *
-     */
-    void flashComplete();
-
-    /**
-     * @brief Emit when lost messages is updated
-     *
-     */
+    * @brief Emit when lost messages is updated
+    *
+    */
     void lostMessagesUpdate();
 
 private:
@@ -515,8 +502,6 @@ private:
     bool _ping_enable = false;
 ///@}
 
-    float _fw_update_perc;
-
     static const uint16_t _num_points = 200;
 
     // TODO: maybe use vector or uint8_t[] here
@@ -532,13 +517,19 @@ private:
     void handleMessage(PingMessage msg); // handle incoming message
     void writeMessage(const PingMessage& msg); // write a message to link
 
-    static const QString stm32flashPath();
-    void firmwareUpdatePercentage();
-    void flash(const QString& portLocation, const QString& firmwareFile, int baud = 57600, bool verify = true);
-
     void loadLastPingConfigurationSettings();
     void updatePingConfigurationSettings();
     void setLastPingConfiguration();
+
+    /**
+     * @brief Internal function used to use as a flash callback
+     *
+     * @param fileUrl Firmware file path
+     * @param sendPingGotoBootloader Use "goto bootloader" message
+     * @param baud baud rate value
+     * @param verify this variable is true when all
+     */
+    void flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, bool verify);
 
     /**
      * @brief Reset sensor local variables
