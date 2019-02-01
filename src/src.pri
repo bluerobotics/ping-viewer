@@ -16,6 +16,7 @@ test {
 }
 
 include($$PWD/filemanager/filemanager.pri)
+include($$PWD/flash/flash.pri)
 include($$PWD/link/link.pri)
 include($$PWD/logger/logger.pri)
 include($$PWD/network/network.pri)
