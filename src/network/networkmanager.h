@@ -33,6 +33,14 @@ public:
     static void requestJson(const QUrl& url, std::function<void(QJsonDocument&)> function);
 
     /**
+     * @brief Download a file and save in a temporary one
+     *
+     * @param url File to be downloaded
+     * @param function Callback supplied with tmeporary file path of downloaded file
+     */
+    static void download(const QUrl& url, std::function<void(QString)> function);
+
+    /**
      * @brief Return a pointer of this singleton to the qml register function
      *
      * @param engine
