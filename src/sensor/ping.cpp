@@ -634,10 +634,7 @@ void Ping::writeMessage(const PingMessage &msg)
 
 void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
 {
-    struct {
-        float version = 0.0;
-        QString downloadUrl;
-    } versionAvailable;
+    float lastVersionAvailable = 0.0;
 
     auto filesPayload = jsonDocument.array();
     for(const QJsonValue& filePayload : filesPayload) {
@@ -646,17 +643,20 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
         // Get version from Ping_V(major).(patch)_115kb.hex where (major).(patch) is <version>
         static const QRegularExpression versionRegex(QStringLiteral(R"(Ping_V(?<version>\d+\.\d+)_115kb\.hex)"));
         auto filePayloadVersion = versionRegex.match(filePayload["name"].toString()).captured("version").toFloat();
-        if(filePayloadVersion > versionAvailable.version) {
-            versionAvailable.version = filePayloadVersion;
-            versionAvailable.downloadUrl = filePayload["download_url"].toString();
+        _firmwares[filePayload["name"].toString()] = filePayload["download_url"].toString();
+
+        if(filePayloadVersion > lastVersionAvailable) {
+            lastVersionAvailable = filePayloadVersion;
         }
     }
+    emit firmwaresAvailableUpdate();
 
     auto sensorVersion = QString("%1.%2").arg(_firmware_version_major).arg(_firmware_version_minor).toFloat();
-    if(versionAvailable.version > sensorVersion) {
+    static QString firmwareUpdateSteps{"https://github.com/bluerobotics/ping-viewer/wiki/firmware-update"};
+    if(lastVersionAvailable > sensorVersion) {
         QString newVersionText =
-            QStringLiteral("Firmware update for Ping available: %1<br>").arg(versionAvailable.version) +
-            QStringLiteral("<a href=\"%1\">DOWNLOAD IT HERE!</a>").arg(versionAvailable.downloadUrl);
+            QStringLiteral("Firmware update for Ping available: %1<br>").arg(lastVersionAvailable) +
+            QStringLiteral("<a href=\"%1\">Check firmware update steps here!</a>").arg(firmwareUpdateSteps);
         NotificationManager::self()->create(newVersionText, "green", StyleManager::infoIcon());
     }
 }
