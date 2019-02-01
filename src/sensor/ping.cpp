@@ -16,6 +16,7 @@
 
 #include "hexvalidator.h"
 #include "link/seriallink.h"
+#include "networkmanager.h"
 #include "networktool.h"
 #include "notificationmanager.h"
 #include "settingsmanager.h"
@@ -394,24 +395,38 @@ void Ping::handleMessage(PingMessage msg)
 
 void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
+    if(fileUrl.contains("http")) {
+        NetworkManager::self()->download(fileUrl, [this, sendPingGotoBootloader, baud, verify](const QString& path) {
+            qCDebug(FLASH) << "Downloaded firmware:" << path;
+            flash(path, sendPingGotoBootloader, baud, verify);
+        });
+    } else {
+        flash(fileUrl, sendPingGotoBootloader, baud, verify);
+    }
+}
+
+void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
+{
+    flasher()->flashStateChanged(Flasher::StartingFlash);
     if(!HexValidator::isValidFile(fileUrl)) {
-        qCWarning(PING_PROTOCOL_PING) << "File does not contain a valid Intel Hex format:" << fileUrl;
+        auto errorMsg = QStringLiteral("File does not contain a valid Intel Hex format: %1").arg(fileUrl);
+        qCWarning(PING_PROTOCOL_PING) << errorMsg;
+        flasher()->setError(errorMsg);
         return;
     };
 
-    if(!QFile::exists(stm32flashPath())) {
-        qCWarning(PING_PROTOCOL_PING) << "stm32flash is not available! Flash procedure will abort.";
-        qCWarning(PING_PROTOCOL_PING) << "Searching in: " << stm32flashPath();
-        return;
-    }
-
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
-
     if (!serialLink) {
+        auto errorMsg = QStringLiteral("It's only possible to flash via serial.");
+        qCWarning(PING_PROTOCOL_PING) << errorMsg;
+        flasher()->setError(errorMsg);
         return;
     }
 
     if(!link()->isOpen()) {
+        auto errorMsg = QStringLiteral("Link is not open to do the flash procedure.");
+        qCWarning(PING_PROTOCOL_PING) << errorMsg;
+        flasher()->setError(errorMsg);
         return;
     }
 
@@ -435,9 +450,8 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
     qCDebug(PING_PROTOCOL_PING) << "Finish connection.";
     // TODO: Move thread delay to something more.. correct.
-    QThread::msleep(500);
+    QThread::msleep(1000);
     link()->finishConnection();
-
 
     QSerialPortInfo pInfo(serialLink->port()->portName());
     QString portLocation = pInfo.systemLocation();
@@ -446,75 +460,25 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
     updatePingConfigurationSettings();
 
     qCDebug(PING_PROTOCOL_PING) << "Start flash.";
+    QThread::msleep(1000);
+
+    flasher()->setBaudRate(baud);
+    flasher()->setFirmwarePath(fileUrl);
+    flasher()->setLink(link()->configuration()[0]);
+    flasher()->setVerify(verify);
+    flasher()->flash();
+
     QThread::msleep(500);
-    flash(portLocation, fileUrl, baud, verify);
-}
-
-const QString Ping::stm32flashPath()
-{
-#ifdef Q_OS_OSX
-    // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-    static QString binPath = QCoreApplication::applicationDirPath() + "/../..";
-#else
-    static QString binPath = QCoreApplication::applicationDirPath();
-#endif
-#ifdef Q_OS_WIN
-    return binPath + "/stm32flash.exe";
-#else
-    return binPath + "/stm32flash";
-#endif
-}
-
-void Ping::flash(const QString& portLocation, const QString& firmwareFile, int baud, bool verify)
-{
-    QFileInfo firmwareFileInfo(firmwareFile);
-    if(!firmwareFileInfo.exists()) {
-        qCCritical(PING_PROTOCOL_PING) << "Firmware file dows not exist:" << firmwareFile;
-        return;
-    }
-
-    static QString cmd = QStringLiteral("\"%0\" -w \"%1\" %2 -g 0x0 -b %3 %4").arg(
-                             stm32flashPath(),
-                             firmwareFileInfo.absoluteFilePath(),
-                             verify ? "-v" : "",
-                             QString::number(baud),
-                             portLocation
-                         );
-
-    _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
-    _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
-    _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
-    qCDebug(PING_PROTOCOL_PING) << "3... 2... 1...";
-    qCDebug(PING_PROTOCOL_PING) << cmd;
-    _firmwareProcess->start(cmd);
-    emit flashProgress(0);
-    connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, &Ping::firmwareUpdatePercentage);
-}
-
-void Ping::firmwareUpdatePercentage()
-{
-    QString output(_firmwareProcess->readAllStandardOutput());
-    // Track values like: (12.23%)
-    QRegularExpression regex("\\d{1,3}[.]\\d\\d");
-    QRegularExpressionMatch match = regex.match(output);
-    if(match.hasMatch()) {
-        QStringList percs = match.capturedTexts();
-        for(const auto& perc : percs) {
-            _fw_update_perc = perc.toFloat();
-
-            if (_fw_update_perc > 99.99) {
-                emit flashComplete();
-                QThread::msleep(500);
-                // Clear last configuration src ID to detect device as a new one
-                resetSensorLocalVariables();
-                detector()->scan();
-            } else {
-                emit flashProgress(_fw_update_perc);
-            }
+    // Clear last configuration src ID to detect device as a new one
+    connect(&_flasher, &Flasher::flashStateChanged, this, [this](Flasher::States state) {
+        if(state == Flasher::States::FlashFinished) {
+            QThread::msleep(500);
+            // Clear last configuration src ID to detect device as a new one
+            resetSensorLocalVariables();
+            detector()->scan();
         }
-    }
 
-    qCDebug(PING_PROTOCOL_PING) << output;
+    });
 }
 
 void Ping::request(int id)

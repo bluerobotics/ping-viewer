@@ -121,7 +121,7 @@ protected:
     bool _connected;
     ProtocolDetector* _detector;
     QThread _detectorThread;
-    // For now this will be structures by: name, baudrate, path
+    // For now this will be structures by: firmware file name, and remote address
     // TODO: A Model should be created to handle this for us
     QMap<QString, QVariant> _firmwares;
     // This class should be a singleton that will work with the future DeviceManager class
