@@ -52,7 +52,7 @@ Visit the [Connection Settings](connection-settings) menu for more connection op
 The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and reflects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
 
 <p align="center">
-    <img src="../images/echo.png">
+    <img src="images/echo.png">
 </p>
 
 See the Wikipedia articles on [Echo sounding](https://en.wikipedia.org/wiki/Echo_sounding) and [Fishfinders](https://en.wikipedia.org/wiki/Fishfinder) for more information on how the device operates.
@@ -76,7 +76,7 @@ The Ping Viewer window consists of four important components:
 TODO use default color gradient
 
 <p align="center">
-    <img src="../images/viewer/annotated/interface-annotated.png">
+    <img src="images/viewer/annotated/interface-annotated.png">
 </p>
 
 TODO add closeups for each
@@ -84,7 +84,7 @@ TODO add closeups for each
 #### Distance Readout
 
 <p align="center">
-    <img src="../images/viewer/distance-readout-closeup.png">
+    <img src="images/viewer/distance-readout-closeup.png">
 </p>
 
 The Distance Readout displays the distance to the target in the most recent measurement. This is the distance to the seafloor in [depth sounding](https://en.wikipedia.org/wiki/Depth_sounding) applications.
@@ -96,7 +96,7 @@ The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcu
 #### Distance Axis
 
 <p align="center">
-    <img src="../images/viewer/distance-axis-closeup.png">
+    <img src="images/viewer/distance-axis-closeup.png">
 </p>
 
 The Distance Axis is labeled with bold numbers on the right-hand edge of the Waterfall. This axis represents the distance from the Ping device transducer. The axis runs vertically down the screen, with the face of the transducer (zero distance) located at the top of the window. The deeper/farther an object is from the transducer, the closer its return will appear to the bottom of the window. The Distance Axis scale automatically adjusts to display the current scanning range of the Ping device.
@@ -106,7 +106,7 @@ There is an orange arrow on the Distance Axis indicating the distance to the tar
 #### Return Plot
 
 <p align="center">
-    <img src="../images/viewer/return-plot-closeup.png">
+    <img src="images/viewer/return-plot-closeup.png">
 </p>
 
 The Return Plot displays the return strength vs distance of the most recent [**Profile**](#distance-and-profile-measurements) sample. The plot displays the measurement of only a single dependent variable (return strength), and is simply mirrored for ease of viewing. Stronger returns appear as wider traces.
@@ -116,7 +116,7 @@ The Return Plot displays the return strength vs distance of the most recent [**P
 #### Waterfall
 
 <p align="center">
-    <img src="../images/viewer/waterfall-closeup.png">
+    <img src="images/viewer/waterfall-closeup.png">
 </p>
 
 The Waterfall is a three dimensional plot that occupies the main portion of the application window. The Waterfall plots consecutive [**Profile**](#distance-and-profile-measurements) samples (distance running vertically and color indicating signal strength). The horizontal axis is time; new data is displayed on the right edge of the Waterfall as older data moves to the left.
