@@ -2,6 +2,7 @@
 
 #include <QPointer>
 
+#include "flasher.h"
 #include "link.h"
 #include "parsers/parser.h"
 #include "protocoldetector.h"
@@ -94,11 +95,27 @@ public:
      */
     QThread* detectorThread() { return &_detectorThread; };
 
+
+    /**
+     * @brief Return flasher class used by this sensor
+     *  TODO: This should be moved to a singleton flasher instance
+     *  But to do such thing, is necessary a DeviceManager to deal with multiple devices and to manage the flash
+     *   procedure.
+     *
+     * @return Flasher*
+     */
+    Flasher* flasher() { return &_flasher; };
+    Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
+
+
 protected:
     bool _autodetect;
     bool _connected;
     ProtocolDetector* _detector;
     QThread _detectorThread;
+    // This class should be a singleton that will work with the future DeviceManager class
+    // TODO: Move to a singleton and integrate with DeviceManager
+    Flasher _flasher;
     QSharedPointer<Link> _linkIn;
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation
