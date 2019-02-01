@@ -97,6 +97,14 @@ public:
 
 
     /**
+     * @brief Return the list of firmwares available to download
+     *
+     * @return QMap<QString, QVariant>
+     */
+    QMap<QString, QVariant> firmwaresAvailable() { return _firmwares; };
+    Q_PROPERTY(QMap<QString, QVariant> firmwaresAvailable READ firmwaresAvailable NOTIFY firmwaresAvailableUpdate)
+
+    /**
      * @brief Return flasher class used by this sensor
      *  TODO: This should be moved to a singleton flasher instance
      *  But to do such thing, is necessary a DeviceManager to deal with multiple devices and to manage the flash
@@ -113,6 +121,9 @@ protected:
     bool _connected;
     ProtocolDetector* _detector;
     QThread _detectorThread;
+    // For now this will be structures by: name, baudrate, path
+    // TODO: A Model should be created to handle this for us
+    QMap<QString, QVariant> _firmwares;
     // This class should be a singleton that will work with the future DeviceManager class
     // TODO: Move to a singleton and integrate with DeviceManager
     Flasher _flasher;
@@ -129,8 +140,9 @@ signals:
     void connectionClose();
     void connectionOpen();
     void connectionUpdate();
-    void nameUpdate();
+    void firmwaresAvailableUpdate();
     void linkUpdate();
+    void nameUpdate();
 
     // Out
     void linkLogUpdate();
