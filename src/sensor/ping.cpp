@@ -415,6 +415,8 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
         return;
     }
 
+    // Stop requests and messages from the sensor
+    _periodicRequestTimer.stop();
     setPingFrequency(0);
 
     if (sendPingGotoBootloader) {
