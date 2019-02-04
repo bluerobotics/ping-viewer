@@ -144,7 +144,6 @@ Item {
                         text: "Current Gain Setting:"
                         enabled: !autoGainChB.checked
                         color: Material.accent
-                        font.pixelSize: Text.font.pixelSize
                     }
 
                     ComboBox {
