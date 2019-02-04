@@ -88,17 +88,18 @@ public:
      */
     void stop() { _active = false; };
 
-public slots:
-    void scan();
-
 signals:
     void connectionDetected(LinkConfiguration linkConf);
+    void scan();
 
 protected:
     bool canOpenPort(QSerialPortInfo& port, int msTimeout);
     bool checkSerial(LinkConfiguration& linkConf);
     bool checkUdp(LinkConfiguration& linkConf);
     QVector<LinkConfiguration> updateLinkConfigurations(QVector<LinkConfiguration>& linkConfig) const;
+
+private slots:
+    void doScan();
 
 private:
     Q_DISABLE_COPY(ProtocolDetector)

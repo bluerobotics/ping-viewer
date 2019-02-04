@@ -26,9 +26,16 @@ ProtocolDetector::ProtocolDetector()
         {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 standard connection"},
         {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}
     });
+
+    /** Encapsulate doScan to avoid direct call.
+     * This protect us to freeze the main loop calling doScan directly
+     * doScan should only be called by connection from others threads
+     * or calling scan directly (that is a signal emission).
+     */
+    connect(this, &ProtocolDetector::scan, this, &ProtocolDetector::doScan);
 };
 
-void ProtocolDetector::scan()
+void ProtocolDetector::doScan()
 {
     _active = true;
     LinkConfiguration linkConf;
