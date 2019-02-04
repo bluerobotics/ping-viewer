@@ -7,6 +7,7 @@ Item {
 
     property alias folder: fileDialog.folder
     property alias title: fileDialog.title
+    property alias shortcuts: fileDialog.shortcuts
 
     property var fileName: ""
     property var fileUrl: ""
