@@ -57,7 +57,7 @@ bool SerialLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 bool SerialLink::finishConnection()
 {
     _port.close();
-    qCDebug(PING_PROTOCOL_SERIALLINK) << "port closed";
+    qCDebug(PING_PROTOCOL_SERIALLINK) << "Port closed.";
     return true;
 }
 
