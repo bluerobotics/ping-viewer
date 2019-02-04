@@ -487,7 +487,7 @@ private:
     uint16_t _firmware_version_minor = 0;
 
     uint32_t _distance = 0; // mm
-    uint8_t _confidence = 0; // 0-100%
+    uint16_t _confidence = 0; // 0-100%
     uint16_t _pulse_duration = 0;
     uint32_t _ping_number = 0;
     uint32_t _scan_start = 0;
