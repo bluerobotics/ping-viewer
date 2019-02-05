@@ -117,7 +117,7 @@ public:
      *
      * @return const QString
      */
-    const QString createConfString() const { return _linkConf.args.join(":"); };
+    Q_INVOKABLE const QString createConfString() const { return _linkConf.args.join(":"); };
 
     /**
      * @brief Create and return a configuration in string list format
