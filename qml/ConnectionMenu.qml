@@ -184,10 +184,10 @@ Item {
                     Layout.columnSpan:  2
                     Layout.fillWidth: true
                     onEditingFinished: {
-                        if (udpIp.text == "0.0.0.0" || udpIp.text == "localhost") {
-                            udpIp.text = "127.0.0.1"
+                        if (input == "0.0.0.0" || input == "localhost") {
+                            text = "127.0.0.1"
                         }
-                        connect(AbstractLinkNamespace.Udp, udpIp.text, udpPort.text)
+                        connect(AbstractLinkNamespace.Udp, text, udpPort.text)
                     }
                 }
 
