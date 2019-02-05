@@ -35,6 +35,12 @@ Item {
                 font.pointSize: 8
             }
             Text {
+                text: "Connection: " + ping.link.configuration.createConfString()
+                color: "white"
+                font.family: "unicode"
+                font.pointSize: 8
+            }
+            Text {
                 text: "Distance (mm): " + ping.distance
                 color: "white"
                 font.family: "unicode"
