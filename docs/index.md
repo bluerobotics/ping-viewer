@@ -10,6 +10,7 @@
 ## Installing and Running the Application
 
 Follow the setup instructions for your operating system:
+
 - [Windows](https://github.com/bluerobotics/ping-viewer/wiki#windows)
 - [Mac](https://github.com/bluerobotics/ping-viewer/wiki#mac)
 - [Linux](https://github.com/bluerobotics/ping-viewer/wiki#linux)
@@ -79,6 +80,7 @@ The device outputs the distance to the most likely target with the associated co
 ## Main Application Interface
 
 The Ping Viewer window consists of four important components:
+
 1. [Distance Readout](#distance-readout)
 2. [Distance Axis](#distance-axis)
 3. [Return Plot](#return-plot)
