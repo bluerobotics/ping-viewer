@@ -47,7 +47,7 @@ If you get an 'unidentified developer' notification when you try to open the app
 </p>
 
 ### Linux
-wiki/
+
 Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-x86_64.AppImage). Edit the permissions of the .AppImage to have _executable_ permission with the command line: `chmod +x ping-viewer-linux.AppImage`. Open the AppImage by double clicking it, or execute it from the command line: `./ping-viewer-linux.AppImage`.
 
 > Remember to run the commands in the same path where the Appimage file is.
