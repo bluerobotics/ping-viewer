@@ -84,8 +84,6 @@ The Ping Viewer window consists of four important components:
 3. [Return Plot](#return-plot)
 4. [Waterfall](#waterfall)
 
-TODO use default color gradient
-
 <p align="center">
     <img src="images/viewer/annotated/interface-annotated.png">
 </p>
