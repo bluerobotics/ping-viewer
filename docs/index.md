@@ -20,17 +20,15 @@ Follow the setup instructions for your operating system:
 Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer_release.zip), open the download location in the File Explorer, and extract it. Open the application by double clicking the executable file (pingviewer.exe). Windows will ask you to trust the software; click **More Info** → **Run Anyway**.
 
 <p align="center">
-  <img src="http://i.imgur.com/VKViZSgg.png">
+  <img src="images/install/windows-protected-your-pc.png">
 </p>
 
 ### Mac
 
 Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
 
-TODO host images from local images folder
-
 <p align="center">
-  <img src="http://i.imgur.com/a4wM4Rfg.jpg">
+  <img src="images/install/mac-install-from-dmg.jpg">
 </p>
 
 If you get an 'unidentified developer' notification when you try to open the application, you may adjust your security preferences to allow the application to run. Visit **System Preferences** -> **Security and Privacy**, click the lock and enter your password to make changes, then click 'Open Anyway'.
