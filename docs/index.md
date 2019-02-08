@@ -26,11 +26,24 @@ Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/d
 
 Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
 
-TODO check security settings
 TODO host images from local images folder
 
 <p align="center">
   <img src="http://i.imgur.com/a4wM4Rfg.jpg">
+</p>
+
+If you get an 'unidentified developer' notification when you try to open the application, you may adjust your security preferences to allow the application to run. Visit **System Preferences** -> **Security and Privacy**, click the lock and enter your password to make changes, then click 'Open Anyway'.
+
+<p align="center">
+  <img src="images/install/mac-unidentified-developer.png">
+</p>
+
+<p align="center">
+  <img src="images/install/mac-system-preferences-annotated.png">
+</p>
+
+<p align="center">
+  <img src="images/install/mac-security-and-privacy-annotated.png">
 </p>
 
 ### Linux
