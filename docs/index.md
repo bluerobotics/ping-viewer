@@ -88,8 +88,6 @@ The Ping Viewer window consists of four important components:
     <img src="images/viewer/annotated/interface-annotated.png">
 </p>
 
-TODO add closeups for each
-
 #### Distance Readout
 
 <p align="center">
@@ -142,4 +140,4 @@ To adjust the update rate and other Ping device settings, visit the [device conf
 
 As the sound wave travels through water, it may encounter several 'reflective' objects like fish, or air bubbles. These smaller objects will also produce a return signal as energy is reflected back to the device. The energy that returns from these smaller objects is usually much less than the energy reflected off of a larger solid object like the sea floor.
 
-contrive/obtain examples. Reflections, fish
+TODO contrive/obtain examples. Reflections, fish
