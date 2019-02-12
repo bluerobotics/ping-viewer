@@ -8,16 +8,16 @@
 Select the units (meters or feet) for the application to display
 
 - **Plot Theme:**
-Select the color swath/gradient to use for the [Waterfall](home#waterfall) display. Custom gradients can be created according to the [custom gradients](#custom-gradients) section.
+Select the color swath/gradient to use for the [Waterfall](index.md#waterfall) display. Custom gradients can be created according to the [custom gradients](#custom-gradients) section.
 
 - **Theme:**
 Select the application menu theme (light or dark)
 
 - **Enable Replay Menu:**
-Enable the [Replay Menu](replay-data)
+Enable the [Replay Menu](replay-data.md)
 
 - **Smooth Data:**
-Filter the [Waterfall](home#waterfall) data to smooth noise and fluctuations.
+Filter the [Waterfall](index.md#waterfall) data to smooth noise and fluctuations.
 
 - **Antialiasing:**
 Enable antialiasing in the Waterfall display rendering

@@ -6,6 +6,6 @@
 
 # Mouse shortcuts
 
-* Click and drag the [*Distance Readout*](home#distance-readout) to move it.
-* Hover the mouse over the [*Distance Readout*](home#distance-readout) and use the mouse scroll to adjust the size of the Depth Readout
-* Click and drag the left edge of the [*Return Plot*](home#return-plot) to adjust its width.
+* Click and drag the [*Distance Readout*](index.md#distance-readout) to move it.
+* Hover the mouse over the [*Distance Readout*](index.md#distance-readout) and use the mouse scroll to adjust the size of the Depth Readout
+* Click and drag the left edge of the [*Return Plot*](index.md#return-plot) to adjust its width.
