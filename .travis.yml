@@ -7,4 +7,5 @@ install:
 
 script:
   - git remote set-url origin https://${GITHUB_TOKEN}@github.com/bluerobotics/ping-viewer
+  - if [ ${TRAVIS_PULL_REQUEST} != "false" ]; then travis_terminate 0; fi
   - mkdocs gh-deploy --force
