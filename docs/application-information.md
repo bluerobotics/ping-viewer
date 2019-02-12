@@ -3,7 +3,7 @@
 1. [**Application software information**](#application-software-information)
 2. [**Device model and firmware information**](#device-model-and-firmware-information)
 3. [**Header buttons**](#header-buttons)
-4. [**Application log**](#aplication-log)
+4. [**Application log**](#application-log)
 5. [**Log categories**](#log-categories)
 
 <p align="center">

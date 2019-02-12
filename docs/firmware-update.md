@@ -6,7 +6,7 @@ The Firmware Update menu allows you to update the programming on a Ping device.
 
 Steps to flash the device:
 
-1. [Connect](connection-settings) to the device
+1. [Connect](connection-settings.md) to the device
 2. Open the Firmware Update menu
 3. Choose 'Automatic Update', and the baudrate that you would like to use to communicate with the device (115kbps or 9600bps, if you are not sure choose 115kbps)
 4. Click _FIRMWARE UPDATE_ to start the process.

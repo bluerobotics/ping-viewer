@@ -53,9 +53,9 @@ Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/relea
 
 ## Connection Setup
 
-To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting) guide.
+To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting.md) guide.
 
-Visit the [Connection Settings](connection-settings) menu for more connection options.
+Visit the [Connection Settings](connection-settings.md) menu for more connection options.
 
 ## Principle of Operation
 
@@ -98,7 +98,7 @@ The Distance Readout displays the distance to the target in the most recent meas
 
 The confidence measurement for the most recent sample is displayed below the distance in the Distance readout. The color of the Distance Readout reflects the current confidence measurement, where red = 0% <-> green = 100%. // TODO better gradient explanation (picture)
 
-The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcuts#mouse-shortcuts).
+The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcuts.md#mouse-shortcuts).
 
 #### Distance Axis
 
@@ -128,13 +128,13 @@ The Return Plot displays the return strength vs distance of the most recent [**P
 
 The Waterfall is a three dimensional plot that occupies the main portion of the application window. The Waterfall plots consecutive [**Profile**](#distance-and-profile-measurements) samples (distance running vertically and color indicating signal strength). The horizontal axis is time; new data is displayed on the right edge of the Waterfall as older data moves to the left.
 
-The color scheme (gradient) of the Waterfall can be [customized](display-settings).
+The color scheme (gradient) of the Waterfall can be [customized](display-settings.md).
 
 ## Application and Device Settings
 
-See [here](display-settings) for instructions to switch between meters and feet for the application display.
+See [here](display-settings.md) for instructions to switch between meters and feet for the application display.
 
-To adjust the update rate and other Ping device settings, visit the [device configuration](device-configuration) page.
+To adjust the update rate and other Ping device settings, visit the [device configuration](device-settings) page.
 
 ## Interpreting Profile Data
 

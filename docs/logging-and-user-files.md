@@ -23,16 +23,16 @@ The Ping Viewer application uses these folders inside of the `PingViewer` folder
 
 #### GUI Logs
 
-The GUI log files (.txt) contain debug log output from the Ping Viewer application process. All [log categories](application-information#log-categories) are captured in these logs.
+The GUI log files (.txt) contain debug log output from the Ping Viewer application process. All [log categories](application-information.md#log-categories) are captured in these logs.
 
 #### Sensor Logs
 
-The sensor log files (.bin) contain all of the raw binary communications received from the device. These binary communications are in [Ping Protocol](https://github.com/bluerobotics/ping-protocol) format. The logs can be [replayed](replay-data) by Ping Viewer application.
+The sensor log files (.bin) contain all of the raw binary communications received from the device. These binary communications are in [Ping Protocol](https://github.com/bluerobotics/ping-protocol) format. The logs can be [replayed](replay-data.md) by Ping Viewer application.
 
 #### Pictures
 
-[Screenshots](hotkeys-and-shortcuts) (.png) are stored in this folder.
+[Screenshots](hotkeys-and-shortcuts.md) (.png) are stored in this folder.
 
 #### Waterfall Gradients
 
-[Custom gradients](display-settings#custom-gradients) (.txt) should be placed in this folder.
+[Custom gradients](display-settings.md#custom-gradients) (.txt) should be placed in this folder.
