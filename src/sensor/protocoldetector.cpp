@@ -169,6 +169,21 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
     // Try to get a valid response, timeout after 10 * 50 ms
     while (!_detected && attempts++ < 10) {
         socket.waitForReadyRead(50);
+        /**
+         * The bound state should be checked while looking for new packages
+         * writeDatagram will always return *bytes sent on success* as the total number of bytes,
+         * This is probably related to the UDP nature.
+         * To check for "Network operation timed out", "Connection reset by peer" and others errors,
+         * we should wait and check for new datagrams, otherwise we are not able to check for changes
+         * in socket state.
+         */
+        if(socket.state() != QUdpSocket::BoundState) {
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in bound state.";
+            QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
+            break;
+        }
+
         QNetworkDatagram datagram = socket.receiveDatagram();
         auto buf = datagram.data();
         for (auto byte : buf) {
