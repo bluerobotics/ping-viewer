@@ -5,19 +5,18 @@ init:
   - ps: $env:commit = $env:appveyor_repo_commit.SubString(0,7)
   - ps: Update-AppveyorBuild -Version ("{0}-{1}-{2}" -f $env:appveyor_repo_branch,$env:appveyor_build_number,$env:commit )
 
+os: Visual Studio 2017
+
 environment:
-  VSVER: 14.0
   matrix:
-    - MSVC_VERSION: 15
+    - MSVC_VERSION: 17
       RUNTIME_LINKAGE: static
-      QT_VERSION: 5.11
+      QT_VERSION: 5.12.1
       QT_LINKAGE: static
       COVERITY_BUILD_CANDIDATE: True
-      QTDIR: C:\Qt\%QT_VERSION%\mingw53_32
-      MGWDIR: C:\Qt\Tools\mingw530_32\bin
-      MGWLIBS: libgomp-1.dll
-      OPENSSLDIR: C:\OpenSSL-Win32
-      VCLIBS: VCRUNTIME140.dll MSVCP140.dll
+      QTDIR: C:\Qt\%QT_VERSION%\msvc2017_64
+      OPENSSLDIR: C:\OpenSSL-Win64
+      VCLIBS: VCRUNTIME140.dll MSVCP140.dll ucrtbased.dll
 
 configuration:
   - release
@@ -28,13 +27,25 @@ install:
   - '%QTDIR%\bin\qtenv2.bat'
   - pip install jinja2
   - qmake -v
-  - set VCLIBDIR=%WINDIR%\SysWOW64 # Find vclibs
+  - set VCLIBDIR=%WINDIR%\System32 # Find vclibs
   - set QTDIR
   - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
   - if %QTDIR:msvc=%==%QTDIR% g++ --version
   - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
-  - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
+  - if not "%QTDIR:msvc2017=%"=="%QTDIR%" (
+      if not "%ARCH:x64=%"=="x64" (
+        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat";
+        echo "64";
+      ) else (
+        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat";
+        echo "32";
+      )
+    ) else if not "%QTDIR:msvc=%"=="%QTDIR%" (
+      call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%;
+      echo "msvc arch";
+    )
+    
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
   # Travis and appveyor does not have compatible names to continuous release
@@ -46,19 +57,22 @@ install:
 
 before_build:
   # Prepare the out-of-source build directory.
-  - echo "RELEASE_NAME"
-  - echo %RELEASE_NAME%
+  - echo "RELEASE_NAME:" %RELEASE_NAME%
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule init
   - git submodule update
+  - if "%CONFIGURATION%" == "debug" (
+      appveyor DownloadFile https://s3.amazonaws.com/downloads.bluerobotics.com/PingViewer/drkonqi.zip -FileName drkonqi.zip &
+      7z x -y -r drkonqi.zip -o%APPVEYOR_BUILD_FOLDER%
+    )
+
   - mkdir %APPVEYOR_BUILD_FOLDER%-build
   - qmake -o %APPVEYOR_BUILD_FOLDER%-build -r -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
 
 build_script:
   # Compile it and check for .exe
   - cd %APPVEYOR_BUILD_FOLDER%-build
-  # We are using make with mingw
-  - '%make% -j3'
+  - '%make%'
   - dir /b /s *.exe
 
 after_build:
@@ -66,13 +80,18 @@ after_build:
   # not support extracting artifacts from out-of-source build directories. See 'artifacts' below.
   - dir /b /s *.exe
   - mkdir deploy
-  - copy %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\pingviewer.exe deploy\pingviewer.exe
+  - if "%CONFIGURATION%" == "debug" (
+      xcopy /E /Y "%APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%" "./deploy"
+    ) else (
+      copy "%APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\pingviewer.exe" "./deploy/pingviewer.exe"
+    )
+
   - windeployqt --qmldir %APPVEYOR_BUILD_FOLDER%/qml --%CONFIGURATION% deploy/pingviewer.exe --verbose=2
   - for %%I in (%VCLIBS%) do copy %VCLIBDIR%\%%I deploy\
-  - for %%I in (%MGWLIBS%) do copy %MGWDIR%\%%I deploy\
   # windeployqt do not deploy openssl binaries
   - copy %OPENSSLDIR%\*.dll deploy\
   - appveyor DownloadFile https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -FileName deploy/stm32flash.exe
+  - if %CONFIGURATION% == debug xcopy /E /Y "%APPVEYOR_BUILD_FOLDER%/drkonqi" "./deploy"
   - 7z a -tzip pingviewer_%CONFIGURATION%.zip deploy -r
   - copy %APPVEYOR_BUILD_FOLDER%-build\pingviewer_%CONFIGURATION%.zip %APPVEYOR_BUILD_FOLDER%\pingviewer_%CONFIGURATION%.zip
   - dir /b /s *.zip
