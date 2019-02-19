@@ -30,6 +30,8 @@ CONFIG(debug, debug|release) {
     win32 {
         # Windows debug
         CONFIG += console
+        INCLUDEPATH += "$$PWD/drkonqi/KCrash"
+        LIBS += "$$PWD/drkonqi/KF5Crash.lib"
     }
 } else {
     message("Release Build !")
