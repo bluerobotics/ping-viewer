@@ -22,137 +22,37 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.margins: marginPix
-            Text {
-                text: "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "SRC: " + ping.srcId + " DST: " + ping.dstId
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Connection: " + ping.link.configuration.createConfString()
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Distance (mm): " + ping.distance
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Auto (bool): " + ping.mode_auto
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Scan Start (mm): " + ping.start_mm
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Scan Length (mm): " + ping.length_mm
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Ping (#): " + ping.ping_number
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Pulse duration (μs): " + ping.pulse_duration
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Ping interval (ms): " + ping.ping_interval
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Gain (index): " + ping.gain_index
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Confidence (%): " + ping.confidence
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Speed of sound (mm/s): " + ping.speed_of_sound
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Processor temperature (C): " + (ping.processor_temperature / 100).toFixed(1)
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "PCB temperature (C): " + (ping.pcb_temperature / 100).toFixed(1)
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Board voltage (V): " + (ping.board_voltage / 1000).toFixed(2)
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Lost messages (#): " + ping.lost_messages
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "RX Packets (#): " + ping.parsed_msgs
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "RX Errors (#): " + ping.parser_errors
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Ascii text:\n" + ping.ascii_text
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Error message:\n" + ping.err_msg
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
-            }
-            Text {
-                text: "Error message:\n" + ping.err_msg
-                color: "white"
-                font.family: "unicode"
-                font.pointSize: 8
+
+            Repeater {
+                model: [
+                    "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
+                    "SRC: " + ping.srcId + " DST: " + ping.dstId,
+                    "Connection: " + ping.link.configuration.createConfString(),
+                    "Distance (mm): " + ping.distance,
+                    "Auto (bool): " + ping.mode_auto,
+                    "Scan Start (mm): " + ping.start_mm,
+                    "Scan Length (mm): " + ping.length_mm,
+                    "Ping (#): " + ping.ping_number,
+                    "Pulse duration (μs): " + ping.pulse_duration,
+                    "Ping interval (ms): " + ping.ping_interval,
+                    "Gain (index): " + ping.gain_index,
+                    "Confidence (%): " + ping.confidence,
+                    "Speed of sound (mm/s): " + ping.speed_of_sound,
+                    "Processor temperature (C): " + (ping.processor_temperature / 100).toFixed(1),
+                    "PCB temperature (C): " + (ping.pcb_temperature / 100).toFixed(1),
+                    "Board voltage (V): " + (ping.board_voltage / 1000).toFixed(2),
+                    "Lost messages (#): " + ping.lost_messages,
+                    "RX Packets (#): " + ping.parsed_msgs,
+                    "RX Errors (#): " + ping.parser_errors,
+                    "Ascii text:\n" + ping.ascii_text,
+                    "Error message:\n" + ping.err_msg,
+                ]
+                Text {
+                    text: modelData
+                    color: "white"
+                    font.family: "unicode"
+                    font.pointSize: 8
+                }
             }
         }
     }
