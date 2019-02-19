@@ -6,6 +6,10 @@
 #include <QDebug>
 #include <QRegularExpression>
 
+#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+    #include <KCrash>
+#endif
+
 #include "abstractlink.h"
 #include "filemanager.h"
 #include "flasher.h"
@@ -107,5 +111,11 @@ int main(int argc, char *argv[])
 
     StyleManager::self()->setApplication(&app);
     StyleManager::self()->setQmlEngine(&engine);
+
+#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+    // Start KCrash
+    KCrash::initialize();
+#endif
+
     return app.exec();
 }
