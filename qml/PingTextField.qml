@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.3
 Item {
     id: root
     property alias title: label.text
-    property var text: ""
+    property string text: ""
     property alias validator: textField.validator
 
     width: label.width + textField.width
