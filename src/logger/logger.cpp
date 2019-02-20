@@ -26,6 +26,7 @@ Logger::Logger()
 
 void Logger::installHandler()
 {
+    self()->logModel()->start();
     originalHandler = qInstallMessageHandler(handleMessage); // This function returns the previous message handler
 
     if (qEnvironmentVariableIsEmpty("QT_MESSAGE_PATTERN")) {
