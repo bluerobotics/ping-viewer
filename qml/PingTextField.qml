@@ -13,7 +13,7 @@ Item {
     height: label.height
 
     // Emited when edition if finished with enter/return key or when TextField loses focus
-    signal editingFinished(var input)
+    signal editingFinished()
 
     // This avoid connection interactions while user input is on
     onTextChanged: {
@@ -38,13 +38,23 @@ Item {
         anchors.leftMargin: 5
         selectByMouse: true
 
-        onEditingFinished: {
+        // editingFinished() is only emitted when TextField has focus
+        // That's why we are using accepted()
+        onAccepted: {
             focus = false
             mainPage.forceActiveFocus()
-            root.editingFinished(textField.text)
+            // It's necessary to update the input variable
+            root.text = textField.text
+            root.editingFinished()
         }
 
         onActiveFocusChanged: {
+            // TODO: We should update the user about wrong inputs here
+            // This allow us to correct not valid inputs to the last valid value
+            if(!acceptableInput) {
+                textField.text = root.text
+            }
+
             if (activeFocus) {
                 selectAll()
             } else {
