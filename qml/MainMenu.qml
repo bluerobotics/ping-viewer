@@ -76,7 +76,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var speed_of_sound = parseFloat(input)
+                            var speed_of_sound = parseFloat(text)
                             ping.speed_of_sound = speed_of_sound * 1000 // mm/s
                         }
                     }
@@ -223,7 +223,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            parent.setDepth(parseInt(input), ping.length_mm)
+                            parent.setDepth(parseInt(text), ping.length_mm)
                         }
                     }
 
@@ -238,7 +238,7 @@ Item {
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            parent.setDepth(ping.start_mm, parseInt(input))
+                            parent.setDepth(ping.start_mm, parseInt(text))
                         }
                     }
                 }
