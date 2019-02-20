@@ -7,6 +7,11 @@ LogListModel::LogListModel(QObject* parent)
         _roles.append(key);
         _vectors.insert(key, {});
     }
+}
+
+void LogListModel::start()
+{
+    //This crashs with msvc if moved to constructor, no workaround was found until now.
 
     _filter.setSourceModel(this);
     _filter.setFilterRole(Roles::Visibility);

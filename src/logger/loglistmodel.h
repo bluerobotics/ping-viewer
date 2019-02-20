@@ -77,6 +77,26 @@ public:
     QSortFilterProxyModel* filteredModel() { return &_filter; };
     Q_PROPERTY(QSortFilterProxyModel* filteredModel READ filteredModel CONSTANT)
 
+    /**
+     * @brief Do the necessary connections of the object
+     *
+     * This also helps to avoid msvc crashs.
+     * Such crashs happens by unknown reasons,
+     * since we are talking about Mycrosoft compiler,
+     * this unknown reasons are really complex, hard to find and maybe
+     * a creation of a superior being to test ourselfs
+     * in a perpetual and impossible fight against the dark forces.
+     * If you are reading this from the future or using mingw to deploy,
+     * you can try move everything here to the constructor.
+     * Note: If the computer starts to scream something about:
+     * "read access violation at: 0x0, flags=0x0"
+     * I highly advise you to run `git stash && git checkout master`,
+     * and forget everything related to this lines.
+     * And if someone asks you to fix that: https://www.youtube.com/watch?v=5GfOlP8FKt0
+     * Get in touch with me otherwise.
+     */
+    void start();
+
 signals:
     /**
      * @brief Append a new log message in model
