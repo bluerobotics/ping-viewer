@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QDir>
 #include <QLoggingCategory>
-#include <QTimer>
 #include <QUrl>
 
 #include "filelink.h"
