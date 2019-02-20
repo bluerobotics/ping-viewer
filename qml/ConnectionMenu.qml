@@ -184,9 +184,10 @@ Item {
                     Layout.columnSpan:  2
                     Layout.fillWidth: true
                     onEditingFinished: {
-                        if (input == "0.0.0.0" || input == "localhost") {
+                        if (text === "0.0.0.0" || text === "localhost") {
                             text = "127.0.0.1"
                         }
+
                         connect(AbstractLinkNamespace.Udp, text, udpPort.text)
                     }
                 }
@@ -197,7 +198,7 @@ Item {
                     Layout.columnSpan:  2
                     Layout.fillWidth: true
                     onEditingFinished: {
-                        connect(AbstractLinkNamespace.Udp, udpIp.text, udpPort.text)
+                        connect(AbstractLinkNamespace.Udp, udpIp.text, text)
                     }
                 }
             }
