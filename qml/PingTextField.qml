@@ -5,12 +5,12 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: root
-    property alias title: text.text
+    property alias title: label.text
     property var text: ""
     property alias validator: textField.validator
 
-    width: text.width + textField.width
-    height: text.height
+    width: label.width + textField.width
+    height: label.height
 
     // Emited when edition if finished with enter/return key or when TextField loses focus
     signal editingFinished(var input)
@@ -21,20 +21,20 @@ Item {
             return
         }
 
-        textField.text = root.text
+        textField.text = text
     }
 
 
     Label {
-        id: text
+        id: label
         color: Material.accent
     }
 
     TextField {
         id: textField
 
-        anchors.left: text.right
-        anchors.baseline: text.baseline
+        anchors.left: label.right
+        anchors.baseline: label.baseline
         anchors.leftMargin: 5
         selectByMouse: true
 
