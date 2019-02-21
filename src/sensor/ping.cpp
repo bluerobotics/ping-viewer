@@ -407,11 +407,12 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
 void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
-    flasher()->flashStateChanged(Flasher::StartingFlash);
+    flasher()->setState(Flasher::Idle);
+    flasher()->setState(Flasher::StartingFlash);
     if(!HexValidator::isValidFile(fileUrl)) {
         auto errorMsg = QStringLiteral("File does not contain a valid Intel Hex format: %1").arg(fileUrl);
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
-        flasher()->setError(errorMsg);
+        flasher()->setState(Flasher::Error, errorMsg);
         return;
     };
 
@@ -419,14 +420,14 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
     if (!serialLink) {
         auto errorMsg = QStringLiteral("It's only possible to flash via serial.");
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
-        flasher()->setError(errorMsg);
+        flasher()->setState(Flasher::Error, errorMsg);
         return;
     }
 
     if(!link()->isOpen()) {
         auto errorMsg = QStringLiteral("Link is not open to do the flash procedure.");
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
-        flasher()->setError(errorMsg);
+        flasher()->setState(Flasher::Error, errorMsg);
         return;
     }
 
@@ -470,8 +471,9 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
 
     QThread::msleep(500);
     // Clear last configuration src ID to detect device as a new one
-    connect(&_flasher, &Flasher::flashStateChanged, this, [this](Flasher::States state) {
-        if(state == Flasher::States::FlashFinished) {
+    connect(&_flasher, &Flasher::stateChanged, this, [this] {
+        if(flasher()->state() == Flasher::States::FlashFinished)
+        {
             QThread::msleep(500);
             // Clear last configuration src ID to detect device as a new one
             resetSensorLocalVariables();
