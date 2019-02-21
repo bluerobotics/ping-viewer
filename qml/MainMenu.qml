@@ -13,8 +13,8 @@ import StyleManager 1.0
 Item {
     id: root
     visible: false
-    height: settingsLayout.height
-    width: settingsLayout.width
+    height: firmwareUpdate.visible*firmwareUpdate.height + pingGroup.height
+    width: childrenRect.width
     property var ping: null
 
     ColumnLayout {
