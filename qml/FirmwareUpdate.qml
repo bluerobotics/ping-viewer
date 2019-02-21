@@ -23,11 +23,11 @@ Item {
             running = true
             flashProgress.value = progress
         }
-        onFlashStateChanged: {
+        onMessageChanged: {
             switch(state) {
                 case Flasher.Error:
                     print("Flash procedure failed!")
-                    print("Error: ", ping.flasher.error)
+                    print("Error: ", ping.flasher.message)
 
                 case Flasher.FlashFinished:
                     running = false
@@ -147,6 +147,20 @@ Item {
                 value: 0.0
                 from: 0.0
                 to: 100.0
+            }
+
+            Label {
+                text: "Error:"
+                font.bold: true
+                visible: ping.flasher.message !== ""
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: ping.flasher.message
+                visible: ping.flasher.message !== ""
+                Layout.fillWidth: true
             }
         }
     }
