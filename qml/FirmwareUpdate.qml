@@ -12,8 +12,8 @@ import SettingsManager 1.0
 
 Item {
     id: root
-    height: settingsLayout.height
-    width: settingsLayout.width
+    height: childrenRect.height
+    width: childrenRect.width
     property var ping: null
     property var running: false
 
@@ -43,116 +43,110 @@ Item {
         }
     }
 
-    ColumnLayout {
-        id: settingsLayout
+    GroupBox {
+        id: firmwareGroup
+        title: "Firmware Update"
+        enabled: true
+        // Hack
+        label.x: width/2 - label.contentWidth/2
         width: 600
-        RowLayout {
-            GroupBox {
-                id: firmwareGroup
-                title: "Firmware Update"
-                enabled: true
-                // Hack
-                label.x: width/2 - label.contentWidth/2
+
+        ColumnLayout {
+            anchors.fill: parent
+
+            RowLayout {
                 Layout.fillWidth: true
 
-                ColumnLayout {
-                    anchors.fill: parent
+                ComboBox {
+                    id: automaticUpdateCB
+                    model: ["Automatic Update", "Manual Update"]
+                    Layout.fillWidth: true
+                }
 
-                    RowLayout {
-                        Layout.fillWidth: true
+                ComboBox {
+                    id: baudComboBox
+                    // This should use the same values in Flasher::_validBaudRates
+                    model: [57600, 115200, 230400]
+                    Layout.fillWidth: true
+                    visible: SettingsManager.debugMode
+                }
 
-                        ComboBox {
-                            id: automaticUpdateCB
-                            model: ["Automatic Update", "Manual Update"]
-                            Layout.fillWidth: true
-                        }
+                CheckBox {
+                    id: verifyCB
+                    text: "Verify"
+                    visible: SettingsManager.debugMode
+                    checked: true
+                }
 
-                        ComboBox {
-                            id: baudComboBox
-                            // This should use the same values in Flasher::_validBaudRates
-                            model: [57600, 115200, 230400]
-                            Layout.fillWidth: true
-                            visible: SettingsManager.debugMode
-                        }
+                CheckBox {
+                    id: bootLoaderCB
+                    text: "Send reset"
+                    visible: SettingsManager.debugMode
+                    checked: true
+                }
+            }
 
-                        CheckBox {
-                            id: verifyCB
-                            text: "Verify"
-                            visible: SettingsManager.debugMode
-                            checked: true
-                        }
+            RowLayout {
+                Layout.fillWidth: true
 
-                        CheckBox {
-                            id: bootLoaderCB
-                            text: "Send reset"
-                            visible: SettingsManager.debugMode
-                            checked: true
-                        }
-                    }
+                Label {
+                    text: "Current Firmware: " + ping.firmware_version_major + "." + ping.firmware_version_minor
+                }
 
-                    RowLayout {
-                        Layout.fillWidth: true
+                Label {
+                    id: firmwareLabel
+                    text: "Firmware File: " + fileDialog.fileName
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    visible: automaticUpdateCB.currentIndex === 1
+                }
 
-                        Label {
-                            text: "Current Firmware: " + ping.firmware_version_major + "." + ping.firmware_version_minor
-                        }
+                Label {
+                    text: "Latest version: "
+                    visible: automaticUpdateCB.currentIndex === 0
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                }
 
-                        Label {
-                            id: firmwareLabel
-                            text: "Firmware File: " + fileDialog.fileName
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignRight
-                            visible: automaticUpdateCB.currentIndex === 1
-                        }
+                ComboBox {
+                    id: fwCombo
+                    visible: automaticUpdateCB.currentIndex === 0
+                    model: Object.keys(ping.firmwaresAvailable)
+                    Layout.minimumWidth: 220
+                }
 
-                        Label {
-                            text: "Latest version: "
-                            visible: automaticUpdateCB.currentIndex === 0
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignRight
-                        }
-
-                        ComboBox {
-                            id: fwCombo
-                            visible: automaticUpdateCB.currentIndex === 0
-                            model: Object.keys(ping.firmwaresAvailable)
-                            Layout.minimumWidth: 220
-                        }
-
-                        PingButton {
-                            id: browseBt
-                            text: "Browse.."
-                            enabled: !running
-                            visible: automaticUpdateCB.currentIndex === 1
-                            onClicked: {
-                                fileDialog.visible = true
-                            }
-                        }
-                    }
-
-                    PingButton {
-                        text: "Firmware Update"
-                        Layout.fillWidth: true
-                        enabled: !running && ((fwCombo.currentText != "" && !browseBt.visible) || (fileDialog.fileName != "" && browseBt.visible))
-
-                        onClicked: {
-                            var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
-                            var verify = SettingsManager.debugMode ? verifyCB.checked : true
-                            var path = automaticUpdateCB.currentIndex ? fileDialog.fileUrl : ping.firmwaresAvailable[fwCombo.currentText]
-                            running = true
-                            ping.firmwareUpdate(path, bootLoaderCB.checked, baud, verifyCB.checked)
-                        }
-                    }
-
-                    ProgressBar {
-                        id: flashProgress
-                        indeterminate: !running
-                        Layout.fillWidth: true
-                        value: 0.0
-                        from: 0.0
-                        to: 100.0
+                PingButton {
+                    id: browseBt
+                    text: "Browse.."
+                    enabled: !running
+                    visible: automaticUpdateCB.currentIndex === 1
+                    onClicked: {
+                        fileDialog.visible = true
                     }
                 }
+            }
+
+            PingButton {
+                text: "Firmware Update"
+                Layout.fillWidth: true
+                enabled: !running && ((fwCombo.currentText != "" && !browseBt.visible) || (fileDialog.fileName != "" && browseBt.visible))
+
+                onClicked: {
+                    var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
+                    var verify = SettingsManager.debugMode ? verifyCB.checked : true
+                    var path = automaticUpdateCB.currentIndex ? fileDialog.fileUrl : ping.firmwaresAvailable[fwCombo.currentText]
+                    running = true
+                    ping.firmwareUpdate(path, bootLoaderCB.checked, baud, verifyCB.checked)
+                }
+            }
+
+            ProgressBar {
+                id: flashProgress
+                indeterminate: !running
+                Layout.fillWidth: true
+                value: 0.0
+                from: 0.0
+                to: 100.0
             }
         }
     }
