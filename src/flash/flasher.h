@@ -30,21 +30,49 @@ public:
     ~Flasher() = default;
 
     /**
-     * @brief Set the error type and message
-     *  this function will emit an error signal and update the error property
+     * @brief Defines flash state
      *
-     * @param errorMessage
      */
-    void setError(const QString& errorMessage);
+    enum States {
+        Error = -1,
+        Idle,
+        StartingFlash,
+        Flashing,
+        FlashFinished,
+    } states;
+    Q_ENUM(States)
 
     /**
-     * @brief Return error string
+     * @brief Set state message
+     *  this function will emit a message signal and update the message property
+     *
+     * @param message
+     */
+    void setMessage(const QString& message);
+
+    /**
+     * @brief Return message string
      *
      * @return QString
      */
-    QString error() const { return _error; };
-    // Error will not be updated by the QML part
-    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+    QString message() const { return _message; };
+    Q_PROPERTY(QString message READ message NOTIFY messageChanged)
+
+    /**
+     * @brief Set flasher state and optionally message
+     *
+     * @param state
+     * @param message
+     */
+    void setState(Flasher::States state, QString message = QString());
+
+    /**
+     * @brief Return flasher state
+     *
+     * @return Flasher::States
+     */
+    Flasher::States state() const { return _state; };
+    Q_PROPERTY(Flasher::States state READ state NOTIFY stateChanged)
 
     /**
      * @brief Start the flash procedure
@@ -80,33 +108,22 @@ public:
      */
     void setVerify(bool verify);
 
-    /**
-     * @brief Defines flash state
-     *
-     */
-    enum States {
-        Error = -1,
-        StartingFlash,
-        Flashing,
-        FlashFinished,
-    } states;
-    Q_ENUM(States)
-
 signals:
-    void errorChanged();
+    void messageChanged();
     void flashProgress(float progress);
-    void flashStateChanged(Flasher::States state);
+    void stateChanged();
 
 private:
-    void firmwareUpdatePercentage();
+    void firmwareUpdatePercentage(const QString& output);
     static QString stm32flashPath();
 
     int _baudRate = 57600;
     QString _binRelativePath;
-    QString _error;
     QString _firmwareFilePath;
     QSharedPointer<QProcess> _firmwareProcess;
     LinkConfiguration _link;
+    QString _message;
+    States _state = Idle;
     const QList<int> _validBaudRates = {57600, 115200, 230400};
     bool _verify = true;
 };
