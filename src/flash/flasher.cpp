@@ -80,8 +80,11 @@ QString Flasher::stm32flashPath()
 void Flasher::flash()
 {
     if(!QFile::exists(stm32flashPath())) {
-        qCWarning(FLASH) << "stm32flash is not available! Flash procedure will abort.";
-        qCWarning(FLASH) << "Searching in: " << stm32flashPath();
+        QString output = QStringLiteral("stm32flash is not available! Flash procedure will abort.");
+        qCCritical(FLASH) << "Searching in: " << stm32flashPath();
+        qCCritical(FLASH) << output;
+        setState(Error, output);
+
         return;
     }
 
@@ -95,7 +98,7 @@ void Flasher::flash()
     if(!firmwareFileInfo.exists()) {
         auto errorMsg = QStringLiteral("Firmware file does not exist: %1").arg(_firmwareFilePath);
         qCCritical(FLASH) << errorMsg;
-        setError(errorMsg);
+        setState(Error, errorMsg);
         return;
     }
 
@@ -114,12 +117,58 @@ void Flasher::flash()
     qCDebug(FLASH) << cmd;
     _firmwareProcess->start(cmd);
     emit flashProgress(0);
-    connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, &Flasher::firmwareUpdatePercentage);
+
+    connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, [this] {
+        // Error strings used to detect important messages for the user
+        static const QStringList errorStrings = {
+            "error",
+            "fail",
+            "fatal",
+            "invalid",
+            "unexpected",
+        };
+        QString output(_firmwareProcess->readAllStandardOutput());
+        for(const auto errorString: errorStrings)
+        {
+            if(output.contains(errorString, Qt::CaseInsensitive)) {
+                qCCritical(FLASH) << output;
+                setState(Error, output);
+                // Break is necessary to avoid messages with multiple keys like:
+                // Error number... Fatal behaviour.. Unexpected port.
+                break;
+            }
+        }
+
+        firmwareUpdatePercentage(output);
+    });
+
+    connect(_firmwareProcess.data(), &QProcess::errorOccurred, this, [this](QProcess::ProcessError error) {
+        QString message = QStringLiteral("Unexpected error in process: %1").arg(error);
+        qCCritical(FLASH) << message;
+        setState(Error, message);
+    });
+
+    connect(_firmwareProcess.data(), qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
+    [](int exitCode, QProcess::ExitStatus exitStatus) {
+        if(exitCode == 0) {
+            return;
+        }
+
+        // It's not necessary to use setMessage here, since this signal is a result of the process
+        // and not from stm32flash
+        static QString message;
+        if(exitStatus == QProcess::NormalExit) {
+            message = QStringLiteral("Process exited normally with exit code: %1").arg(exitCode);
+            qCWarning(FLASH) << message;
+        } else {
+            message = QStringLiteral("Process crashed with exit code: %1").arg(exitCode);
+            qCCritical(FLASH) << message;
+        }
+    });
 }
 
-void Flasher::firmwareUpdatePercentage()
+void Flasher::firmwareUpdatePercentage(const QString& output)
 {
-    QString output(_firmwareProcess->readAllStandardOutput());
     // Track values like: (12.23%)
     QRegularExpression regex("\\d{1,3}[.]\\d\\d");
     QRegularExpressionMatch match = regex.match(output);
@@ -130,7 +179,7 @@ void Flasher::firmwareUpdatePercentage()
             qCDebug(FLASH) << _fw_update_perc;
             if (_fw_update_perc > 99.99) {
                 QThread::msleep(1000);
-                emit flashStateChanged(FlashFinished);
+                setState(FlashFinished);
             } else {
                 emit flashProgress(_fw_update_perc);
             }
@@ -140,12 +189,21 @@ void Flasher::firmwareUpdatePercentage()
     qCDebug(FLASH) << output;
 }
 
-void Flasher::setError(const QString& errorMessage)
+void Flasher::setState(Flasher::States state, QString message)
 {
-    /* Update error before flashState
-     *  This will avoid any problem related to error detection from state change
-     */
-    _error = errorMessage;
-    emit errorChanged();
-    flashStateChanged(Error);
+    if(_state != state) {
+        _state = state;
+        emit stateChanged();
+    }
+
+    setMessage(message);
+}
+
+void Flasher::setMessage(const QString& message)
+{
+    auto msg = message.trimmed();
+    if(msg != _message) {
+        _message = msg;
+        emit messageChanged();
+    }
 }
