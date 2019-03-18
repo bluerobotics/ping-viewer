@@ -159,7 +159,7 @@ Item {
 
                 ComboBox {
                     id: baudrateBox
-                    model: [9600, 115200]
+                    model: [115200, 9600]
                     onActivated: {
                         connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
                     }
