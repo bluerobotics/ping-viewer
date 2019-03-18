@@ -6,7 +6,6 @@ import SettingsManager 1.0
 
 Item {
     id: root
-    x: margin
     width: mainLayout.width
     height: mainLayout.height
 
@@ -119,13 +118,25 @@ Item {
         property alias readoutFontSize: readout.font.pointSize
     }
 
-
-    Component.onCompleted: {
-        if(y <= 0 || y + height > parent.height) {
-            y = margin
-        }
-        if(x <= 0 || x + width > parent.width) {
-            x = margin
-        }
+    function clamp(x, min, max) {
+        return x < min ? min : (x > max ? max : x)
     }
+
+    function checkPosition() {
+        // Check if parent is visible and correct initialized
+        if(!root.parent.visible || root.parent.width === 0 || root.parent.height === 0) {
+            return
+        }
+
+        x = clamp(x, margin, parent.width - root.width - margin)
+        y = clamp(y, margin, parent.height - root.height - margin)
+    }
+
+    // Component is used when the application is started for the first time in a computer
+    // since X and Y is not emited
+    Component.onCompleted: checkPosition()
+    // X and Y signals are necessary, since onCompleted is emitted before the application is
+    // correct initialized
+    onXChanged: checkPosition()
+    onYChanged: checkPosition()
 }
