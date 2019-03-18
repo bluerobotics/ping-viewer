@@ -166,20 +166,64 @@ Item {
                     enabled: !autoGainChB.checked
                     visible: SettingsManager.enableSensorAdvancedConfiguration
 
+                    property var maxDepthMm: SettingsManager.debugMode ? 1e6 : 5e4
+                    property var minLengthMm: 1e3
+
+                    function setDepth(startMm, lengthMm) {
+                        // Sensor max range is limited to maxDepthMm
+                        // The minimum range between start and length is minLengthMm
+
+                        // Start
+                        if(ping.start_mm !== startMm) {
+                            // Check if length + new start is bigger than our limit (maxDepthMm)
+                            if(startMm >= maxDepthMm - minLengthMm) {
+                                startMm = maxDepthMm - minLengthMm
+                            }
+
+                            // Limit window to maxDepthMm
+                            if(startMm + ping.length_mm > maxDepthMm) {
+                                lengthMm = maxDepthMm - startMm
+                            }
+
+                            // Set new value
+                            ping.start_mm = startMm
+                        }
+
+                        // Length
+                        if(ping.length_mm !== lengthMm) {
+                            // Check if length is less than minLengthMm
+                            var lengthMm = lengthMm
+                            if(lengthMm < minLengthMm) {
+                                lengthMm = minLengthMm
+                            }
+
+                            // Check if length is inside our maxDepthMm
+                            lengthMm = Math.min(lengthMm, maxDepthMm - ping.start_mm)
+
+                            // If length is invalid, set minLengthMm
+                            if(isNaN(lengthMm)) {
+                                lengthMm = minLengthMm
+                            }
+
+                            // Set new value
+                            ping.length_mm = lengthMm
+                        }
+                    }
+
+
+
                     PingTextField {
                         id: startLength
                         title: "Scan start point (mm):"
                         text: ping.start_mm
                         validator: IntValidator {
                             bottom: 0
-                            top: SettingsManager.debugMode ? 1e6 : 7e5
+                            top: maxDepthMm
                         }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var start_mm = parseInt(input)
-                            text = start_mm
-                            ping.start_mm = start_mm
+                            parent.setDepth(parseInt(input), ping.length_mm)
                         }
                     }
 
@@ -189,18 +233,12 @@ Item {
                         text: ping.length_mm
                         validator: IntValidator {
                             bottom: 0
-                            top: SettingsManager.debugMode ? 1e6 : 7e5
+                            top: maxDepthMm
                         }
                         Layout.columnSpan: 2
                         Layout.fillWidth: true
                         onEditingFinished: {
-                            var start_mm = parseInt(input)
-                            var length_mm = Math.min(parseInt(input), 50000 - start_mm)
-                            if(isNaN(length_mm)) {
-                                length_mm = 500
-                            }
-                            text = length_mm
-                            ping.length_mm = length_mm
+                            parent.setDepth(ping.start_mm, parseInt(input))
                         }
                     }
                 }
