@@ -54,4 +54,4 @@ If the led is not blinking:
 
 If the instructions are not clear or sound a bit complicated, please wait a bit more for us to create a Ping-Viewer version that allows you to recover devices.
 
-TODO explain bootloader process
+> TODO explain bootloader process
