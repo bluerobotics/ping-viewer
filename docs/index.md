@@ -11,9 +11,9 @@
 
 Follow the setup instructions for your operating system:
 
-- [Windows](https://github.com/bluerobotics/ping-viewer/wiki#windows)
-- [Mac](https://github.com/bluerobotics/ping-viewer/wiki#mac)
-- [Linux](https://github.com/bluerobotics/ping-viewer/wiki#linux)
+- [Windows](https://docs.bluerobotics.com/ping-viewer/#windows)
+- [Mac](https://docs.bluerobotics.com/ping-viewer/#mac)
+- [Linux](https://docs.bluerobotics.com/ping-viewer/#linux)
 
 ### Windows
 
