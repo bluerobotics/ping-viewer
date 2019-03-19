@@ -17,19 +17,6 @@ Item {
     property string deviceFirmware: 'No device'
     property string deviceID: 'No device'
 
-    onWidthChanged: updateGridLayout()
-    onVisibleChanged: updateGridLayout()
-
-    function updateGridLayout() {
-        if(logCategoryGrid.maxItemSize*logCategoryGrid.columns > width) {
-            if(logCategoryGrid.columns > 1) {
-                logCategoryGrid.columns -= 1
-            }
-        } else if(logCategoryGrid.maxItemSize*(logCategoryGrid.columns + 1) < width) {
-            logCategoryGrid.columns += 1
-        }
-    }
-
     ColumnLayout {
         id: mainLayout
         width: root.width
@@ -269,37 +256,44 @@ Item {
             color: Material.primary
         }
 
-        PingLogger {
-            id: log
-            height: 300
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-        GridLayout {
-            id: logCategoryGrid
-            rowSpacing: 5
-            columnSpacing: 5
-            columns: 5
-            Layout.fillWidth: true
-            property var maxItemSize: 100
-            Repeater {
-                model: Logger.registeredCategory
-                CheckBox {
-                    text: modelData
-                    checked: SettingsManager.enabledCategories & Logger.getCategoryIndex(modelData.toString())
-                    Layout.columnSpan: 1
-                    onCheckedChanged: {
-                        if(checked) {
-                            log.enabledCategories |= Logger.getCategoryIndex(modelData.toString())
-                        } else {
-                            log.enabledCategories ^= Logger.getCategoryIndex(modelData.toString())
+        RowLayout {
+            PingLogger {
+                id: log
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            ColumnLayout {
+                Layout.fillHeight: true
+                Label {
+                    text: "Categories"
+                    Layout.minimumWidth: parent.width
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+                ListView {
+                    id: listView
+                    clip: true
+                    Layout.fillHeight: true
+                    ScrollBar.vertical: ScrollBar {}
+
+                    model: Logger.registeredCategory
+                    delegate: CheckBox {
+                        text: modelData
+                        checked: SettingsManager.enabledCategories & Logger.getCategoryIndex(modelData.toString())
+                        Layout.fillWidth: true
+                        onCheckedChanged: {
+                            if(checked) {
+                                log.enabledCategories |= Logger.getCategoryIndex(modelData.toString())
+                            } else {
+                                log.enabledCategories ^= Logger.getCategoryIndex(modelData.toString())
+                            }
                         }
                     }
-                }
-                onModelChanged: {
-                    for(var i in model) {
-                        var size = model[i].length*font.font.pixelSize
-                        logCategoryGrid.maxItemSize = logCategoryGrid.maxItemSize > size ? logCategoryGrid.maxItemSize : size
+                    onVisibleChanged: {
+                        for(var i in flickableChildren) {
+                            Layout.minimumWidth = Math.max(Layout.minimumWidth, flickableChildren[i].width)
+                        }
                     }
                 }
             }
