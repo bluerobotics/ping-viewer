@@ -40,7 +40,7 @@ Take a look at [our documentation with **installation steps** and **technical in
 * [Store][4]
 
 [1]: https://github.com/bluerobotics/ping-protocol
-[2]: https://github.com/bluerobotics/ping-viewer/wiki
+[2]: https://docs.bluerobotics.com/ping-viewer/
 [3]: https://github.com/bluerobotics/software-guidelines
 [4]: https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/
 [5]: https://discuss.bluerobotics.com/
