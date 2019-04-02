@@ -71,7 +71,11 @@ runstep() {
     okmessage=$2
     errormsg=$3
     printfb "$okmessage: "
+
+    # This prints a '.' while the command is evaluated
+    sh -c "while sleep 1; do printf '.'; done;" &
     eval "$1" >>$verboseoutput 2>&1
+    kill $!
     [ $? == 0 ] || {
         echob "✖"
         cat $verboseoutput
