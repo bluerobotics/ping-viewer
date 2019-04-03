@@ -1,6 +1,4 @@
-<p align="center">
-    <img src="../images/viewer/ping-settings.png">
-</p>
+![Ping Settings](/images/viewer/ping-settings.png)
 
 ## Menu Items
 
