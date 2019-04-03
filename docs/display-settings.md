@@ -1,6 +1,4 @@
-<p align="center">
-    <img src="../images/viewer/display-settings.png">
-</p>
+![Display Settings](/images/viewer/display-settings.png)
 
 ## Menu Items
 
