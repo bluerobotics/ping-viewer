@@ -20,3 +20,5 @@ nav:
         - Logging and User Files: logging-and-user-files.md
         - FAQ and Troubleshooting: faq-and-troubleshooting.md
         - Developers and OEMs: developers-and-oems.md
+extra_css:
+    - css/center_images.css
