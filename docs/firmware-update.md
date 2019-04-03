@@ -27,6 +27,7 @@ To open the device, hold it firmly, and turn the blue ring in counterclockwise d
 After the device is opened, turn it on and look for a blinking led on the circuit board inside of the device. If you see a blinking led, the device should be good and the firmware is running fine, you may close the device and double check the [troubleshooting instructions](http://docs.bluerobotics.com/ping-viewer/faq-and-troubleshooting/#troubleshooting).
 
 If the led is not blinking:
+
  - Open the folder where the ping-viewer executable binary is located
  - Copy the folder path (we will use `/folder/path` in this example)
  - Open your OS terminal. (powershell on windows, what you prefer on linux :) )
