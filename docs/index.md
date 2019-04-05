@@ -19,21 +19,21 @@ Follow the setup instructions for your operating system:
 
 Download [this .zip file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer_release.zip), open the download location in the File Explorer, and extract it. Open the application by double clicking the executable file (pingviewer.exe). Windows will ask you to trust the software; click **More Info** → **Run Anyway**.
 
-![Windows protected your PC screen](/images/install/windows-protected-your-pc.png)
+![Windows protected your PC screen](images/install/windows-protected-your-pc.png)
 
 ### Mac
 
 Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-release.dmg), and double click it to open. Drag the Ping Viewer application icon to your *Applications* folder. Open the application by double clicking the icon in your *Applications* folder.
 
-![Install from .dmg](/images/install/mac-install-from-dmg.jpg)
+![Install from .dmg](images/install/mac-install-from-dmg.jpg)
 
 If you get an 'unidentified developer' notification when you try to open the application, you may adjust your security preferences to allow the application to run. Visit **System Preferences** -> **Security and Privacy**, click the lock and enter your password to make changes, then click 'Open Anyway'.
 
-![Mac Unindentified Developer](/images/install/mac-unidentified-developer.png)
+![Mac Unindentified Developer](images/install/mac-unidentified-developer.png)
 
-![Mac System Preferences](/images/install/mac-system-preferences-annotated.png)
+![Mac System Preferences](images/install/mac-system-preferences-annotated.png)
 
-![Mac Security and Privacy](/images/install/mac-security-and-privacy-annotated.png)
+![Mac Security and Privacy](images/install/mac-security-and-privacy-annotated.png)
 
 ### Linux
 
@@ -51,7 +51,7 @@ Visit the [Connection Settings](connection-settings.md) menu for more connection
 
 The Blue Robotics Ping Echosounder is a 1-dimensional sonar that measures the distance to objects underwater. The device emits a brief 115 kHz acoustic pulse from the transducer at the face of the device. The device then measures the strength of returned acoustic energy and the amount of time for the returned energy to reach a significant level. The sound wave travels through water, and reflects or 'echos' off of solid objects, and travels back to the device. The device then calculates the distance to the solid object with the equation `distance = known speed of sound in water * (measured time for echo to return / 2)`.
 
-![Echo](/images/echo.png)
+![Echo](images/echo.png)
 
 See the Wikipedia articles on [Echo sounding](https://en.wikipedia.org/wiki/Echo_sounding) and [Fishfinders](https://en.wikipedia.org/wiki/Fishfinder) for more information on how the device operates.
 
@@ -72,11 +72,11 @@ The Ping Viewer window consists of four important components:
 3. [Return Plot](#return-plot)
 4. [Waterfall](#waterfall)
 
-![Interface Annotated](/images/viewer/annotated/interface-annotated.png)
+![Interface Annotated](images/viewer/annotated/interface-annotated.png)
 
 #### Distance Readout
 
-![Distance Readout](/images/viewer/distance-readout-closeup.png)
+![Distance Readout](images/viewer/distance-readout-closeup.png)
 
 The Distance Readout displays the distance to the target in the most recent measurement. This is the distance to the seafloor in [depth sounding](https://en.wikipedia.org/wiki/Depth_sounding) applications.
 
@@ -86,7 +86,7 @@ The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcu
 
 #### Distance Axis
 
-![Distance Axis](/images/viewer/distance-axis-closeup.png)
+![Distance Axis](images/viewer/distance-axis-closeup.png)
 
 The Distance Axis is labeled with bold numbers on the right-hand edge of the Waterfall. This axis represents the distance from the Ping device transducer. The axis runs vertically down the screen, with the face of the transducer (zero distance) located at the top of the window. The deeper/farther an object is from the transducer, the closer its return will appear to the bottom of the window. The Distance Axis scale automatically adjusts to display the current scanning range of the Ping device.
 
@@ -94,7 +94,7 @@ There is an orange arrow on the Distance Axis indicating the distance to the tar
 
 #### Return Plot
 
-![Return Plot](/images/viewer/return-plot-closeup.png)
+![Return Plot](images/viewer/return-plot-closeup.png)
 
 The Return Plot displays the return strength vs distance of the most recent [**Profile**](#distance-and-profile-measurements) sample. The plot displays the measurement of only a single dependent variable (return strength), and is simply mirrored for ease of viewing. Stronger returns appear as wider traces.
 
@@ -102,7 +102,7 @@ The Return Plot displays the return strength vs distance of the most recent [**P
 
 #### Waterfall
 
-![Waterfall](/images/viewer/waterfall-closeup.png)
+![Waterfall](images/viewer/waterfall-closeup.png)
 
 The Waterfall is a three dimensional plot that occupies the main portion of the application window. The Waterfall plots consecutive [**Profile**](#distance-and-profile-measurements) samples (distance running vertically and color indicating signal strength). The horizontal axis is time; new data is displayed on the right edge of the Waterfall as older data moves to the left.
 
