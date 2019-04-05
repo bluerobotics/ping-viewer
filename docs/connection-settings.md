@@ -5,7 +5,7 @@ PingViewer also attempts to connect to UDP port 9090 on the host at IP address 1
 The Ping device connection can also be configured explicitly in the Connection Settings menu:
 
 TODO take new shot without sonar type
-![Connection Settings](/images/viewer/connection-settings.png)
+![Connection Settings](/ping-viewer/images/viewer/connection-settings.png)
 
 ## Connection Types
 
