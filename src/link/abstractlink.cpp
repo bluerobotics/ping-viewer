@@ -19,7 +19,4 @@ const AbstractLink& AbstractLink::operator=(const AbstractLink& other)
     return *this;
 }
 
-AbstractLink::~AbstractLink()
-{
-    finishConnection();
-}
+AbstractLink::~AbstractLink() = default;

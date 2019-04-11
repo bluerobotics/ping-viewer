@@ -7,4 +7,7 @@ TCPLink::TCPLink(QObject* parent)
 {
 }
 
-TCPLink::~TCPLink() = default;
+TCPLink::~TCPLink()
+{
+    finishConnection();
+}

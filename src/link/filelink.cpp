@@ -127,4 +127,5 @@ bool FileLink::finishConnection()
 
 FileLink::~FileLink()
 {
+    finishConnection();
 }

@@ -75,3 +75,8 @@ QStringList SerialLink::listAvailableConnections()
     }
     return list;
 }
+
+SerialLink::~SerialLink()
+{
+    finishConnection();
+}
