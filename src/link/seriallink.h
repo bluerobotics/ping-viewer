@@ -22,7 +22,7 @@ public:
      * @brief Destroy the Serial Link object
      *
      */
-    ~SerialLink() = default;
+    ~SerialLink();
 
     /**
      * @brief Human friendly error string
