@@ -23,7 +23,7 @@ configuration:
   - debug
 
 install:
-  # Set some vars
+  # Set and load necessary variables
   - '%QTDIR%\bin\qtenv2.bat'
   - pip install jinja2
   - qmake -v
@@ -61,6 +61,7 @@ before_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule init
   - git submodule update
+  # If building a debug version, add drkonqi
   - if "%CONFIGURATION%" == "debug" (
       appveyor DownloadFile https://s3.amazonaws.com/downloads.bluerobotics.com/PingViewer/drkonqi.zip -FileName drkonqi.zip &
       7z x -y -r drkonqi.zip -o%APPVEYOR_BUILD_FOLDER%
@@ -80,6 +81,7 @@ after_build:
   # not support extracting artifacts from out-of-source build directories. See 'artifacts' below.
   - dir /b /s *.exe
   - mkdir deploy
+  # We need all debug symbols and generates files in debug mode
   - if "%CONFIGURATION%" == "debug" (
       xcopy /E /Y "%APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%" "./deploy"
     ) else (
