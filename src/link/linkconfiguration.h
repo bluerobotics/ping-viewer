@@ -63,10 +63,9 @@ public:
      * @brief Construct a new Link Configuration object
      *
      * @param other
-     * @param parent
      */
-    LinkConfiguration(const LinkConfiguration& other, QObject* parent = nullptr)
-        : QObject(parent)
+    LinkConfiguration(const LinkConfiguration& other)
+        : QObject(nullptr)
         , _linkConf{other.configurationStruct()} {};
 
     /**
