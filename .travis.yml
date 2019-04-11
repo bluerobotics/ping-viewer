@@ -15,15 +15,15 @@ matrix:
           sources:
             - sourceline: 'ppa:cs50/ppa'
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:beineri/opt-qt-5.11.1-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.12.2-xenial'
           packages:
             - astyle
             - doxygen
             - g++-7
             - git
             - build-essential
-            - qt511base
-            - qt511charts-no-lgpl qt511graphicaleffects qt511quickcontrols qt511quickcontrols2 qt511scxml qt511serialport qt511svg
+            - qt512base
+            - qt512charts-no-lgpl qt512graphicaleffects qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
             - libgl1-mesa-dev
             - xvfb
       env:
@@ -39,13 +39,13 @@ matrix:
         apt:
           sources:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:beineri/opt-qt-5.11.1-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.12.2-xenial'
           packages:
             - g++-7
             - git
             - build-essential
-            - qt511base
-            - qt511charts-no-lgpl qt511graphicaleffects qt511quickcontrols qt511quickcontrols2 qt511scxml qt511serialport qt511svg
+            - qt512base
+            - qt512charts-no-lgpl qt512graphicaleffects qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
             - libgl1-mesa-dev
       env:
         - DESC="AppImage deploy"
