@@ -1,3 +1,5 @@
+#pragma once
+
 #include <QQuickPaintedItem>
 #include <QImage>
 
