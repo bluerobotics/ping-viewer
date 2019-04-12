@@ -9,6 +9,7 @@ import Qt.labs.settings 1.0
 import Logger 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
+import Util 1.0
 
 Item {
     id: root
@@ -351,7 +352,7 @@ Item {
                     onClicked: {
                         print("Reset settings.")
                         SettingsManager.reset = true
-                        Qt.quit()
+                        Util.restartApplication()
                     }
                 }
 
