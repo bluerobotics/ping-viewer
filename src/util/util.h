@@ -44,6 +44,12 @@ public:
     Q_INVOKABLE QStringList serialPortList();
 
     /**
+     * @brief  Restart application
+     *  Based in https://stackoverflow.com/a/7947551/7988054
+     */
+    Q_INVOKABLE void restartApplication();
+
+    /**
      * @brief Return Util pointer
      *
      * @return Util*

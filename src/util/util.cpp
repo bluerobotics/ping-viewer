@@ -72,6 +72,17 @@ void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& poin
     xySeries->replace(realPoints);
 }
 
+void Util::restartApplication()
+{
+    QCoreApplication::quit();
+    const QStringList arguments = QCoreApplication::arguments();
+    if(arguments.isEmpty()) {
+        qCWarning(util) << "CoreApplication argument is empty, the application will not restart.";
+        return;
+    }
+    QProcess::startDetached(arguments.first(), arguments);
+}
+
 QObject* Util::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
 {
     Q_UNUSED(engine)
