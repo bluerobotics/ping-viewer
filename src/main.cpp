@@ -11,6 +11,7 @@
 #endif
 
 #include "abstractlink.h"
+#include "devicemanager.h"
 #include "filemanager.h"
 #include "flasher.h"
 #include "linkconfiguration.h"
@@ -42,6 +43,8 @@ int main(int argc, char *argv[])
 
     // Singleton register
     qRegisterMetaType<AbstractLinkNamespace::LinkType>();
+    qmlRegisterSingletonType<DeviceManager>("DeviceManager", 1, 0, "DeviceManager",
+                                            DeviceManager::qmlSingletonRegister);
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
     qmlRegisterSingletonType<NotificationManager>("NotificationManager", 1, 0, "NotificationManager",

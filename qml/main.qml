@@ -23,6 +23,13 @@ ApplicationWindow {
     MainPage {
         id: mainPage
         anchors.fill: parent
+
+        DeviceManagerViewer {
+            id: deviceManagerViewer
+            width: parent.width/2
+            height: parent.height*0.9
+            anchors.centerIn: parent
+        }
     }
 
     // Save windows position and size
