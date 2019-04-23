@@ -32,7 +32,7 @@ Item {
             Image {
                 id: pingIcon
                 Layout.preferredWidth: 50
-                source: "/imgs/ping.png"
+                source: "/imgs/ping.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
                 smooth: true
@@ -47,7 +47,7 @@ Item {
                 id: pingName
                 height: 50
                 width: 150
-                source: "/imgs/ping_name.png"
+                source: "/imgs/ping_name.svg"
             }
 
             Item {
@@ -57,7 +57,7 @@ Item {
             Image {
                 id: brIcon
                 Layout.preferredWidth: 50
-                source: "/imgs/br_icon.png"
+                source: "/imgs/br_icon.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
                 smooth: true
