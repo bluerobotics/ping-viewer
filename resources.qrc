@@ -4,6 +4,7 @@
         <file alias="Chart.qml">qml/Chart.qml</file>
         <file alias="ConnectionMenu.qml">qml/ConnectionMenu.qml</file>
         <file alias="DepthAxis.qml">qml/DepthAxis.qml</file>
+        <file alias="DeviceManagerViewer.qml">qml/DeviceManagerViewer.qml</file>
         <file alias="DisplaySettings.qml">qml/DisplaySettings.qml</file>
         <file alias="FirmwareUpdate.qml">qml/FirmwareUpdate.qml</file>
         <file alias="InfoPage.qml">qml/InfoPage.qml</file>
