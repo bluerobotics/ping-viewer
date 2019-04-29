@@ -78,7 +78,6 @@ public:
     CREATE_ICON(disk)
     CREATE_ICON(info)
     CREATE_ICON(lock)
-    CREATE_ICON(process)
     CREATE_ICON(report)
     CREATE_ICON(reset)
     CREATE_ICON(settings)
