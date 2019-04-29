@@ -7,8 +7,7 @@
 #include <QSerialPortInfo>
 #include <QUdpSocket>
 
-#include "pingmessage/pingmessage.h"
-#include "pingmessage/pingmessage_ping1D.h"
+#include "pingmessage/ping_ping1d.h"
 #include "protocoldetector.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PROTOCOLDETECTOR, "ping.protocol.protocoldetector")
@@ -97,8 +96,8 @@ QVector<LinkConfiguration> ProtocolDetector::updateLinkConfigurations(QVector<Li
 bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 {
     // To find a ping, we this message on a link, then wait for a reply
-    ping_msg_ping1D_empty req;
-    req.set_id(Ping1DNamespace::Firmware_version);
+    ping_message_general_request req;
+    req.set_requested_id(PingPing1DNamespace::FirmwareVersion);
     req.updateChecksum();
 
     QSerialPortInfo portInfo(linkConf.serialPort());
@@ -147,8 +146,8 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 {
     // To find a ping, we this message on a link, then wait for a reply
-    ping_msg_ping1D_empty req;
-    req.set_id(Ping1DNamespace::Firmware_version);
+    ping_message_general_request req;
+    req.set_requested_id(PingPing1DNamespace::FirmwareVersion);
     req.updateChecksum();
 
     QUdpSocket socket;
