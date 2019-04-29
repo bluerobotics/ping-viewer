@@ -1,7 +1,7 @@
 #include <QtMath>
 
 #include "pingsimulationlink.h"
-#include "pingmessage/pingmessage_all.h"
+#include "pingmessage/ping_ping1d.h"
 
 PingSimulationLink::PingSimulationLink(QObject* parent)
     : SimulationLink(parent)
@@ -21,7 +21,7 @@ void PingSimulationLink::randomUpdate()
 
     uint8_t conf = 400 / (stop2 - stop1);
 
-    static ping_msg_ping1D_profile profile(numPoints);
+    static ping_ping1D_profile profile(numPoints);
 
     profile.set_distance(osc*(stop2+stop1)/(numPoints*2));
     profile.set_confidence(conf);
