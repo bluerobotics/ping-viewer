@@ -23,7 +23,7 @@
 #include "waterfall.h"
 
 // Register message enums to qml
-#include "pingmessage/pingmessage.h"
+#include "pingmessage/ping_ping1d.h"
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     // Uncreatable register
     qmlRegisterUncreatableMetaObject(
-        Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
+        PingPing1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
     );
 
     qmlRegisterUncreatableMetaObject(
