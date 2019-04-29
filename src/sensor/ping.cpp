@@ -61,10 +61,10 @@ Ping::Ping() : Sensor()
         }
         emit lostMessagesUpdate();
 
-        request(Ping1DNamespace::Pcb_temperature);
-        request(Ping1DNamespace::Processor_temperature);
-        request(Ping1DNamespace::Voltage_5);
-        request(Ping1DNamespace::Mode_auto);
+        request(PingPing1DNamespace::PcbTemperature);
+        request(PingPing1DNamespace::ProcessorTemperature);
+        request(PingPing1DNamespace::Voltage5);
+        request(PingPing1DNamespace::ModeAuto);
     });
 
     //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
@@ -116,12 +116,12 @@ void Ping::startPreConfigurationProcess()
     SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 
     // Request device information
-    request(Ping1DNamespace::Ping_enable);
-    request(Ping1DNamespace::Mode_auto);
-    request(Ping1DNamespace::Profile);
-    request(Ping1DNamespace::Firmware_version);
-    request(Ping1DNamespace::Device_id);
-    request(Ping1DNamespace::Speed_of_sound);
+    request(PingPing1DNamespace::PingEnable);
+    request(PingPing1DNamespace::ModeAuto);
+    request(PingPing1DNamespace::Profile);
+    request(PingPing1DNamespace::FirmwareVersion);
+    request(PingPing1DNamespace::DeviceId);
+    request(PingPing1DNamespace::SpeedOfSound);
 
     // Start periodic request timer
     _periodicRequestTimer.start();
@@ -176,11 +176,11 @@ void Ping::connectLink(LinkType connType, const QStringList& connString)
     startPreConfigurationProcess();
 }
 
-void Ping::handleMessage(PingMessage msg)
+void Ping::handleMessage(ping_message msg)
 {
     qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id();
 
-    auto& requestedId = requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(msg.message_id())];
+    auto& requestedId = requestedIds[static_cast<PingPing1DNamespace::ping_ping1D_id>(msg.message_id())];
     if(requestedId.waiting) {
         requestedId.waiting--;
         requestedId.ack++;
@@ -188,20 +188,20 @@ void Ping::handleMessage(PingMessage msg)
 
     switch (msg.message_id()) {
 
-    case Ping1DNamespace::Ack: {
-        ping_msg_ping1D_ack ackMessage{msg};
+    case PingMessageNamespace::Ack: {
+        ping_message_ack ackMessage{msg};
         qCDebug(PING_PROTOCOL_PING) << "ACK message:" << ackMessage.acked_id();
         break;
     }
 
-    case Ping1DNamespace::Nack: {
-        ping_msg_ping1D_nack nackMessage{msg};
+    case PingMessageNamespace::Nack: {
+        ping_message_nack nackMessage{msg};
         qCCritical(PING_PROTOCOL_PING) << "Sensor NACK!";
         _nack_msg = QString("%1: %2").arg(nackMessage.nack_message()).arg(nackMessage.nacked_id());
         qCDebug(PING_PROTOCOL_PING) << "NACK message:" << _nack_msg;
         emit nackMsgUpdate();
 
-        auto& nackRequestedId = requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(nackMessage.nacked_id())];
+        auto& nackRequestedId = requestedIds[static_cast<PingPing1DNamespace::ping_ping1D_id>(nackMessage.nacked_id())];
         if(nackRequestedId.waiting) {
             nackRequestedId.waiting--;
             nackRequestedId.nack++;
@@ -210,15 +210,15 @@ void Ping::handleMessage(PingMessage msg)
     }
 
     // needs dynamic-payload patch
-    case Ping1DNamespace::Ascii_text: {
-        _ascii_text = ping_msg_ping1D_ascii_text(msg).ascii_message();
+    case PingMessageNamespace::AsciiText: {
+        _ascii_text = ping_message_ascii_text(msg).ascii_message();
         qCInfo(PING_PROTOCOL_PING) << "Sensor status:" << _ascii_text;
         emit asciiTextUpdate();
         break;
     }
 
-    case Ping1DNamespace::Firmware_version: {
-        ping_msg_ping1D_firmware_version m(msg);
+    case PingPing1DNamespace::FirmwareVersion: {
+        ping_ping1D_firmware_version m(msg);
         _device_type = m.device_type();
         _device_model = m.device_model();
         _firmware_version_major = m.firmware_version_major();
@@ -233,16 +233,16 @@ void Ping::handleMessage(PingMessage msg)
 
     // This message is deprecated, it provides no added information because
     // the device id is already supplied in every message header
-    case Ping1DNamespace::Device_id: {
-        ping_msg_ping1D_device_id m(msg);
+    case PingPing1DNamespace::DeviceId: {
+        ping_ping1D_device_id m(msg);
         _srcId = m.src_device_id();
 
         emit srcIdUpdate();
     }
     break;
 
-    case Ping1DNamespace::Distance: {
-        ping_msg_ping1D_distance m(msg);
+    case PingPing1DNamespace::Distance: {
+        ping_ping1D_distance m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
         _pulse_duration = m.pulse_duration();
@@ -262,8 +262,8 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case Ping1DNamespace::Distance_simple: {
-        ping_msg_ping1D_distance_simple m(msg);
+    case PingPing1DNamespace::DistanceSimple: {
+        ping_ping1D_distance_simple m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
 
@@ -272,8 +272,8 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case Ping1DNamespace::Profile: {
-        ping_msg_ping1D_profile m(msg);
+    case PingPing1DNamespace::Profile: {
+        ping_ping1D_profile m(msg);
         _distance = m.distance();
         _confidence = m.confidence();
         _pulse_duration = m.pulse_duration();
@@ -302,8 +302,8 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case Ping1DNamespace::Mode_auto: {
-        ping_msg_ping1D_mode_auto m(msg);
+    case PingPing1DNamespace::ModeAuto: {
+        ping_ping1D_mode_auto m(msg);
         if(_mode_auto != m.mode_auto()) {
             _mode_auto = m.mode_auto();
             emit modeAutoUpdate();
@@ -311,22 +311,22 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case  Ping1DNamespace::Ping_enable: {
-        ping_msg_ping1D_ping_enable m(msg);
+    case  PingPing1DNamespace::PingEnable: {
+        ping_ping1D_ping_enable m(msg);
         _ping_enable = m.ping_enabled();
         emit pingEnableUpdate();
     }
     break;
 
-    case Ping1DNamespace::Ping_interval: {
-        ping_msg_ping1D_ping_interval m(msg);
+    case PingPing1DNamespace::PingInterval: {
+        ping_ping1D_ping_interval m(msg);
         _ping_interval = m.ping_interval();
         emit pingIntervalUpdate();
     }
     break;
 
-    case Ping1DNamespace::Range: {
-        ping_msg_ping1D_range m(msg);
+    case PingPing1DNamespace::Range: {
+        ping_ping1D_range m(msg);
         _scan_start = m.scan_start();
         _scan_length = m.scan_length();
         emit scanLengthUpdate();
@@ -334,43 +334,43 @@ void Ping::handleMessage(PingMessage msg)
     }
     break;
 
-    case Ping1DNamespace::General_info: {
-        ping_msg_ping1D_general_info m(msg);
+    case PingPing1DNamespace::GeneralInfo: {
+        ping_ping1D_general_info m(msg);
         _gain_index = m.gain_index();
         emit gainIndexUpdate();
     }
     break;
 
-    case Ping1DNamespace::Gain_index: {
-        ping_msg_ping1D_gain_index m(msg);
+    case PingPing1DNamespace::GainIndex: {
+        ping_ping1D_gain_index m(msg);
         _gain_index = m.gain_index();
         emit gainIndexUpdate();
     }
     break;
 
-    case Ping1DNamespace::Speed_of_sound: {
-        ping_msg_ping1D_speed_of_sound m(msg);
+    case PingPing1DNamespace::SpeedOfSound: {
+        ping_ping1D_speed_of_sound m(msg);
         _speed_of_sound = m.speed_of_sound();
         emit speedOfSoundUpdate();
     }
     break;
 
-    case Ping1DNamespace::Processor_temperature: {
-        ping_msg_ping1D_processor_temperature m(msg);
+    case PingPing1DNamespace::ProcessorTemperature: {
+        ping_ping1D_processor_temperature m(msg);
         _processor_temperature = m.processor_temperature();
         emit processorTemperatureUpdate();
     }
     break;
 
-    case Ping1DNamespace::Pcb_temperature: {
-        ping_msg_ping1D_pcb_temperature m(msg);
+    case PingPing1DNamespace::PcbTemperature: {
+        ping_ping1D_pcb_temperature m(msg);
         _pcb_temperature = m.pcb_temperature();
         emit pcbTemperatureUpdate();
     }
     break;
 
-    case Ping1DNamespace::Voltage_5: {
-        ping_msg_ping1D_voltage_5 m(msg);
+    case PingPing1DNamespace::Voltage5: {
+        ping_ping1D_voltage_5 m(msg);
         _board_voltage = m.voltage_5(); // millivolts
         emit boardVoltageUpdate();
     }
@@ -437,7 +437,7 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
 
     if (sendPingGotoBootloader) {
         qCDebug(PING_PROTOCOL_PING) << "Put it in bootloader mode.";
-        ping_msg_ping1D_goto_bootloader m;
+        ping_ping1D_goto_bootloader m;
         m.updateChecksum();
         writeMessage(m);
     }
@@ -491,13 +491,13 @@ void Ping::request(int id)
     }
     qCDebug(PING_PROTOCOL_PING) << "Requesting:" << id;
 
-    ping_msg_ping1D_empty m;
+    ping_message_empty m;
     m.set_id(id);
     m.updateChecksum();
     writeMessage(m);
 
     // Add requested id
-    requestedIds[static_cast<Ping1DNamespace::msg_ping1D_id>(id)].waiting++;
+    requestedIds[static_cast<PingPing1DNamespace::ping_ping1D_id>(id)].waiting++;
 }
 
 void Ping::setLastPingConfiguration()
@@ -549,7 +549,7 @@ void Ping::setLastPingConfiguration()
         {
             qCDebug(PING_PROTOCOL_PING) << "Last configuration done, timer will stop now.";
             lastPingConfigurationTimer->stop();
-            do_continuous_start(Ping1DNamespace::Profile);
+            do_continuous_start(PingPing1DNamespace::Profile);
         }
     });
     lastPingConfigurationTimer->start(500);
@@ -560,12 +560,12 @@ void Ping::setPingFrequency(float pingFrequency)
 {
     if (pingFrequency <= 0 || pingFrequency > _pingMaxFrequency) {
         qCWarning(PING_PROTOCOL_PING) << "Invalid frequency:" << pingFrequency;
-        do_continuous_stop(Ping1DNamespace::Profile);
+        do_continuous_stop(PingPing1DNamespace::Profile);
     } else {
         int periodMilliseconds = 1000.0f / pingFrequency;
         qCDebug(PING_PROTOCOL_PING) << "Setting frequency(Hz) and period(ms):" << pingFrequency << periodMilliseconds;
         set_ping_interval(periodMilliseconds);
-        do_continuous_start(Ping1DNamespace::Profile);
+        do_continuous_start(PingPing1DNamespace::Profile);
     }
     qCDebug(PING_PROTOCOL_PING) << "Ping frequency" << pingFrequency;
 }
@@ -591,7 +591,7 @@ void Ping::printStatus()
     qCDebug(PING_PROTOCOL_PING) << "\t- points:" << QByteArray((const char*)_points.data(), _num_points).toHex(',');
 }
 
-void Ping::writeMessage(const PingMessage &msg)
+void Ping::writeMessage(const ping_message &msg)
 {
     if(link() && link()->isOpen() && link()->isWritable()) {
         link()->write(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength());
