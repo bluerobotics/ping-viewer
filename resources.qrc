@@ -48,4 +48,9 @@
         <file alias="ping.svg">qml/imgs/ping.svg</file>
         <file alias="ping_name.svg">qml/imgs/ping_name.svg</file>
     </qresource>
+    <qresource prefix="/gifs">
+        <file alias="None.gif">qml/gifs/None.gif</file>
+        <file alias="Ping1D.gif">qml/gifs/Ping1D.gif</file>
+        <file alias="Ping360.gif">qml/gifs/Ping360.gif</file>
+    </qresource>
 </RCC>
