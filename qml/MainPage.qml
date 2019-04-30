@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
 import AbstractLinkNamespace 1.0
+import DeviceManager 1.0
 import FileManager 1.0
 import Ping 1.0
 import Ping1DNamespace 1.0
@@ -18,6 +19,25 @@ Item {
     visible: true
     focus: true
 
+    property var ping: DeviceManager.primarySensor
+
+    Connections {
+        target: ping
+
+        onPointsUpdate: {
+            // Move from mm to m
+            ping1DVisualizer.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
+        }
+
+        onDistanceUpdate: {
+            ping1DVisualizer.setDepth(ping.distance/1e3)
+        }
+
+        onConfidenceUpdate: {
+            ping1DVisualizer.setConfidence(ping.confidence)
+        }
+    }
+
     Column {
         z: 1
         anchors.left: parent.left
@@ -27,7 +47,7 @@ Item {
             id: menuContainer
             icon: StyleManager.arrowIcon()
             item: MainMenu {
-                ping: ping
+                ping: root.ping
             }
 
             onHideItemChanged: {
@@ -60,18 +80,21 @@ Item {
 
                     onHideItemChanged: {
                         if(hideItem == false) {
-                            connectionMenu.hideItem = true
+                            deviceManagerMenu.hideItem = true
                         }
                     }
                 }
 
                 PingItem {
-                    id: connectionMenu
+                    id: deviceManagerMenu
                     isSubItem: true
                     icon: StyleManager.connectIcon()
 
-                    item: ConnectionMenu {
-                        ping: ping
+                    onClickedChanged: {
+                        if(clicked) {
+                            deviceManagerViewer.open()
+                            settingsMenu.hideItem = true
+                        }
                     }
 
                     onHideItemChanged: {
@@ -209,23 +232,6 @@ Item {
         anchors.bottom: parent.bottom
     }
 
-    Ping {
-        id: ping
-
-        onPointsUpdate: {
-            // Move from mm to m
-            ping1DVisualizer.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
-        }
-
-        onDistanceUpdate: {
-            ping1DVisualizer.setDepth(ping.distance/1e3)
-        }
-
-        onConfidenceUpdate: {
-            ping1DVisualizer.setConfidence(ping.confidence)
-        }
-    }
-
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent
@@ -238,7 +244,7 @@ Item {
     }
 
     PingStatus {
-        ping: ping
+        ping: root.ping
         visible: SettingsManager.debugMode
     }
 
