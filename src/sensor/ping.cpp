@@ -85,23 +85,10 @@ Ping::Ping() : Sensor()
         }
     });
 
-    connect(this, &Ping::autoDetectUpdate, this, [this](bool autodetect) {
-        if(!autodetect) {
-            if(detector()->isRunning()) {
-                detector()->stop();
-            }
-        } else {
-            if(!detector()->isRunning()) {
-                detector()->scan();
-            }
-        }
-    });
-
+    // TODO: @Patrick move it to devicemanager
     // Load last successful connection
     auto config = SettingsManager::self()->lastLinkConfiguration();
     qCDebug(PING_PROTOCOL_PING) << "Loading last configuration connection from settings:" << config;
-    addDetectionLink(config);
-    detectorThread()->start();
 }
 
 void Ping::startPreConfigurationProcess()
@@ -112,7 +99,6 @@ void Ping::startPreConfigurationProcess()
         return;
     }
 
-    setAutoDetect(false);
     SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 
     // Request device information
@@ -158,15 +144,6 @@ void Ping::updatePingConfigurationSettings()
         auto& dataStruct = _pingConfiguration[key];
         dataStruct.set(dataStruct.getClassValue());
         SettingsManager::self()->setMapValue({"Ping", "PingConfiguration", QString(_srcId), key}, dataStruct.value);
-    }
-}
-
-void Ping::addDetectionLink(const LinkConfiguration& linkConfiguration)
-{
-    if(linkConfiguration.isValid()) {
-        detector()->appendConfiguration(linkConfiguration);
-    } else {
-        qCDebug(PING_PROTOCOL_PING) << "Invalid configuration:" << linkConfiguration.errorToString();
     }
 }
 
@@ -477,7 +454,7 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
             QThread::msleep(500);
             // Clear last configuration src ID to detect device as a new one
             resetSensorLocalVariables();
-            detector()->scan();
+            Sensor::connectLink(*link()->configuration());
         }
 
     });

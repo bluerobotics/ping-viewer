@@ -26,13 +26,6 @@ public:
     ~Ping();
 
     /**
-     * @brief Add configuration to be detected by detector
-     *
-     * @param linkConfiguration
-     */
-    void addDetectionLink(const LinkConfiguration& linkConfiguration);
-
-    /**
      * @brief Add new connection
      *
      * @param connType connection type
