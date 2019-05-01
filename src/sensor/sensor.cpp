@@ -9,39 +9,26 @@
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 
-Sensor::Sensor() :
-    _autodetect(true)
-    ,_connected(false)
-    ,_detector(new ProtocolDetector())
-    ,_linkIn(new Link(LinkType::Serial, "Default"))
+Sensor::Sensor()
+    :_connected(false)
+    ,_linkIn(new Link())
     ,_linkOut(nullptr)
     ,_parser(nullptr)
 {
     emit connectionUpdate();
     connect(this, &Sensor::connectionOpen, this, [this] {
-        this->_connected = true;
+        _connected = true;
         emit this->connectionUpdate();
     });
     connect(this, &Sensor::connectionClose, this, [this] {
-        this->_connected = false;
+        _connected = false;
         emit this->connectionUpdate();
-    });
-
-    _detector->moveToThread(&_detectorThread);
-    connect(&_detectorThread, &QThread::finished, _detector, &QObject::deleteLater);
-    connect(&_detectorThread, &QThread::started, _detector, &ProtocolDetector::scan);
-    connect(_detector, &ProtocolDetector::connectionDetected, this, [this](const LinkConfiguration& conConf) {
-        connectLink(conConf);
     });
 }
 
 // TODO: rework this after sublasses and parser rework
-void Sensor::connectLink(const LinkConfiguration& conConf, const LinkConfiguration& logConf)
+void Sensor::connectLink(const LinkConfiguration conConf, const LinkConfiguration& logConf)
 {
-    if(_detector->isRunning()) {
-        _detector->stop();
-    }
-
     if(link()->isOpen()) {
         link()->finishConnection();
     }
@@ -118,18 +105,4 @@ void Sensor::connectLinkLog(const LinkConfiguration& logConf)
     emit linkLogUpdate();
 }
 
-void Sensor::setAutoDetect(bool autodetect)
-{
-    if(_autodetect == autodetect) {
-        return;
-    }
-    _autodetect = autodetect;
-    emit autoDetectUpdate(autodetect);
-}
-
-Sensor::~Sensor()
-{
-    _detector->stop();
-    _detectorThread.quit();
-    _detectorThread.wait();
-}
+Sensor::~Sensor() = default;

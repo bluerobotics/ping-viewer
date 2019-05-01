@@ -47,9 +47,11 @@ public:
      * @brief Add new connection and log
      *
      * @param conConf connection configuration
+     *          note: This should be received by copy, since we could use our own link to connect
      * @param logConf log configuration
+     *
      */
-    void connectLink(const LinkConfiguration& conConf, const LinkConfiguration& logConf = LinkConfiguration());
+    void connectLink(const LinkConfiguration conConf, const LinkConfiguration& logConf = LinkConfiguration());
 
     /**
      * @brief Add new log connection
@@ -59,41 +61,12 @@ public:
     void connectLinkLog(const LinkConfiguration& logConf);
 
     /**
-     * @brief Set auto detect
-     *
-     * @param autodetect
-     */
-    void setAutoDetect(bool autodetect);
-    /**
-     * @brief Check auto detect state
-     *
-     * @return true running
-     * @return false not running
-     */
-    bool autoDetect() { return _autodetect; };
-    Q_PROPERTY(bool autodetect READ autoDetect WRITE setAutoDetect NOTIFY autoDetectUpdate)
-
-    /**
      * @brief Return true if sensor is connected
      *
      * @return bool
      */
     bool connected() { return _connected; };
     Q_PROPERTY(bool connected READ connected NOTIFY connectionUpdate)
-
-    /**
-     * @brief Return protocol detector
-     *
-     * @return const ProtocolDetector*
-     */
-    ProtocolDetector* detector() { return _detector; };
-
-    /**
-     * @brief Return protocol detector thread
-     *
-     * @return const QThread*
-     */
-    QThread* detectorThread() { return &_detectorThread; };
 
 
     /**
@@ -117,10 +90,7 @@ public:
 
 
 protected:
-    bool _autodetect;
     bool _connected;
-    ProtocolDetector* _detector;
-    QThread _detectorThread;
     // For now this will be structures by: firmware file name, and remote address
     // TODO: A Model should be created to handle this for us
     QMap<QString, QVariant> _firmwares;
