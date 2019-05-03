@@ -36,13 +36,6 @@ public:
     static StyleManager* self();
 
     /**
-     * @brief Set the Application object
-     *
-     * @param app
-     */
-    void setApplication(QApplication* app) { _app = app; }
-
-    /**
      * @brief Set the Qml Engine object
      *
      * @param engine
@@ -116,7 +109,6 @@ private:
         return QStringLiteral("/icons/%1.svg").arg(functionName.remove("Icon"));
     };
 
-    QApplication* _app;
     QColor _dark = "black";
     QColor _light = "linen";
     QQmlApplicationEngine* _engine;
