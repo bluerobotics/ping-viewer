@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QQmlEngine>
 #include <QStandardPaths>
 
 #include "filemanager.h"
@@ -14,6 +15,8 @@ FileManager::FileManager()
     , _picturesDir(_fmDir.dir.filePath(QStringLiteral("Pictures")), fileTypeExtension[PICTURE])
     , _sensorLogDir(_fmDir.dir.filePath(QStringLiteral("Sensor_Log")), fileTypeExtension[BINARY])
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     // Check for folders and create if necessary
     auto rootDir = QDir();
     for(auto f : {&_fmDir, &_guiLogDir, &_picturesDir, &_sensorLogDir, &_gradientsDir}) {
