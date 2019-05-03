@@ -1,11 +1,15 @@
 #include "logger.h"
 #include "settingsmanager.h"
 
+#include <QQmlEngine>
+
 PING_LOGGING_CATEGORY(SETTINGSMANAGER, "ping.settingsmanager")
 
 SettingsManager::SettingsManager()
     : _settings("Blue Robotics Inc.", "Ping Viewer")
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     //TODO: reset settings if new version
     if(_settings.contains("reset")) {
         bool reset = _settings.value("reset").toBool();
