@@ -211,6 +211,29 @@ public:
     Q_INVOKABLE AbstractLinkNamespace::LinkType type() const { return _linkConf.type; };
 
     /**
+     * @brief Return the type in a human readable format
+     *
+     * @return QString
+     */
+    Q_INVOKABLE QString typeToString() const
+    {
+        switch(_linkConf.type) {
+        case LinkType::None:
+            return QStringLiteral("None");
+        case LinkType::File:
+            return QStringLiteral("File");
+        case LinkType::Serial:
+            return QStringLiteral("Serial");
+        case LinkType::Udp:
+            return QStringLiteral("UDP");
+        case LinkType::PingSimulation :
+            return QStringLiteral("Simulation");
+        default :
+            return QStringLiteral("Unknown");
+        }
+    };
+
+    /**
      * @brief Will return argument with UDP host name
      *
      * @return QString
