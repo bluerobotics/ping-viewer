@@ -23,7 +23,7 @@ Item {
             running = true
             flashProgress.value = progress
         }
-        onMessageChanged: {
+        onStateChanged: {
             switch(state) {
                 case Flasher.Error:
                     print("Flash procedure failed!")
