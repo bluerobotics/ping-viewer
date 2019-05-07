@@ -111,7 +111,7 @@ public:
 signals:
     void messageChanged();
     void flashProgress(float progress);
-    void stateChanged();
+    void stateChanged(Flasher::States state);
 
 private:
     void firmwareUpdatePercentage(const QString& output);
