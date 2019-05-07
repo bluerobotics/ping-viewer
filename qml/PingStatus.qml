@@ -7,7 +7,7 @@ Item {
     anchors.fill: parent
 
     property var marginPix: 10
-    property var ping
+    property var ping: null
 
     Rectangle {
         anchors.centerIn: parent
