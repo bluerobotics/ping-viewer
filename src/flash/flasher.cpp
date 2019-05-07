@@ -193,7 +193,7 @@ void Flasher::setState(Flasher::States state, QString message)
 {
     if(_state != state) {
         _state = state;
-        emit stateChanged();
+        emit stateChanged(state);
     }
 
     setMessage(message);
