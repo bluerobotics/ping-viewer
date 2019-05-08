@@ -12,7 +12,6 @@ Item {
     width: iconRect.width
     // Default state
     state: "top-left"
-    signal  activated()
 
     property bool flip: !hideItem
     property bool hideItem: true
