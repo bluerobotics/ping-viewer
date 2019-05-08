@@ -111,8 +111,10 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onClicked: {
-                itemRect.hide = !itemRect.hide
-                hideItem = itemRect.hide
+                if(item) {
+                    itemRect.hide = !itemRect.hide
+                    hideItem = itemRect.hide
+                }
                 pingItem.clicked = !pingItem.clicked
             }
         }
