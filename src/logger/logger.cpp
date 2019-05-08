@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QtConcurrent>
 #include <QColor>
+#include <QQmlEngine>
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
 
@@ -16,6 +17,8 @@ Logger::Logger()
     : _file(FileManager::self()->createFileName(FileManager::Folder::GuiLogs))
     , _fileStream(&_file)
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     if(!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         qCWarning(logger) << "A file with the gui log will not be available !";
     }
