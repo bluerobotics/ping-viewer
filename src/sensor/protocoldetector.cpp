@@ -21,6 +21,9 @@ const QStringList ProtocolDetector::_invalidSerialPortNames(
 
 ProtocolDetector::ProtocolDetector()
 {
+    // Register type to be used in availableLinksChanged
+    qRegisterMetaType<QVector<LinkConfiguration>>();
+
     _linkConfigs.append({
         {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 standard connection"},
         {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}
@@ -43,10 +46,12 @@ void ProtocolDetector::doScan()
         auto linksConf = updateLinkConfigurations(_linkConfigs);
         for(LinkConfiguration& tryLinkConf : linksConf) {
             linkConf = tryLinkConf;
-            if(checkLink(linkConf)) {
-                break;
-            }
+            checkLink(linkConf);
         }
+
+        QVector<LinkConfiguration> availableLinksCopy = _availableLinks;
+        emit availableLinksChanged(availableLinksCopy);
+        _availableLinks.clear();
         QThread::msleep(500);
     }
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Scan finished.";
@@ -69,7 +74,6 @@ bool ProtocolDetector::checkLink(LinkConfiguration& linkConf)
             _availableLinks.append(linkConf);
         }
         emit connectionDetected(linkConf);
-        _active = false;
     }
     return _detected;
 }

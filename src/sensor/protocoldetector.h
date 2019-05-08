@@ -89,6 +89,7 @@ public:
     void stop() { _active = false; };
 
 signals:
+    void availableLinksChanged(QVector<LinkConfiguration> linkConfs);
     void connectionDetected(LinkConfiguration linkConf);
     void scan();
 
