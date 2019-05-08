@@ -109,7 +109,6 @@ int main(int argc, char *argv[])
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
     qCInfo(mainCategory) << "Git url:" << GIT_URL;
 
-    StyleManager::self()->setApplication(&app);
     StyleManager::self()->setQmlEngine(&engine);
 
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
