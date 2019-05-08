@@ -4,13 +4,12 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
 import AbstractLinkNamespace 1.0
+import DeviceManager 1.0
 import SettingsManager 1.0
 import Util 1.0
 
 Item {
     id: root
-    height: connectionLayout.height
-    width: connectionLayout.width
     property var ping: null
     property var serialPortList: null
 
@@ -28,7 +27,7 @@ Item {
 
         // Transform arguments to Array and remove connectionTypeEnum from it
         var nextArgs = Array.prototype.slice.call(arguments).slice(1)
-        ping.connectLink(connectionTypeEnum, nextArgs)
+        DeviceManager.connectLinkDirectly(connectionTypeEnum, nextArgs)
     }
 
     Connections {
@@ -72,7 +71,7 @@ Item {
         enabled: true
         // Hack
         label.x: width/2 - label.contentWidth/2
-        Layout.fillWidth: true
+        width: parent.width
 
         GridLayout {
             anchors.fill: parent
