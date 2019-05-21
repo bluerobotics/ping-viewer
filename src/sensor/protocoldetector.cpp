@@ -130,17 +130,10 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 
     int attempts = 0;
 
-    PingParser parser;
-    while (!_detected && attempts < 10) { // Try to get a valid response, timeout after 10 * 50 ms
+    // Try to get a valid response, timeout after 10 * 50 ms
+    while (!_detected && attempts++ < 10) {
         port.waitForReadyRead(50);
-        auto buf = port.readAll();
-        for (const auto& byte : buf) {
-            _detected = parser.parseByte(byte) == PingParser::NEW_MESSAGE;
-            if (_detected) {
-                break;
-            }
-        }
-        attempts++;
+        _detected = checkBuffer(port.readAll());
     }
 
     port.close();
@@ -187,20 +180,22 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
             break;
         }
-
-        QNetworkDatagram datagram = socket.receiveDatagram();
-        auto buf = datagram.data();
-        PingParser parser;
-        for (auto byte : buf) {
-            _detected = parser.parseByte(byte) == PingParser::NEW_MESSAGE;
-            if (_detected) {
-                break;
-            }
-        }
+        _detected = checkBuffer(socket.receiveDatagram().data());
     }
 
     socket.close();
     return _detected;
+}
+
+bool ProtocolDetector::checkBuffer(const QByteArray& buffer)
+{
+    PingParser parser;
+    for (const auto& byte : buffer) {
+        if(parser.parseByte(byte) == PingParser::NEW_MESSAGE) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
