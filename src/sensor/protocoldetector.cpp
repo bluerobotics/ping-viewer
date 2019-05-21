@@ -130,11 +130,12 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 
     int attempts = 0;
 
+    PingParser parser;
     while (!_detected && attempts < 10) { // Try to get a valid response, timeout after 10 * 50 ms
         port.waitForReadyRead(50);
         auto buf = port.readAll();
         for (const auto& byte : buf) {
-            _detected = _parser.parseByte(byte) == PingParser::NEW_MESSAGE;
+            _detected = parser.parseByte(byte) == PingParser::NEW_MESSAGE;
             if (_detected) {
                 break;
             }
@@ -189,8 +190,9 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
         QNetworkDatagram datagram = socket.receiveDatagram();
         auto buf = datagram.data();
+        PingParser parser;
         for (auto byte : buf) {
-            _detected = _parser.parseByte(byte) == PingParser::NEW_MESSAGE;
+            _detected = parser.parseByte(byte) == PingParser::NEW_MESSAGE;
             if (_detected) {
                 break;
             }

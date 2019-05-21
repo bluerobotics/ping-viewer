@@ -108,6 +108,5 @@ private:
     bool _detected { false };
     QVector<LinkConfiguration> _availableLinks;
     QVector<LinkConfiguration> _linkConfigs;
-    PingParser _parser;
     static const QStringList _invalidSerialPortNames;
 };
