@@ -24,8 +24,9 @@ NetworkTool::NetworkTool()
     if (!regexMatch.hasMatch() || regexMatch.lastCapturedIndex() < 1) {
         qCWarning(NETWORKTOOL) <<
                                "Fail to get github user and repository! "
-                               "It'll not be possible to check for updates."
+                               "It will not be possible to check for updates. "
                                "Using default value:" << _gitUserRepo;
+        qCDebug(NETWORKTOOL) << "GIT_URL value:" << QStringLiteral(GIT_URL);
         return;
     }
     _gitUserRepo = regexMatch.capturedTexts()[1];
