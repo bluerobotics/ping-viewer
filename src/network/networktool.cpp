@@ -21,11 +21,12 @@ NetworkTool::NetworkTool()
     //*github.com/user/repo* results in user/repo
     const static QRegularExpression regex(R"(github.com\/([^.]*))");
     QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
-    if (!regexMatch.hasMatch()) {
+    if (!regexMatch.hasMatch() || regexMatch.lastCapturedIndex() < 1) {
         qCWarning(NETWORKTOOL) <<
                                "Fail to get github user and repository! "
                                "It'll not be possible to check for updates."
                                "Using default value:" << _gitUserRepo;
+        return;
     }
     _gitUserRepo = regexMatch.capturedTexts()[1];
 }
