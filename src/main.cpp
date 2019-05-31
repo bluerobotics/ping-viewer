@@ -21,7 +21,7 @@
 #include "settingsmanager.h"
 #include "stylemanager.h"
 #include "util.h"
-#include "waterfall.h"
+#include "waterfallplot.h"
 
 // Register message enums to qml
 #include "pingmessage/ping_ping1d.h"
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
     qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
-    qmlRegisterType<Waterfall>("Waterfall", 1, 0, "Waterfall");
+    qmlRegisterType<WaterfallPlot>("WaterfallPlot", 1, 0, "WaterfallPlot");
 
     // Uncreatable register
     qmlRegisterUncreatableMetaObject(
