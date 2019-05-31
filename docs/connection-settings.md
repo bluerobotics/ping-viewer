@@ -14,9 +14,8 @@ TODO take new shot without sonar type
 
     To connect the application to a Ping device on a remote host (eg. a Raspberry Pi) you can use the pingproxy program in the bluerobotics-ping python package:
 
-    ```sh
-    sudo pip install bluerobotics-ping
-    python -m brping/pingproxy --device <device>
-    ```
+    `sudo pip install bluerobotics-ping`
+
+    `python -m brping/pingproxy --device <device>`
 
     `<device>` is the serial port where the Ping device is connected (eg. `/dev/ttyUSB0`).
