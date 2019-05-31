@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
-import Waterfall 1.0
+import WaterfallPlot 1.0
 
 import SettingsManager 1.0
 import StyleManager 1.0
@@ -12,7 +12,6 @@ import StyleManager 1.0
 Item {
     id: visualizer
     property alias waterfallItem: waterfall
-    property var protocol
 
     onWidthChanged: {
         if(chart.Layout.minimumWidth === chart.width) {
@@ -38,7 +37,7 @@ Item {
         orientation: Qt.Horizontal
         anchors.fill: parent
 
-        Waterfall {
+        WaterfallPlot {
             id: waterfall
             Layout.fillHeight: true
             Layout.fillWidth: true
