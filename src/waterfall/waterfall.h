@@ -18,42 +18,69 @@ class Waterfall : public QQuickPaintedItem
     Q_OBJECT
 public:
     /**
+     * @brief Construct a new Waterfall object
+     *
+     * @param parent
+     */
+    Waterfall(QQuickItem *parent = nullptr);
+
+    /**
+     * @brief This is used by the qml pain event
+     *  This paint the waterfall in qml
+     *
+     * @param painter
+     */
+    virtual void paint(QPainter *painter) = 0;
+
+    /**
+     * @brief Change the theme used in the waterfall
+     *
+     * @param theme name
+     */
+    void setTheme(const QString& theme);
+
+    /**
+     * @brief Transform a power value 0-1 to color
+     *
+     * @param point
+     * @return QColor
+     */
+    QColor valueToRGB(float point);
+
+    /**
+     * @brief Transform color to a power value
+     *
+     * @param color
+     * @return float
+     */
+    float RGBToValue(const QColor& color);
+
+    /**
+     * @brief Function that deals when the mouse is inside the waterfall
+     *
+     * @param event
+     */
+    void hoverMoveEvent(QHoverEvent *event);
+
+    /**
+     * @brief Function that executes when the mouse leaves the waterfall area
+     *
+     * @param event
+     */
+    void hoverLeaveEvent(QHoverEvent *event);
+
+    /**
+     * @brief Function that executes when the mouse enters the waterfall area
+     *
+     * @param event
+     */
+    void hoverEnterEvent(QHoverEvent *event);
+
+    /**
      * @brief Clear waterfall and restart all parameters
      *
      */
-    Q_INVOKABLE void clear();
-
-    /**
-     * @brief Return waterfall image
-     *
-     * @return QImage
-     */
-    QImage image() {return _image;}
-    Q_PROPERTY(QImage image READ image WRITE setImage NOTIFY imageChanged)
-
-    /**
-     * @brief Get depth from mouse position
-     *
-     * @return float
-     */
-    float mouseDepth() {return _mouseDepth;}
-    Q_PROPERTY(float mouseDepth READ mouseDepth NOTIFY mouseDepthChanged)
-
-    /**
-     * @brief Get signal confidence from mouse position column
-     *
-     * @return float
-     */
-    float mouseColumnConfidence() {return _mouseColumnConfidence;}
-    Q_PROPERTY(float mouseColumnConfidence READ mouseColumnConfidence NOTIFY mouseColumnConfidenceChanged)
-
-    /**
-     * @brief Get signal deepth from mouse position column
-     *
-     * @return float
-     */
-    float mouseColumnDepth() {return _mouseColumnDepth;}
-    Q_PROPERTY(float mouseColumnDepth READ mouseColumnDepth NOTIFY mouseColumnDepthChanged)
+    virtual Q_INVOKABLE void clear() = 0;
 
     /**
      * @brief Return mouse position
@@ -112,63 +139,11 @@ public:
     void setAliasing(bool antialiasing) {setAntialiasing(antialiasing); emit antialiasingChanged();}
     Q_PROPERTY(bool antialiasing READ antialiasing WRITE setAliasing NOTIFY antialiasingChanged)
 
-    /**
-     * @brief Return max depth in waterfall at the moment in meters
-     *
-     */
-    Q_INVOKABLE float getMaxDepthToDraw() {return _maxDepthToDraw;}
-    Q_PROPERTY(float maxDepthToDraw READ getMaxDepthToDraw NOTIFY maxDepthToDrawChanged)
-
-    /**
-     * @brief Return min depth in waterfall at the moment in meters
-     *
-     */
-    Q_INVOKABLE float getMinDepthToDraw() {return _minDepthToDraw;}
-    Q_PROPERTY(float minDepthToDraw READ getMinDepthToDraw NOTIFY minDepthToDrawChanged)
-
-    QVector<WaterfallGradient> _gradients;
-    WaterfallGradient _gradient;
-    QImage _image;
-    QPainter *_painter;
-    float _minPixelsPerMeter;
-    float _maxDepthToDraw;
-    float _maxDepthToDrawInPixels;
-    float _minDepthToDraw;
-    float _minDepthToDrawInPixels;
-    float _mouseColumnConfidence;
-    float _mouseColumnDepth;
-    float _mouseDepth;
-    bool _containsMouse;
-    QPoint _mousePos;
-    bool _smooth;
-    QTimer* _updateTimer;
-    QString _theme;
-    QStringList _themes;
-    static uint16_t displayWidth;
-    uint16_t currentDrawIndex;
-    float _waterfallDepth;
-
-    /**
-     * @brief Depth and Confidence package
-     *
-     */
-    struct DCPack {
-        float initialDepth;
-        float length;
-        float confidence;
-        float distance;
-    };
-
-    RingVector<DCPack> _DCRing;
-
 signals:
     void antialiasingChanged();
-    void imageChanged();
-    void minDepthToDrawChanged();
-    void maxDepthToDrawChanged();
+
     void mouseDepthChanged();
-    void mouseColumnConfidenceChanged();
-    void mouseColumnDepthChanged();
+    void mouseConfidenceChanged();
     // TODO: mouseMove should be renamed
     void mouseMove();
     void mousePosChanged();
@@ -177,28 +152,17 @@ signals:
     void themesChanged();
     void smoothChanged();
 
-public:
-    /**
-     * @brief Construct a new Waterfall object
-     *
-     * @param parent
-     */
-    Waterfall(QQuickItem *parent = nullptr);
+protected:
+    bool _containsMouse;
+    WaterfallGradient _gradient;
+    static QList<WaterfallGradient> _gradients;
+    QPoint _mousePos;
+    bool _smooth;
+    QString _theme;
+    QStringList _themes;
 
-    /**
-     * @brief This is used by the qml pain event
-     *  This paint the waterfall in qml
-     *
-     * @param painer
-     */
-    void paint(QPainter *painer);
-
-    /**
-     * @brief Set the waterfall Image
-     *
-     * @param image
-     */
-    void setImage(const QImage &image);
+private:
+    Q_DISABLE_COPY(Waterfall)
 
     /**
      * @brief Set all gradients used for the themes
@@ -206,71 +170,6 @@ public:
      */
     void setGradients();
 
-    /**
-     * @brief Set the waterfall max depth in meters
-     *
-     * @param maxDepth
-     */
-    Q_INVOKABLE void setWaterfallMaxDepth(float maxDepth);
-
-    /**
-     * @brief Change the theme used in the waterfall
-     *
-     * @param theme name
-     */
-    void setTheme(const QString& theme);
-
-    /**
-     * @brief Transform a power value 0-1 to color
-     *
-     * @param point
-     * @return QColor
-     */
-    QColor valueToRGB(float point);
-
-    /**
-     * @brief Transform color to a power value
-     *
-     * @param color
-     * @return float
-     */
-    float RGBToValue(const QColor& color);
-
-    /**
-     * @brief Draw a list of points in the waterfall
-     *
-     * @param points
-     * @param confidence
-     * @param initPoint
-     * @param length
-     * @param distance
-     */
-    Q_INVOKABLE void draw(const QVector<double>& points, float confidence = 0, float initPoint = 0, float length = 50,
-                          float distance = 0);
-
-    /**
-     * @brief Function that deals when the mouse is inside the waterfall
-     *
-     * @param event
-     */
-    void hoverMoveEvent(QHoverEvent *event);
-
-    /**
-     * @brief Function that executes when the mouse leaves the waterfall area
-     *
-     * @param event
-     */
-    void hoverLeaveEvent(QHoverEvent *event);
-
-    /**
-     * @brief Function that executes when the mouse enters the waterfall area
-     *
-     * @param event
-     */
-    void hoverEnterEvent(QHoverEvent *event);
-
-private:
-    Q_DISABLE_COPY(Waterfall)
     /**
      * @brief Load user gradients
      *
