@@ -18,6 +18,7 @@
 #include "logger.h"
 #include "notificationmanager.h"
 #include "ping.h"
+#include "polarplot.h"
 #include "settingsmanager.h"
 #include "stylemanager.h"
 #include "util.h"
@@ -59,6 +60,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
     qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
+    qmlRegisterType<PolarPlot>("PolarPlot", 1, 0, "PolarPlot");
     qmlRegisterType<WaterfallPlot>("WaterfallPlot", 1, 0, "WaterfallPlot");
 
     // Uncreatable register
