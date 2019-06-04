@@ -97,8 +97,14 @@ Item {
 
         function draw(points, depth, initPost) {
             if (points) {
-                Util.update(serie, points, initPost, depth, minDepthToDraw, maxDepthToDraw, 1)
-                Util.update(serieInv, points, initPost, depth, minDepthToDraw, maxDepthToDraw, -1)
+                // If there is no user configuration, we set the max and min automatically
+                if(maxDepthToDraw == 0 && minDepthToDraw == 0) {
+                    Util.update(serie, points, initPost, depth, initPost, depth, 1)
+                    Util.update(serieInv, points, initPost, depth, initPost, depth, -1)
+                } else {
+                    Util.update(serie, points, initPost, depth, minDepthToDraw, maxDepthToDraw, 1)
+                    Util.update(serieInv, points, initPost, depth, minDepthToDraw, maxDepthToDraw, -1)
+                }
                 return
             }
 
