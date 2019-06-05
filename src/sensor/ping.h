@@ -10,14 +10,14 @@
 #include "parsers/parser_ping.h"
 #include "pingmessage/ping_ping1d.h"
 #include "protocoldetector.h"
-#include "sensor.h"
+#include "pingsensor.h"
 
 /**
  * @brief Define ping sensor
  * 1D Sonar
  *
  */
-class Ping : public Sensor
+class Ping : public PingSensor
 {
     Q_OBJECT
 public:
@@ -36,23 +36,7 @@ public:
     /**
      * @brief debug function
      */
-    void printStatus();
-
-    /**
-     * @brief Get device source ID
-     *
-     * @return uint8_t source id
-     */
-    uint8_t srcId() { return _srcId; }
-    Q_PROPERTY(int srcId READ srcId NOTIFY srcIdUpdate)
-
-    /**
-     * @brief Return destiny ID
-     *
-     * @return uint8_t destiny id
-     */
-    uint8_t dstId() { return _dstId; }
-    Q_PROPERTY(int dstId READ dstId NOTIFY dstIdUpdate)
+    void printSensorInformation() const override final;
 
     /**
      * @brief Return if sensor is enabled
@@ -77,38 +61,6 @@ public:
     }
 
     Q_PROPERTY(bool pingEnable READ pingEnable WRITE pingEnable NOTIFY pingEnableUpdate)
-
-    /**
-     * @brief Return firmware major version
-     *
-     * @return uint16_t firmware major version number
-     */
-    uint16_t firmware_version_major() { return _firmware_version_major; }
-    Q_PROPERTY(int firmware_version_major READ firmware_version_major NOTIFY firmwareVersionMajorUpdate)
-
-    /**
-     * @brief Return firmware minor version
-     *
-     * @return uint16_t firmware minor version number
-     */
-    uint16_t firmware_version_minor() { return _firmware_version_minor; }
-    Q_PROPERTY(int firmware_version_minor READ firmware_version_minor NOTIFY firmwareVersionMinorUpdate)
-
-    /**
-     * @brief Return device type number
-     *
-     * @return uint8_t Device type number
-     */
-    uint8_t device_type() { return _device_type; }
-    Q_PROPERTY(int device_type READ device_type NOTIFY deviceTypeUpdate)
-
-    /**
-     * @brief Return device model number
-     *
-     * @return uint8_t Device model number
-     */
-    uint8_t device_model() { return _device_model; }
-    Q_PROPERTY(int device_model READ device_model NOTIFY deviceModelUpdate)
 
     /**
      * @brief Return distance in mm
@@ -139,8 +91,8 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t pulse_duration() { return _pulse_duration; }
-    Q_PROPERTY(int pulse_duration READ pulse_duration NOTIFY pulseDurationUpdate)
+    uint16_t transmit_duration() { return _transmit_duration; }
+    Q_PROPERTY(int transmit_duration READ transmit_duration NOTIFY transmitDurationUpdate)
 
     /**
      * @brief Return start distance of sonar points in mm
@@ -189,26 +141,26 @@ public:
     Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthUpdate)
 
     /**
-     * @brief Return gain index
+     * @brief Return gain setting
      *
      * @return uint32_t
      */
-    uint32_t gain_index() { return _gain_index; }
+    uint32_t gain_setting() { return _gain_setting; }
 
     /**
      * @brief Set sensor gain index
      *
-     * @param gain_index
+     * @param gain_setting
      */
-    void set_gain_index(int gain_index)
+    void set_gain_setting(int gain_setting)
     {
         ping1D_set_gain_setting m;
-        m.set_gain_setting(gain_index);
+        m.set_gain_setting(gain_setting);
         m.updateChecksum();
         writeMessage(m);
         request(Ping1DNamespace::GainSetting);
     }
-    Q_PROPERTY(int gain_index READ gain_index WRITE set_gain_index NOTIFY gainIndexUpdate)
+    Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingUpdate)
 
     /**
      * @brief Return last array of points
@@ -316,7 +268,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t processor_temperature() { return _processor_temperature; }
+    uint16_t processor_temperature() const { return _processor_temperature; }
     Q_PROPERTY(int processor_temperature READ processor_temperature NOTIFY processorTemperatureUpdate)
 
     /**
@@ -324,7 +276,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t pcb_temperature() { return _pcb_temperature; }
+    uint16_t pcb_temperature() const { return _pcb_temperature; }
     Q_PROPERTY(int pcb_temperature READ pcb_temperature NOTIFY pcbTemperatureUpdate)
 
     /**
@@ -332,7 +284,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t board_voltage() { return _board_voltage; }
+    uint16_t board_voltage() const { return _board_voltage; }
     Q_PROPERTY(int board_voltage READ board_voltage NOTIFY boardVoltageUpdate)
 
     /**
@@ -359,56 +311,6 @@ public:
     Q_PROPERTY(int pingMaxFrequency READ pingMaxFrequency CONSTANT)
 
     /**
-     * @brief Return last ascii_text message
-     *
-     * @return QString
-     */
-    QString asciiText() { return _ascii_text; }
-    Q_PROPERTY(QString ascii_text READ asciiText NOTIFY asciiTextUpdate)
-
-    /**
-     * @brief Return last err_msg message
-     *
-     * @return QString
-     */
-    QString errMsg() { return _nack_msg; }
-    Q_PROPERTY(QString err_msg READ errMsg NOTIFY nackMsgUpdate)
-
-    /**
-     * @brief Return number of parser errors
-     *
-     * @return int
-     */
-    int parserErrors() { return _parser ? _parser->errors : 0; }
-    Q_PROPERTY(int parser_errors READ parserErrors NOTIFY parserErrorsUpdate)
-
-    /**
-     * @brief Return number of successfully parsed messages
-     *
-     * @return int
-     */
-    int parsedMsgs() { return _parser ? _parser->parsed : 0; }
-    Q_PROPERTY(int parsed_msgs READ parsedMsgs NOTIFY parsedMsgsUpdate)
-    // TODO: maybe store history/filtered history of values in this
-    // object for access by different visual elements without need to recompute
-    // TODO: install filters here?
-
-    /**
-     * @brief Return the number of messages that we requested and did not received
-     *
-     * @return int
-     */
-    int lostMessages() { return _lostMessages; }
-    Q_PROPERTY(int lost_messages READ lostMessages NOTIFY lostMessagesUpdate)
-
-    /**
-     * @brief Request message id
-     *
-     * @param id
-     */
-    Q_INVOKABLE void request(int id);
-
-    /**
      * @brief Do firmware sensor update
      *
      * @param fileUrl firmware file path
@@ -424,44 +326,24 @@ signals:
      * @brief emitted when propriety changes
      */
 ///@{
-    void asciiTextUpdate();
-    void nackMsgUpdate();
-
-    void srcIdUpdate();
-    void dstIdUpdate();
-    void deviceTypeUpdate();
-    void deviceModelUpdate();
-    void firmwareVersionMajorUpdate();
-    void firmwareVersionMinorUpdate();
-
     void distanceUpdate();
     void pingNumberUpdate();
     void confidenceUpdate();
-    void pulseDurationUpdate();
+    void transmitDurationUpdate();
     void scanStartUpdate();
     void scanLengthUpdate();
-    void gainIndexUpdate();
+    void gainSettingUpdate();
     void pointsUpdate();
 
     void modeAutoUpdate();
+    void pingEnableUpdate();
     void pingIntervalUpdate();
     void speedOfSoundUpdate();
 
-    void processorTemperatureUpdate();
-    void pcbTemperatureUpdate();
     void boardVoltageUpdate();
-
-    void pingEnableUpdate();
-
-    void parserErrorsUpdate();
-    void parsedMsgsUpdate();
+    void pcbTemperatureUpdate();
+    void processorTemperatureUpdate();
 ///@}
-
-    /**
-    * @brief Emit when lost messages is updated
-    *
-    */
-    void lostMessagesUpdate();
 
 private:
     Q_DISABLE_COPY(Ping)
@@ -469,31 +351,19 @@ private:
      * @brief Sensor variables
      */
 ///@{
-    QString _ascii_text = QString();
-    QString _nack_msg = QString();
-
-    uint8_t _srcId = 0;
-    uint8_t _dstId = 0;
-
-    uint8_t _device_type = 0;
-    uint8_t _device_model = 0;
-    uint16_t _firmware_version_major = 0;
-    uint16_t _firmware_version_minor = 0;
-
+    uint16_t _board_voltage;
+    uint8_t _device_model;
     uint32_t _distance = 0; // mm
     uint16_t _confidence = 0; // 0-100%
-    uint16_t _pulse_duration = 0;
+    uint16_t _transmit_duration = 0;
     uint32_t _ping_number = 0;
     uint32_t _scan_start = 0;
     uint32_t _scan_length = 0;
-    uint32_t _gain_index = 0;
+    uint32_t _gain_setting = 0;
     uint32_t _speed_of_sound = 0;
-
-    uint16_t _processor_temperature = 0;
-    uint16_t _pcb_temperature = 0;
-    uint16_t _board_voltage = 0;
-
-    bool _ping_enable = false;
+    bool _ping_enable;
+    uint16_t _pcb_temperature;
+    uint16_t _processor_temperature;
 ///@}
 
     static const uint16_t _num_points = 200;
@@ -507,9 +377,7 @@ private:
     uint16_t _ping_interval = 0;
     static const int _pingMaxFrequency;
 
-    // TODO: const &
-    void handleMessage(ping_message msg); // handle incoming message
-    void writeMessage(const ping_message& msg); // write a message to link
+    void handleMessage(const ping_message& msg) final; // handle incoming message
 
     void loadLastPingConfigurationSettings();
     void updatePingConfigurationSettings();
@@ -612,8 +480,8 @@ private:
         },
         {   {"3_gainIndex"}, {
                 0, 0, 6,
-                std::bind(&Ping::gain_index, this),
-                [this](long long int value) {set_gain_index(value);}
+                std::bind(&Ping::gain_setting, this),
+                [this](long long int value) {set_gain_setting(value);}
             }
         },
         {   {"3_lengthDistance"}, {
