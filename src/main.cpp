@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     // Uncreatable register
     qmlRegisterUncreatableMetaObject(
-        PingPing1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
+        Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
     );
 
     qmlRegisterUncreatableMetaObject(
