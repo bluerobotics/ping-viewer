@@ -45,7 +45,7 @@ LinkConfiguration::Error LinkConfiguration::error() const
     }
 
     // Simulation does not need args
-    if(_linkConf.type == LinkType::PingSimulation && !_linkConf.args.length()) {
+    if(_linkConf.type == LinkType::Ping1DSimulation && !_linkConf.args.length()) {
         return NoErrors;
     }
 

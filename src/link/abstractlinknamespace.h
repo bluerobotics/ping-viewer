@@ -11,7 +11,7 @@ enum LinkType {
     Serial,
     Udp,
     Tcp,
-    PingSimulation,
+    Ping1DSimulation,
     Last,
 };
 Q_ENUM_NS(LinkType)

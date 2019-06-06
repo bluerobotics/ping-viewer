@@ -29,7 +29,7 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
     case LinkType::Udp :
         _abstractLink.reset(new UDPLink());
         break;
-    case LinkType::PingSimulation :
+    case LinkType::Ping1DSimulation :
         _abstractLink.reset(new PingSimulationLink());
         break;
     default :
@@ -55,7 +55,7 @@ Link::Link(const LinkConfiguration& linkConfiguration, QObject* parent)
     case LinkType::Udp :
         _abstractLink.reset(new UDPLink());
         break;
-    case LinkType::PingSimulation :
+    case LinkType::Ping1DSimulation :
         _abstractLink.reset(new PingSimulationLink());
         break;
     default :
