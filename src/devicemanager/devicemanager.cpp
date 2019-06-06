@@ -23,7 +23,7 @@ DeviceManager::DeviceManager() :
         qCDebug(DEVICEMANAGER) << "Available devices:" << links;
         updateAvailableConnections(links);
     });
-    append({AbstractLinkNamespace::PingSimulation}, "Ping1D");
+    append({AbstractLinkNamespace::Ping1DSimulation}, "Ping1D");
 }
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName)
@@ -109,7 +109,7 @@ void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>&
     // Make all connections unavailable by default
     for(int i{0}; i < _sensors[Available].size(); i++) {
         auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
-        if(linkConf->type() == AbstractLinkNamespace::PingSimulation) {
+        if(linkConf->type() == AbstractLinkNamespace::Ping1DSimulation) {
             continue;
         }
         _sensors[Available][i] = false;
