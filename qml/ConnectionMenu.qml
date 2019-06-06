@@ -112,7 +112,7 @@ Item {
                         case 2: // Simulation
                             udpLayout.enabled = false
                             serialLayout.enabled = false
-                            connect(AbstractLinkNamespace.PingSimulation)
+                            connect(AbstractLinkNamespace.Ping1DSimulation)
                     }
                 }
             }
