@@ -21,23 +21,6 @@ Item {
 
     property var ping: DeviceManager.primarySensor
 
-    Connections {
-        target: ping
-
-        onPointsUpdate: {
-            // Move from mm to m
-            ping1DVisualizer.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
-        }
-
-        onDistanceUpdate: {
-            ping1DVisualizer.setDepth(ping.distance/1e3)
-        }
-
-        onConfidenceUpdate: {
-            ping1DVisualizer.setConfidence(ping.confidence)
-        }
-    }
-
     Column {
         z: 1
         anchors.left: parent.left
