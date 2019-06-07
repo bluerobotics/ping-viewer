@@ -78,7 +78,7 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
     int objIndex = -1;
     for(int i{0}; i < _sensors[Connection].size(); i++) {
         auto sensorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
-        if(sensorLinkConf->argsAsConst() == linkConf->argsAsConst()) {
+        if(*sensorLinkConf == *linkConf) {
             objIndex = i;
             break;
         }
