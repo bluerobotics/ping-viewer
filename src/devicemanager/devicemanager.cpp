@@ -30,9 +30,8 @@ void DeviceManager::append(const LinkConfiguration& linkConf, const QString& dev
 {
     for(int i{0}; i < _sensors[Connection].size(); i++) {
         auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
-        if(vectorLinkConf->argsAsConst() == linkConf.argsAsConst()) {
-            qCDebug(DEVICEMANAGER) << "Connection configuration already exist.";
-            qCDebug(DEVICEMANAGER) << linkConf;
+        if(*vectorLinkConf == linkConf) {
+            qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:" << _sensors[Name][i] << linkConf << linkConf.argsAsConst();
             _sensors[Available][i] = true;
             const auto indexRow = index(i);
             emit dataChanged(indexRow, indexRow, _roles);
