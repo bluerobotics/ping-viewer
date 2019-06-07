@@ -5,7 +5,6 @@
 #include <QThread>
 
 #include "abstractlinknamespace.h"
-#include "ping.h"
 #include "protocoldetector.h"
 #include "sensor.h"
 

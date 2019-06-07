@@ -1,5 +1,6 @@
 #include "devicemanager.h"
 #include "logger.h"
+#include "ping.h"
 
 PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 
