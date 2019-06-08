@@ -11,8 +11,9 @@ import SettingsManager 1.0
 import StyleManager 1.0
 
 Item {
-    id: visualizer
+    id: root
     property alias waterfallItem: waterfall
+    anchors.fill: parent
 
     Connections {
         property var ping: DeviceManager.primarySensor
@@ -20,15 +21,15 @@ Item {
 
         onPointsUpdate: {
             // Move from mm to m
-            visualizer.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
+            root.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
         }
 
         onDistanceUpdate: {
-            visualizer.setDepth(ping.distance/1e3)
+            root.setDepth(ping.distance/1e3)
         }
 
         onConfidenceUpdate: {
-            visualizer.setConfidence(ping.confidence)
+            root.setConfidence(ping.confidence)
         }
     }
 
