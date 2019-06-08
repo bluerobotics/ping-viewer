@@ -18,6 +18,7 @@
 #include "logger.h"
 #include "notificationmanager.h"
 #include "ping.h"
+#include "ping360.h"
 #include "polarplot.h"
 #include "settingsmanager.h"
 #include "stylemanager.h"
@@ -60,12 +61,17 @@ int main(int argc, char *argv[])
     qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
     qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
+    qmlRegisterType<Ping360>("Ping360", 1, 0, "Ping360");
     qmlRegisterType<PolarPlot>("PolarPlot", 1, 0, "PolarPlot");
     qmlRegisterType<WaterfallPlot>("WaterfallPlot", 1, 0, "WaterfallPlot");
 
     // Uncreatable register
     qmlRegisterUncreatableMetaObject(
         Ping1DNamespace::staticMetaObject, "Ping1DNamespace", 1, 0, "Ping1DNamespace", "This is a enum."
+    );
+
+    qmlRegisterUncreatableMetaObject(
+        Ping360Namespace::staticMetaObject, "Ping360Namespace", 1, 0, "Ping360Namespace", "This is a enum."
     );
 
     qmlRegisterUncreatableMetaObject(
