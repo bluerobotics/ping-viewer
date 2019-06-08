@@ -215,15 +215,11 @@ Item {
         anchors.bottom: parent.bottom
     }
 
-    ColumnLayout {
-        id: mainColumn
+    Loader {
+        id: sensorVisualizerLoader
+        objectName: "SensorVisualizer"
         anchors.fill: parent
-        spacing: 0
-        Ping1DVisualizer {
-            id: ping1DVisualizer
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-        }
+        sourceComponent: DeviceManager.primarySensor.sensorVisualizer(parent)
     }
 
     PingStatus {
