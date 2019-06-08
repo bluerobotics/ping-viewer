@@ -552,6 +552,17 @@ void Ping::resetSensorLocalVariables()
     _lastPingConfigurationSrcId = -1;
 }
 
+QQmlComponent* Ping::sensorVisualizer(QObject *parent)
+{
+    QQmlEngine *engine = qmlEngine(parent);
+    if(!engine) {
+        qCDebug(PING_PROTOCOL_PING) << "No qml engine to load visualization.";
+        return nullptr;
+    }
+    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/Ping1DVisualizer.qml"));
+    return component;
+}
+
 Ping::~Ping()
 {
     updatePingConfigurationSettings();
