@@ -74,7 +74,7 @@ void PolarPlot::draw(const QVector<double>& points, float confidence, float init
     _DCRing[int(actualAngle*rad2grad) % 400] = {initPoint, length, confidence, distance};
 
     for(int i = 1; i < center.x(); i++) {
-        pointColor = valueToRGB(points[i%200]);
+        pointColor = valueToRGB(points[i]);
         step = ceil(i*2*d2r)*1.15;
         for(float u = -0.25; u <= 0.25; u += 1/step) {
             angleStep = u*d2r+actualAngle - M_PI/2;
