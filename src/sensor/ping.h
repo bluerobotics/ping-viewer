@@ -321,6 +321,14 @@ public:
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
                                     bool verify = true);
 
+    /**
+     * @brief Return the visualization widget
+     *
+     * @param parent
+     * @return QQmlComponent* sensorVisualizer
+     */
+    Q_INVOKABLE QQmlComponent* sensorVisualizer(QObject *parent) final;
+
 signals:
     /**
      * @brief emitted when propriety changes
