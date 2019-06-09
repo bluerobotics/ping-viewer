@@ -70,14 +70,15 @@ void PolarPlot::draw(const QVector<double>& points, float confidence, float init
     float actualAngle = currentDrawAngle*d2r;
 
     // This ring vector will store variables of the last n samples for user access
-    static const float rad2grad = 200/M_PI;
-    _DCRing[int(actualAngle*rad2grad) % 400] = {initPoint, length, confidence, distance};
+    static const float rad2grad = _angularResolution/(2*M_PI);
+    _DCRing[int(actualAngle*rad2grad) % _angularResolution] = {initPoint, length, confidence, distance};
 
-    for(int i = 1; i < center.x(); i++) {
-        pointColor = valueToRGB(points[i]);
+    const float linearFactor = points.size()/(float)center.x();
+    for(int i = 0; i < center.x(); i++) {
+        pointColor = valueToRGB(points[i*linearFactor]);
         step = ceil(i*2*d2r)*1.15;
         for(float u = -0.25; u <= 0.25; u += 1/step) {
-            angleStep = u*d2r+actualAngle - M_PI/2;
+            angleStep = u*d2r+actualAngle - M_PI_2;
             _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
         }
     }
