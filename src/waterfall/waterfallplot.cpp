@@ -140,10 +140,10 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
     /**
      * @brief Get lastMaxDepth from the last n samples
      */
-    static auto lastMaxDC = [this] {
+    auto lastMaxDC = [&] {
         float maxDepth = 0;
         DCPack tempDC{0, 0, 0, 0};
-        for(const auto& DC : qAsConst(this->_DCRing))
+        for(const auto& DC : qAsConst(_DCRing))
         {
             if(maxDepth < DC.length + DC.initialDepth && DC.initialDepth != static_cast<const float>(_image.height())) {
                 maxDepth = DC.length + DC.initialDepth;
@@ -156,9 +156,9 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
     /**
      * @brief Get lastMinDepth from the last n samples
      */
-    static auto lastMinDepth = [this] {
+    auto lastMinDepth = [&] {
         float minDepth = std::numeric_limits<float>::max();
-        for(const auto& DC : qAsConst(this->_DCRing))
+        for(const auto& DC : qAsConst(_DCRing))
         {
             minDepth = minDepth > DC.initialDepth ? DC.initialDepth : minDepth;
         }
@@ -173,7 +173,7 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
      *        the default value is old.rect().
      *
      */
-    static auto redrawImage = [this](const QRect& dst, QRect src = QRect()) {
+    auto redrawImage = [&](const QRect& dst, QRect src = QRect()) {
         // Use old as default rect
         if(src.isEmpty()) {
             src = old.rect();
