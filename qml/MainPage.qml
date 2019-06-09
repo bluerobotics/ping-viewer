@@ -246,18 +246,21 @@ Item {
                 print(FileManager.createFileName(FileManager.Pictures))
                 result.saveToFile(FileManager.createFileName(FileManager.Pictures))
             })
-        } else if (event.key == Qt.Key_W) {
-            print("Grab waterfall image")
-            event.accepted = true
 
-            ping1DVisualizer.waterfallItem.grabToImage(function(result) {
-                print("Grab waterfall image callback")
-                print(FileManager.createFileName(FileManager.Pictures))
-                result.saveToFile(FileManager.createFileName(FileManager.Pictures))
-            })
-        } else if (event.key == Qt.Key_R) {
-            print("Clear waterfall")
-            ping1DVisualizer.waterfallItem.clear()
+        // This are the base shortcuts that are common between all visualization items
+        } else if(event.key == Qt.Key_W) {
+            print("Grab visualizer image.")
+            event.accepted = true
+            sensorVisualizerLoader.item.captureVisualizer()
+
+        }  else if(event.key == Qt.Key_R) {
+            print("Clear visualizer.")
+            event.accepted = true
+            sensorVisualizerLoader.item.clear()
+
+        } else {
+            // Let the visualizer use specialized shortcuts if necessary
+            event.accepted = sensorVisualizerLoader.item.handleShortcut(event.key)
         }
     }
 }
