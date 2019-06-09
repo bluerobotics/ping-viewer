@@ -58,7 +58,6 @@ Item {
 
                     item: DisplaySettings {
                         id: displaySettings
-                        waterfallItem: ping1DVisualizer.waterfallItem
                     }
 
                     onHideItemChanged: {
