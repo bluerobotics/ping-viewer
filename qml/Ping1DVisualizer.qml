@@ -7,6 +7,7 @@ import Qt.labs.settings 1.0
 import WaterfallPlot 1.0
 
 import DeviceManager 1.0
+import FileManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
@@ -139,6 +140,22 @@ Item {
 
     function transformValue(value, precision) {
         return typeof(value) == "number" ? value.toFixed(precision) : value + ' '
+    }
+
+    function captureVisualizer() {
+        waterfall.grabToImage(function(result) {
+            print("Grab waterfall image callback.")
+            print(FileManager.createFileName(FileManager.Pictures))
+            result.saveToFile(FileManager.createFileName(FileManager.Pictures))
+        })
+    }
+
+    function clear() {
+        waterfall.clear()
+    }
+
+    function handleShortcut(key) {
+        return false
     }
 
     Component {
