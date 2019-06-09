@@ -31,9 +31,8 @@ Item {
                     rowSpacing: 5
                     columnSpacing: 5
 
-                    Text {
+                    Label {
                         text: "Units:"
-                        color: Material.primary
                     }
 
                     ComboBox {
@@ -46,9 +45,8 @@ Item {
                         onCurrentIndexChanged: SettingsManager.distanceUnitsIndex = currentIndex
                     }
 
-                    Text {
+                    Label {
                         text: "Theme:"
-                        color: Material.primary
                     }
 
                     ComboBox {
