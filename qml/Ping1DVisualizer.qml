@@ -12,7 +12,7 @@ import StyleManager 1.0
 
 Item {
     id: root
-    property alias waterfallItem: waterfall
+    property alias displaySettings: displaySettings
     anchors.fill: parent
 
     Connections {
@@ -139,5 +139,57 @@ Item {
 
     function transformValue(value, precision) {
         return typeof(value) == "number" ? value.toFixed(precision) : value + ' '
+    }
+
+    Component {
+        id: displaySettings
+        GridLayout {
+            anchors.fill: parent
+            columns: 5
+            rowSpacing: 5
+            columnSpacing: 5
+
+            CheckBox {
+                id: smoothDataChB
+                text: "Smooth Data"
+                checked: true
+                Layout.columnSpan:  5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    waterfall.smooth = checkState
+                }
+            }
+
+            CheckBox {
+                id: antialiasingDataChB
+                text: "Antialiasing"
+                checked: true
+                Layout.columnSpan:  5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    waterfall.antialiasing = checkState
+                }
+            }
+
+            Label {
+                text: "Plot Theme:"
+            }
+
+            ComboBox {
+                id: plotThemeCB
+                Layout.columnSpan:  4
+                Layout.fillWidth: true
+                Layout.minimumWidth: 200
+                model: waterfall.themes
+                onCurrentTextChanged: waterfall.theme = currentText
+            }
+
+            Settings {
+                category: "Ping1DVisualizer"
+                property alias plotThemeIndex: plotThemeCB.currentIndex
+                property alias smoothDataState: smoothDataChB.checkState
+                property alias waterfallAntialiasingData: antialiasingDataChB.checkState
+            }
+        }
     }
 }
