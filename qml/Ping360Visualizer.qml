@@ -38,14 +38,6 @@ Item {
         chart.draw(points, length + initialPoint, initialPoint)
     }
 
-    function setDepth(depth) {
-        readout.value = depth
-    }
-
-    function setConfidence(perc) {
-        readout.confidence = perc
-    }
-
     QC1.SplitView {
         orientation: Qt.Horizontal
         anchors.fill: parent
@@ -115,10 +107,6 @@ Item {
         Settings {
             property alias chartWidth: chart.width
         }
-    }
-
-    ValueReadout {
-        id: readout
     }
 
     function confidenceToColor(confidence) {
