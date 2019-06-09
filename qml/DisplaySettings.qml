@@ -14,7 +14,6 @@ Item {
     visible: false
     height: settingsLayout.height
     width: settingsLayout.width
-    property var waterfallItem
 
     ColumnLayout {
         id: settingsLayout
@@ -48,20 +47,6 @@ Item {
                     }
 
                     Text {
-                        text: "Plot Theme:"
-                        color: Material.primary
-                    }
-
-                    ComboBox {
-                        id: plotThemeCB
-                        Layout.columnSpan:  4
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 200
-                        model: waterfallItem.themes
-                        onCurrentTextChanged: waterfallItem.theme = currentText
-                    }
-
-                    Text {
                         text: "Theme:"
                         color: Material.primary
                     }
@@ -84,26 +69,11 @@ Item {
                         onCheckedChanged: SettingsManager.replayMenu = checked
                     }
 
-                    CheckBox {
-                        id: smoothDataChB
-                        text: "Smooth Data"
-                        checked: true
+                    Loader {
+                        sourceComponent: sensorVisualizerLoader.item.displaySettings
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
-                        onCheckStateChanged: {
-                            waterfallItem.smooth = checkState
-                        }
-                    }
-
-                    CheckBox {
-                        id: antialiasingDataChB
-                        text: "Antialiasing"
-                        checked: true
-                        Layout.columnSpan:  5
-                        Layout.fillWidth: true
-                        onCheckStateChanged: {
-                            waterfallItem.antialiasing = checkState
-                        }
+                        Layout.fillHeight: true
                     }
 
                     CheckBox {
@@ -118,11 +88,4 @@ Item {
             }
         }
     }
-
-    Settings {
-        property alias plotThemeIndex: plotThemeCB.currentIndex
-        property alias smoothDataState: smoothDataChB.checkState
-        property alias waterfallAntialiasingData: antialiasingDataChB.checkState
-    }
-
 }
