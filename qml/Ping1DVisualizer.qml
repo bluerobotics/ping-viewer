@@ -6,12 +6,31 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import WaterfallPlot 1.0
 
+import DeviceManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
 Item {
     id: visualizer
     property alias waterfallItem: waterfall
+
+    Connections {
+        property var ping: DeviceManager.primarySensor
+        target: ping
+
+        onPointsUpdate: {
+            // Move from mm to m
+            visualizer.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
+        }
+
+        onDistanceUpdate: {
+            visualizer.setDepth(ping.distance/1e3)
+        }
+
+        onConfidenceUpdate: {
+            visualizer.setConfidence(ping.confidence)
+        }
+    }
 
     onWidthChanged: {
         if(chart.Layout.minimumWidth === chart.width) {
