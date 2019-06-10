@@ -1,6 +1,7 @@
 #include "devicemanager.h"
 #include "logger.h"
 #include "ping.h"
+#include "ping360.h"
 
 PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 
@@ -91,11 +92,17 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
         return;
     }
 
-    qCDebug(DEVICEMANAGER) << "Connecting with configuration:" << linkConf[0];
+    qCDebug(DEVICEMANAGER) << "Connecting with sensor:" << _sensors[Name][objIndex].toString() << *linkConf;
 
     // We could use a single Ping instance, but since we are going to support multiple devices
     // this pointer will hold everything for us
-    _primarySensor.reset(new Ping());
+    // TODO: Use enum and not string compare
+    if(_sensors[Name][objIndex].toString() == "Ping1D") {
+        _primarySensor.reset(new Ping());
+    } else {
+        _primarySensor.reset(new Ping360());
+    }
+
     emit primarySensorChanged();
     _primarySensor->connectLink(*linkConf);
     _sensors[Connected][objIndex] = true;
