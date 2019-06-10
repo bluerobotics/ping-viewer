@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QQmlComponent>
 #include <QPointer>
 
 #include "flasher.h"
@@ -87,6 +88,14 @@ public:
      */
     Flasher* flasher() { return &_flasher; };
     Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
+
+    /**
+     * @brief Return a qml component that will take care of the main visualization widget
+     *
+     * @param parent
+     * @return QQmlComponent* sensorVisualizer
+     */
+    Q_INVOKABLE virtual QQmlComponent* sensorVisualizer(QObject *parent) = 0;
 
 
 protected:
