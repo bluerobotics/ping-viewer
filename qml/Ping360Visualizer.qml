@@ -13,8 +13,9 @@ import SettingsManager 1.0
 import StyleManager 1.0
 
 Item {
-    id: visualizer
+    id: root
     property alias waterfallItem: waterfall
+    anchors.fill: parent
 
     Connections {
         property var ping: DeviceManager.primarySensor
@@ -22,7 +23,7 @@ Item {
 
         onDataChanged: {
             // Move from mm to m
-            visualizer.draw(ping.data, 100, 0, 100, 0)
+            root.draw(ping.data, 100, 0, 100, 0)
         }
     }
 
