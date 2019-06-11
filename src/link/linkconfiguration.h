@@ -228,6 +228,8 @@ public:
             return QStringLiteral("UDP");
         case LinkType::Ping1DSimulation:
             return QStringLiteral("Ping1D Simulation");
+        case LinkType::Ping360Simulation:
+            return QStringLiteral("Ping360 Simulation");
         default :
             return QStringLiteral("Unknown");
         }
