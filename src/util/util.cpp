@@ -59,7 +59,7 @@ void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& poin
     const float dataIndexScale = points.length()/((finalPos - initPos)*distPoints);
     #pragma omp for
     for(int i = 0; i < lastDataPoint; i++) {
-        realPoints << QPointF(i + lastStartPoint, multiplier * points[i*dataIndexScale]);
+        realPoints << QPointF(i + lastStartPoint, multiplier * points[static_cast<int>(i*dataIndexScale)]);
     }
 
     // Final
