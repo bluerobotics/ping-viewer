@@ -8,12 +8,23 @@ import Qt.labs.settings 1.0
 import WaterfallPlot 1.0
 import PolarPlot 1.0
 
+import DeviceManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
 Item {
     id: visualizer
     property alias waterfallItem: waterfall
+
+    Connections {
+        property var ping: DeviceManager.primarySensor
+        target: ping
+
+        onDataChanged: {
+            // Move from mm to m
+            visualizer.draw(ping.data, 100, 0, 100, 0)
+        }
+    }
 
     onWidthChanged: {
         if(chart.Layout.minimumWidth === chart.width) {
