@@ -12,7 +12,7 @@ import Util 1.0
 Item {
     id: root
     property string deviceType: 'No device'
-    property string deviceModel: 'No device'
+    property string deviceRevision: 'No device'
     property string deviceFirmware: 'No device'
     property string deviceID: 'No device'
 
@@ -121,7 +121,7 @@ Item {
                 Text {
                     z: 1
                     // Add link to model in store
-                    text: 'Model: <b>' + deviceModel
+                    text: 'Model: <b>' + deviceRevision
                     color: Material.primary
                     textFormat: Text.RichText
                 }
