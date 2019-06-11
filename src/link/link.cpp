@@ -4,7 +4,7 @@
 #include "link.h"
 
 #include "filelink.h"
-#include "pingsimulationlink.h"
+#include "ping1dsimulationlink.h"
 #include "seriallink.h"
 #include "simulationlink.h"
 #include "tcplink.h"
@@ -30,7 +30,7 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
         _abstractLink.reset(new UDPLink());
         break;
     case LinkType::Ping1DSimulation :
-        _abstractLink.reset(new PingSimulationLink());
+        _abstractLink.reset(new Ping1DSimulationLink());
         break;
     default :
         qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
@@ -56,7 +56,7 @@ Link::Link(const LinkConfiguration& linkConfiguration, QObject* parent)
         _abstractLink.reset(new UDPLink());
         break;
     case LinkType::Ping1DSimulation :
-        _abstractLink.reset(new PingSimulationLink());
+        _abstractLink.reset(new Ping1DSimulationLink());
         break;
     default :
         qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
