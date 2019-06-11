@@ -107,7 +107,7 @@ Item {
                 anchors.fill: parent
                 deviceFirmware: ping.firmware_version_major + "." + ping.firmware_version_minor
                 deviceID: ping.srcId
-                deviceModel: ping.device_model
+                deviceRevision: ping.device_revision
                 deviceType: ping.device_type
             }
             onHideItemChanged: {
