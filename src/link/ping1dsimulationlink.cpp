@@ -1,16 +1,16 @@
 #include <QtMath>
 
-#include "pingsimulationlink.h"
+#include "ping1dsimulationlink.h"
 #include "pingmessage/ping_ping1d.h"
 
-PingSimulationLink::PingSimulationLink(QObject* parent)
+Ping1DSimulationLink::Ping1DSimulationLink(QObject* parent)
     : SimulationLink(parent)
 {
-    connect(&_randomUpdateTimer, &QTimer::timeout, this, &PingSimulationLink::randomUpdate);
+    connect(&_randomUpdateTimer, &QTimer::timeout, this, &Ping1DSimulationLink::randomUpdate);
     _randomUpdateTimer.start(50);
 }
 
-void PingSimulationLink::randomUpdate()
+void Ping1DSimulationLink::randomUpdate()
 {
     static uint counter = 1;
     static const float numPoints = 200;

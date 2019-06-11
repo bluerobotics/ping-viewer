@@ -7,15 +7,15 @@
  * @brief Link that simulates Ping sensor behaviour
  *
  */
-class PingSimulationLink : public SimulationLink
+class Ping1DSimulationLink : public SimulationLink
 {
 public:
     /**
-     * @brief Construct a new Ping Simulation Link object
+     * @brief Construct a new Ping1D Simulation Link object
      *
      * @param parent
      */
-    PingSimulationLink(QObject* parent = nullptr);
+    Ping1DSimulationLink(QObject* parent = nullptr);
 
     /**
      * @brief Generates random data
