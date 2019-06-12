@@ -19,8 +19,6 @@ PolarPlot::PolarPlot(QQuickItem *parent)
     ,_painter(nullptr)
     ,_updateTimer(new QTimer(this))
 {
-    // This is the max depth that ping returns
-    _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, _angularResolution);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
@@ -35,7 +33,6 @@ PolarPlot::PolarPlot(QQuickItem *parent)
 void PolarPlot::clear()
 {
     qCDebug(polarplot) << "Cleaning waterfall and restarting internal variables";
-    _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, _angularResolution);
     _image.fill(Qt::transparent);
 }
 
@@ -70,9 +67,6 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     static QColor pointColor;
     static float step;
     static float angleStep;
-    // This ring vector will store variables of the last n samples for user access
-    static const float rad2grad = _angularResolution/(2*M_PI);
-    _DCRing[int(actualAngle*rad2grad) % _angularResolution] = {initPoint, length, confidence, distance};
     static float angleResolution = g2d/2;
     float actualAngle = g2d*angle*d2r;
 
@@ -109,9 +103,8 @@ void PolarPlot::updateMouseColumnData()
     const QPoint deltaScaled(delta.x()*_image.width()/width(), delta.y()*_image.height()/height());
     int grad = static_cast<int>(atan2f(-deltaScaled.x(), deltaScaled.y())*rad2grad + 200) % 400;
 
-    const auto& depthAndConfidence = _DCRing[grad];
-    _mouseSampleConfidence = depthAndConfidence.confidence;
-    _mouseSampleDepth = depthAndConfidence.distance;
-    emit mouseSampleConfidenceChanged();
-    emit mouseSampleDepthChanged();
+    _mouseSampleAngle = grad;
+    _mouseSampleDistance = 100;
+    emit mouseSampleAngleChanged();
+    emit mouseSampleDistanceChanged();
 }
