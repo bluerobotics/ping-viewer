@@ -24,7 +24,7 @@ Item {
 
         onDataChanged: {
             // Move from mm to m
-            root.draw(ping.data, 100, 0, 100, 0)
+            root.draw(ping.data, ping.angle, 0, 100)
         }
     }
 
@@ -34,8 +34,8 @@ Item {
         }
     }
 
-    function draw(points, confidence, initialPoint, length, distance) {
-        waterfall.draw(points, confidence, initialPoint, length, distance)
+    function draw(points, angle, initialPoint, length) {
+        waterfall.draw(points, angle, initialPoint, length)
         chart.draw(points, length + initialPoint, initialPoint)
     }
 
@@ -76,8 +76,8 @@ Item {
                     visible: waterfall.containsMouse
                     x: waterfall.mousePos.x - width/2
                     y: waterfall.mousePos.y - height*2
-                    text: (waterfall.mouseSampleDepth*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
-                    color: confidenceToColor(waterfall.mouseSampleConfidence)
+                    text: (waterfall.mouseSampleDistance*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
+                    color: "green"
                     font.family: "Arial"
                     font.pointSize: 15
                     font.bold: true
@@ -86,9 +86,9 @@ Item {
                         id: mouseConfidenceText
                         x: mouseReadout.width - width
                         y: mouseReadout.height*4/5
-                        text: transformValue(waterfall.mouseSampleConfidence) + "%"
-                        visible: typeof(waterfall.mouseSampleConfidence) == "number"
-                        color: confidenceToColor(waterfall.mouseSampleConfidence)
+                        text: transformValue(waterfall.mouseSampleAngle) + "º"
+                        visible: typeof(waterfall.mouseSampleAngle) == "number"
+                        color: "green"
                         font.family: "Arial"
                         font.pointSize: 10
                         font.bold: true
@@ -108,10 +108,6 @@ Item {
         Settings {
             property alias chartWidth: chart.width
         }
-    }
-
-    function confidenceToColor(confidence) {
-        return Qt.rgba(2*(1 - confidence/100), 2*confidence/100, 0)
     }
 
     function transformValue(value, precision) {
