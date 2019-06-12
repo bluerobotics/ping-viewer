@@ -23,7 +23,7 @@ Item {
         target: ping
 
         onDataChanged: {
-            // Move from mm to m
+            shapeSpinner.angle = (ping.angle + 0.25)*180/200
             root.draw(ping.data, ping.angle, 0, 100)
         }
     }
@@ -93,6 +93,11 @@ Item {
                         font.pointSize: 10
                         font.bold: true
                     }
+                }
+
+                PolarGrid {
+                    id: polarGrid
+                    anchors.fill: parent
                 }
             }
         }
