@@ -1,9 +1,9 @@
 import QtGraphicalEffects 1.0
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
-import QtQuick.Shapes 1.0
+import QtQuick.Shapes 1.12
 import Qt.labs.settings 1.0
 import WaterfallPlot 1.0
 import PolarPlot 1.0
@@ -68,6 +68,55 @@ Item {
                             x: waterfall.width*Math.cos(angle)/2
                             y: waterfall.height*Math.sin(angle)/2
                         }
+                    }
+                }
+
+                // Spinner that shows the head angle
+                Shape {
+                    id: shapeSpinner
+                    opacity: 1
+                    anchors.fill: parent
+                    vendorExtensionsEnabled: false
+                    property var angle: 0
+                    property var centerX: waterfall.width/2
+                    property var centerY: waterfall.height/2
+                    property var radius: waterfall.width/2
+
+                    ShapePath {
+                        id: shapePathSpinner
+                        strokeWidth: -1
+
+                        fillGradient: LinearGradient {
+                            x1: x2*1.1
+                            y1: y2*1.5
+                            x2: shapeSpinner.radius
+                            y2: shapeSpinner.radius
+                            GradientStop { position: 1; color: "transparent" }
+                            GradientStop { position: 0.8; color: "#7bd82c" }
+                        }
+
+                        // Create spinner outside arc
+                        PathAngleArc {
+                            centerX: shapeSpinner.centerX
+                            centerY: shapeSpinner.centerY
+                            radiusX: shapeSpinner.radius
+                            radiusY: shapeSpinner.radius
+                            sweepAngle: 0.5
+                            startAngle: -sweepAngle
+                        }
+
+                        // Create line between arc and origin of the chart
+                        PathLine {
+                            x: shapeSpinner.centerX
+                            y: shapeSpinner.centerY
+                        }
+                    }
+
+                    transform: Rotation {
+                        origin.x: shapeSpinner.centerX
+                        origin.y: shapeSpinner.centerY
+                        axis { x: 0; y: 0; z: 1 }
+                        angle: shapeSpinner.angle - 90
                     }
                 }
 
