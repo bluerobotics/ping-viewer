@@ -59,31 +59,33 @@ void PolarPlot::setImage(const QImage &image)
     setImplicitHeight(image.height());
 }
 
-void PolarPlot::draw(const QVector<double>& points, float confidence, float initPoint, float length, float distance)
+void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint, float length)
 {
-    static float currentDrawAngle(0);
+    Q_UNUSED(initPoint)
+    Q_UNUSED(length)
+
     static const QPoint center(_image.width()/2, _image.height()/2);
     static const float d2r = M_PI/180.0;
+    static const float g2d = 180.0/200.0;
     static QColor pointColor;
     static float step;
     static float angleStep;
-    float actualAngle = currentDrawAngle*d2r;
-
     // This ring vector will store variables of the last n samples for user access
     static const float rad2grad = _angularResolution/(2*M_PI);
     _DCRing[int(actualAngle*rad2grad) % _angularResolution] = {initPoint, length, confidence, distance};
+    static float angleResolution = g2d/2;
+    float actualAngle = g2d*angle*d2r;
 
     const float linearFactor = points.size()/(float)center.x();
     for(int i = 0; i < center.x(); i++) {
         pointColor = valueToRGB(points[static_cast<int>(i*linearFactor)]);
         step = ceil(i*2*d2r)*1.15;
-        for(float u = -0.25; u <= 0.25; u += 1/step) {
+        for(float u = -angleResolution; u <= angleResolution; u += 1/step) {
             angleStep = u*d2r+actualAngle - M_PI_2;
             _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
         }
     }
 
-    currentDrawAngle += 0.5;
     // Fix max update in 20Hz at max
     if(!_updateTimer->isActive()) {
         _updateTimer->start(50);
