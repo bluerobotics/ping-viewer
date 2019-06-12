@@ -55,6 +55,14 @@ public:
     Q_PROPERTY(int transmit_duration READ transmit_duration NOTIFY transmitDurationUpdate)
 
     /**
+     * @brief Angle of sensor head in gradians (400)
+     *
+     * @return uint16_t
+     */
+    uint16_t angle() { return _angle; }
+    Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
+
+    /**
      * @brief Return start distance of sonar points in mm
      *
      * @return uint32_t
@@ -201,6 +209,7 @@ signals:
      * @brief emitted when propriety changes
      */
 ///@{
+    void angleChanged();
     void dataChanged();
     void gainSettingUpdate();
     void pingIntervalUpdate();
@@ -217,6 +226,7 @@ private:
      * @brief Sensor variables
      */
 ///@{
+    uint16_t _angle = 0;
     uint16_t _transmit_duration = 0;
     uint32_t _ping_number = 0;
     uint32_t _scan_start = 0;
