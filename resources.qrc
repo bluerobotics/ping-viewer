@@ -22,6 +22,7 @@
         <file alias="PingNotificationArea.qml">qml/PingNotificationArea.qml</file>
         <file alias="PingPopup.qml">qml/PingPopup.qml</file>
         <file alias="PingStatus.qml">qml/PingStatus.qml</file>
+        <file alias="PolarGrid.qml">qml/PolarGrid.qml</file>
         <file alias="ValueReadout.qml">qml/ValueReadout.qml</file>
         <file alias="PingTextField.qml">qml/PingTextField.qml</file>
     </qresource>
