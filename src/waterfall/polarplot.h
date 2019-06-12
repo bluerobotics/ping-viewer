@@ -45,13 +45,11 @@ public:
      * @brief Draw a list of points in the waterfall
      *
      * @param points
-     * @param confidence
+     * @param angle
      * @param initPoint
      * @param length
-     * @param distance
      */
-    Q_INVOKABLE void draw(const QVector<double>& points, float confidence = 0, float initPoint = 0, float length = 50,
-                          float distance = 0);
+    Q_INVOKABLE void draw(const QVector<double>& points, float angle = 0, float initPoint = 0, float length = 100);
 
     /**
      * @brief Clear waterfall and restart all parameters
