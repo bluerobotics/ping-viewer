@@ -62,7 +62,7 @@ void Ping360::handleMessage(const ping_message& msg)
         const ping360_device_data deviceData(msg);
         deviceData.mode();
         _gain_setting = deviceData.gain_setting();
-        deviceData.angle();
+        _angle = deviceData.angle();
         _transmit_duration = deviceData.transmit_duration();
         deviceData.transmit_duration();
         deviceData.transmit_frequency();
@@ -73,7 +73,10 @@ void Ping360::handleMessage(const ping_message& msg)
         for (int i = 0; i < deviceData.data_length(); i++) {
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
+
+        emit angleChanged();
         emit dataChanged();
+
         break;
     }
 
