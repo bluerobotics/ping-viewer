@@ -45,7 +45,7 @@ void PolarPlot::paint(QPainter *painter)
 
     // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
     pix = QPixmap::fromImage(_image, Qt::NoFormatConversion);
-    _painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
+    _painter->drawPixmap(QRect(0, 0, width(), height()), pix, QRect(0, 0, _image.width(), _image.height()));
 }
 
 void PolarPlot::setImage(const QImage &image)
