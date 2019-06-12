@@ -66,25 +66,25 @@ public:
     Q_PROPERTY(QImage image READ image WRITE setImage NOTIFY imageChanged)
 
     /**
-     * @brief Get signal confidence from mouse position column
+     * @brief Get angle from mouse position
      *
      * @return float
      */
-    float mouseSampleConfidence() {return _mouseSampleConfidence;}
-    Q_PROPERTY(float mouseSampleConfidence READ mouseSampleConfidence NOTIFY mouseSampleConfidenceChanged)
+    float mouseSampleAngle() {return _mouseSampleAngle;}
+    Q_PROPERTY(float mouseSampleAngle READ mouseSampleAngle NOTIFY mouseSampleAngleChanged)
 
     /**
-     * @brief Get signal depth from mouse position sample
+     * @brief Get distance from mouse position
      *
      * @return float
      */
-    float mouseSampleDepth() {return _mouseSampleDepth;}
-    Q_PROPERTY(float mouseSampleDepth READ mouseSampleDepth NOTIFY mouseSampleDepthChanged)
+    float mouseSampleDistance() {return _mouseSampleDistance;}
+    Q_PROPERTY(float mouseSampleDistance READ mouseSampleDistance NOTIFY mouseSampleDistanceChanged)
 
 signals:
     void imageChanged();
-    void mouseSampleConfidenceChanged();
-    void mouseSampleDepthChanged();
+    void mouseSampleAngleChanged();
+    void mouseSampleDistanceChanged();
 
 private:
     Q_DISABLE_COPY(PolarPlot)
@@ -102,22 +102,9 @@ private:
     void updateMouseColumnData();
 
     QImage _image;
-    float _mouseSampleConfidence;
-    float _mouseSampleDepth;
+    float _mouseSampleAngle;
+    float _mouseSampleDistance;
     QPainter *_painter;
     static uint16_t _angularResolution;
     QTimer* _updateTimer;
-
-    /**
-     * @brief Depth and Confidence package
-     *
-     */
-    struct DCPack {
-        float initialDepth;
-        float length;
-        float confidence;
-        float distance;
-    };
-
-    QVector<DCPack> _DCRing;
 };
