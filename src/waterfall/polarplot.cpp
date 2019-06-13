@@ -62,22 +62,23 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     Q_UNUSED(length)
 
     static const QPoint center(_image.width()/2, _image.height()/2);
-    static const float d2r = M_PI/180.0;
-    static const float g2d = 180.0/200.0;
+    static const float degreeToRadian = M_PI/180.0;
+    static const float gradianToDegree = 180.0/200.0;
+    static const float gradianToRadian = M_PI/200.0;
     static QColor pointColor;
     static float step;
     static float angleStep;
-    static float angleResolution = g2d/2;
-    float actualAngle = g2d*angle*d2r;
+    static float angleResolution = gradianToDegree/2;
+    float actualAngle = angle*gradianToRadian;
 
     const float linearFactor = points.size()/(float)center.x();
     for(int i = 1; i < center.x(); i++) {
         pointColor = valueToRGB(points[static_cast<int>(i*linearFactor - 1)]);
-        step = ceil(i*2*d2r);
+        step = ceil(i*2*degreeToRadian);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
         for(int currentStep = 0; currentStep < step; currentStep++) {
             float deltaDegree = (2*angleResolution/(float)step)*(currentStep - step/2);
-            angleStep = deltaDegree*d2r+actualAngle - M_PI_2;
+            angleStep = deltaDegree*degreeToRadian+actualAngle - M_PI_2;
             _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
         }
     }
