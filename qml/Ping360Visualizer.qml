@@ -123,24 +123,25 @@ Item {
                 Text {
                     id: mouseReadout
                     visible: waterfall.containsMouse
-                    x: waterfall.mousePos.x - width/2
-                    y: waterfall.mousePos.y - height*2
-                    text: (waterfall.mouseSampleDistance*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
-                    color: "green"
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.margins: 5
+                    font.bold: true
                     font.family: "Arial"
                     font.pointSize: 15
-                    font.bold: true
+                    text: (waterfall.mouseSampleDistance*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
+                    color: StyleManager.secondaryColor
 
                     Text {
                         id: mouseConfidenceText
-                        x: mouseReadout.width - width
-                        y: mouseReadout.height*4/5
-                        text: transformValue(waterfall.mouseSampleAngle) + "º"
                         visible: typeof(waterfall.mouseSampleAngle) == "number"
-                        color: "green"
-                        font.family: "Arial"
-                        font.pointSize: 10
+                        anchors.top: parent.bottom
+                        anchors.margins: 5
                         font.bold: true
+                        font.family: "Arial"
+                        font.pointSize: 15
+                        text: transformValue(waterfall.mouseSampleAngle) + "º"
+                        color: StyleManager.secondaryColor
                     }
                 }
 
