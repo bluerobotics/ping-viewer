@@ -15,6 +15,7 @@ uint16_t PolarPlot::_angularResolution = 400;
 
 PolarPlot::PolarPlot(QQuickItem *parent)
     :Waterfall(parent)
+    ,_distances(_angularResolution, 0)
     ,_image(2500, 2500, QImage::Format_RGBA8888)
     ,_painter(nullptr)
     ,_updateTimer(new QTimer(this))
@@ -70,6 +71,19 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     static float angleStep;
     static float angleResolution = gradianToDegree/2;
     float actualAngle = angle*gradianToRadian;
+
+    _distances[static_cast<int>(angle)%_angularResolution] = initPoint + length;
+
+    float maxDistance = 0;
+    for(const auto distance : _distances) {
+        if(distance > _maxDistance) {
+            maxDistance = distance;
+        }
+    }
+    if(maxDistance > _maxDistance) {
+        _maxDistance = maxDistance;
+        emit maxDistanceChanged();
+    }
 
     const float linearFactor = points.size()/(float)center.x();
     for(int i = 1; i < center.x(); i++) {
