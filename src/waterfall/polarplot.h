@@ -81,8 +81,20 @@ public:
     float mouseSampleDistance() {return _mouseSampleDistance;}
     Q_PROPERTY(float mouseSampleDistance READ mouseSampleDistance NOTIFY mouseSampleDistanceChanged)
 
+    /**
+     * @brief Max distance in waterfall
+     *
+     * @return float
+     */
+    float maxDistance()
+    {
+        return _maxDistance;
+    }
+    Q_PROPERTY(float maxDistance READ maxDistance NOTIFY maxDistanceChanged)
+
 signals:
     void imageChanged();
+    void maxDistanceChanged();
     void mouseSampleAngleChanged();
     void mouseSampleDistanceChanged();
 
@@ -101,7 +113,9 @@ private:
      */
     void updateMouseColumnData();
 
+    QVector<int> _distances;
     QImage _image;
+    float _maxDistance;
     float _mouseSampleAngle;
     float _mouseSampleDistance;
     QPainter *_painter;
