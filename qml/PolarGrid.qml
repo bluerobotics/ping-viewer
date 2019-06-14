@@ -103,4 +103,29 @@ Item {
             }
         }
     }
+
+    Canvas {
+        anchors.fill: parent
+        opacity: 0.8
+        property var angle: 45
+
+        onPaint: {
+            var centerX = root.width/2
+            var centerY = root.height/2
+            var radius = root.height/2 - shapePathPolar.strokeWidth
+            var ctx = getContext("2d")
+            ctx.lineWidth = 1
+            ctx.strokeStyle = "white"
+            ctx.beginPath()
+
+            for(var i=0; i*angle < 360; i++){
+                ctx.moveTo(centerX, centerY);
+                var angleRadians = i*angle*Math.PI/180;
+                ctx.lineTo(radius*Math.cos(angleRadians) + centerX, radius*Math.sin(angleRadians) + centerY);
+            }
+
+            ctx.closePath()
+            ctx.stroke()
+        }
+    }
 }
