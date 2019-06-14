@@ -122,6 +122,7 @@ Item {
                 PolarGrid {
                     id: polarGrid
                     anchors.fill: parent
+                    maxDistance: waterfall.maxDistance
                 }
             }
         }
