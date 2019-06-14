@@ -75,7 +75,7 @@ Item {
                 Shape {
                     id: shapeSpinner
                     opacity: 1
-                    anchors.fill: parent
+                    anchors.centerIn: parent
                     vendorExtensionsEnabled: false
                     property var angle: 0
                     property var centerX: waterfall.width/2
@@ -84,39 +84,13 @@ Item {
 
                     ShapePath {
                         id: shapePathSpinner
-                        strokeWidth: -1
+                        strokeWidth: 2
+                        strokeColor: StyleManager.secondaryColor
 
-                        fillGradient: LinearGradient {
-                            x1: x2*1.1
-                            y1: y2*1.5
-                            x2: shapeSpinner.radius
-                            y2: shapeSpinner.radius
-                            GradientStop { position: 1; color: "transparent" }
-                            GradientStop { position: 0.8; color: "#7bd82c" }
-                        }
-
-                        // Create spinner outside arc
-                        PathAngleArc {
-                            centerX: shapeSpinner.centerX
-                            centerY: shapeSpinner.centerY
-                            radiusX: shapeSpinner.radius
-                            radiusY: shapeSpinner.radius
-                            sweepAngle: 0.5
-                            startAngle: -sweepAngle
-                        }
-
-                        // Create line between arc and origin of the chart
                         PathLine {
-                            x: shapeSpinner.centerX
-                            y: shapeSpinner.centerY
+                            x: waterfall.width*Math.cos(shapeSpinner.angle*Math.PI/180 - Math.PI/2)/2
+                            y: waterfall.height*Math.sin(shapeSpinner.angle*Math.PI/180 - Math.PI/2)/2
                         }
-                    }
-
-                    transform: Rotation {
-                        origin.x: shapeSpinner.centerX
-                        origin.y: shapeSpinner.centerY
-                        axis { x: 0; y: 0; z: 1 }
-                        angle: shapeSpinner.angle - 90
                     }
                 }
 
