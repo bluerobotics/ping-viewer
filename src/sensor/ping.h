@@ -322,6 +322,14 @@ public:
                                     bool verify = true);
 
     /**
+     * @brief Return a qml component that will take care of the main control panel for the sensor
+     *
+     * @param parent
+     * @return QQuickItem* controlPanel
+     */
+    Q_INVOKABLE QQuickItem* controlPanel(QObject *parent) override final;
+
+    /**
      * @brief Return the visualization widget
      *
      * @param parent
@@ -436,6 +444,8 @@ private:
     QTimer _periodicRequestTimer;
 
     QSharedPointer<QProcess> _firmwareProcess;
+
+    QSharedPointer<QQuickItem> _controlPanel;
 
     struct settingsConfiguration {
         /*

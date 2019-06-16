@@ -552,6 +552,19 @@ void Ping::resetSensorLocalVariables()
     _lastPingConfigurationSrcId = -1;
 }
 
+QQuickItem* Ping::controlPanel(QObject *parent)
+{
+    QQmlEngine* engine = qmlEngine(parent);
+    if(!engine) {
+        qCDebug(PING_PROTOCOL_PING) << "No qml engine to load visualization.";
+        return nullptr;
+    }
+    QQmlComponent component(engine, QUrl("qrc:/Ping1DControlPanel.qml"), parent);
+    _controlPanel.reset(qobject_cast<QQuickItem*>(component.create()));
+    _controlPanel->setParentItem(qobject_cast<QQuickItem*>(parent));
+    return _controlPanel.get();
+}
+
 QQmlComponent* Ping::sensorVisualizer(QObject *parent)
 {
     QQmlEngine *engine = qmlEngine(parent);
