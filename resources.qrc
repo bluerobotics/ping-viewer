@@ -11,6 +11,7 @@
         <file alias="Logo.qml">qml/Logo.qml</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="Ping1DControlPanel.qml">qml/Ping1DControlPanel.qml</file>
+        <file alias="Ping360ControlPanel.qml">qml/Ping360ControlPanel.qml</file>
         <file alias="MainPage.qml">qml/MainPage.qml</file>
         <file alias="Ping1DVisualizer.qml">qml/Ping1DVisualizer.qml</file>
         <file alias="Ping360Visualizer.qml">qml/Ping360Visualizer.qml</file>
