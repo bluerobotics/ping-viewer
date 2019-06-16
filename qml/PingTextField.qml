@@ -42,7 +42,7 @@ Item {
         // That's why we are using accepted()
         onAccepted: {
             focus = false
-            mainPage.forceActiveFocus()
+            root.parent.forceActiveFocus()
             // It's necessary to update the input variable
             root.text = textField.text
             root.editingFinished()
