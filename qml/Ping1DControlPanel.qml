@@ -5,6 +5,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
+import DeviceManager 1.0
 import Ping1DNamespace 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
@@ -14,7 +15,7 @@ Item {
     visible: false
     height: firmwareUpdate.visible*firmwareUpdate.height + pingGroup.height
     width: childrenRect.width
-    property var ping: null
+    property var ping: DeviceManager.primarySensor
 
     ColumnLayout {
         id: settingsLayout
