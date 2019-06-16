@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QQmlComponent>
+#include <QQuickItem>
 #include <QPointer>
 
 #include "flasher.h"
@@ -88,6 +89,14 @@ public:
      */
     Flasher* flasher() { return &_flasher; };
     Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
+
+    /**
+     * @brief Return a qml component that will take care of the main control panel for the sensor
+     *
+     * @param parent
+     * @return QQuickItem* controlPanel
+     */
+    Q_INVOKABLE virtual QQuickItem* controlPanel(QObject *parent) = 0;
 
     /**
      * @brief Return a qml component that will take care of the main visualization widget
