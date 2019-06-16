@@ -8,8 +8,6 @@ PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 DeviceManager::DeviceManager() :
     _detector(new ProtocolDetector())
 {
-    // This helps to avoid type errors in qml
-    _primarySensor.reset(new Ping());
     emit primarySensorChanged();
 
     for(const auto& key : _roleNames.keys()) {
