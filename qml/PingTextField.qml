@@ -67,12 +67,15 @@ Item {
             // This allow us to correct not valid inputs to the last valid value
             if(!acceptableInput) {
                 textField.text = root.text
+            } else {
+                root.text = textField.text
             }
 
             if (activeFocus) {
                 selectAll()
             } else {
                 deselect()
+                root.editingFinished()
             }
         }
     }
