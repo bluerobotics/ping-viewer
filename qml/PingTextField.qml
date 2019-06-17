@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
@@ -24,6 +24,11 @@ Item {
         textField.text = text
     }
 
+    TextMetrics {
+        id: textMetrics
+        font: textField.font
+        text: validator.top
+    }
 
     Label {
         id: label
@@ -37,6 +42,15 @@ Item {
         anchors.baseline: label.baseline
         anchors.leftMargin: 5
         selectByMouse: true
+        // Change input box style
+        rightPadding: leftPadding
+        topPadding: 0
+        bottomPadding: 0
+        horizontalAlignment: TextInput.AlignRight
+        property var inputWidth: validator === undefined ? contentWidth : textMetrics.width
+        background.implicitWidth: inputWidth + 2*leftPadding
+        background.implicitHeight: contentHeight*1.1
+        background.y: contentHeight
 
         // editingFinished() is only emitted when TextField has focus
         // That's why we are using accepted()
