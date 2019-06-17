@@ -216,7 +216,7 @@ Item {
 
     Loader {
         id: sensorVisualizerLoader
-        objectName: "SensorVisualizer"
+        objectName: "sensorVisualizer"
         anchors.fill: parent
         sourceComponent: DeviceManager.primarySensor.sensorVisualizer(parent)
     }
