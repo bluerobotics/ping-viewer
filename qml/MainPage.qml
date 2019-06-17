@@ -226,12 +226,36 @@ Item {
         visible: SettingsManager.debugMode
     }
 
-    LinearGradient {
-        anchors.fill: parent
+    Loader {
+        id: backGroundLoader
+        objectName: "backGround"
         z: parent.z-1
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "#FF11b3ff" }
-            GradientStop { position: 1.0; color: "#FF111363" }
+        anchors.fill: parent
+        // Load linear or radial background
+        // TODO: Add a proper check in PingSensor
+        sourceComponent: sensorVisualizerLoader.item == null ?
+            radialGradient : sensorVisualizerLoader.item.toString().includes("Ping360") ? radialGradient : linearGradient
+    }
+
+    // Linear and radial background gradients for different sensors
+    Component {
+        id: linearGradient
+        LinearGradient {
+            anchors.fill: parent
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#FF11b3ff" }
+                GradientStop { position: 1.0; color: "#FF111363" }
+            }
+        }
+    }
+    Component {
+        id: radialGradient
+        RadialGradient {
+            anchors.fill: parent
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#FF11b3ff" }
+                GradientStop { position: 1.0; color: "#FF111363" }
+            }
         }
     }
 
