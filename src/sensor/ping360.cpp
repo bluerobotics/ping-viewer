@@ -36,8 +36,8 @@ Ping360::Ping360()
 void Ping360::startPreConfigurationProcess()
 {
     // Fetch sensor configuration to update class variables
-    ping_message_general_request msg;
-    msg.set_requested_id(Ping360Namespace::DeviceData);
+    common_general_request msg;
+    msg.set_requested_id(Ping360Id::DEVICE_DATA);
     msg.updateChecksum();
     writeMessage(msg);
 }
@@ -64,7 +64,7 @@ void Ping360::handleMessage(const ping_message& msg)
 
     switch (msg.message_id()) {
 
-    case Ping360Namespace::DeviceData: {
+    case Ping360Id::DEVICE_DATA: {
         const ping360_device_data deviceData(msg);
         deviceData.mode();
         _gain_setting = deviceData.gain_setting();

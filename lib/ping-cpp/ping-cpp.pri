@@ -1,0 +1,5 @@
+MESSAGEPATH = $$PWD/ping-cpp/src/message
+
+HEADERS += $$MESSAGEPATH/*.h
+
+INCLUDEPATH += $$MESSAGEPATH

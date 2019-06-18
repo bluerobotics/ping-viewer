@@ -6,7 +6,6 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
 import DeviceManager 1.0
-import Ping1DNamespace 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 

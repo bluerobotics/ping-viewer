@@ -1,7 +1,7 @@
 #pragma once
 
 #include "abstractlink.h"
-#include "parsers/parser.h"
+#include "parser-ping.h"
 
 /**
  * @brief Simulation connection class
@@ -24,7 +24,4 @@ public:
      * @return false
      */
     bool isWritable() final { return false; };
-
-private:
-    Parser _parser;
 };
