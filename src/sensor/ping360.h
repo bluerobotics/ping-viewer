@@ -47,12 +47,64 @@ public:
     Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberUpdate)
 
     /**
+     * @brief Set pulse emission in ms
+     *
+     * @param transmit_duration
+     */
+    void set_transmit_duration(int transmit_duration)
+    {
+        _transmit_duration = transmit_duration;
+    }
+
+    /**
      * @brief Return pulse emission in ms
      *
      * @return uint16_t
      */
     uint16_t transmit_duration() { return _transmit_duration; }
-    Q_PROPERTY(int transmit_duration READ transmit_duration NOTIFY transmitDurationUpdate)
+    Q_PROPERTY(int transmit_duration READ transmit_duration WRITE set_transmit_duration NOTIFY transmitDurationUpdate)
+
+    /**
+     * @brief Set the sample period in ms
+     *
+     * @param sample_period
+     */
+    void set_sample_period(int sample_period)
+    {
+        _sample_period = sample_period;
+    }
+
+    /**
+     * @brief Return the sample period in ms
+     *
+     * @return int
+     */
+    int sample_period()
+    {
+        return _sample_period;
+    }
+    Q_PROPERTY(int sample_period READ sample_period WRITE set_sample_period NOTIFY samplePeriodChanged)
+
+    /**
+     * @brief Set the transmit frequency in Hz
+     *
+     * @param transmit_frequency
+     */
+    void set_transmit_frequency(int transmit_frequency)
+    {
+        _transmit_frequency = transmit_frequency;
+    }
+
+    /**
+     * @brief Return the transmit frequency in Hz
+     *
+     * @return int
+     */
+    int transmit_frequency()
+    {
+        return _transmit_frequency;
+    }
+    Q_PROPERTY(int transmit_frequency READ transmit_frequency WRITE set_transmit_frequency NOTIFY transmitFrequencyChanged)
 
     /**
      * @brief Angle of sensor head in gradians (400)
@@ -214,10 +266,12 @@ signals:
     void gainSettingUpdate();
     void pingIntervalUpdate();
     void pingNumberUpdate();
+    void samplePeriodChanged();
     void scanLengthUpdate();
     void scanStartUpdate();
     void speedOfSoundUpdate();
     void transmitDurationUpdate();
+    void transmitFrequencyChanged();
 ///@}
 
 private:
@@ -232,7 +286,9 @@ private:
     uint32_t _scan_start = 0;
     uint32_t _scan_length = 0;
     uint32_t _gain_setting = 0;
+    uint16_t _sample_period = 100;
     uint32_t _speed_of_sound = 0;
+    uint16_t _transmit_frequency = 500;
 ///@}
 
     uint16_t _num_points = 2000;
