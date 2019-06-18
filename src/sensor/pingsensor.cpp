@@ -1,20 +1,22 @@
 #include "logger.h"
 #include "pingsensor.h"
+#include "ping-message-common.h"
+#include "ping-message-ping1d.h"
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PINGSENSOR, "ping.protocol.pingsensor")
 
 PingSensor::PingSensor()
     :Sensor()
 {
-    _parser = new PingParser();
-    connect(dynamic_cast<PingParser*>(_parser), &PingParser::newMessage, this, &PingSensor::handleMessagePrivate);
-    connect(dynamic_cast<PingParser*>(_parser), &PingParser::parseError, this, &PingSensor::parserErrorsUpdate);
+    _parser = new PingParserExt();
+    connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate);
+    connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsUpdate);
 
     connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
     emit linkUpdate();
 }
 
-void PingSensor::request(int id)
+void PingSensor::request(int id) const
 {
     if(!link()->isWritable()) {
         qCWarning(PING_PROTOCOL_PINGSENSOR) << "Can't write in this type of link.";
@@ -22,8 +24,9 @@ void PingSensor::request(int id)
     }
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "Requesting:" << id;
 
-    ping_message_empty m;
-    m.set_id(id);
+    ping_message m(10);
+    m.set_payload_length(0);
+    m.set_message_id(id);
     m.updateChecksum();
     writeMessage(m);
 }
@@ -39,26 +42,26 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
 {
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "Handling Message:" << msg.message_id();
 
-    if(_dstId != msg.dst_device_id()) {
-        _dstId = msg.dst_device_id();
+    if(_dstId != msg.destination_device_id()) {
+        _dstId = msg.destination_device_id();
         emit dstIdUpdate();
     }
 
-    if(_srcId != msg.src_device_id()) {
-        _srcId = msg.src_device_id();
+    if(_srcId != msg.source_device_id()) {
+        _srcId = msg.source_device_id();
         emit srcIdUpdate();
     }
 
     switch (msg.message_id()) {
 
-    case PingMessageNamespace::Ack: {
-        ping_message_ack ackMessage{msg};
+    case CommonId::ACK: {
+        common_ack ackMessage{msg};
         qCDebug(PING_PROTOCOL_PINGSENSOR) << "ACK message:" << ackMessage.acked_id();
         break;
     }
 
-    case PingMessageNamespace::Nack: {
-        ping_message_nack nackMessage{msg};
+    case CommonId::NACK: {
+        common_nack nackMessage{msg};
         qCCritical(PING_PROTOCOL_PINGSENSOR) << "Sensor NACK!";
         _nack_msg = QString("%1: %2").arg(nackMessage.nack_message()).arg(nackMessage.nacked_id());
         qCDebug(PING_PROTOCOL_PINGSENSOR) << "NACK message:" << _nack_msg;
@@ -67,15 +70,15 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
     }
 
     // needs dynamic-payload patch
-    case PingMessageNamespace::AsciiText: {
-        _ascii_text = ping_message_ascii_text(msg).ascii_message();
+    case CommonId::ASCII_TEXT: {
+        _ascii_text = common_ascii_text(msg).ascii_message();
         qCInfo(PING_PROTOCOL_PINGSENSOR) << "Sensor status:" << _ascii_text;
         emit asciiTextUpdate();
         break;
     }
 
-    case PingMessageNamespace::DeviceInformation: {
-        ping_message_device_information m(msg);
+    case CommonId::DEVICE_INFORMATION: {
+        common_device_information m(msg);
 
         _device_type = m.device_type();
         _device_revision = m.device_revision();
@@ -91,8 +94,8 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
         break;
     }
 
-    case PingMessageNamespace::ProtocolVersion: {
-        ping_message_protocol_version m(msg);
+    case CommonId::PROTOCOL_VERSION: {
+        common_protocol_version m(msg);
 
         _protocol_version_major = m.version_major();
         _protocol_version_minor = m.version_minor();
@@ -105,8 +108,8 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
     }
 
     //Will be deprecated in future firmware versions of Ping1D
-    case Ping1DNamespace::FirmwareVersion: {
-        ping1D_firmware_version m(msg);
+    case Ping1dId::FIRMWARE_VERSION: {
+        ping1d_firmware_version m(msg);
 
         m.device_type();
         // Ping1D uses device_model as device_type to specify which sersion is it

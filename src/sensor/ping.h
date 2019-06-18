@@ -6,9 +6,9 @@
 #include <QSharedPointer>
 #include <QTimer>
 
-#include "parsers/parser.h"
-#include "parsers/parser_ping.h"
-#include "pingmessage/ping_ping1d.h"
+#include <ping-message.h>
+#include <ping-message-common.h>
+#include <ping-message-ping1d.h>
 #include "protocoldetector.h"
 #include "pingsensor.h"
 
@@ -53,11 +53,11 @@ public:
      */
     void pingEnable(bool enabled)
     {
-        ping1D_set_ping_enable m;
+        ping1d_set_ping_enable m;
         m.set_ping_enabled(enabled);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::PingEnable);
+        request(Ping1dId::PING_ENABLE);
     }
 
     Q_PROPERTY(bool pingEnable READ pingEnable WRITE pingEnable NOTIFY pingEnableUpdate)
@@ -108,12 +108,12 @@ public:
      */
     void set_start_mm(int start_mm)
     {
-        ping1D_set_range m;
+        ping1d_set_range m;
         m.set_scan_start(start_mm);
         m.set_scan_length(_scan_length);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::Range);
+        request(Ping1dId::RANGE);
     }
     Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartUpdate)
 
@@ -131,12 +131,12 @@ public:
      */
     void set_length_mm(int length_mm)
     {
-        ping1D_set_range m;
+        ping1d_set_range m;
         m.set_scan_start(_scan_start);
         m.set_scan_length(length_mm);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::Range);
+        request(Ping1dId::RANGE);
     }
     Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthUpdate)
 
@@ -154,11 +154,11 @@ public:
      */
     void set_gain_setting(int gain_setting)
     {
-        ping1D_set_gain_setting m;
+        ping1d_set_gain_setting m;
         m.set_gain_setting(gain_setting);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::GainSetting);
+        request(Ping1dId::GAIN_SETTING);
     }
     Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingUpdate)
 
@@ -185,23 +185,31 @@ public:
      */
     void set_mode_auto(bool mode_auto)
     {
-        ping1D_set_mode_auto m;
+        ping1d_set_mode_auto m;
         m.set_mode_auto(mode_auto);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::ModeAuto);
+        request(Ping1dId::MODE_AUTO);
     }
     Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
+
+    /**
+     * @brief These are ids that the sensor can continuously output.
+     * The sensor only supports continuous profile output
+     */
+    enum ContinuousId : uint16_t {
+        PROFILE = Ping1dId::PROFILE
+    };
 
     /**
      * @brief Do continuous start
      *
      * @param id
      */
-    void do_continuous_start(Ping1DNamespace::ping1D_id id)
+    void do_continuous_start(ContinuousId id)
     {
-        ping1D_continuous_start m;
-        m.set_id(static_cast<int>(id));
+        ping1d_continuous_start m;
+        m.set_id(id);
         m.updateChecksum();
         writeMessage(m);
     }
@@ -211,9 +219,9 @@ public:
      *
      * @param id
      */
-    void do_continuous_stop(Ping1DNamespace::ping1D_id id)
+    void do_continuous_stop(ContinuousId id)
     {
-        ping1D_continuous_stop m;
+        ping1d_continuous_stop m;
         m.set_id(static_cast<int>(id));
         m.updateChecksum();
         writeMessage(m);
@@ -233,11 +241,11 @@ public:
      */
     void set_ping_interval(uint16_t ping_interval)
     {
-        ping1D_set_ping_interval m;
+        ping1d_set_ping_interval m;
         m.set_ping_interval(ping_interval);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::PingInterval);
+        request(Ping1dId::PING_INTERVAL);
     }
     Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalUpdate)
 
@@ -255,11 +263,11 @@ public:
      */
     void set_speed_of_sound(uint32_t speed_of_sound)
     {
-        ping1D_set_speed_of_sound m;
+        ping1d_set_speed_of_sound m;
         m.set_speed_of_sound(speed_of_sound);
         m.updateChecksum();
         writeMessage(m);
-        request(Ping1DNamespace::SpeedOfSound);
+        request(Ping1dId::SPEED_OF_SOUND);
     }
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundUpdate)
 
@@ -324,7 +332,7 @@ public:
     /**
      * @brief request a profile message from the device
      */
-    Q_INVOKABLE void emitPing() { request(Ping1dId::PROFILE); }
+    Q_INVOKABLE void emitPing() const { request(Ping1dId::PROFILE); }
 
 signals:
     /**
@@ -515,5 +523,5 @@ private:
         int waiting = 0;
     };
     friend QDebug operator<<(QDebug d, const Ping::messageStatus& other);
-    QHash<Ping1DNamespace::ping1D_id, messageStatus> requestedIds;
+    QHash<uint16_t, messageStatus> requestedIds;
 };

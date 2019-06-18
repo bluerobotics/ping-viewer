@@ -4,7 +4,7 @@
 
 #include "abstractlink.h"
 #include "linkconfiguration.h"
-#include "parsers/parser_ping.h"
+#include "parser-ping.h"
 
 class QSerialPortInfo;
 

@@ -7,7 +7,9 @@
 #include <QSerialPortInfo>
 #include <QUdpSocket>
 
-#include "pingmessage/ping_ping1d.h"
+#include <ping-message.h>
+#include <ping-message-common.h>
+#include <ping-message-ping1d.h>
 #include "protocoldetector.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PROTOCOLDETECTOR, "ping.protocol.protocoldetector")
@@ -25,8 +27,8 @@ ProtocolDetector::ProtocolDetector()
     qRegisterMetaType<QVector<LinkConfiguration>>();
 
     // To find a ping, we use this message on a link, then wait for a reply
-    ping_message_general_request deviceInformationMessage;
-    deviceInformationMessage.set_requested_id(PingMessageNamespace::DeviceInformation);
+    common_general_request deviceInformationMessage;
+    deviceInformationMessage.set_requested_id(CommonId::DEVICE_INFORMATION);
     deviceInformationMessage.updateChecksum();
     _deviceInformationMessageByteArray = QByteArray(reinterpret_cast<const char*>(deviceInformationMessage.msgData),
                                          deviceInformationMessage.msgDataLength());
@@ -186,11 +188,11 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer)
 {
     // Parser need to be here, having a single parser to for everything will result in fake detections,
     // since the buffer need to be clear for each try
-    PingParser parser;
+    PingParserExt parser;
 
     // Print information from detected devices
-    connect(&parser, &PingParser::newMessage, this, [&](const ping_message& msg) {
-        ping_message_device_information device_information(msg);
+    connect(&parser, &Parser::newMessage, this, [&](const ping_message& msg) {
+        common_device_information device_information(msg);
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Detect new device:"
                                                 << "\ndevice_revision:" << device_information.device_revision()
                                                 << "\nfirmware_version_major:" << device_information.firmware_version_major()

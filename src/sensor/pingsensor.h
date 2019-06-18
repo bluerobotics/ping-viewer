@@ -138,7 +138,7 @@ public:
      *
      * @param id
      */
-    Q_INVOKABLE virtual void request(int id);
+    Q_INVOKABLE virtual void request(int id) const;
 
     /**
      * @brief Do firmware sensor update
