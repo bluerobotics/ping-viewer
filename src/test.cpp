@@ -20,8 +20,7 @@
 
 #include "test.h"
 
-// Register message enums to qml
-#include "pingmessage/ping_ping1d.h"
+#include "ping-message-ping1d.h"
 
 void Test::initTestCase()
 {

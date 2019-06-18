@@ -1,7 +1,7 @@
 #include <QtMath>
 
 #include "ping360simulationlink.h"
-#include "pingmessage/ping_ping360.h"
+#include "ping-message-ping360.h"
 
 Ping360SimulationLink::Ping360SimulationLink(QObject* parent)
     : SimulationLink(parent)

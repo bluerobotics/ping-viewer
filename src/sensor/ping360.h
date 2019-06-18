@@ -6,9 +6,10 @@
 #include <QSharedPointer>
 #include <QTimer>
 
-#include "parsers/parser.h"
-#include "parsers/parser_ping.h"
-#include "pingmessage/ping_ping360.h"
+#include "parser.h"
+#include "parser-ping.h"
+#include "ping-message-common.h"
+#include "ping-message-ping360.h"
 #include "protocoldetector.h"
 #include "pingsensor.h"
 

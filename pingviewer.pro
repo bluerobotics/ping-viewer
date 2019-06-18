@@ -22,8 +22,8 @@ RESOURCES += \
     QMAKE_LFLAGS += -fopenmp
 }
 
-include(lib/ping-protocol-cpp/ping.pri)
 include(lib/maddy/maddy.pri)
+include(lib/ping-cpp/ping-cpp.pri)
 
 CONFIG(debug, debug|release) {
     message("Debug Build !")

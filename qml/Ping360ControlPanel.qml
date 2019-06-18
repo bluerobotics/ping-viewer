@@ -4,7 +4,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import DeviceManager 1.0
-import Ping360Namespace 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 

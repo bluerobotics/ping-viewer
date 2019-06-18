@@ -10,7 +10,6 @@ import AbstractLinkNamespace 1.0
 import DeviceManager 1.0
 import FileManager 1.0
 import Ping 1.0
-import Ping1DNamespace 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
