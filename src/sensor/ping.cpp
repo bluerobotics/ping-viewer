@@ -572,8 +572,7 @@ QQmlComponent* Ping::sensorVisualizer(QObject *parent)
         qCDebug(PING_PROTOCOL_PING) << "No qml engine to load visualization.";
         return nullptr;
     }
-    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/Ping1DVisualizer.qml"));
-    return component;
+    return new QQmlComponent(engine, QUrl("qrc:/Ping1DVisualizer.qml"), parent);
 }
 
 Ping::~Ping()
