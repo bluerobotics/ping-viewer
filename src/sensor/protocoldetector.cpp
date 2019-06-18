@@ -24,6 +24,13 @@ ProtocolDetector::ProtocolDetector()
     // Register type to be used in availableLinksChanged
     qRegisterMetaType<QVector<LinkConfiguration>>();
 
+    // To find a ping, we use this message on a link, then wait for a reply
+    ping_message_general_request deviceInformationMessage;
+    deviceInformationMessage.set_requested_id(PingMessageNamespace::DeviceInformation);
+    deviceInformationMessage.updateChecksum();
+    _deviceInformationMessageByteArray = QByteArray(reinterpret_cast<const char*>(deviceInformationMessage.msgData),
+                                         deviceInformationMessage.msgDataLength());
+
     _linkConfigs.append({
         {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 standard connection"},
         {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}
@@ -99,11 +106,6 @@ QVector<LinkConfiguration> ProtocolDetector::updateLinkConfigurations(QVector<Li
 
 bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 {
-    // To find a ping, we this message on a link, then wait for a reply
-    ping_message_general_request req;
-    req.set_requested_id(Ping1DNamespace::FirmwareVersion);
-    req.updateChecksum();
-
     QSerialPortInfo portInfo(linkConf.serialPort());
     int baudrate = linkConf.serialBaudrate();
 
@@ -125,7 +127,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
     port.setBaudRate(baudrate);
 
     // Probe
-    port.write(reinterpret_cast<const char*>(req.msgData), (uint16_t)req.msgDataLength());
+    port.write(_deviceInformationMessageByteArray);
     port.waitForBytesWritten();
 
     int attempts = 0;
@@ -143,11 +145,6 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 
 bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 {
-    // To find a ping, we this message on a link, then wait for a reply
-    ping_message_general_request req;
-    req.set_requested_id(Ping1DNamespace::FirmwareVersion);
-    req.updateChecksum();
-
     QUdpSocket socket;
 
     // To test locally, change the host to 127.0.0.1 and use something like:
@@ -157,9 +154,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Probing UDP:" << linkConf;
 
-    socket.writeDatagram(
-        reinterpret_cast<const char*>(req.msgData), req.msgDataLength(), QHostAddress(linkConf.udpHost()), linkConf.udpPort()
-    );
+    socket.writeDatagram(_deviceInformationMessageByteArray, QHostAddress(linkConf.udpHost()), linkConf.udpPort());
 
     int attempts = 0;
 
@@ -189,7 +184,20 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
 bool ProtocolDetector::checkBuffer(const QByteArray& buffer)
 {
+    // Parser need to be here, having a single parser to for everything will result in fake detections,
+    // since the buffer need to be clear for each try
     PingParser parser;
+
+    // Print information from detected devices
+    connect(&parser, &PingParser::newMessage, this, [&](const ping_message& msg) {
+        ping_message_device_information device_information(msg);
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Detect new device:"
+                                                << "\ndevice_revision:" << device_information.device_revision()
+                                                << "\nfirmware_version_major:" << device_information.firmware_version_major()
+                                                << "\nfirmware_version_minor:" << device_information.firmware_version_minor()
+                                                << "\nfirmware_version_patch:" << device_information.firmware_version_patch();
+    });
+
     for (const auto& byte : buffer) {
         if(parser.parseByte(byte) == PingParser::NEW_MESSAGE) {
             return true;

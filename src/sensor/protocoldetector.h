@@ -110,4 +110,5 @@ private:
     QVector<LinkConfiguration> _availableLinks;
     QVector<LinkConfiguration> _linkConfigs;
     static const QStringList _invalidSerialPortNames;
+    QByteArray _deviceInformationMessageByteArray;
 };
