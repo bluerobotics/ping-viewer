@@ -153,8 +153,7 @@ QQmlComponent* Ping360::sensorVisualizer(QObject *parent)
         qCDebug(PING_PROTOCOL_PING360) << "No qml engine to load visualization.";
         return nullptr;
     }
-    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/Ping360Visualizer.qml"));
-    return component;
+    return new QQmlComponent(engine, QUrl("qrc:/Ping360Visualizer.qml"), parent);
 }
 
 Ping360::~Ping360()
