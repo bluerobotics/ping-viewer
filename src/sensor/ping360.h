@@ -187,7 +187,7 @@ public:
      */
     void set_gain_setting(int gain_setting)
     {
-        Q_UNUSED(gain_setting)
+        _gain_setting = gain_setting;
     }
     Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingUpdate)
 
