@@ -236,14 +236,6 @@ public:
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundChanged)
 
     /**
-     * @brief Return the max frequency that the sensor can work
-     *
-     * @return int
-     */
-    int pingMaxFrequency() { return _pingMaxFrequency; }
-    Q_PROPERTY(int pingMaxFrequency READ pingMaxFrequency CONSTANT)
-
-    /**
      * @brief Do firmware sensor update
      *
      * @param fileUrl firmware file path
@@ -310,7 +302,6 @@ private:
     QVector<double> _data;
 
     uint16_t _ping_interval = 0;
-    static const int _pingMaxFrequency;
 
     QSharedPointer<QQuickItem> _controlPanel;
 
