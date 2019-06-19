@@ -39,6 +39,27 @@ public:
     void printSensorInformation() const override final;
 
     /**
+     * @brief Helper function to request profiles from sensor based in the actual position
+     *
+     * @param delta number of grads/steps from the actual position
+     */
+    Q_INVOKABLE void deltaStep(int delta)
+    {
+        ping360_transducer msg;
+        msg.set_mode(1);
+        msg.set_gain_setting(_gain_setting);
+        msg.set_angle((_angle+delta)%400);
+        msg.set_transmit_duration(_transmit_duration);
+        msg.set_sample_period(_sample_period);
+        msg.set_transmit_frequency(_transmit_frequency);
+        msg.set_number_of_samples(200);
+        msg.set_transmit(1);
+
+        msg.updateChecksum();
+        writeMessage(msg);
+    }
+
+    /**
      * @brief Return number of pings emitted
      *
      * @return uint32_t
