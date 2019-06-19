@@ -296,13 +296,13 @@ private:
      */
 ///@{
     uint16_t _angle = 0;
-    uint16_t _transmit_duration = 0;
+    uint16_t _transmit_duration = 42;
     uint32_t _ping_number = 0;
     uint32_t _scan_start = 0;
     uint32_t _scan_length = 0;
-    uint32_t _gain_setting = 0;
-    uint16_t _sample_period = 100;
-    uint32_t _speed_of_sound = 0;
+    uint32_t _gain_setting = 1;
+    uint16_t _sample_period = 1300;
+    uint32_t _speed_of_sound = 1500;
     uint16_t _transmit_frequency = 500;
 ///@}
 
