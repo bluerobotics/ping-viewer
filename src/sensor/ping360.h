@@ -271,6 +271,7 @@ signals:
 ///@{
     void angleChanged();
     void dataChanged();
+    void gainSettingChanged();
     void gainSettingUpdate();
     void pingIntervalUpdate();
     void pingNumberUpdate();
