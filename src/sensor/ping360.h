@@ -52,7 +52,7 @@ public:
         msg.set_transmit_duration(_transmit_duration);
         msg.set_sample_period(_sample_period);
         msg.set_transmit_frequency(_transmit_frequency);
-        msg.set_number_of_samples(200);
+        msg.set_number_of_samples(_num_points);
         msg.set_transmit(1);
 
         msg.updateChecksum();
