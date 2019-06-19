@@ -215,21 +215,6 @@ public:
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundUpdate)
 
     /**
-     * @brief Return ping frequency
-     *
-     * @return float
-     */
-    float pingFrequency() { return _ping_interval ? static_cast<int>(1000/_ping_interval) : 0; };
-
-    /**
-     * @brief Set ping frequency
-     *
-     * @param pingFrequency
-     */
-    void setPingFrequency(float pingFrequency);
-    Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingIntervalUpdate)
-
-    /**
      * @brief Return the max frequency that the sensor can work
      *
      * @return int

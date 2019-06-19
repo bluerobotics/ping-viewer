@@ -117,12 +117,6 @@ void Ping360::setLastSensorConfiguration()
     //TODO
 }
 
-void Ping360::setPingFrequency(float pingFrequency)
-{
-    Q_UNUSED(pingFrequency)
-    //TODO
-}
-
 void Ping360::printSensorInformation() const
 {
     qCDebug(PING_PROTOCOL_PING360) << "Ping360 Status:";
