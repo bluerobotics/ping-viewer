@@ -29,11 +29,16 @@ Ping360::Ping360()
     :PingSensor()
     ,_data(_num_points, 0)
 {
+    connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
 }
 
 void Ping360::startPreConfigurationProcess()
 {
-    //TODO
+    // Fetch sensor configuration to update class variables
+    ping_message_general_request msg;
+    msg.set_requested_id(Ping360Namespace::DeviceData);
+    msg.updateChecksum();
+    writeMessage(msg);
 }
 
 void Ping360::loadLastSensorConfigurationSettings()
