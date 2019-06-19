@@ -149,7 +149,7 @@ public:
      */
     void set_start_mm(int start_mm)
     {
-        Q_UNUSED(start_mm)
+        _scan_start = start_mm;
     }
 
     //TODO: update this signal name and others to Changed
