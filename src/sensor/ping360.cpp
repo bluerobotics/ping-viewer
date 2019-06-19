@@ -81,6 +81,7 @@ void Ping360::handleMessage(const ping_message& msg)
 
         emit gainSettingChanged();
         emit angleChanged();
+        emit transmitDurationChanged();
         emit dataChanged();
 
         break;

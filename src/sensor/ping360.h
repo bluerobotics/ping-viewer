@@ -62,7 +62,7 @@ public:
      * @return uint16_t
      */
     uint16_t transmit_duration() { return _transmit_duration; }
-    Q_PROPERTY(int transmit_duration READ transmit_duration WRITE set_transmit_duration NOTIFY transmitDurationUpdate)
+    Q_PROPERTY(int transmit_duration READ transmit_duration WRITE set_transmit_duration NOTIFY transmitDurationChanged)
 
     /**
      * @brief Set the sample period in ms
@@ -279,7 +279,7 @@ signals:
     void scanLengthUpdate();
     void scanStartUpdate();
     void speedOfSoundUpdate();
-    void transmitDurationUpdate();
+    void transmitDurationChanged();
     void transmitFrequencyChanged();
 ///@}
 
