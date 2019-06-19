@@ -65,7 +65,7 @@ public:
      * @return uint32_t
      */
     uint32_t ping_number() { return _ping_number; }
-    Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberUpdate)
+    Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberChanged)
 
     /**
      * @brief Set pulse emission in ms
@@ -153,7 +153,7 @@ public:
     }
 
     //TODO: update this signal name and others to Changed
-    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartUpdate)
+    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartChanged)
 
     /**
      * @brief return points length in mm
@@ -171,7 +171,7 @@ public:
     {
         Q_UNUSED(length_mm)
     }
-    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthUpdate)
+    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthChanged)
 
     /**
      * @brief Return gain setting
@@ -189,7 +189,7 @@ public:
     {
         _gain_setting = gain_setting;
     }
-    Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingUpdate)
+    Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingChanged)
 
     /**
      * @brief Return last array of points
@@ -215,7 +215,7 @@ public:
     {
         Q_UNUSED(ping_interval)
     }
-    Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalUpdate)
+    Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalChanged)
 
     /**
      * @brief Get the speed of sound (mm/s) used for calculating the distance from time-of-flight
@@ -233,7 +233,7 @@ public:
     {
         Q_UNUSED(speed_of_sound)
     }
-    Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundUpdate)
+    Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundChanged)
 
     /**
      * @brief Return the max frequency that the sensor can work
@@ -278,13 +278,12 @@ signals:
     void angleChanged();
     void dataChanged();
     void gainSettingChanged();
-    void gainSettingUpdate();
-    void pingIntervalUpdate();
-    void pingNumberUpdate();
+    void pingIntervalChanged();
+    void pingNumberChanged();
     void samplePeriodChanged();
-    void scanLengthUpdate();
-    void scanStartUpdate();
-    void speedOfSoundUpdate();
+    void scanLengthChanged();
+    void scanStartChanged();
+    void speedOfSoundChanged();
     void transmitDurationChanged();
     void transmitFrequencyChanged();
 ///@}
