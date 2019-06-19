@@ -23,8 +23,6 @@
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
-const int Ping360::_pingMaxFrequency = 50;
-
 Ping360::Ping360()
     :PingSensor()
     ,_data(_num_points, 0)
