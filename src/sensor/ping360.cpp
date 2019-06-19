@@ -79,6 +79,7 @@ void Ping360::handleMessage(const ping_message& msg)
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
 
+        emit gainSettingChanged();
         emit angleChanged();
         emit dataChanged();
 
