@@ -26,29 +26,14 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
 
-        GroupBox {
-            id: noItem
-            title: "No sensor"
-            label.x: width/2 - label.contentWidth/2
-            ColumnLayout {
-                Label {
-                    text: "Please connect with a device:"
-                }
-                Button {
-                    text: "Device Manager"
-                    Layout.fillWidth: true
-                    onClicked: {
-                        deviceManagerViewer.open()
-                        menuContainer.hideItem = true
-                    }
-                }
-            }
+        NoControlPanel {
+            id: noControlPanel
         }
 
         PingItem {
             id: menuContainer
             icon: StyleManager.arrowIcon()
-            item: root.ping != null ? root.ping.controlPanel(menuContainer) : noItem
+            item: root.ping != null ? root.ping.controlPanel(menuContainer) : noControlPanel
 
             onHideItemChanged: {
                 if(hideItem == false) {
