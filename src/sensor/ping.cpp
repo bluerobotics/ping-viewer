@@ -29,6 +29,9 @@ Ping::Ping()
     :PingSensor()
     ,_points(_num_points, 0)
 {
+    setControlPanel({"qrc:/Ping1DControlPanel.qml"});
+    setSensorVisualizer({"qrc:/Ping1DVisualizer.qml"});
+
     _periodicRequestTimer.setInterval(1000);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
         if(!link()->isWritable())
@@ -550,29 +553,6 @@ void Ping::resetSensorLocalVariables()
     _ping_interval = 0;
 
     _lastPingConfigurationSrcId = -1;
-}
-
-QQuickItem* Ping::controlPanel(QObject *parent)
-{
-    QQmlEngine* engine = qmlEngine(parent);
-    if(!engine) {
-        qCDebug(PING_PROTOCOL_PING) << "No qml engine to load visualization.";
-        return nullptr;
-    }
-    QQmlComponent component(engine, QUrl("qrc:/Ping1DControlPanel.qml"), parent);
-    _controlPanel.reset(qobject_cast<QQuickItem*>(component.create()));
-    _controlPanel->setParentItem(qobject_cast<QQuickItem*>(parent));
-    return _controlPanel.get();
-}
-
-QQmlComponent* Ping::sensorVisualizer(QObject *parent)
-{
-    QQmlEngine *engine = qmlEngine(parent);
-    if(!engine) {
-        qCDebug(PING_PROTOCOL_PING) << "No qml engine to load visualization.";
-        return nullptr;
-    }
-    return new QQmlComponent(engine, QUrl("qrc:/Ping1DVisualizer.qml"), parent);
 }
 
 Ping::~Ping()
