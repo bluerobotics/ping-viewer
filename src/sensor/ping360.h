@@ -246,22 +246,6 @@ public:
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
                                     bool verify = true);
 
-    /**
-     * @brief Return a qml component that will take care of the main control panel for the sensor
-     *
-     * @param parent
-     * @return QQuickItem* controlPanel
-     */
-    Q_INVOKABLE QQuickItem* controlPanel(QObject *parent) override final;
-
-    /**
-     * @brief Return the visualization widget
-     *
-     * @param parent
-     * @return QQmlComponent* sensorVisualizer
-     */
-    Q_INVOKABLE QQmlComponent* sensorVisualizer(QObject *parent) final;
-
 signals:
     /**
      * @brief emitted when propriety changes
@@ -302,8 +286,6 @@ private:
     QVector<double> _data;
 
     uint16_t _ping_interval = 0;
-
-    QSharedPointer<QQuickItem> _controlPanel;
 
     void handleMessage(const ping_message& msg) final; // handle incoming message
 
