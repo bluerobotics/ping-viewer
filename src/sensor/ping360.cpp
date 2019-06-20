@@ -27,6 +27,9 @@ Ping360::Ping360()
     :PingSensor()
     ,_data(_num_points, 0)
 {
+    setControlPanel({"qrc:/Ping360ControlPanel.qml"});
+    setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
+
     connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
 }
 
@@ -130,29 +133,6 @@ void Ping360::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
 void Ping360::resetSensorLocalVariables()
 {
     //TODO
-}
-
-QQuickItem* Ping360::controlPanel(QObject *parent)
-{
-    QQmlEngine *engine = qmlEngine(parent);
-    if(!engine) {
-        qCDebug(PING_PROTOCOL_PING360) << "No qml engine to load visualization.";
-        return nullptr;
-    }
-    QQmlComponent component(engine, QUrl("qrc:/Ping360ControlPanel.qml"), parent);
-    _controlPanel.reset(qobject_cast<QQuickItem*>(component.create()));
-    _controlPanel->setParentItem(qobject_cast<QQuickItem*>(parent));
-    return _controlPanel.get();
-}
-
-QQmlComponent* Ping360::sensorVisualizer(QObject *parent)
-{
-    QQmlEngine *engine = qmlEngine(parent);
-    if(!engine) {
-        qCDebug(PING_PROTOCOL_PING360) << "No qml engine to load visualization.";
-        return nullptr;
-    }
-    return new QQmlComponent(engine, QUrl("qrc:/Ping360Visualizer.qml"), parent);
 }
 
 Ping360::~Ping360()
