@@ -91,24 +91,43 @@ public:
     Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
 
     /**
+     * @brief Set the control panel url
+     *
+     * @param url
+     */
+    void setControlPanel(const QUrl& url);
+
+    /**
+     * @brief Set the sensor visualizer url
+     *
+     * @param url
+     */
+    void setSensorVisualizer(const QUrl& url);
+
+    /**
      * @brief Return a qml component that will take care of the main control panel for the sensor
      *
      * @param parent
      * @return QQuickItem* controlPanel
      */
-    Q_INVOKABLE virtual QQuickItem* controlPanel(QObject *parent) = 0;
+    Q_INVOKABLE virtual QQuickItem* controlPanel(QObject* parent);
 
     /**
      * @brief Return a qml component that will take care of the main visualization widget
-     *
+     *  TODO: Move it to QuickItem and probably property and not functions
      * @param parent
      * @return QQmlComponent* sensorVisualizer
      */
-    Q_INVOKABLE virtual QQmlComponent* sensorVisualizer(QObject *parent) = 0;
+    Q_INVOKABLE virtual QQmlComponent* sensorVisualizer(QObject* parent);
 
 
 protected:
     bool _connected;
+    // Hold the control panel item
+    QSharedPointer<QQuickItem> _controlPanel;
+    QUrl _controlPanelUrl;
+    static const QUrl _defaultControlPanelUrl;
+
     // For now this will be structures by: firmware file name, and remote address
     // TODO: A Model should be created to handle this for us
     QMap<QString, QVariant> _firmwares;
@@ -120,6 +139,9 @@ protected:
     Parser* _parser; // communication implementation
 
     QString _name; // TODO: populate
+
+    // Hold the sensor visualizer url
+    QUrl _sensorVisualizerUrl;
 
 signals:
     void autoDetectUpdate(bool autodetect);

@@ -9,8 +9,11 @@
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 
+const QUrl Sensor::_defaultControlPanelUrl("qrc:/NoControlPanel.qml");
+
 Sensor::Sensor()
     :_connected(false)
+    ,_controlPanelUrl(_defaultControlPanelUrl)
     ,_linkIn(new Link())
     ,_linkOut(nullptr)
     ,_parser(nullptr)
@@ -103,6 +106,62 @@ void Sensor::connectLinkLog(const LinkConfiguration& logConf)
 
     connect(link(), &AbstractLink::newData, linkLog(), &AbstractLink::sendData);
     emit linkLogUpdate();
+}
+
+void Sensor::setControlPanel(const QUrl& url)
+{
+    if(!url.isValid()) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "Invalid url:" << url;
+        _controlPanelUrl = _defaultControlPanelUrl;
+        return;
+    }
+
+    _controlPanelUrl = url;
+}
+
+void Sensor::setSensorVisualizer(const QUrl& url)
+{
+    if(!url.isValid()) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "Invalid url:" << url;
+        //TODO: Need default visualizer
+        _sensorVisualizerUrl.setUrl({});
+        return;
+    }
+
+    _sensorVisualizerUrl = url;
+}
+
+QQuickItem* Sensor::controlPanel(QObject* parent)
+{
+    QQmlEngine* engine = qmlEngine(parent);
+    if(!engine) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "No qml engine to load visualization.";
+        return nullptr;
+    }
+    QQmlComponent component(engine, _controlPanelUrl, parent);
+    _controlPanel.reset(qobject_cast<QQuickItem*>(component.create()));
+    if(_controlPanel.isNull()) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "Failed to load QML component.";
+        qCDebug(PING_PROTOCOL_SENSOR) << "Component status:" << component.status();
+        if(component.isError()) {
+            qCDebug(PING_PROTOCOL_SENSOR) << "Error list:" << component.errors();
+        }
+        return nullptr;
+    }
+
+    _controlPanel->setParentItem(qobject_cast<QQuickItem*>(parent));
+    return _controlPanel.get();
+}
+
+QQmlComponent* Sensor::sensorVisualizer(QObject* parent)
+{
+    QQmlEngine* engine = qmlEngine(parent);
+    if(!engine) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "No qml engine to load visualization.";
+        return nullptr;
+    }
+
+    return new QQmlComponent(engine, _sensorVisualizerUrl, parent);
 }
 
 Sensor::~Sensor() = default;
