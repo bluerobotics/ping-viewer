@@ -321,6 +321,11 @@ public:
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
                                     bool verify = true);
 
+    /**
+     * @brief request a profile message from the device
+     */
+    Q_INVOKABLE void emitPing() { request(Ping1dId::PROFILE); }
+
 signals:
     /**
      * @brief emitted when propriety changes
