@@ -37,7 +37,7 @@ Item {
                     PingButton {
                         text: "Emit Ping"
                         //requestEchosounderProfile
-                        onClicked: ping.request(Ping1DNamespace.Profile)
+                        onClicked: ping.emitPing()
                     }
 
                     Slider {

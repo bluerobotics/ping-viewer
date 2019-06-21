@@ -199,7 +199,7 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer)
     });
 
     for (const auto& byte : buffer) {
-        if(parser.parseByte(byte) == PingParser::NEW_MESSAGE) {
+        if(parser.parseByte(byte) == Parser::NEW_MESSAGE) {
             return true;
         }
     }
