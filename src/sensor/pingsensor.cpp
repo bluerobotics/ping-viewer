@@ -7,6 +7,7 @@ PING_LOGGING_CATEGORY(PING_PROTOCOL_PINGSENSOR, "ping.protocol.pingsensor")
 
 PingSensor::PingSensor()
     :Sensor()
+    ,_lostMessages(0)
 {
     _parser = new PingParserExt();
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate);
