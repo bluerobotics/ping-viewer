@@ -38,17 +38,35 @@ void ProtocolDetector::doScan()
 {
     _active = true;
     LinkConfiguration linkConf;
+    auto start = QSerialPortInfo::availablePorts();
+
     // Scan until we find a ping, then stop
     while (_active) {
-        auto linksConf = updateLinkConfigurations(_linkConfigs);
-        for(LinkConfiguration& tryLinkConf : linksConf) {
-            linkConf = tryLinkConf;
-            if(checkLink(linkConf)) {
-                break;
-            }
+//        auto linksConf = updateLinkConfigurations(_linkConfigs);
+//        for(LinkConfiguration& tryLinkConf : linksConf) {
+//            linkConf = tryLinkConf;
+//            if(checkLink(linkConf)) {
+//                break;
+//            }
+//        }
+//        QThread::msleep(500);
+        auto current = QSerialPortInfo::availablePorts();
+        if (current.size() > start.size()) {
+            auto portInfo = current.last();
+            //qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << current;
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << portInfo.manufacturer() << portInfo.portName();
+            QSerialPort p(portInfo);
+            while (!p.open(QIODevice::ReadWrite));
+            p.setBaudRate(115200);
+            p.write("bhello");
+            p.waitForBytesWritten(10);
+            QThread::msleep(10);
+            p.close();
+            _active = false;
         }
-        QThread::msleep(500);
+        QThread::msleep(10);
     }
+    QThread::msleep(500);
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Scan finished.";
 }
 

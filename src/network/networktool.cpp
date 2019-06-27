@@ -27,7 +27,7 @@ NetworkTool::NetworkTool()
                                "It'll not be possible to check for updates."
                                "Using default value:" << _gitUserRepo;
     }
-    _gitUserRepo = regexMatch.capturedTexts()[1];
+    //_gitUserRepo = regexMatch.capturedTexts()[1];
 }
 
 void NetworkTool::checkInterfaceUpdate()
