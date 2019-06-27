@@ -498,9 +498,6 @@ private:
         },
     };
 
-    // total of lost messages
-    int _lostMessages = 0;
-
     struct messageStatus {
         // Requested and acknowledge
         int ack = 0;
