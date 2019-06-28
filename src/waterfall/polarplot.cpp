@@ -91,7 +91,11 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 
     const float linearFactor = points.size()/(float)center.x();
     for(int i = 1; i < center.x(); i++) {
-        pointColor = valueToRGB(points[static_cast<int>(i*linearFactor - 1)]);
+        if(i < center.x()*length/_maxDistance) {
+            pointColor = valueToRGB(points[static_cast<int>(i*linearFactor - 1)]);
+        } else {
+            pointColor = QColor(0, 0, 0, 0);
+        }
         step = ceil(i*2*degreeToRadian*angleGrad);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
         for(int currentStep = 0; currentStep < step; currentStep++) {
