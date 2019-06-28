@@ -237,6 +237,92 @@ public:
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundChanged)
 
     /**
+     * @brief Returns the angle offset from sample position
+     *  TODO: Maybe this should be in the viewer configuration and not in the sensor class
+     * @return int
+     */
+    int angle_offset() { return _angle_offset; }
+
+    /**
+     * @brief Set angle offset from sample position
+     *
+     * @param angle_offset
+     */
+    void set_angle_offset(int angle_offset)
+    {
+        if(angle_offset != _angle_offset) {
+            _angle_offset = angle_offset;
+            emit angleOffsetChanged();
+        }
+    }
+    Q_PROPERTY(int angle_offset READ angle_offset WRITE set_angle_offset NOTIFY angleOffsetChanged)
+
+    /**
+     * @brief Angular sample speed
+     *
+     * @return uint
+     */
+    int angular_speed() { return _angular_speed; }
+
+    /**
+     * @brief Set the angular speed
+     *
+     * @param angular_speed
+     */
+    void set_angular_speed(int angular_speed)
+    {
+        if(angular_speed != _angular_speed) {
+            _angular_speed = angular_speed;
+            emit angularSpeedChanged();
+        }
+    }
+    Q_PROPERTY(int angular_speed READ angular_speed WRITE set_angular_speed NOTIFY angularSpeedChanged)
+
+    /**
+     * @brief Reverse sonar direction
+     *
+     * @return bool
+     */
+    bool reverse_direction() { return _reverse_direction; }
+
+    /**
+     * @brief Set reverse direction
+     *
+     * @param reverse_direction
+     */
+    void set_reverse_direction(bool reverse_direction)
+    {
+        if(reverse_direction != _reverse_direction) {
+            _reverse_direction = reverse_direction;
+            emit reverseDirectionChanged();
+        }
+    }
+    Q_PROPERTY(bool reverse_direction READ reverse_direction WRITE set_reverse_direction NOTIFY reverseDirectionChanged)
+
+    /**
+     * @brief Return the number of points
+     *
+     * @return int
+     */
+    int number_of_points() { return _num_points; }
+
+    /**
+     * @brief Set the number of points
+     *
+     * @param num_points
+     */
+    void set_number_of_points(int num_points)
+    {
+        if(num_points != _num_points) {
+            _num_points = num_points;
+            emit numberOfPointsChanged();
+
+            _sample_period = (_scan_length*2/float(_num_points*_speed_of_sound))/(25e-6);
+        }
+    }
+    Q_PROPERTY(int number_of_points READ number_of_points WRITE set_number_of_points NOTIFY numberOfPointsChanged)
+
+    /**
      * @brief Do firmware sensor update
      *
      * @param fileUrl firmware file path
@@ -253,10 +339,14 @@ signals:
      */
 ///@{
     void angleChanged();
+    void angleOffsetChanged();
+    void angularSpeedChanged();
     void dataChanged();
     void gainSettingChanged();
+    void numberOfPointsChanged();
     void pingIntervalChanged();
     void pingNumberChanged();
+    void reverseDirectionChanged();
     void samplePeriodChanged();
     void scanLengthChanged();
     void scanStartChanged();
@@ -274,15 +364,19 @@ private:
     uint16_t _angle = 0;
     uint16_t _transmit_duration = 42;
     uint32_t _ping_number = 0;
-    uint32_t _scan_start = 0;
-    uint32_t _scan_length = 0;
     uint32_t _gain_setting = 1;
     uint16_t _sample_period = 1300;
     uint32_t _speed_of_sound = 1500;
     uint16_t _transmit_frequency = 500;
 ///@}
 
-    uint16_t _num_points = 2000;
+    int _angle_offset = 0;
+    int _angular_speed = 1;
+    uint _central_angle = 1;
+    uint16_t _num_points = 1000;
+    bool _reverse_direction = false;
+    uint32_t _scan_start = 0;
+    uint32_t _scan_length = 100000;
 
     QVector<double> _data;
 
