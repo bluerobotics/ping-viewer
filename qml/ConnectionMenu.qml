@@ -74,6 +74,7 @@ Item {
         width: parent.width
 
         GridLayout {
+            id: settingsLayout
             anchors.fill: parent
             columns: 5
             rowSpacing: 5
