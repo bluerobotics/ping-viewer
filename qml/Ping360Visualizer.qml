@@ -24,7 +24,7 @@ Item {
 
         onDataChanged: {
             shapeSpinner.angle = (ping.angle + 0.25)*180/200
-            root.draw(ping.data, ping.angle, 0, 100)
+            root.draw(ping.data, ping.angle, 0, ping.length_mm, ping.angular_speed)
         }
     }
 
@@ -34,8 +34,8 @@ Item {
         }
     }
 
-    function draw(points, angle, initialPoint, length) {
-        waterfall.draw(points, angle, initialPoint, length)
+    function draw(points, angle, initialPoint, length, angleStep) {
+        waterfall.draw(points, angle, initialPoint, length, angleStep)
         chart.draw(points, length + initialPoint, initialPoint)
     }
 
