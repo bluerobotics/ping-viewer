@@ -59,7 +59,7 @@ void PolarPlot::setImage(const QImage &image)
     setImplicitHeight(image.height());
 }
 
-void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint, float length)
+void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint, float length, float angleGrad)
 {
     Q_UNUSED(initPoint)
     Q_UNUSED(length)
@@ -74,6 +74,7 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     static float angleResolution = gradianToDegree/2;
     float actualAngle = angle*gradianToRadian;
 
+    //TODO: Need a better way to deal with dynamic steps, maybe doing `draw(data, angle++)` with `angleGrad` loop
     _distances[static_cast<int>(angle)%_angularResolution] = initPoint + length;
 
     float maxDistance = 0;
@@ -91,10 +92,10 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     const float linearFactor = points.size()/(float)center.x();
     for(int i = 1; i < center.x(); i++) {
         pointColor = valueToRGB(points[static_cast<int>(i*linearFactor - 1)]);
-        step = ceil(i*2*degreeToRadian);
+        step = ceil(i*2*degreeToRadian*angleGrad);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
         for(int currentStep = 0; currentStep < step; currentStep++) {
-            float deltaDegree = (2*angleResolution/(float)step)*(currentStep - step/2);
+            float deltaDegree = (2*angleResolution*angleGrad/(float)step)*(currentStep - step/2);
             angleStep = deltaDegree*degreeToRadian+actualAngle - M_PI_2;
             _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
         }

@@ -48,8 +48,9 @@ public:
      * @param angle
      * @param initPoint
      * @param length
+     * @param angleGrad
      */
-    Q_INVOKABLE void draw(const QVector<double>& points, float angle = 0, float initPoint = 0, float length = 100);
+    Q_INVOKABLE void draw(const QVector<double>& points, float angle, float initPoint, float length, float angleGrad);
 
     /**
      * @brief Clear waterfall and restart all parameters
