@@ -67,11 +67,12 @@ int main(int argc, char *argv[])
         "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "This is another enum."
     );
 
-    QApplication app(argc, argv);
-
     // DPI support and HiDPI pixmaps
+    // Attributes must be set before QCoreApplication is created.
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
 
