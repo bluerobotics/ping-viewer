@@ -190,18 +190,26 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer)
     // since the buffer need to be clear for each try
     PingParserExt parser;
 
-    // Print information from detected devices
-    connect(&parser, &Parser::newMessage, this, [&](const ping_message& msg) {
-        common_device_information device_information(msg);
-        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Detect new device:"
-                                                << "\ndevice_revision:" << device_information.device_revision()
-                                                << "\nfirmware_version_major:" << device_information.firmware_version_major()
-                                                << "\nfirmware_version_minor:" << device_information.firmware_version_minor()
-                                                << "\nfirmware_version_patch:" << device_information.firmware_version_patch();
-    });
-
+    qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << buffer;
     for (const auto& byte : buffer) {
         if(parser.parseByte(byte) == Parser::NEW_MESSAGE) {
+            // Print information from detected devices
+            common_device_information device_information(parser.rxMessage());
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Detect new device:"
+                                                    << "\ndevice_type:" << device_information.device_type()
+                                                    << "\ndevice_revision:" << device_information.device_revision()
+                                                    << "\nfirmware_version_major:" << device_information.firmware_version_major()
+                                                    << "\nfirmware_version_minor:" << device_information.firmware_version_minor()
+                                                    << "\nfirmware_version_patch:" << device_information.firmware_version_patch();
+
+            //TODO: Ping1D with firmware 3.26 or older
+            // We should remove this code in future releases but allowing undetected devices to be flashed
+            PingDeviceType type = static_cast<PingDeviceType>(device_information.device_type());
+            if(type == PingDeviceType::PING360) {
+                linkConf.setDeviceType(PingDeviceType::PING360);
+            } else {
+                linkConf.setDeviceType(PingDeviceType::PING1D);
+            }
             return true;
         }
     }
