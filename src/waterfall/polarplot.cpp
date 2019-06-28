@@ -78,11 +78,12 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 
     float maxDistance = 0;
     for(const auto distance : _distances) {
-        if(distance > _maxDistance) {
+        if(distance > maxDistance) {
             maxDistance = distance;
         }
     }
-    if(maxDistance > _maxDistance) {
+
+    if(maxDistance != _maxDistance) {
         _maxDistance = maxDistance;
         emit maxDistanceChanged();
     }
