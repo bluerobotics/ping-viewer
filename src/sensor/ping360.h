@@ -46,6 +46,10 @@ public:
      */
     Q_INVOKABLE void deltaStep(int delta)
     {
+        // Force delta to be positive and inside our polar space
+        while(delta < 0) {
+            delta += 400;
+        }
         ping360_transducer msg;
         msg.set_mode(1);
         msg.set_gain_setting(_gain_setting);
