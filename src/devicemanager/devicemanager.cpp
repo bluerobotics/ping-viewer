@@ -23,8 +23,8 @@ DeviceManager::DeviceManager() :
         qCDebug(DEVICEMANAGER) << "Available devices:" << links;
         updateAvailableConnections(links);
     });
-    append({AbstractLinkNamespace::Ping1DSimulation}, "Ping1D");
-    append({AbstractLinkNamespace::Ping360Simulation}, "Ping360");
+    append({AbstractLinkNamespace::Ping1DSimulation, {}, "Ping1D Simulation", PingDeviceType::PING1D}, "Ping1D");
+    append({AbstractLinkNamespace::Ping360Simulation, {}, "Ping360 Simulation", PingDeviceType::PING360}, "Ping360");
 }
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName)
@@ -90,12 +90,12 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
         return;
     }
 
+    _sensors[Name][objIndex] = PingHelper::nameFromDeviceType(linkConf->deviceType());
     qCDebug(DEVICEMANAGER) << "Connecting with sensor:" << _sensors[Name][objIndex].toString() << *linkConf;
 
     // We could use a single Ping instance, but since we are going to support multiple devices
     // this pointer will hold everything for us
-    // TODO: Use enum and not string compare
-    if(_sensors[Name][objIndex].toString() == "Ping1D") {
+    if(linkConf->deviceType() == PingDeviceType::PING1D) {
         _primarySensor.reset(new Ping());
     } else {
         _primarySensor.reset(new Ping360());
@@ -131,9 +131,8 @@ void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>&
         emit dataChanged(indexRow, indexRow, _roles);
     }
 
-    // Right now we only support Ping1D, we should update protocol detector to detect device type
     for(const auto& link : availableLinkConfigurations) {
-        append(link, "Ping1D");
+        append(link, PingHelper::nameFromDeviceType(link.deviceType()));
     }
 }
 
