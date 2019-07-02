@@ -119,13 +119,19 @@ bool operator==(const LinkConfiguration& first, const LinkConfiguration& second)
     return (firstLinkconf.name == secondLinkconf.name)
            && (firstLinkconf.type == secondLinkconf.type)
            && (firstLinkconf.args == secondLinkconf.args)
+           && (firstLinkconf.deviceType == secondLinkconf.deviceType)
            ;
 }
 
 QDebug operator<<(QDebug d, const LinkConfiguration& other)
 {
-    QString text(QStringLiteral("LinkConfiguration{Name: %1, LinkType: %2, Arguments: (%3)}"));
-    d << text.arg(other.name(), QString::number(other.type()), other.args()->join(":"));;
+    QString text(QStringLiteral("LinkConfiguration{Name: %1, Sensor: %2, LinkType: %3, Arguments: (%4)}"));
+    d << text.arg(
+          other.name(),
+          PingHelper::nameFromDeviceType(other.deviceType()),
+          other.typeToString(),
+          other.args()->join(":")
+      );
     return d;
 }
 
@@ -134,16 +140,24 @@ QDataStream& operator<<(QDataStream &out, const LinkConfiguration linkConfigurat
     out << linkConfiguration.configurationStructPtr()->name;
     out << QVariant(linkConfiguration.configurationStructPtr()->args);
     out << QVariant(linkConfiguration.configurationStructPtr()->type);
+    //TODO: We need to register PingDeviceType
+    out << QVariant(static_cast<int>(linkConfiguration.configurationStructPtr()->deviceType));
     return out;
 }
 
 QDataStream& operator>>(QDataStream &in, LinkConfiguration &linkConfiguration)
 {
     QString name;
-    QVariant variantArgs, variantType;
+    QVariant variantArgs, variantType, variantDeviceType;
     in >> name;
     in >> variantArgs;
     in >> variantType;
-    linkConfiguration = LinkConfiguration(variantType.value<LinkType>(), variantArgs.toStringList(), name);
+    in >> variantDeviceType;
+    linkConfiguration = LinkConfiguration(
+                            variantType.value<LinkType>(),
+                            variantArgs.toStringList(),
+                            name,
+                            static_cast<PingDeviceType>(variantDeviceType.toInt())
+                        );
     return in;
 }
