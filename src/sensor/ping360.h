@@ -172,9 +172,14 @@ public:
      *
      * @param length_mm
      */
-    void set_length_mm(int length_mm)
+    void set_length_mm(uint length_mm)
     {
-        Q_UNUSED(length_mm)
+        if(_scan_length != length_mm) {
+            _scan_length = length_mm;
+            emit scanLengthChanged();
+
+            _sample_period = (_scan_length*2/float(_num_points*_speed_of_sound))/(25e-6);
+        }
     }
     Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthChanged)
 
