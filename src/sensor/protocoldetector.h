@@ -95,7 +95,7 @@ signals:
 
 protected:
     bool canOpenPort(QSerialPortInfo& port, int msTimeout);
-    bool checkBuffer(const QByteArray& buffer);
+    bool checkBuffer(const QByteArray& buffer, LinkConfiguration& linkConf);
     bool checkSerial(LinkConfiguration& linkConf);
     bool checkUdp(LinkConfiguration& linkConf);
     QVector<LinkConfiguration> updateLinkConfigurations(QVector<LinkConfiguration>& linkConfig) const;
