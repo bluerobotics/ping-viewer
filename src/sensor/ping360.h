@@ -387,15 +387,27 @@ private:
     uint32_t _scan_start = 0;
     uint32_t _scan_length = 100000;
 
+    float _angularResolutionGrad = 400;
+    // The motor takes 4s to run a full circle
+    float _motorSpeedGradMs = 4000/_angularResolutionGrad;
+    int _sensorBaseTimeoutMs = 200;
     QVector<double> _data;
 
     uint16_t _ping_interval = 0;
+
+    QTimer _timeoutProfileMessage;
 
     void handleMessage(const ping_message& msg) final; // handle incoming message
 
     void loadLastSensorConfigurationSettings();
     void updateSensorConfigurationSettings();
     void setLastSensorConfiguration();
+
+    /**
+     * @brief Request the next profile based in the class configuration
+     *
+     */
+    void requestNextProfile();
 
     /**
      * @brief Internal function used to use as a flash callback

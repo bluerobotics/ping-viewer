@@ -31,6 +31,14 @@ Ping360::Ping360()
     setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
 
     connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
+
+    // Wait for sensor calibration, as time base it's used a full circle time
+    _timeoutProfileMessage.setInterval(_motorSpeedGradMs*_angularResolutionGrad);
+
+    connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
+        qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
+        requestNextProfile();
+    });
 }
 
 void Ping360::startPreConfigurationProcess()
@@ -40,6 +48,7 @@ void Ping360::startPreConfigurationProcess()
     msg.set_requested_id(Ping360Id::DEVICE_DATA);
     msg.updateChecksum();
     writeMessage(msg);
+    _timeoutProfileMessage.start();
 }
 
 void Ping360::loadLastSensorConfigurationSettings()
@@ -58,6 +67,16 @@ void Ping360::connectLink(LinkType connType, const QStringList& connString)
     startPreConfigurationProcess();
 }
 
+void Ping360::requestNextProfile()
+{
+    // Calculate the next depta step
+    int steps = _angular_speed;
+    if(_reverse_direction) {
+        steps *= -1;
+    }
+    deltaStep(steps);
+}
+
 void Ping360::handleMessage(const ping_message& msg)
 {
     qCDebug(PING_PROTOCOL_PING360) << "Handling Message:" << msg.message_id();
@@ -65,10 +84,18 @@ void Ping360::handleMessage(const ping_message& msg)
     switch (msg.message_id()) {
 
     case Ping360Id::DEVICE_DATA: {
+        // request another transmission
+        requestNextProfile();
+
+        // Restart timer
+        // We need to calculate the next timeout based in the motor speed, argular resolution and max distance
+        _timeoutProfileMessage.start(_angular_speed*_motorSpeedGradMs + _sensorBaseTimeoutMs);
+
+        // Parse message
         const ping360_device_data deviceData(msg);
         deviceData.mode();
-        _gain_setting = deviceData.gain_setting();
         _angle = deviceData.angle();
+        _gain_setting = deviceData.gain_setting();
         _transmit_duration = deviceData.transmit_duration();
         _sample_period = deviceData.sample_period();
         _transmit_frequency = deviceData.transmit_frequency();
@@ -78,6 +105,8 @@ void Ping360::handleMessage(const ping_message& msg)
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
 
+        // TODO: doublecheck what we are getting and what we want
+        // some parameter combinations are not valid and the sensor will automatically adjust
         emit gainSettingChanged();
         emit angleChanged();
         emit transmitDurationChanged();
