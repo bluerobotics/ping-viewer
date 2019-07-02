@@ -137,7 +137,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
     // Try to get a valid response, timeout after 10 * 50 ms
     while (!_detected && attempts++ < 10) {
         port.waitForReadyRead(50);
-        _detected = checkBuffer(port.readAll());
+        _detected = checkBuffer(port.readAll(), linkConf);
     }
 
     port.close();
@@ -177,14 +177,14 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
             break;
         }
-        _detected = checkBuffer(socket.receiveDatagram().data());
+        _detected = checkBuffer(socket.receiveDatagram().data(), linkConf);
     }
 
     socket.close();
     return _detected;
 }
 
-bool ProtocolDetector::checkBuffer(const QByteArray& buffer)
+bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& linkConf)
 {
     // Parser need to be here, having a single parser to for everything will result in fake detections,
     // since the buffer need to be clear for each try
