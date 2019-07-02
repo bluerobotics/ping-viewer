@@ -34,7 +34,8 @@ ProtocolDetector::ProtocolDetector()
                                          deviceInformationMessage.msgDataLength());
 
     _linkConfigs.append({
-        {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 standard connection"},
+        {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 Ping1D Port"},
+        {LinkType::Udp, {"192.168.2.2", "9092"}, "BlueRov2 Ping360 Port"},
         {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}
     });
 
