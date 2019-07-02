@@ -382,7 +382,7 @@ private:
     int _angle_offset = 0;
     int _angular_speed = 1;
     uint _central_angle = 1;
-    uint16_t _num_points = 1000;
+    uint16_t _num_points = 1200;
     bool _reverse_direction = false;
     uint32_t _scan_start = 0;
     uint32_t _scan_length = 100000;
