@@ -6,6 +6,7 @@
 #include <QStringList>
 
 #include "abstractlinknamespace.h"
+#include "ping-message-all.h"
 
 /**
  * @brief Link configuration class
@@ -24,6 +25,11 @@ public:
         QStringList args;
         QString name;
         LinkType type = LinkType::None;
+        //TODO: We should somehow make this class or this structure more abstract
+        // and remove any protocol or device specific information
+        // right now this is necessary, since link configuration is our default
+        // link information structure
+        PingDeviceType deviceType = PingDeviceType::UNKNOWN;
     };
 
     /**
@@ -47,9 +53,14 @@ public:
      * @param linkType
      * @param args
      * @param name
+     * @param deviceType
      */
-    LinkConfiguration(LinkType linkType = LinkType::None, QStringList args = QStringList(), QString name = QString())
-        : _linkConf{args, name, linkType} {};
+    LinkConfiguration(
+        LinkType linkType = LinkType::None,
+        QStringList args = QStringList(),
+        QString name = QString(),
+        PingDeviceType deviceType = PingDeviceType::UNKNOWN
+    ) : _linkConf{args, name, linkType, deviceType} {};
 
     /**
      * @brief Construct a new Link Configuration object
@@ -87,6 +98,20 @@ public:
      * @return Q_INVOKABLE argsAsConst
      */
     Q_INVOKABLE QStringList argsAsConst() const { return _linkConf.args; };
+
+    /**
+     * @brief Return PingDeviceType enumartion for device specific identification
+     *
+     * @return PingDeviceType
+     */
+    PingDeviceType deviceType() const { return _linkConf.deviceType; };
+
+    /**
+     * @brief Set the Device Type object
+     *
+     * @param deviceType
+     */
+    void setDeviceType(const PingDeviceType deviceType) { _linkConf.deviceType = deviceType; };
 
     /**
      * @brief Check if type is the one in the configuration
@@ -212,7 +237,7 @@ public:
 
     /**
      * @brief Return the type in a human readable format
-     *
+     *  TODO: move this function to somewhere else
      * @return QString
      */
     Q_INVOKABLE QString typeToString() const
