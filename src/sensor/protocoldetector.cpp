@@ -98,7 +98,9 @@ QVector<LinkConfiguration> ProtocolDetector::updateLinkConfigurations(QVector<Li
         }
 
         // Add valid port and baudrate
-        for(auto baud : {9600, 115200}) {
+        // Ping360 can't handle 9600 requests with 115200 request in a sort time priod
+        // TODO: Fix Ping360 is not possible, we should drop 9600 checks if 115200 returns fine
+        for(auto baud : {115200, /*9600*/}) {
             auto config = {portInfo.portName(), QString::number(baud)};
             tempConfigs.append({LinkType::Serial, config, QString("Detector serial link")});
         }
