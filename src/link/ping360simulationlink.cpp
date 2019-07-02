@@ -13,7 +13,7 @@ Ping360SimulationLink::Ping360SimulationLink(QObject* parent)
 void Ping360SimulationLink::randomUpdate()
 {
     static uint counter = 1;
-    static const float numberOfSamples = 2000;
+    static const float numberOfSamples = 1200;
     static const int angularResolution = 400;
 
     const float stop1 = numberOfSamples / 2.0 - 10 * qSin(counter / 10.0);
