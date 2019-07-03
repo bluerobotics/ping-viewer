@@ -85,13 +85,6 @@ void Ping360::handleMessage(const ping_message& msg)
     switch (msg.message_id()) {
 
     case Ping360Id::DEVICE_DATA: {
-        // request another transmission
-        requestNextProfile();
-
-        // Restart timer
-        // We need to calculate the next timeout based in the motor speed, argular resolution and max distance
-        _timeoutProfileMessage.start(_angular_speed*_motorSpeedGradMs + _sensorBaseTimeoutMs);
-
         // Parse message
         const ping360_device_data deviceData(msg);
         deviceData.mode();
@@ -117,6 +110,13 @@ void Ping360::handleMessage(const ping_message& msg)
 
         // Update total number of pings
         _ping_number++;
+
+        // request another transmission
+        requestNextProfile();
+
+        // Restart timer
+        // We need to calculate the next timeout based in the motor speed, argular resolution and max distance
+        _timeoutProfileMessage.start(_angular_speed*_motorSpeedGradMs + _sensorBaseTimeoutMs);
 
         break;
     }
