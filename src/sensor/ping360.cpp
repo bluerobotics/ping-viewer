@@ -44,6 +44,7 @@ Ping360::Ping360()
 void Ping360::startPreConfigurationProcess()
 {
     // Fetch sensor configuration to update class variables
+    // Ping base class should abstract the request message to allow version compatibility between protocol versions
     common_general_request msg;
     msg.set_requested_id(Ping360Id::DEVICE_DATA);
     msg.updateChecksum();
