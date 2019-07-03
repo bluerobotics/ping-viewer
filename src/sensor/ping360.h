@@ -141,26 +141,6 @@ public:
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
-     * @brief Return start distance of sonar points in mm
-     *
-     * @return uint32_t
-     */
-    uint32_t start_mm() { return _scan_start; }
-
-    /**
-     * @brief Set sensor start analyze distance in mm
-     *
-     * @param start_mm
-     */
-    void set_start_mm(int start_mm)
-    {
-        _scan_start = start_mm;
-    }
-
-    //TODO: update this signal name and others to Changed
-    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartChanged)
-
-    /**
      * @brief return points length in mm
      *
      * @return uint32_t
@@ -358,7 +338,6 @@ signals:
     void reverseDirectionChanged();
     void samplePeriodChanged();
     void scanLengthChanged();
-    void scanStartChanged();
     void speedOfSoundChanged();
     void transmitDurationChanged();
     void transmitFrequencyChanged();
@@ -384,7 +363,6 @@ private:
     int _angular_speed = 1;
     uint _central_angle = 1;
     bool _reverse_direction = false;
-    uint32_t _scan_start = 0;
     uint32_t _scan_length = 100000;
     uint32_t _speed_of_sound = 1500;
 
