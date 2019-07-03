@@ -336,7 +336,7 @@ public:
 
 signals:
     /**
-     * @brief emitted when propriety changes
+     * @brief emitted when property changes
      */
 ///@{
     void distanceUpdate();
