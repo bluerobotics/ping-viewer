@@ -369,7 +369,8 @@ private:
     float _angularResolutionGrad = 400;
     // The motor takes 4s to run a full circle
     float _motorSpeedGradMs = 4000/_angularResolutionGrad;
-    int _sensorBaseTimeoutMs = 200;
+    // The sensor can take 4s to answer, we are also using an extra 200ms for latency
+    int _sensorTimeout = 4200;
 
     uint16_t _ping_interval = 0;
 

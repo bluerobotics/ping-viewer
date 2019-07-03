@@ -32,8 +32,8 @@ Ping360::Ping360()
 
     connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
 
-    // Wait for sensor calibration, as time base it's used a full circle time
-    _timeoutProfileMessage.setInterval(_motorSpeedGradMs*_angularResolutionGrad);
+    // Add timer for worst case scenario
+    _timeoutProfileMessage.setInterval(_sensorTimeout);
 
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
         qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
@@ -115,8 +115,7 @@ void Ping360::handleMessage(const ping_message& msg)
         requestNextProfile();
 
         // Restart timer
-        // We need to calculate the next timeout based in the motor speed, argular resolution and max distance
-        _timeoutProfileMessage.start(_angular_speed*_motorSpeedGradMs + _sensorBaseTimeoutMs);
+        _timeoutProfileMessage.start();
 
         break;
     }
