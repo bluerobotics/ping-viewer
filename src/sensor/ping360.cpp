@@ -115,6 +115,9 @@ void Ping360::handleMessage(const ping_message& msg)
         emit transmitFrequencyChanged();
         emit dataChanged();
 
+        // Update total number of pings
+        _ping_number++;
+
         break;
     }
 
