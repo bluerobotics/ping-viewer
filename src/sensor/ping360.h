@@ -369,6 +369,9 @@ private:
     float _angularResolutionGrad = 400;
     // The motor takes 4s to run a full circle
     float _motorSpeedGradMs = 4000/_angularResolutionGrad;
+    // Right now the max value is 1200 for ping360
+    // We are saving 2k of the memory for future proof modifications
+    int _maxNumberOfPoints = 2048;
     // The sensor can take 4s to answer, we are also using an extra 200ms for latency
     int _sensorTimeout = 4200;
 
