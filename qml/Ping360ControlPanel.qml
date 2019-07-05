@@ -174,7 +174,6 @@ Item {
 
                 PingTextField {
                     title: "Samples (#):"
-                    enabled: false
                     text: ping.number_of_points
                     validator: IntValidator {
                         bottom: 200
