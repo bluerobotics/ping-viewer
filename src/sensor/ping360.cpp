@@ -25,7 +25,7 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
 Ping360::Ping360()
     :PingSensor()
-    ,_data(_num_points, 0)
+    ,_data(_sensorTimeout, 0)
 {
     setControlPanel({"qrc:/Ping360ControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
@@ -93,8 +93,8 @@ void Ping360::handleMessage(const ping_message& msg)
         _transmit_duration = deviceData.transmit_duration();
         _sample_period = deviceData.sample_period();
         _transmit_frequency = deviceData.transmit_frequency();
-        deviceData.number_of_samples();
 
+        _data.resize(deviceData.number_of_samples());
         for (int i = 0; i < deviceData.data_length(); i++) {
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
