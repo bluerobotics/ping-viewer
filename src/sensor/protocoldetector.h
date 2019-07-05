@@ -97,6 +97,25 @@ protected:
     bool canOpenPort(QSerialPortInfo& port, int msTimeout);
     bool checkBuffer(const QByteArray& buffer, LinkConfiguration& linkConf);
     bool checkSerial(LinkConfiguration& linkConf);
+
+    /**
+     * @brief Check if a device is provided by a UDP server
+     *  This functions follows IBM documentation about socket connections for clients
+     *  https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_71/rzab6/howdosockets.htm
+     *  https://www.ibm.com/support/knowledgecenter/en/SSB23S_1.1.0.14/gtpc1/gtpc1mst104.html
+     *      1. create socket
+     *      2. bind (optional, but necessary for QUdpSocket::ReuseAddressHint)
+     *      3. read/write
+     *      4. close
+     *
+     *  Without ReuseAddressHint, the next connection request will fail if there were connections open.
+     *
+     *  Since this uses the connectToHost method, all read and write functions should use the QIODevice primitive
+     *
+     * @param linkConf
+     * @return true
+     * @return false
+     */
     bool checkUdp(LinkConfiguration& linkConf);
     QVector<LinkConfiguration> updateLinkConfigurations(QVector<LinkConfiguration>& linkConfig) const;
 
