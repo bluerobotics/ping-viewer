@@ -159,7 +159,27 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Probing UDP:" << linkConf;
 
-    socket.writeDatagram(_deviceInformationMessageByteArray, QHostAddress(linkConf.udpHost()), linkConf.udpPort());
+    // Bind port
+    socket.bind(QHostAddress::Any, linkConf.udpPort(), QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+
+    // Connect with server
+    socket.connectToHost(linkConf.udpHost(), linkConf.udpPort());
+
+    // Give the socket half second to connect to the other side otherwise error out
+    int socketAttemps = 0;
+    while(!socket.waitForConnected(100) && socketAttemps < 5 ) {
+        // Increases socketAttemps here to avoid empty loop optimization
+        socketAttemps++;
+    }
+    if(socket.state() != QUdpSocket::ConnectedState) {
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in connected state.";
+        QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
+        return _detected;
+    }
+
+    // Send message
+    socket.write(_deviceInformationMessageByteArray);
 
     int attempts = 0;
 
@@ -167,20 +187,15 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
     while (!_detected && attempts++ < 10) {
         socket.waitForReadyRead(50);
         /**
-         * The bound state should be checked while looking for new packages
-         * writeDatagram will always return *bytes sent on success* as the total number of bytes,
-         * This is probably related to the UDP nature.
-         * To check for "Network operation timed out", "Connection reset by peer" and others errors,
-         * we should wait and check for new datagrams, otherwise we are not able to check for changes
-         * in socket state.
+         * The connection state should be checked while looking for new packages
          */
-        if(socket.state() != QUdpSocket::BoundState) {
-            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in bound state.";
+        if(socket.state() != QUdpSocket::ConnectedState) {
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in connected state.";
             QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
             break;
         }
-        _detected = checkBuffer(socket.receiveDatagram().data(), linkConf);
+        _detected = checkBuffer(socket.readAll(), linkConf);
     }
 
     socket.close();
