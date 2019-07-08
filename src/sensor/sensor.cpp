@@ -132,37 +132,53 @@ void Sensor::setSensorVisualizer(const QUrl& url)
     _sensorVisualizerUrl = url;
 }
 
-QQuickItem* Sensor::controlPanel(QObject* parent)
+bool Sensor::createQQuickItem(QObject* parent, const QUrl& resource, QSharedPointer<QQuickItem>& pointerQuickItem)
 {
     QQmlEngine* engine = qmlEngine(parent);
     if(!engine) {
-        qCCritical(PING_PROTOCOL_SENSOR) << "No qml engine to load visualization.";
-        return nullptr;
+        qCCritical(PING_PROTOCOL_SENSOR) << "No qml engine to load visualization for:" << resource;
+        return false;
     }
-    QQmlComponent component(engine, _controlPanelUrl, parent);
-    _controlPanel.reset(qobject_cast<QQuickItem*>(component.create()));
-    if(_controlPanel.isNull()) {
+    QQmlComponent component(engine, resource, parent);
+    pointerQuickItem.reset(qobject_cast<QQuickItem*>(component.create()));
+    if(pointerQuickItem.isNull()) {
         qCCritical(PING_PROTOCOL_SENSOR) << "Failed to load QML component.";
         qCDebug(PING_PROTOCOL_SENSOR) << "Component status:" << component.status();
         if(component.isError()) {
             qCDebug(PING_PROTOCOL_SENSOR) << "Error list:" << component.errors();
         }
-        return nullptr;
+        return false;
     }
 
-    _controlPanel->setParentItem(qobject_cast<QQuickItem*>(parent));
+    pointerQuickItem->setParentItem(qobject_cast<QQuickItem*>(parent));
+    return !pointerQuickItem.isNull();
+}
+
+QQuickItem* Sensor::controlPanel(QObject* parent)
+{
+    // Check if item already exist, if not create it
+    if(_controlPanel.isNull() && !createQQuickItem(parent, _controlPanelUrl, _controlPanel)) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "Failed to create control panel.";
+        return nullptr;
+    }
+    qDebug() << _controlPanel.get();
     return _controlPanel.get();
 }
 
-QQmlComponent* Sensor::sensorVisualizer(QObject* parent)
+QQuickItem* Sensor::sensorVisualizer(QObject* parent)
 {
-    QQmlEngine* engine = qmlEngine(parent);
-    if(!engine) {
-        qCCritical(PING_PROTOCOL_SENSOR) << "No qml engine to load visualization.";
-        return nullptr;
+    // Check if item already exist, if not create it
+    if(_sensorVisualizer.isNull()) {
+        if(!createQQuickItem(parent, _sensorVisualizerUrl, _sensorVisualizer)) {
+            qCCritical(PING_PROTOCOL_SENSOR) << "Failed to create sensor visualizer.";
+            return nullptr;
+        }
+        // Visualizer will always fill the parent
+        auto anchors = _sensorVisualizer.get()->property("anchors").value<QObject*>();
+        anchors->setProperty("fill", QVariant::fromValue(parent));
     }
 
-    return new QQmlComponent(engine, _sensorVisualizerUrl, parent);
+    return _sensorVisualizer.get();
 }
 
 Sensor::~Sensor() = default;
