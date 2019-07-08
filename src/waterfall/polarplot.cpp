@@ -113,8 +113,8 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 
 void PolarPlot::updateMouseColumnData()
 {
-    static const QPoint center(width()/2, height()/2);
     static const float rad2grad = 200/M_PI;
+    const QPointF center(width()/2, height()/2);
 
     const QPoint delta = _mousePos - center;
     // Check if mouse is inside circle
