@@ -17,6 +17,7 @@ PolarPlot::PolarPlot(QQuickItem *parent)
     :Waterfall(parent)
     ,_distances(_angularResolution, 0)
     ,_image(2500, 2500, QImage::Format_RGBA8888)
+    ,_maxDistance(0)
     ,_painter(nullptr)
     ,_updateTimer(new QTimer(this))
 {
@@ -114,22 +115,32 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 void PolarPlot::updateMouseColumnData()
 {
     static const float rad2grad = 200/M_PI;
+    static const float grad2deg = 180.0f/200.0f;
     const QPointF center(width()/2, height()/2);
 
-    const QPoint delta = _mousePos - center;
+    /**
+     * @brief delta is a normalized value with x,y ∈ [-1, 1]
+     * Where (0, 0) represents the center of the circle of `radius = 1`
+     *
+     *  radius_{real} = \frac{max(height, width)}{2}
+     *  \delta = point/radius_{real}
+     */
+    const QPointF delta = 2*(_mousePos - center)/std::min(width(), height());
+
     // Check if mouse is inside circle
-    if(hypotf(delta.x(), delta.y()) > std::min(width(), height())/2) {
+    if(hypotf(delta.x(), delta.y()) > 1) {
         _containsMouse = false;
         emit containsMouseChanged();
         return;
     }
 
-    // Calculate grad from mouse position
-    const QPoint deltaScaled(delta.x()*_image.width()/width(), delta.y()*_image.height()/height());
-    int grad = static_cast<int>(atan2f(-deltaScaled.x(), deltaScaled.y())*rad2grad + 200) % 400;
+    // Calculate the angle in degrees
+    int grad = static_cast<int>(atan2f(-delta.x(), delta.y())*rad2grad + 200) % 400;
+    _mouseSampleAngle = grad*grad2deg;
 
-    _mouseSampleAngle = grad;
-    _mouseSampleDistance = 100;
+    // Calculate mouse distance in meters
+    _mouseSampleDistance = std::hypotf(delta.x(), delta.y())*_maxDistance*1e-3;
+
     emit mouseSampleAngleChanged();
     emit mouseSampleDistanceChanged();
 }
