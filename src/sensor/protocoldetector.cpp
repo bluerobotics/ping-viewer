@@ -5,6 +5,7 @@
 #include <QNetworkDatagram>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QSet>
 #include <QUdpSocket>
 
 #include "pingmessage/ping_ping1d.h"
@@ -52,9 +53,28 @@ void ProtocolDetector::doScan()
 //        QThread::msleep(500);
         auto current = QSerialPortInfo::availablePorts();
         if (current.size() > start.size()) {
-            auto portInfo = current.last();
+
+//            auto difference = current.toSet().subtract(start.toSet());
+//            auto newDeviceList = difference.toList();
+//            auto portInfo = newDeviceList.last();
+            QSerialPortInfo portInfo;
+            for (auto p1 : current) {
+
+                bool found = true;
+                for (auto p2 : start) {
+                    if (p1.portName() == p2.portName()) {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found) {
+                    portInfo = p1;
+                    break;
+                }
+            }
+
             //qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << current;
-            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << portInfo.manufacturer() << portInfo.portName();
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << portInfo.manufacturer() << portInfo.portName() << portInfo.systemLocation();
             QSerialPort p(portInfo);
             while (!p.open(QIODevice::ReadWrite));
             p.setBaudRate(115200);
