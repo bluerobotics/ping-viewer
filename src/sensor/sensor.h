@@ -110,15 +110,14 @@ public:
      * @param parent
      * @return QQuickItem* controlPanel
      */
-    Q_INVOKABLE virtual QQuickItem* controlPanel(QObject* parent);
+    Q_INVOKABLE virtual QQuickItem* controlPanel(QObject* parent = nullptr);
 
     /**
      * @brief Return a qml component that will take care of the main visualization widget
-     *  TODO: Move it to QuickItem and probably property and not functions
      * @param parent
-     * @return QQmlComponent* sensorVisualizer
+     * @return QQuickItem* sensorVisualizer
      */
-    Q_INVOKABLE virtual QQmlComponent* sensorVisualizer(QObject* parent);
+    Q_INVOKABLE virtual QQuickItem* sensorVisualizer(QObject* parent = nullptr);
 
 
 protected:
@@ -140,8 +139,20 @@ protected:
 
     QString _name; // TODO: populate
 
-    // Hold the sensor visualizer url
+    // Hold the sensor visualizer item
+    QSharedPointer<QQuickItem> _sensorVisualizer;
     QUrl _sensorVisualizerUrl;
+
+    /**
+     * @brief Helper function to create QQuickItems
+     *
+     * @param parent
+     * @param resource
+     * @param pointerQuickItem
+     * @return true QQuickItem is accessible
+     * @return false QQuickItem is not accessible or created
+     */
+    bool createQQuickItem(QObject* parent, const QUrl& resource, QSharedPointer<QQuickItem>& pointerQuickItem);
 
 signals:
     void autoDetectUpdate(bool autodetect);
