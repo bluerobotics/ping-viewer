@@ -19,6 +19,7 @@ Item {
     focus: true
 
     property var ping: DeviceManager.primarySensor
+    property var sensorVisualizer: ping.sensorVisualizer(root)
 
     Column {
         z: 1
@@ -215,13 +216,6 @@ Item {
         anchors.bottom: parent.bottom
     }
 
-    Loader {
-        id: sensorVisualizerLoader
-        objectName: "sensorVisualizer"
-        anchors.fill: parent
-        sourceComponent: DeviceManager.primarySensor.sensorVisualizer(parent)
-    }
-
     PingStatus {
         ping: root.ping
         visible: SettingsManager.debugMode
@@ -234,8 +228,8 @@ Item {
         anchors.fill: parent
         // Load linear or radial background
         // TODO: Add a proper check in PingSensor
-        sourceComponent: sensorVisualizerLoader.item == null ?
-            radialGradient : sensorVisualizerLoader.item.toString().includes("Ping360") ? radialGradient : linearGradient
+        sourceComponent: sensorVisualizer == null ?
+            radialGradient : sensorVisualizer.toString().includes("Ping360") ? radialGradient : linearGradient
     }
 
     // Linear and radial background gradients for different sensors
@@ -276,16 +270,16 @@ Item {
         } else if(event.key == Qt.Key_W) {
             print("Grab visualizer image.")
             event.accepted = true
-            sensorVisualizerLoader.item.captureVisualizer()
+            sensorVisualizer.captureVisualizer()
 
         }  else if(event.key == Qt.Key_R) {
             print("Clear visualizer.")
             event.accepted = true
-            sensorVisualizerLoader.item.clear()
+            sensorVisualizer.clear()
 
         } else {
             // Let the visualizer use specialized shortcuts if necessary
-            event.accepted = sensorVisualizerLoader.item.handleShortcut(event.key)
+            event.accepted = sensorVisualizer.handleShortcut(event.key)
         }
     }
 }
