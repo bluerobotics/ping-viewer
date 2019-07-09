@@ -155,12 +155,9 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
     // To test locally, change the host to 127.0.0.1 and use something like:
     // nc -kul 127.0.0.1 8888 > /dev/ttyUSB0 < /dev/ttyUSB0
     // or
-    // socat UDP-LISTEN:1234,fork,reuseaddr,ignoreeof FILE:/dev/ttyUSB1,b115200,raw,ignoreeof
+    // socat -T0.1 UDP-LISTEN:1234,fork,reuseaddr,ignoreeof OPEN:/dev/ttyUSB0,b115200,raw,ignoreeof
 
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Probing UDP:" << linkConf;
-
-    // Bind port
-    socket.bind(QHostAddress::Any, linkConf.udpPort(), QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
 
     // Connect with server
     socket.connectToHost(linkConf.udpHost(), linkConf.udpPort());
