@@ -6,7 +6,7 @@ RC_ICONS = deploy/icon.ico
 ICON = deploy/icon.icns
 
 CONFIG += \
-    c++14 \
+    c++17 \
     qtquickcompiler \
     static
 
