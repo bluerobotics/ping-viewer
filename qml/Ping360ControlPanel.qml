@@ -106,10 +106,24 @@ Item {
                 }
                 PingComboBox {
                     id: modeComboBox
-                    //TODO: Need to be done
-                    enabled: false
-                    model: ["Full", "Manual", "180", "90", "60", "45", "30"]
                     Layout.fillWidth: true
+                    editable: true
+                    model: ["360", "180", "90", "60", "45", "30"]
+                    validator: IntValidator {
+                        top: 360
+                        bottom: 15
+                    }
+                    onAccepted: {
+                        ping.sectorSize = parseInt(editText)*400/360
+                    }
+                    onCurrentIndexChanged: {
+                        // Not valid index
+                        if(currentIndex == -1) {
+                            return;
+                        }
+
+                        ping.sectorSize = parseInt(model[currentIndex])*400/360
+                    }
                 }
 
                 PingTextField {
