@@ -12,10 +12,8 @@ PingSensor::PingSensor()
     _parser = new PingParserExt();
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate);
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsUpdate);
-
-    connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
-    emit linkUpdate();
 }
+
 
 void PingSensor::request(int id) const
 {
