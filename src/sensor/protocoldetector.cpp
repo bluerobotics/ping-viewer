@@ -70,6 +70,7 @@ void ProtocolDetector::doScan()
 bool ProtocolDetector::checkLink(LinkConfiguration& linkConf)
 {
     _detected = false;
+    _parser.clearBuffer();
     if(linkConf.type() == LinkType::Udp) {
         checkUdp(linkConf);
     } else if(linkConf.type() == LinkType::Serial) {
@@ -214,15 +215,11 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
 bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& linkConf)
 {
-    // Parser need to be here, having a single parser to for everything will result in fake detections,
-    // since the buffer need to be clear for each try
-    PingParserExt parser;
-
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << buffer;
     for (const auto& byte : buffer) {
-        if(parser.parseByte(byte) == Parser::NEW_MESSAGE) {
+        if(_parser.parseByte(byte) == Parser::NEW_MESSAGE) {
             // Print information from detected devices
-            common_device_information device_information(parser.rxMessage());
+            common_device_information device_information(_parser.rxMessage());
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Detect new device:"
                                                     << "\ndevice_type:" << device_information.device_type()
                                                     << "\ndevice_revision:" << device_information.device_revision()
