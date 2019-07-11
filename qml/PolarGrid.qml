@@ -36,6 +36,7 @@ Item {
         delegate: Text {
             font.pixelSize: 15
             // Calculate the angle and radius for each item
+            // The final angle in radians will be the last angle in the right side
             property var itemRadian: ((root.angle/2)%90)*Math.PI/180 - ((root.angle%180) ? Math.PI/2 : 0)
             property var itemRadius: repeater.radius*(index + 1)/repeater.numberOfRings
             text: repeater.formatDistance(root.maxDistance*(1 + index)/repeater.numberOfRings)

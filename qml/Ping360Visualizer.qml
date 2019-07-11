@@ -17,15 +17,19 @@ Item {
     id: root
     property alias displaySettings: displaySettings
     anchors.fill: parent
+    property var ping: DeviceManager.primarySensor
 
     Connections {
-        property var ping: DeviceManager.primarySensor
         target: ping
 
         /** Ping360 does not handle auto range/scale
          *  Any change in scale is a result of user input
          */
         onLength_mmChanged: {
+            clear()
+        }
+
+        onSectorSizeChanged : {
             clear()
         }
 
@@ -51,14 +55,18 @@ Item {
         anchors.fill: parent
 
         Item {
+            id: waterfallParent
             Layout.fillHeight: true
             Layout.fillWidth: true
 
             PolarPlot {
                 id: waterfall
-                height: Math.min(parent.height, parent.width)
+                height: Math.min(ping.sectorSize > 200 ? parent.height : parent.height*2, parent.width*scale)
                 width: height
-                anchors.centerIn: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: ping.sectorSize > 200 ? parent.verticalCenter : parent.bottom
+
+                property var scale: ping.sectorSize >= 200 ? 1 : 0.8/Math.sin(ping.sectorSize*Math.PI/400)
                 property bool verticalFlip: false
                 property bool horizontalFlip: false
 
@@ -159,6 +167,7 @@ Item {
             PolarGrid {
                 id: polarGrid
                 anchors.fill: waterfall
+                angle: ping.sectorSize*360/400
                 maxDistance: waterfall.maxDistance
             }
         }
@@ -203,6 +212,21 @@ Item {
             columns: 5
             rowSpacing: 5
             columnSpacing: 5
+
+            // Sensor connections should be done inside component
+            // Components are local '.qml' descriptions, so it's not possible get outside connections
+            Connections {
+                target: ping
+                // We do not support vertical flips in sector view
+                onSectorSizeChanged: {
+                    if(ping.sectorSize != 400) {
+                        verticalFlipChB.checked = false
+                        verticalFlipChB.enabled = false
+                    } else {
+                        verticalFlipChB.enabled = true
+                    }
+                }
+            }
 
             CheckBox {
                 id: verticalFlipChB
