@@ -130,4 +130,5 @@ private:
     QVector<LinkConfiguration> _linkConfigs;
     static const QStringList _invalidSerialPortNames;
     QByteArray _deviceInformationMessageByteArray;
+    PingParserExt _parser;
 };
