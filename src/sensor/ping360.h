@@ -48,12 +48,15 @@ public:
     {
         // Force delta to be positive and inside our polar space
         while(delta < 0) {
-            delta += 400;
+            delta += _angularResolutionGrad;
         }
+
+        int nextPoint = (_angle+delta)%_angularResolutionGrad;
+
         ping360_transducer msg;
         msg.set_mode(1);
         msg.set_gain_setting(_gain_setting);
-        msg.set_angle((_angle + delta)%_angularResolutionGrad);
+        msg.set_angle(nextPoint);
         msg.set_transmit_duration(_transmit_duration);
         msg.set_sample_period(_sample_period);
         msg.set_transmit_frequency(_transmit_frequency);
@@ -312,6 +315,28 @@ public:
     Q_PROPERTY(int number_of_points READ number_of_points WRITE set_number_of_points NOTIFY numberOfPointsChanged)
 
     /**
+     * @brief Return sector size in gradians
+     *
+     * @return int
+     */
+    int sectorSize() { return _sectorSize; }
+
+    /**
+     * @brief Set sector size in gradians
+     *
+     * @param sectorSize
+     */
+    void setSectorSize(int sectorSize)
+    {
+        if(_sectorSize != sectorSize) {
+            _sectorSize = sectorSize;
+            emit sectorSizeChanged();
+        }
+    }
+
+    Q_PROPERTY(int sectorSize READ sectorSize WRITE setSectorSize NOTIFY sectorSizeChanged)
+
+    /**
      * @brief Do firmware sensor update
      *
      * @param fileUrl firmware file path
@@ -337,6 +362,7 @@ signals:
     void pingNumberChanged();
     void reverseDirectionChanged();
     void samplePeriodChanged();
+    void sectorSizeChanged();
     void scanLengthChanged();
     void speedOfSoundChanged();
     void transmitDurationChanged();
@@ -375,6 +401,9 @@ private:
     int _maxNumberOfPoints = 2048;
     // The sensor can take 4s to answer, we are also using an extra 200ms for latency
     int _sensorTimeout = 4200;
+
+    // Sector size in gradians, default is full circle
+    int _sectorSize = 400;
 
     uint16_t _ping_interval = 0;
 

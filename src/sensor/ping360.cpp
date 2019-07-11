@@ -1,5 +1,6 @@
 #include "ping360.h"
 
+#include <algorithm>
 #include <functional>
 
 #include <QCoreApplication>
@@ -77,6 +78,29 @@ void Ping360::requestNextProfile()
     if(_reverse_direction) {
         steps *= -1;
     }
+
+    // Check if steps is in sector
+    auto isInside = [this](int steps) -> bool {
+        int relativeAngle = (steps + angle() + _angularResolutionGrad)%_angularResolutionGrad;
+        if(relativeAngle >= _angularResolutionGrad/2)
+        {
+            relativeAngle -= _angularResolutionGrad;
+        }
+        return std::clamp(relativeAngle, -_sectorSize/2, _sectorSize/2) == relativeAngle;
+    };
+
+    // Move the other direction to be in sector
+    if(!isInside(steps)) {
+        _reverse_direction = !_reverse_direction;
+        steps *= -1;
+    }
+
+    // If we are not inside yet, we are not in section, go to zero
+    if(!isInside(steps)) {
+        _reverse_direction = !_reverse_direction;
+        steps = -angle();
+    }
+
     deltaStep(steps);
 }
 
@@ -108,7 +132,12 @@ void Ping360::handleMessage(const ping_message& msg)
         emit transmitDurationChanged();
         emit samplePeriodChanged();
         emit transmitFrequencyChanged();
-        emit dataChanged();
+
+        // Only emit data changed when inside sector range
+        if(_sectorSize == 400
+                || (angle() >= _angularResolutionGrad - _sectorSize/2) || (angle() <= _sectorSize/2)) {
+            emit dataChanged();
+        }
 
         // Update total number of pings
         _ping_number++;
