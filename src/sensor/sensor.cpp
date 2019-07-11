@@ -55,9 +55,6 @@ void Sensor::connectLink(const LinkConfiguration conConf, const LinkConfiguratio
 
     emit linkUpdate();
 
-    if (_parser) {
-        connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer);
-    }
 
     emit connectionOpen();
 

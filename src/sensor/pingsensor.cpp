@@ -14,6 +14,21 @@ PingSensor::PingSensor()
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsUpdate);
 }
 
+void PingSensor::connectLink(const LinkConfiguration conConf, const LinkConfiguration& logConf)
+{
+    Sensor::connectLink(conConf, logConf);
+    if (_parser) {
+        connect(link(), &AbstractLink::newData, this, [this](QByteArray data) {
+            for (char b : data) {
+                Parser::ParserState result = _parser->parseByte(b);
+                if (result == Parser::NEW_MESSAGE) {
+                    handleMessage(_parser->rxMessage());
+                }
+            }
+        });
+        emit this->connectionUpdate();
+    }
+}
 
 void PingSensor::request(int id) const
 {

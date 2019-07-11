@@ -35,6 +35,8 @@ public:
      */
     Q_INVOKABLE virtual void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString) = 0;
 
+    void connectLink(const LinkConfiguration conConf, const LinkConfiguration& logConf = LinkConfiguration()) override final;
+
     /**
      * @brief Get device source ID
      *

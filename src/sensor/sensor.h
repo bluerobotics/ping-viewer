@@ -53,7 +53,7 @@ public:
      * @param logConf log configuration
      *
      */
-    void connectLink(const LinkConfiguration conConf, const LinkConfiguration& logConf = LinkConfiguration());
+    virtual void connectLink(const LinkConfiguration conConf, const LinkConfiguration& logConf = LinkConfiguration());
 
     /**
      * @brief Add new log connection
