@@ -212,9 +212,15 @@ public:
     void write(const char* data, int size)
     {
         if(size > 0) {
-            emit sendData(QByteArray(data, size));
-        };
+            if (_type == LinkType::Serial){
+                writeSync(data, size);
+            } else {
+                emit sendData(QByteArray(data, size));
+            }
+        }
     }
+
+    virtual void writeSync(const char* data, int size) { Q_UNUSED(data) Q_UNUSED(size) }
 
     /**
      * @brief Copy operation
