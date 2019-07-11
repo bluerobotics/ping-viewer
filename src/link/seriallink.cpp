@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QLoggingCategory>
 #include <QSerialPortInfo>
+#include <QThread>
 #include <QTimer>
 
 #include "seriallink.h"
@@ -46,6 +47,13 @@ bool SerialLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     _port.setPortName(linkConfiguration.args()->at(0));
     _port.setBaudRate(linkConfiguration.args()->at(1).toInt());
+    _port.setBreakEnabled(true);
+    QThread::usleep(500);
+    _port.setBreakEnabled(false);
+    QThread::msleep(11);
+    _port.write("U");
+    _port.flush();
+    QThread::msleep(11);
 
     return true;
 }
