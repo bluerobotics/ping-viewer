@@ -92,6 +92,11 @@ public:
      */
     void forceSensorAutomaticBaudRateDetection();
 
+    void writeSync(const char* data, int size) final override {
+        _port.write(data, size);
+        _port.flush();
+    }
+
 private:
     QSerialPort _port;
 };
