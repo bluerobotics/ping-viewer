@@ -49,7 +49,7 @@ void Sensor::connectLink(const LinkConfiguration conConf, const LinkConfiguratio
     link()->startConnection();
 
     if(!link()->isOpen()) {
-        qCCritical(PING_PROTOCOL_SENSOR) << "Connection fail !" << conConf << link()->errorString();;
+        qCCritical(PING_PROTOCOL_SENSOR) << "Connection fail !" << conConf << link()->errorString();
         emit connectionClose();
         return;
     }
