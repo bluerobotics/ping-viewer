@@ -350,12 +350,12 @@ private:
      */
 ///@{
     uint16_t _angle = 0;
-    uint16_t _transmit_duration = 42;
+    uint16_t _transmit_duration = 32;
     uint32_t _ping_number = 0;
     uint32_t _gain_setting = 1;
-    uint16_t _num_points = 1200;
-    uint16_t _sample_period = 1300;
-    uint16_t _transmit_frequency = 500;
+    uint16_t _num_points = 1024;
+    uint16_t _sample_period = 80;
+    uint16_t _transmit_frequency = 740;
     QVector<double> _data;
 ///@}
 
@@ -364,7 +364,7 @@ private:
     int _angular_speed = 1;
     uint _central_angle = 1;
     bool _reverse_direction = false;
-    uint32_t _scan_length = 100000;
+    uint32_t _scan_length = 1000;
     uint32_t _speed_of_sound = 1500;
 
     int _angularResolutionGrad = 400;
