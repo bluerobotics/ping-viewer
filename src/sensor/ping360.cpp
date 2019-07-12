@@ -25,8 +25,10 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
 Ping360::Ping360()
     :PingSensor()
-    ,_data(_maxNumberOfPoints, 0)
 {
+    // QVector crashs when constructed in initialization list
+    _data = QVector<double>(_maxNumberOfPoints, 0);
+
     setControlPanel({"qrc:/Ping360ControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
 
