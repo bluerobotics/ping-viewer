@@ -54,10 +54,10 @@ public:
         msg.set_mode(1);
         msg.set_gain_setting(_gain_setting);
         msg.set_angle((_angle+delta)%400);
-        msg.set_transmit_duration(5);
-        msg.set_sample_period(80);
+        msg.set_transmit_duration(_transmit_duration);
+        msg.set_sample_period(_sample_period);
         msg.set_transmit_frequency(_transmit_frequency);
-        msg.set_number_of_samples(200);
+        msg.set_number_of_samples(_num_points);
         msg.set_transmit(1);
 
         msg.updateChecksum();
