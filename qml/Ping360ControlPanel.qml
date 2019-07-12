@@ -168,6 +168,7 @@ Item {
                     Layout.fillWidth: true
                     onEditingFinished: {
                         ping.length_mm = parseInt(text)
+                        print(ping.length_mm)
                     }
                 }
 

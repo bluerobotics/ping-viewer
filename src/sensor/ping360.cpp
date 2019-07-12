@@ -89,9 +89,9 @@ void Ping360::handleMessage(const ping_message& msg)
         const ping360_device_data deviceData(msg);
         deviceData.mode();
         _angle = deviceData.angle();
-        _gain_setting = deviceData.gain_setting();
-        _transmit_duration = deviceData.transmit_duration();
-        _sample_period = deviceData.sample_period();
+        //_gain_setting = deviceData.gain_setting();
+        //_transmit_duration = deviceData.transmit_duration();
+        //_sample_period = deviceData.sample_period();
         if(_sample_period < 80) _sample_period = 80;
         _transmit_frequency = deviceData.transmit_frequency();
 
