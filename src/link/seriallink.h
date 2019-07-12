@@ -76,7 +76,7 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _port.open(QIODevice::ReadWrite); };
+    bool startConnection() final { _port.open(QIODevice::ReadWrite); return setConfiguration(_linkConfiguration); };
 
     void writeSync(const char* data, int size) final override {
         _port.write(data, size);
