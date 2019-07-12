@@ -53,7 +53,7 @@ public:
         ping360_transducer msg;
         msg.set_mode(1);
         msg.set_gain_setting(_gain_setting);
-        msg.set_angle((_angle+delta)%400);
+        msg.set_angle((_angle + delta)%_angularResolutionGrad);
         msg.set_transmit_duration(_transmit_duration);
         msg.set_sample_period(_sample_period);
         msg.set_transmit_frequency(_transmit_frequency);
@@ -137,7 +137,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t angle() { return _angle; }
+    uint16_t angle() { return (_angle + _angle_offset)%_angularResolutionGrad; }
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
@@ -359,14 +359,15 @@ private:
     QVector<double> _data;
 ///@}
 
-    int _angle_offset = 0;
+    // Ping360 has a 200 offset by default
+    int _angle_offset = 200;
     int _angular_speed = 1;
     uint _central_angle = 1;
     bool _reverse_direction = false;
     uint32_t _scan_length = 100000;
     uint32_t _speed_of_sound = 1500;
 
-    float _angularResolutionGrad = 400;
+    int _angularResolutionGrad = 400;
     // The motor takes 4s to run a full circle
     float _motorSpeedGradMs = 4000/_angularResolutionGrad;
     // Right now the max value is 1200 for ping360
