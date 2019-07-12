@@ -59,15 +59,14 @@ Item {
                 PingTextField {
                     title: "Angle Offset:"
                     text: ping.angle_offset
-                    //TODO: Need to be done
-                    enabled: false
+                    enabled: true
                     Layout.fillWidth: true
                     validator: IntValidator {
                         bottom: 0
                         top: 359
                     }
                     onEditingFinished: {
-                        ping.transmit_frequency = parseInt(text)
+                        ping.angle_offset = parseInt(text)
                     }
                 }
 
