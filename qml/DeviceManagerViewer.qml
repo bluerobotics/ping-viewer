@@ -148,6 +148,8 @@ PingPopup {
                             root.close()
                         }
                         ToolTip {
+                            x: parent.mouseX
+                            y: parent.mouseY - height - 5
                             visible: parent.containsMouse
                             text: "Connect."
                         }
