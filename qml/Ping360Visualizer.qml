@@ -59,23 +59,14 @@ Item {
                 height: Math.min(parent.height, parent.width)
                 width: height
                 anchors.centerIn: parent
+                property bool verticalFlip: false
+                property bool horizontalFlip: false
 
-                Shape {
-                    visible: waterfall.containsMouse
-                    anchors.centerIn: parent
-                    opacity: 0.5
-                    ShapePath {
-                        strokeWidth: 3
-                        strokeColor: StyleManager.secondaryColor
-                        startX: 0
-                        startY: 0
-                        //TODO: This need to be updated in sensor integration
-                        PathLine {
-                            property real angle: -Math.atan2(waterfall.mousePos.x - waterfall.width/2, waterfall.mousePos.y - waterfall.height/2) + Math.PI/2
-                            x: waterfall.width*Math.cos(angle)/2
-                            y: waterfall.height*Math.sin(angle)/2
-                        }
-                    }
+                transform: Rotation {
+                    origin.x: waterfall.width/2
+                    origin.y: waterfall.height/2
+                    axis { x: waterfall.verticalFlip; y: waterfall.horizontalFlip; z: 0 }
+                    angle: 180
                 }
 
                 // Spinner that shows the head angle
@@ -101,36 +92,74 @@ Item {
                     }
                 }
 
-                Text {
-                    id: mouseReadout
+                Shape {
                     visible: waterfall.containsMouse
-                    anchors.right: parent.right
-                    anchors.top: parent.top
+                    anchors.centerIn: parent
+                    opacity: 0.5
+                    ShapePath {
+                        strokeWidth: 3
+                        strokeColor: StyleManager.secondaryColor
+                        startX: 0
+                        startY: 0
+                        //TODO: This need to be updated in sensor integration
+                        PathLine {
+                            property real angle: -Math.atan2(waterfall.mousePos.x - waterfall.width/2, waterfall.mousePos.y - waterfall.height/2) + Math.PI/2
+                            x: waterfall.width*Math.cos(angle)/2
+                            y: waterfall.height*Math.sin(angle)/2
+                        }
+                    }
+                }
+            }
+
+            Text {
+                id: mouseReadout
+                visible: waterfall.containsMouse
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 5
+                font.bold: true
+                font.family: "Arial"
+                font.pointSize: 15
+                text: (waterfall.mouseSampleDistance*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
+                color: StyleManager.secondaryColor
+
+                Text {
+                    id: mouseConfidenceText
+                    visible: typeof(waterfall.mouseSampleAngle) == "number"
+                    anchors.top: parent.bottom
                     anchors.margins: 5
                     font.bold: true
                     font.family: "Arial"
                     font.pointSize: 15
-                    text: (waterfall.mouseSampleDistance*SettingsManager.distanceUnits['distanceScalar']).toFixed(2) + SettingsManager.distanceUnits['distance']
+                    text: calcAngleFromFlips(waterfall.mouseSampleAngle) + "º"
                     color: StyleManager.secondaryColor
 
-                    Text {
-                        id: mouseConfidenceText
-                        visible: typeof(waterfall.mouseSampleAngle) == "number"
-                        anchors.top: parent.bottom
-                        anchors.margins: 5
-                        font.bold: true
-                        font.family: "Arial"
-                        font.pointSize: 15
-                        text: transformValue(waterfall.mouseSampleAngle) + "º"
-                        color: StyleManager.secondaryColor
+                    function calcAngleFromFlips(angle) {
+                        var value = waterfall.mouseSampleAngle
+                        if(waterfall.verticalFlip && waterfall.horizontalFlip) {
+                            value = (360 + 270 - value) % 360
+                            return transformValue(value)
+                        }
+
+                        if(waterfall.verticalFlip) {
+                            value = (360 + 180 - value) % 360
+                            return transformValue(value)
+                        }
+
+                        if(waterfall.horizontalFlip) {
+                            value = 360 - value
+                            return transformValue(value)
+                        }
+
+                        return transformValue(value)
                     }
                 }
+            }
 
-                PolarGrid {
-                    id: polarGrid
-                    anchors.fill: parent
-                    maxDistance: waterfall.maxDistance
-                }
+            PolarGrid {
+                id: polarGrid
+                anchors.fill: waterfall
+                maxDistance: waterfall.maxDistance
             }
         }
 
@@ -174,6 +203,28 @@ Item {
             columns: 5
             rowSpacing: 5
             columnSpacing: 5
+
+            CheckBox {
+                id: verticalFlipChB
+                text: "Flip Vertically"
+                checked: false
+                Layout.columnSpan: 5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    waterfall.verticalFlip = checkState
+                }
+            }
+
+            CheckBox {
+                id: horizontalFlipChB
+                text: "Flip Horizontally"
+                checked: false
+                Layout.columnSpan: 5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    waterfall.horizontalFlip = checkState
+                }
+            }
 
             CheckBox {
                 id: smoothDataChB
