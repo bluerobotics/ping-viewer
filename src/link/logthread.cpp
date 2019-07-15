@@ -1,6 +1,9 @@
 #include <QDebug>
 
+#include "logger.h"
 #include "logthread.h"
+
+PING_LOGGING_CATEGORY(LOGTHREAD, "ping.logthread");
 
 LogThread::LogThread(QObject *parent)
     :QTimer(parent)
