@@ -1,9 +1,12 @@
 #pragma once
 
 #include <QByteArray>
+#include <QLoggingCategory>
 #include <QTime>
 #include <QTimer>
 #include <QVector>
+
+Q_DECLARE_LOGGING_CATEGORY(LOGTHREAD)
 
 /**
  * @brief Play sensor logs
