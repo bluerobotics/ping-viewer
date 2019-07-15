@@ -32,7 +32,18 @@ void LogThread::processJob()
         static int diffMSecs;
         _logIndex++;
         diffMSecs = _log[_logIndex].time.msecsSinceStartOfDay() - lastMSecs;
-        start(diffMSecs);
+
+        // Something is wrong, we need to go 'back to the future'
+        if(diffMSecs < 0) {
+            qCWarning(LOGTHREAD) << "Sample time is negative from previous sample! Trying to recover..";
+            qCDebug(LOGTHREAD) << "First time:" << _log.constFirst().time;
+            qCDebug(LOGTHREAD) << "Last time:" << _log.constLast().time;
+            qCDebug(LOGTHREAD) << "Actual index:" << _logIndex
+                               << "Time[n-1, n]:" << _log[_logIndex - 1].time << _log[_logIndex].time;
+            processJob();
+            return;
+        }
+        start(diffMSecs/10);
     }
 }
 
