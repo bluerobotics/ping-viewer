@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDataStream>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QTime>
 
@@ -133,7 +134,7 @@ private:
     };
 
     QIODevice::OpenModeFlag _openModeFlag;
-    QTime _time;
+    QElapsedTimer _timer;
 
     QFile _file;
     QDataStream _inout;
