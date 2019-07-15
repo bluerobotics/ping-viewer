@@ -12,12 +12,12 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_FILELINK, "ping.protocol.filelink")
 FileLink::FileLink(QObject* parent)
     : AbstractLink(parent)
     , _openModeFlag(QIODevice::ReadWrite)
-    , _time(QTime::currentTime())
+    , _timer()
     , _inout(&_file)
     , _logThread(nullptr)
 {
+    _timer.start();
     setType(LinkType::File);
-
     connect(this, &AbstractLink::sendData, this, &FileLink::_writeData);
 }
 
@@ -34,7 +34,7 @@ void FileLink::_writeData(const QByteArray& data)
 
     // This save the data as a structure to deal with the timestamp
     if(_openModeFlag == QIODevice::WriteOnly && _file.isWritable()) {
-        QString time = _time.currentTime().toString(_timeFormat);
+        QString time =  QTime::fromMSecsSinceStartOfDay(_timer.elapsed()).toString(_timeFormat);
         Pack pack{time, data};
         _inout << pack.time << pack.data;
     } else {
