@@ -175,7 +175,7 @@ Item {
 
                 Text {
                     text: "UDP Host/Port:"
-                    color: Material.primary
+                    color: udpIp.isValid ? Material.primary : Material.color(Material.Error)
                 }
 
                 PingTextField {
@@ -183,12 +183,16 @@ Item {
                     text: "192.168.2.2"
                     Layout.columnSpan:  2
                     Layout.fillWidth: true
+                    property bool isValid:  // Check for valid IPV4 (0.0.0.0, 192.168.0.2)
+                                            text.match(/^(?!\.)((^|\.)([1-9]?\d|1\d\d|2(5[0-5]|[0-4]\d))){4}$/gm)
+                                            // Check for valid host names (potato.com, smashed.potato.com.br, great-potato-of-doom.com)
+                                            || text.match(/^(([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,63}?)$/gm)
+                                            // Check for a valid host name (localhost, raspberrypi, potato)
+                                            || text.match(/^[a-zA-Z0-9-]*$/gm)
                     onEditingFinished: {
-                        if (text === "0.0.0.0" || text === "localhost") {
-                            text = "127.0.0.1"
+                        if (isValid) {
+                            connect(AbstractLinkNamespace.Udp, text, udpPort.text)
                         }
-
-                        connect(AbstractLinkNamespace.Udp, text, udpPort.text)
                     }
                 }
 
@@ -197,6 +201,10 @@ Item {
                     text: "1234"
                     Layout.columnSpan:  2
                     Layout.fillWidth: true
+                    validator: IntValidator {
+                        bottom: 1
+                        top: 65535
+                    }
                     onEditingFinished: {
                         connect(AbstractLinkNamespace.Udp, udpIp.text, text)
                     }
