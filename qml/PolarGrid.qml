@@ -7,6 +7,7 @@ Item {
     width: 400
     height: width
     property var maxDistance: 100e3
+    property bool enableText: true
     Repeater {
         id: repeater
         anchors.fill: parent
@@ -33,6 +34,7 @@ Item {
 
         delegate: Text {
             font.pixelSize: 15
+            visible: root.enableText
             // Calculate the angle and radius for each item
             property var itemRadian: (index%Math.floor(360/repeater.angle))*repeater.angle*Math.PI/180
             property var itemRadius: repeater.radius*(1 + Math.floor(index/Math.floor(360/repeater.angle)))/repeater.numberOfRings

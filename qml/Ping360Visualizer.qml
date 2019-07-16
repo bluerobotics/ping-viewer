@@ -227,6 +227,16 @@ Item {
             }
 
             CheckBox {
+                text: "Remove axis text"
+                checked: true
+                Layout.columnSpan: 5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    polarGrid.enableText = checkState
+                }
+            }
+
+            CheckBox {
                 id: smoothDataChB
                 text: "Smooth Data"
                 checked: true
