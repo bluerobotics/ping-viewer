@@ -32,7 +32,7 @@ public:
      * @param connType connection type
      * @param connString arguments for the new connection
      */
-    Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString);
+    Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
 
     /**
      * @brief debug function
@@ -345,7 +345,7 @@ public:
      * @param verify this variable is true when all
      */
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
-                                    bool verify = true);
+                                    bool verify = true) final override;
 
 signals:
     /**
