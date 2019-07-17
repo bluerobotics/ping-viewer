@@ -233,7 +233,7 @@ void Ping::handleMessage(const ping_message& msg)
 
     case Ping1dId::MODE_AUTO: {
         ping1d_mode_auto m(msg);
-        if(_mode_auto != m.mode_auto()) {
+        if(_mode_auto != static_cast<bool>(m.mode_auto())) {
             _mode_auto = m.mode_auto();
             emit modeAutoUpdate();
         }
