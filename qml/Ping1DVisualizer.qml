@@ -14,10 +14,11 @@ import StyleManager 1.0
 Item {
     id: root
     property alias displaySettings: displaySettings
+    property var ping: DeviceManager.primarySensor
+
     anchors.fill: parent
 
     Connections {
-        property var ping: DeviceManager.primarySensor
         target: ping
 
         onPointsUpdate: {
@@ -132,6 +133,12 @@ Item {
 
     ValueReadout {
         id: readout
+    }
+
+    // TODO: this item should be provided by the sensor, like the visualizer and control panel
+    PingStatus {
+        ping: root.ping
+        visible: SettingsManager.debugMode
     }
 
     function confidenceToColor(confidence) {
