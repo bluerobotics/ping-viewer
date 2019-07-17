@@ -66,9 +66,9 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     Q_UNUSED(length)
 
     static const QPoint center(_image.width()/2, _image.height()/2);
-    static const float degreeToRadian = M_PI/180.0;
-    static const float gradianToDegree = 180.0/200.0;
-    static const float gradianToRadian = M_PI/200.0;
+    static const float degreeToRadian = M_PI/180.0f;
+    static const float gradianToDegree = 180.0f/200.0f;
+    static const float gradianToRadian = M_PI/200.0f;
     static QColor pointColor;
     static float step;
     static float angleStep;
@@ -114,7 +114,7 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 
 void PolarPlot::updateMouseColumnData()
 {
-    static const float rad2grad = 200/M_PI;
+    static const float rad2grad = 200.0f/M_PI;
     static const float grad2deg = 180.0f/200.0f;
     const QPointF center(width()/2, height()/2);
 
