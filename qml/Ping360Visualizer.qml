@@ -16,6 +16,7 @@ import StyleManager 1.0
 Item {
     id: root
     property alias displaySettings: displaySettings
+
     anchors.fill: parent
     property var ping: DeviceManager.primarySensor
 
@@ -183,6 +184,12 @@ Item {
         Settings {
             property alias chartWidth: chart.width
         }
+    }
+
+    // TODO: this item should be provided by the sensor, like the visualizer and control panel
+    Ping360Status {
+        ping: root.ping
+        visible: SettingsManager.debugMode
     }
 
     function transformValue(value, precision) {
