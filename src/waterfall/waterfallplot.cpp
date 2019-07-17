@@ -145,7 +145,7 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
         DCPack tempDC{0, 0, 0, 0};
         for(const auto& DC : qAsConst(_DCRing))
         {
-            if(maxDepth < DC.length + DC.initialDepth && DC.initialDepth != static_cast<const float>(_image.height())) {
+            if(maxDepth < DC.length + DC.initialDepth && DC.initialDepth != static_cast<float>(_image.height())) {
                 maxDepth = DC.length + DC.initialDepth;
                 tempDC = DC;
             }
