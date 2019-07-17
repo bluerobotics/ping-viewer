@@ -216,11 +216,6 @@ Item {
         anchors.bottom: parent.bottom
     }
 
-    PingStatus {
-        ping: root.ping
-        visible: SettingsManager.debugMode
-    }
-
     Loader {
         id: backGroundLoader
         objectName: "backGround"
