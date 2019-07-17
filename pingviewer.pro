@@ -22,6 +22,15 @@ RESOURCES += \
     QMAKE_LFLAGS += -fopenmp
 }
 
+# Warning as error
+*-g++ | *-clang {
+    QMAKE_CXXFLAGS += -Werror
+}
+*msvc {
+    QMAKE_CXXFLAGS += /WX \
+        /wd4305 \ # Remove truncated warnings, msvc does not provide some non double values
+}
+
 include(lib/maddy/maddy.pri)
 include(lib/ping-cpp/ping-cpp.pri)
 
