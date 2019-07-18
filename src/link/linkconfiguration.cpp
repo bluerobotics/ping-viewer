@@ -15,9 +15,7 @@ const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
 
 const QString LinkConfiguration::createFullConfString() const
 {
-    QStringList args{_linkConf.args};
-    args.prepend(QString::number(_linkConf.type));
-    return args.join(":");
+    return createFullConfStringList().join(":");
 }
 
 const QStringList LinkConfiguration::createFullConfStringList() const
