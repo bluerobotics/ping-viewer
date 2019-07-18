@@ -29,7 +29,7 @@ public:
      *
      * @return QString
      */
-    QString errorString() final { return _udpSocket->errorString(); };
+    QString errorString() const final { return _udpSocket->errorString(); }
 
     /**
      * @brief Finish connection
@@ -45,7 +45,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final { return _udpSocket->isWritable() && _udpSocket->isReadable(); };
+    bool isOpen() const final { return _udpSocket->isWritable() && _udpSocket->isReadable(); }
 
     /**
      * @brief Set the configuration object

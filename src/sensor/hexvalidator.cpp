@@ -83,7 +83,7 @@ bool HexValidator::isValidFile(const QString& fileUrl)
 
     while(!file.atEnd()) {
         // Read each line and remove \n
-        QByteArray line = file.readLine().replace('\n', QByteArray());
+        const QByteArray line = file.readLine().replace('\n', QByteArray());
         if(!check(line)) {
             return false;
         }
