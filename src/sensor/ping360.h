@@ -375,13 +375,22 @@ private:
      * @brief Sensor variables
      */
 ///@{
-    uint16_t _angle = 0;
-    uint16_t _transmit_duration = 42;
+
+    // The firmware defaults at boot
+    static const uint8_t _firmwareDefaultGainSetting = 0;
+    static const uint16_t _firmwareDefaultAngle = 0;
+    static const uint16_t _firmwareDefaultTransmitDuration = 32;
+    static const uint16_t _firmwareDefaultSamplePeriod = 80;
+    static const uint16_t _firmwareDefaultTransmitFrequency = 740;
+    static const uint16_t _firmwareDefaultNumberOfSamples = 1024;
+
+    uint16_t _angle = _firmwareDefaultAngle;
+    uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
     uint32_t _ping_number = 0;
-    uint32_t _gain_setting = 1;
-    uint16_t _num_points = 1200;
-    uint16_t _sample_period = 1300;
-    uint16_t _transmit_frequency = 500;
+    uint32_t _gain_setting = _firmwareDefaultGainSetting;
+    uint16_t _num_points = _firmwareDefaultNumberOfSamples;
+    uint16_t _sample_period = _firmwareDefaultSamplePeriod;
+    uint16_t _transmit_frequency = _firmwareDefaultTransmitFrequency;
     QVector<double> _data;
 ///@}
 
