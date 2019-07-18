@@ -12,15 +12,14 @@
 PING_LOGGING_CATEGORY(FLASH, "ping.flash")
 
 Flasher::Flasher(QObject* parent)
-    : QObject(parent)
-{
-    _binRelativePath =
+    : QObject(parent),
+    _binRelativePath(QCoreApplication::applicationDirPath()
 #ifdef Q_OS_OSX
         // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-        QCoreApplication::applicationDirPath() + "/../..";
-#else
-        QCoreApplication::applicationDirPath();
+         + QStringLiteral("/../..")
 #endif
+    )
+{
 }
 
 bool Flasher::setBaudRate(int baudRate)
