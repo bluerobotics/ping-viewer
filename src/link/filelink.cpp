@@ -82,18 +82,9 @@ bool FileLink::startConnection()
         connect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
         connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
         connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
-        while(true) {
-            // Get data
+        while(!_inout.atEnd()) {
             _inout >> pack.time >> pack.data;
-
-            // Check if we have a new package
-            if(pack.time.isEmpty()) {
-                qCDebug(PING_PROTOCOL_FILELINK) << "No more packages !";
-                break;
-            }
-
-            QTime time = QTime::fromString(pack.time, _timeFormat);
-            _logThread->append(time, pack.data);
+            _logThread->append(QTime::fromString(pack.time, _timeFormat), pack.data);
         }
         _logThread->start();
         emit elapsedTimeChanged();
