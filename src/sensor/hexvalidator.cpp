@@ -31,7 +31,7 @@ bool HexValidator::check(const QByteArray& bytes)
     }
 
     // Check if it has an odd number of elements
-    if(bytes.size()%2 == 0) {
+    if(bytes.size() & 0x1) {
         return error("Number of elements is not odd: %d", bytes.size());
     }
 
