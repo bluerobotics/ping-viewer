@@ -3,9 +3,11 @@
 LogListModel::LogListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    for(const auto& key : _roleNames.keys()) {
-        _roles.append(key);
-        _vectors.insert(key, {});
+    _roles.reserve(_roleNames.count());
+    _vectors.reserve(_roleNames.count());
+    for(auto keyIt = _roleNames.keyBegin(), end = _roleNames.keyEnd(); keyIt != end; keyIt++) {
+        _roles.append(*keyIt);
+        _vectors.insert(*keyIt, {});
     }
 }
 
