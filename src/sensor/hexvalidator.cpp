@@ -58,7 +58,7 @@ bool HexValidator::check(const QByteArray& bytes)
     // Calculate checksum and compare it
     uint8_t calculatedCheckSum = 0;
     // Checksum is the last value
-    for(int i = 0; i < uintBytes.size() - 1; i++) {
+    for(int i = 0, end = uintBytes.size() - 1; i < end; i++) {
         calculatedCheckSum += uintBytes[i];
     }
     // Do the two's complement
