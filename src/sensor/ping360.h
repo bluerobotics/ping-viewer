@@ -386,7 +386,6 @@ private:
 
     uint16_t _angle = _firmwareDefaultAngle;
     uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
-    uint32_t _ping_number = 0;
     uint32_t _gain_setting = _firmwareDefaultGainSetting;
     uint16_t _num_points = _firmwareDefaultNumberOfSamples;
     uint16_t _sample_period = _firmwareDefaultSamplePeriod;
@@ -394,6 +393,7 @@ private:
     QVector<double> _data;
 ///@}
 
+    uint32_t _ping_number = 0;
     // Ping360 has a 200 offset by default
     int _angle_offset = 200;
     int _angular_speed = 1;
