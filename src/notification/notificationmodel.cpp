@@ -19,11 +19,13 @@ void NotificationModel::add(QVariant text, QVariant icon, QVariant color, QVaria
     const int line = rowCount();
     beginInsertRows(QModelIndex(), line, line);
     insertRows(line, 1);
-    setData(index(line), time, NotificationModel::Time);
-    setData(index(line), text, NotificationModel::Text);
-    setData(index(line), color, NotificationModel::Color);
-    setData(index(line), severity, NotificationModel::Severity);
-    setData(index(line), icon, NotificationModel::Icon);
+    const QModelIndex idx = index(line);
+    /* This should be just *one* call. */
+    setData(idx, time, NotificationModel::Time);
+    setData(idx, text, NotificationModel::Text);
+    setData(idx, color, NotificationModel::Color);
+    setData(idx, severity, NotificationModel::Severity);
+    setData(idx, icon, NotificationModel::Icon);
     endInsertRows();
 }
 
