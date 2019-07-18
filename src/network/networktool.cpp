@@ -125,17 +125,15 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     if(!assets.isEmpty()) {
 
 // Astyle is not smart enough
-// *INDENT-OFF*
         static const QString extension =
 #ifdef Q_OS_LINUX
             QStringLiteral("x86_64.AppImage");
-#endif
-#ifdef Q_OS_OSX
+#elif Q_OS_OSX
             QStringLiteral("release.dmg");
 #else
             QStringLiteral("release.zip");
 #endif
-// *INDENT-ON*
+
 
         for(const QJsonValue& artifact : assets) {
             if(artifact["name"].toString().contains(extension)) {

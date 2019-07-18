@@ -64,17 +64,17 @@ void Flasher::setVerify(bool verify)
 
 QString Flasher::stm32flashPath()
 {
+    static QString path = QCoreApplication::applicationDirPath()
 #ifdef Q_OS_OSX
-    // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-    static QString absoluteBinPath = QCoreApplication::applicationDirPath() + "/../..";
-#else
-    static QString absoluteBinPath = QCoreApplication::applicationDirPath();
+        + QStringLiteral("/../..")
 #endif
+        + QStringLiteral("/stm32flash")
 #ifdef Q_OS_WIN
-    return absoluteBinPath + "/stm32flash.exe";
-#else
-    return absoluteBinPath + "/stm32flash";
+        + QStringLiteral(".exe")
 #endif
+        ;
+
+    return path;
 }
 
 void Flasher::flash()
