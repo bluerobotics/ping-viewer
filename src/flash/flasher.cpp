@@ -104,7 +104,7 @@ void Flasher::flash()
     static QString cmd = QStringLiteral("\"%0\" -w \"%1\" %2 -g 0x0 -b %3 %4").arg(
                              stm32flashPath(),
                              firmwareFileInfo.absoluteFilePath(),
-                             _verify ? "-v" : "",
+                             _verify ? QStringLiteral("-v") : QString(),
                              baudRate,
                              portLocation
                          );
@@ -120,11 +120,11 @@ void Flasher::flash()
     connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, [this] {
         // Error strings used to detect important messages for the user
         static const QStringList errorStrings = {
-            "error",
-            "fail",
-            "fatal",
-            "invalid",
-            "unexpected",
+            QStringLiteral("error"),
+            QStringLiteral("fail"),
+            QStringLiteral("fatal"),
+            QStringLiteral("invalid"),
+            QStringLiteral("unexpected"),
         };
         QString output(_firmwareProcess->readAllStandardOutput());
         for(const auto errorString: errorStrings)
@@ -155,7 +155,7 @@ void Flasher::flash()
 
         // It's not necessary to use setMessage here, since this signal is a result of the process
         // and not from stm32flash
-        static QString message;
+        QString message;
         if(exitStatus == QProcess::NormalExit) {
             message = QStringLiteral("Process exited normally with exit code: %1").arg(exitCode);
             qCWarning(FLASH) << message;

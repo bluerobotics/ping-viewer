@@ -50,7 +50,7 @@ void Logger::logMessage(const QString& msg, const QtMsgType& type, const QMessag
     const QString time = QTime::currentTime().toString(QStringLiteral("[hh:mm:ss:zzz]"));
 
     // Save the message into the file
-    _fileStream << QString("%1 %2\n").arg(time, msg);
+    _fileStream << QStringLiteral("%1 %2\n").arg(time, msg);
 
     _logModel.append(time, msg, _colors[type], _categoryIndexer[context.category]);
 }
@@ -60,14 +60,21 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
     // Check if category is not registered and add it in Logger
     Logger::self()->registerCategory(context.category);
 
-    static const QString msgTypes[] = { "Debug", "Warning", "Critical", "Fatal", "Info" };
-    const QString file = QString(context.file).split('/').last();
+    static const QString msgTypes[] = {
+        QStringLiteral("Debug"),
+        QStringLiteral("Warning"),
+        QStringLiteral("Critical"),
+        QStringLiteral("Fatal"),
+        QStringLiteral("Info")
+    };
+
+    const QString file = QString(context.file).split(QLatin1Char('/')).last();
     QString fileInfo;
     if (!file.isEmpty()) {
-        fileInfo = QString("%1(%2) ").arg(file).arg(context.line);
+        fileInfo = QStringLiteral("%1(%2) ").arg(file).arg(context.line);
     }
 
-    const QString logMsg = QString("%1[%2]: %3%4").arg(context.category, msgTypes[type], fileInfo, msg);
+    const QString logMsg = QStringLiteral("%1[%2]: %3%4").arg(context.category, msgTypes[type], fileInfo, msg);
 
     Logger::self()->logMessage(logMsg, type, context);
     if (originalHandler) {

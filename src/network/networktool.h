@@ -65,7 +65,4 @@ private:
      *
      */
     NetworkTool();
-
-    static QString _gitUserRepo;
-    static QString _gitUserRepoFirmware;
 };
