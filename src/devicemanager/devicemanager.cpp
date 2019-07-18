@@ -31,7 +31,7 @@ DeviceManager::DeviceManager() :
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName)
 {
-    for(int i{0}; i < _sensors[Connection].size(); i++) {
+    for(int i{0}, end = _sensors[Connection].size(); i < end; i++) {
         auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
         if(*vectorLinkConf == linkConf) {
             qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:"
@@ -121,7 +121,7 @@ void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType
 void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations)
 {
     // Make all connections unavailable by default
-    for(int i{0}; i < _sensors[Available].size(); i++) {
+    for(int i{0}, end = _sensors[Available].size(); i < end; i++) {
         auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
         //TODO: rework this check, check linkconfiguration capabilities or add new ones for this case
         if(linkConf->type() == AbstractLinkNamespace::Ping1DSimulation
