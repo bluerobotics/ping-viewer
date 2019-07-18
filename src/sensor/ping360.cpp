@@ -115,10 +115,6 @@ void Ping360::handleMessage(const ping_message& msg)
         const ping360_device_data deviceData(msg);
 
         _angle = deviceData.angle();
-        _gain_setting = deviceData.gain_setting();
-        _transmit_duration = deviceData.transmit_duration();
-        _sample_period = deviceData.sample_period();
-        _transmit_frequency = deviceData.transmit_frequency();
 
         _data.resize(deviceData.number_of_samples());
         for (int i = 0; i < deviceData.data_length(); i++) {
@@ -127,11 +123,9 @@ void Ping360::handleMessage(const ping_message& msg)
 
         // TODO: doublecheck what we are getting and what we want
         // some parameter combinations are not valid and the sensor will automatically adjust
-        emit gainSettingChanged();
+        // in order to detect this, we will have to track our last commanded values separately
+        // from our presently commanded values
         emit angleChanged();
-        emit transmitDurationChanged();
-        emit samplePeriodChanged();
-        emit transmitFrequencyChanged();
 
         // Only emit data changed when inside sector range
         if(_sectorSize == 400
