@@ -80,4 +80,5 @@ public:
 
 private:
     QSerialPort _port;
+    QStringList _availableConnections;
 };
