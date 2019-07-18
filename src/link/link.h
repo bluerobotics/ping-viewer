@@ -31,15 +31,14 @@ public:
      * @param parent
      */
     Link(const LinkConfiguration& linkConfiguration, QObject* parent = nullptr);
-    ~Link();
 
     /**
      * @brief This will handle the link used
      *
      * @return AbstractLink*
      */
-    AbstractLink* self() { return _abstractLink.get(); }
+    AbstractLink* self() const { return _abstractLink; }
 
 private:
-    std::unique_ptr<AbstractLink> _abstractLink;
+   AbstractLink* _abstractLink;
 };
