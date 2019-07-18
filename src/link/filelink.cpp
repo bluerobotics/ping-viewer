@@ -78,12 +78,6 @@ bool FileLink::startConnection()
     bool ok = _file.open(QIODevice::ReadWrite);
     if(ok) {
         Pack pack;
-        if(_logThread) {
-            // Disconnect LogThread
-            disconnect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
-            disconnect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
-            disconnect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
-        }
         _logThread.reset(new LogThread());
         connect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
         connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
