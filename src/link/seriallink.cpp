@@ -90,17 +90,19 @@ bool SerialLink::finishConnection()
 
 QStringList SerialLink::listAvailableConnections()
 {
-    static QStringList list;
-    auto oldList = list;
-    list.clear();
     auto ports = QSerialPortInfo::availablePorts();
+    QStringList currentPortList;
+    currentPortList.reserve(ports.size());
     for(const auto& port : ports) {
-        list.append(port.portName());
+        currentPortList.append(port.portName());
     }
-    if(oldList != list) {
+
+    if(_availableConnections != currentPortList) {
+        _availableConnections = currentPortList;
         emit availableConnectionsChanged();
     }
-    return list;
+
+    return _availableConnections;
 }
 
 SerialLink::~SerialLink()
