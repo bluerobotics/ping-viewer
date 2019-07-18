@@ -37,8 +37,9 @@ bool HexValidator::check(const QByteArray& bytes)
 
     // Get all values as normal bytes
     bool valid = false;
-    QList<uint8_t> uintBytes;
+    QVector<uint8_t> uintBytes;
     int numberOfBytesInLine = (bytes.size() - 1)/2; // Remove (:) character
+    uintBytes.reserve(numberOfBytesInLine);
     for(int i = 0; i < numberOfBytesInLine; i++) {
         uint8_t value = QString(bytes.mid(1 + i*2, 2)).toUInt(&valid, 16);
         uintBytes.append(value);
