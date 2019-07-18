@@ -151,6 +151,32 @@ void Ping360::handleMessage(const ping_message& msg)
         break;
     }
 
+    case CommonId::NACK: {
+        const common_nack nack(msg);
+        if (nack.nacked_id() == Ping360Id::TRANSDUCER) {
+            qCWarning(PING_PROTOCOL_PING360) << "transducer control was NACKED, reverting to default settings";
+
+            _gain_setting = _firmwareDefaultGainSetting;
+            _transmit_duration = _firmwareDefaultTransmitDuration;
+            _sample_period = _firmwareDefaultSamplePeriod;
+            _transmit_frequency = _firmwareDefaultTransmitFrequency;
+            _num_points = _firmwareDefaultNumberOfSamples;
+
+            // request another transmission
+            requestNextProfile();
+
+            // restart timer
+            _timeoutProfileMessage.start();
+
+            emit gainSettingChanged();
+            emit transmitDurationChanged();
+            emit samplePeriodChanged();
+            emit transmitFrequencyChanged();
+            emit numberOfPointsChanged();
+        }
+        break;
+    }
+
     default:
         qWarning(PING_PROTOCOL_PING360) << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;
