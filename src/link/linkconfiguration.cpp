@@ -3,14 +3,14 @@
 #include "linkconfiguration.h"
 
 const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
-    {NoErrors, "No link configuration errors."},
-    {MissingConfiguration, "Warning: Link configuration is missing."},
-    {NoType, "Link configuration Type is None."},
-    {InvalidType, "Link configuration Type is invalid."},
-    {NoArgs, "Link configuration does not have arguments."},
-    {InvalidArgsNumber, "Link configuration have a invalid number of arguments"},
-    {ArgsAreEmpty, "Link configuration arguments are empty."},
-    {InvalidUrl, "Url not formatted properly."}
+    {NoErrors, QStringLiteral("No link configuration errors.")},
+    {MissingConfiguration, QStringLiteral("Warning: Link configuration is missing.")},
+    {NoType, QStringLiteral("Link configuration Type is None.")},
+    {InvalidType, QStringLiteral("Link configuration Type is invalid.")},
+    {NoArgs, QStringLiteral("Link configuration does not have arguments.")},
+    {InvalidArgsNumber, QStringLiteral("Link configuration have a invalid number of arguments")},
+    {ArgsAreEmpty, QStringLiteral("Link configuration arguments are empty.")},
+    {InvalidUrl, QStringLiteral("Url not formatted properly.")}
 };
 
 const QString LinkConfiguration::createFullConfString() const
@@ -130,7 +130,7 @@ QDebug operator<<(QDebug d, const LinkConfiguration& other)
           other.name(),
           PingHelper::nameFromDeviceType(other.deviceType()),
           other.typeToString(),
-          other.args()->join(":")
+          other.args()->join(QStringLiteral(":"))
       );
     return d;
 }

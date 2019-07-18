@@ -12,39 +12,39 @@
 
 PING_LOGGING_CATEGORY(NETWORKTOOL, "ping.networktool")
 
-
-QString NetworkTool::_gitUserRepo = "bluerobotics/ping-viewer";
-QString NetworkTool::_gitUserRepoFirmware = "bluerobotics/ping-firmware";
-
+namespace {
+    QString gitUserRepo = QStringLiteral("bluerobotics/ping-viewer");
+    QString gitUserRepoFirmware = QStringLiteral("bluerobotics/ping-firmware");
+    const QString gitReleases = QStringLiteral("https://api.github.com/repos/%1/releases");
+    const QString repoContents = QStringLiteral("https://api.github.com/repos/%1/contents/%2");
+    const QString projectTag = QStringLiteral(GIT_TAG);
+    const QString userRepoUrl = QStringLiteral(GIT_URL);
+}
 NetworkTool::NetworkTool()
 {
     //*github.com/user/repo* results in user/repo
     const static QRegularExpression regex(R"(github.com\/([^.]*))");
-    QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
+    QRegularExpressionMatch regexMatch = regex.match(userRepoUrl);
     if (!regexMatch.hasMatch() || regexMatch.lastCapturedIndex() < 1) {
-        qCWarning(NETWORKTOOL) <<
-                               "Fail to get github user and repository! "
-                               "It will not be possible to check for updates. "
-                               "Using default value:" << _gitUserRepo;
+        qCWarning(NETWORKTOOL) << "Fail to get github user and repository! "
+                                  "It will not be possible to check for updates. "
+                                  "Using default value:" << gitUserRepo;
         qCDebug(NETWORKTOOL) << "GIT_URL value:" << QStringLiteral(GIT_URL);
         return;
     }
-    _gitUserRepo = regexMatch.capturedTexts()[1];
+    gitUserRepo = regexMatch.capturedTexts()[1];
 }
 
 void NetworkTool::checkInterfaceUpdate()
 {
-    static const QUrl url{QStringLiteral("https://api.github.com/repos/%1/releases").arg(_gitUserRepo)};
     NetworkManager::self()->requestJson(
-        url,
+        QUrl(gitReleases.arg(gitUserRepo)),
         self()->checkNewVersionInGitHubPayload
     );
 }
 
 void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocument)
 {
-    const static QString projectTag = QStringLiteral(GIT_TAG);
-
     auto semverToInt = [](const QString& version) -> int {
         int major, minor, patch = 0;
         std::sscanf(version.toStdString().c_str(), "%d.%d.%d", &major, &minor, &patch);
@@ -174,7 +174,7 @@ void NetworkTool::scheduleUpdateCheck()
 
 void NetworkTool::checkNewFirmware(const QString& sensorName, std::function<void(QJsonDocument&)> function)
 {
-    static const QUrl url{QStringLiteral("https://api.github.com/repos/%1/contents/%2").arg(_gitUserRepoFirmware, sensorName)};
+    static const QUrl url{repoContents.arg(gitUserRepoFirmware, sensorName)};
     NetworkManager::self()->requestJson(url, function);
 }
 

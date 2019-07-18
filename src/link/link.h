@@ -38,7 +38,7 @@ public:
      *
      * @return AbstractLink*
      */
-    AbstractLink* self() { return _abstractLink.get(); };
+    AbstractLink* self() { return _abstractLink.get(); }
 
 private:
     std::unique_ptr<AbstractLink> _abstractLink;
