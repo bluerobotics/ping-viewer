@@ -37,7 +37,7 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
         _abstractLink.reset(new Ping360SimulationLink());
         break;
     default :
-        qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
+        assert("Link not available!");
         return;
     }
 
@@ -66,7 +66,7 @@ Link::Link(const LinkConfiguration& linkConfiguration, QObject* parent)
         _abstractLink.reset(new Ping360SimulationLink());
         break;
     default :
-        qCDebug(PING_PROTOCOL_LINK) << "Link not available!";
+        assert("Link not available!");
         return;
     }
 
