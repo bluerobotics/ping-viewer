@@ -10,6 +10,8 @@ DeviceManager::DeviceManager() :
 {
     emit primarySensorChanged();
 
+    _roles.reserve(_roleNames.count());
+    _sensors.reserve(_roleNames.count());
     for(const auto& key : _roleNames.keys()) {
         _roles.append(key);
         _sensors.insert(key, {});
