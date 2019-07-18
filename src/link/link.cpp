@@ -19,29 +19,28 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
 {
     switch(linkType) {
     case LinkType::None :
-        _abstractLink.reset(new AbstractLink());
+        _abstractLink = new AbstractLink(this);
         break;
     case LinkType::File :
-        _abstractLink.reset(new FileLink());
+        _abstractLink = new FileLink(this);
         break;
     case LinkType::Serial :
-        _abstractLink.reset(new SerialLink());
+        _abstractLink = new SerialLink(this);
         break;
     case LinkType::Udp :
-        _abstractLink.reset(new UDPLink());
+        _abstractLink = new UDPLink(this);
         break;
     case LinkType::Ping1DSimulation :
-        _abstractLink.reset(new Ping1DSimulationLink());
+        _abstractLink = new Ping1DSimulationLink(this);
         break;
     case LinkType::Ping360Simulation :
-        _abstractLink.reset(new Ping360SimulationLink());
+        _abstractLink = new Ping360SimulationLink(this);
         break;
     default :
         assert("Link not available!");
         return;
     }
 
-    _abstractLink->setParent(this);
     _abstractLink->setName(name);
 }
 
@@ -51,27 +50,24 @@ Link::Link(const LinkConfiguration& linkConfiguration, QObject* parent)
 {
     switch(linkConfiguration.type()) {
     case LinkType::File :
-        _abstractLink.reset(new FileLink());
+        _abstractLink = new FileLink(this);
         break;
     case LinkType::Serial :
-        _abstractLink.reset(new SerialLink());
+        _abstractLink = new SerialLink(this);
         break;
     case LinkType::Udp :
-        _abstractLink.reset(new UDPLink());
+        _abstractLink = new UDPLink(this);
         break;
     case LinkType::Ping1DSimulation :
-        _abstractLink.reset(new Ping1DSimulationLink());
+        _abstractLink = new Ping1DSimulationLink(this);
         break;
     case LinkType::Ping360Simulation :
-        _abstractLink.reset(new Ping360SimulationLink());
+        _abstractLink = new Ping360SimulationLink(this);
         break;
     default :
         assert("Link not available!");
         return;
     }
 
-    _abstractLink->setParent(this);
     _abstractLink->setConfiguration(linkConfiguration);
 }
-
-Link::~Link() = default;
