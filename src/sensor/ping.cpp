@@ -327,12 +327,12 @@ void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud
 
 void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
-    flasher()->setState(Flasher::Idle);
-    flasher()->setState(Flasher::StartingFlash);
+    flasher()->setState(Flasher::States::Idle);
+    flasher()->setState(Flasher::States::StartingFlash);
     if(!HexValidator::isValidFile(fileUrl)) {
         auto errorMsg = QStringLiteral("File does not contain a valid Intel Hex format: %1").arg(fileUrl);
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
-        flasher()->setState(Flasher::Error, errorMsg);
+        flasher()->setState(Flasher::States::Error, errorMsg);
         return;
     };
 
@@ -340,14 +340,14 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
     if (!serialLink) {
         auto errorMsg = QStringLiteral("It's only possible to flash via serial.");
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
-        flasher()->setState(Flasher::Error, errorMsg);
+        flasher()->setState(Flasher::States::Error, errorMsg);
         return;
     }
 
     if(!link()->isOpen()) {
         auto errorMsg = QStringLiteral("Link is not open to do the flash procedure.");
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
-        flasher()->setState(Flasher::Error, errorMsg);
+        flasher()->setState(Flasher::States::Error, errorMsg);
         return;
     }
 

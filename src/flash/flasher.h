@@ -33,7 +33,7 @@ public:
      * @brief Defines flash state
      *
      */
-    enum States {
+    enum class States : int8_t {
         Error = -1,
         Idle,
         StartingFlash,
@@ -123,7 +123,7 @@ private:
     QSharedPointer<QProcess> _firmwareProcess;
     LinkConfiguration _link;
     QString _message;
-    States _state = Idle;
+    States _state = States::Idle;
     const QList<int> _validBaudRates = {57600, 115200, 230400};
     bool _verify = true;
 };
