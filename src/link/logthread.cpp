@@ -57,7 +57,8 @@ QTime LogThread::elapsedTime()
 {
     if(_logIndex < 0) {
         return QTime::fromMSecsSinceStartOfDay(0);
-    } else if(_logIndex >= _log.size()) {
+    }
+    if(_logIndex >= _log.size()) {
         return totalTime();
     }
 
