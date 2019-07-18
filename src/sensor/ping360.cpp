@@ -113,7 +113,7 @@ void Ping360::handleMessage(const ping_message& msg)
     case Ping360Id::DEVICE_DATA: {
         // Parse message
         const ping360_device_data deviceData(msg);
-        deviceData.mode();
+
         _angle = deviceData.angle();
         _gain_setting = deviceData.gain_setting();
         _transmit_duration = deviceData.transmit_duration();
