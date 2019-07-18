@@ -10,9 +10,11 @@ DeviceManager::DeviceManager() :
 {
     emit primarySensorChanged();
 
-    for(const auto& key : _roleNames.keys()) {
-        _roles.append(key);
-        _sensors.insert(key, {});
+    _roles.reserve(_roleNames.count());
+    _sensors.reserve(_roleNames.count());
+    for(auto keyIt = _roleNames.keyBegin(), end = _roleNames.keyEnd(); keyIt != end; keyIt++) {
+        _roles.append(*keyIt);
+        _sensors.insert(*keyIt, {});
     }
 
     _detector->moveToThread(&_detectorThread);
