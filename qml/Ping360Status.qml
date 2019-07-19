@@ -27,7 +27,7 @@ Item {
                     "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
                     "SRC: " + ping.srcId + " DST: " + ping.dstId,
                     "Connection: " + ping.link.configuration.createConfString(),
-                    "Scan length (mm): " + ping.length_mm,
+                    "Range (m): " + ping.range.toFixed(2),
                     "Sample period (μs): " + ping.sample_period,
                     "Number of samples (#): " + ping.number_of_points,
                     "Ping (#): " + ping.ping_number,
