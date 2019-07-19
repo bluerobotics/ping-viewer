@@ -134,26 +134,28 @@ public:
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
+     * @brief The sonar communicates the _sample_period in units of 25nsec ticks
+     * @return inter-sample period in nanoseconds
+     */
+    double samplePeriod() { return _sample_period * _samplePeriodTickDuration; }
+
+    /**
      * @brief return points length in mm
      *
      * @return uint32_t
      */
-    uint32_t range() { return _range; }
+    uint32_t range() { return samplePeriod() * _num_points * _speed_of_sound / 2; }
 
     /**
      * @brief Set sensor window analysis size
      *
-     * @param range
+     * @param newRange
      */
-    void set_range(uint range)
+    void set_range(uint newRange)
     {
-        if(_range != range) {
-            _range = range;
+        if(newRange != range()) {
+            _sample_period = 2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
             emit rangeChanged();
-
-            // range = samplePeriod() * numSamples * speedOfSound / 2
-            // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
-            _sample_period = 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
     Q_PROPERTY(int range READ range WRITE set_range NOTIFY rangeChanged)
@@ -379,7 +381,6 @@ private:
     int _angular_speed = 1;
     uint _central_angle = 1;
     bool _reverse_direction = false;
-    uint32_t _range = 100000;
     uint32_t _speed_of_sound = 1500;
 
     int _angularResolutionGrad = 400;
