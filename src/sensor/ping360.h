@@ -148,27 +148,25 @@ public:
      *
      * @return uint32_t
      */
-    uint32_t length_mm() { return _scan_length; }
+    uint32_t range() { return _range; }
 
     /**
      * @brief Set sensor window analysis size
      *
-     * @param length_mm
+     * @param range
      */
-    void set_length_mm(uint length_mm)
+    void set_range(uint range)
     {
-        if(_scan_length != length_mm) {
-            _scan_length = length_mm;
-            emit scanLengthChanged();
+        if(_range != range) {
+            _range = range;
+            emit rangeChanged();
 
-            // TODO: improve member names
-            // TODO: range in meters (SI unit members, generally)
-            // range (scan_length) = samplePeriod() * numSamples * speedOfSound / 2
+            // range = samplePeriod() * numSamples * speedOfSound / 2
             // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
-            _sample_period = 1e-3/*convert to mm*/ * 2*_scan_length/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            _sample_period = 1e-3/*convert to mm*/ * 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
-    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthChanged)
+    Q_PROPERTY(int range READ range WRITE set_range NOTIFY rangeChanged)
 
     /**
      * @brief Return gain setting
@@ -313,11 +311,9 @@ public:
             _num_points = num_points;
             emit numberOfPointsChanged();
 
-            // TODO: better member names
-            // TODO: range in meters (SI unit members, generally)
-            // range (scan_length) = samplePeriod() * numSamples * speedOfSound / 2
+            // range = samplePeriod() * numSamples * speedOfSound / 2
             // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
-            _sample_period = 1e-3/*convert to mm*/ * 2*_scan_length/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            _sample_period = 1e-3/*convert to mm*/ * 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
     Q_PROPERTY(int number_of_points READ number_of_points WRITE set_number_of_points NOTIFY numberOfPointsChanged)
@@ -371,7 +367,7 @@ signals:
     void reverseDirectionChanged();
     void samplePeriodChanged();
     void sectorSizeChanged();
-    void scanLengthChanged();
+    void rangeChanged();
     void speedOfSoundChanged();
     void transmitDurationChanged();
     void transmitFrequencyChanged();
@@ -410,7 +406,7 @@ private:
     int _angular_speed = 1;
     uint _central_angle = 1;
     bool _reverse_direction = false;
-    uint32_t _scan_length = 100000;
+    uint32_t _range = 100000;
     uint32_t _speed_of_sound = 1500;
 
     int _angularResolutionGrad = 400;
