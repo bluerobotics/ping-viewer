@@ -94,16 +94,6 @@ public:
     Q_PROPERTY(int transmit_duration READ transmit_duration WRITE set_transmit_duration NOTIFY transmitDurationChanged)
 
     /**
-     * @brief Set the sample period in ms
-     *
-     * @param sample_period
-     */
-    void set_sample_period(int sample_period)
-    {
-        _sample_period = sample_period;
-    }
-
-    /**
      * @brief Return the sample period in ms
      *
      * @return int
@@ -112,7 +102,7 @@ public:
     {
         return _sample_period;
     }
-    Q_PROPERTY(int sample_period READ sample_period WRITE set_sample_period NOTIFY samplePeriodChanged)
+    Q_PROPERTY(int sample_period READ sample_period NOTIFY samplePeriodChanged)
 
     /**
      * @brief Set the transmit frequency in Hz
@@ -299,24 +289,7 @@ public:
      * @return int
      */
     int number_of_points() { return _num_points; }
-
-    /**
-     * @brief Set the number of points
-     *
-     * @param num_points
-     */
-    void set_number_of_points(int num_points)
-    {
-        if(num_points != _num_points) {
-            _num_points = num_points;
-            emit numberOfPointsChanged();
-
-            // range = samplePeriod() * numSamples * speedOfSound / 2
-            // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
-            _sample_period = 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
-        }
-    }
-    Q_PROPERTY(int number_of_points READ number_of_points WRITE set_number_of_points NOTIFY numberOfPointsChanged)
+    Q_PROPERTY(int number_of_points READ number_of_points NOTIFY numberOfPointsChanged)
 
     /**
      * @brief Return sector size in gradians
