@@ -163,7 +163,7 @@ public:
 
             // range = samplePeriod() * numSamples * speedOfSound / 2
             // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
-            _sample_period = 1e-3/*convert to mm*/ * 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            _sample_period = 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
     Q_PROPERTY(int range READ range WRITE set_range NOTIFY rangeChanged)
@@ -313,7 +313,7 @@ public:
 
             // range = samplePeriod() * numSamples * speedOfSound / 2
             // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
-            _sample_period = 1e-3/*convert to mm*/ * 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            _sample_period = 2*_range/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
     Q_PROPERTY(int number_of_points READ number_of_points WRITE set_number_of_points NOTIFY numberOfPointsChanged)
