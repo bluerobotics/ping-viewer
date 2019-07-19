@@ -161,7 +161,11 @@ public:
             _scan_length = length_mm;
             emit scanLengthChanged();
 
-            _sample_period = (_scan_length*2/float(_num_points*_speed_of_sound))/(25e-6);
+            // TODO: improve member names
+            // TODO: range in meters (SI unit members, generally)
+            // range (scan_length) = samplePeriod() * numSamples * speedOfSound / 2
+            // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
+            _sample_period = 1e-3/*convert to mm*/ * 2*_scan_length/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
     Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthChanged)
@@ -309,7 +313,11 @@ public:
             _num_points = num_points;
             emit numberOfPointsChanged();
 
-            _sample_period = (_scan_length*2/float(_num_points*_speed_of_sound))/(25e-6);
+            // TODO: better member names
+            // TODO: range in meters (SI unit members, generally)
+            // range (scan_length) = samplePeriod() * numSamples * speedOfSound / 2
+            // samplePeriod() = samplePeriodTicks * samplePeriodTickDuration
+            _sample_period = 1e-3/*convert to mm*/ * 2*_scan_length/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
         }
     }
     Q_PROPERTY(int number_of_points READ number_of_points WRITE set_number_of_points NOTIFY numberOfPointsChanged)
@@ -393,6 +401,9 @@ private:
     QVector<double> _data;
 ///@}
 
+    // _sample_period is the number of timer ticks between each data point
+    // each timer tick has a duration of 25 nanoseconds
+    static constexpr double _samplePeriodTickDuration = 25e-9;
     uint32_t _ping_number = 0;
     // Ping360 has a 200 offset by default
     int _angle_offset = 200;
