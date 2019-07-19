@@ -144,7 +144,7 @@ public:
      *
      * @return uint32_t
      */
-    uint32_t range() { return samplePeriod() * _num_points * _speed_of_sound / 2; }
+    double range() { return samplePeriod() * _num_points * _speed_of_sound / 2; }
 
     /**
      * @brief Set sensor window analysis size
@@ -158,7 +158,7 @@ public:
             emit rangeChanged();
         }
     }
-    Q_PROPERTY(int range READ range WRITE set_range NOTIFY rangeChanged)
+    Q_PROPERTY(double range READ range WRITE set_range NOTIFY rangeChanged)
 
     /**
      * @brief Return gain setting
