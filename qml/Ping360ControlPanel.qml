@@ -184,18 +184,6 @@ Item {
                         ping.length_mm = parseInt(text)
                     }
                 }
-
-                PingTextField {
-                    title: "Samples (#):"
-                    text: ping.number_of_points
-                    validator: IntValidator {
-                        bottom: 200
-                        top: 1200
-                    }
-                    onEditingFinished: {
-                        ping.number_of_points = parseInt(text)
-                    }
-                }
             }
         }
     }
