@@ -26,7 +26,7 @@ Item {
         /** Ping360 does not handle auto range/scale
          *  Any change in scale is a result of user input
          */
-        onLength_mmChanged: {
+        onRangeChanged: {
             clear()
         }
 
@@ -36,7 +36,7 @@ Item {
 
         onDataChanged: {
             shapeSpinner.angle = (ping.angle + 0.25)*180/200
-            root.draw(ping.data, ping.angle, 0, ping.length_mm, ping.angular_speed)
+            root.draw(ping.data, ping.angle, 0, ping.range, ping.angular_speed)
         }
     }
 

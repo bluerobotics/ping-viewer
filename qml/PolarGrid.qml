@@ -6,7 +6,7 @@ Item {
     id: root
     width: 400
     height: width
-    property var maxDistance: 100e3
+    property var maxDistance: 100
     property var angle: 360
     onAngleChanged: canvas.requestPaint()
 
@@ -25,12 +25,12 @@ Item {
         function formatDistance(distance) {
             // Change precision based in distance
             var precision = 0
-            if(2e3 < root.maxDistance && root.maxDistance < 5e3) {
+            if(2 < root.maxDistance && root.maxDistance < 5) {
                 precision = 1
-            } else if(root.maxDistance < 2e3) {
+            } else if(root.maxDistance < 2) {
                 precision = 2
             }
-            return (distance*scalar/1e3).toFixed(precision) + units
+            return distance*scalar.toFixed(precision) + units
         }
 
         delegate: Text {

@@ -173,15 +173,15 @@ Item {
                 spacing: 5
 
                 PingTextField {
-                    title: "Length (mm):"
-                    text: ping.length_mm
+                    title: "Range (m):"
+                    text: ping.range
                     validator: IntValidator {
-                        bottom: 1e3
-                        top: (1e3)*1e2
+                        bottom: 1
+                        top: 100
                     }
                     Layout.fillWidth: true
                     onEditingFinished: {
-                        ping.length_mm = parseInt(text)
+                        ping.range = parseInt(text)
                     }
                 }
             }
