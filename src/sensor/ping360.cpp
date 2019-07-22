@@ -128,14 +128,15 @@ void Ping360::handleMessage(const ping_message& msg)
         emit angleChanged();
 
         // Only emit data changed when inside sector range
-        if(_data.size() &&
-                (_sectorSize == 400
-                || (angle() >= _angularResolutionGrad - _sectorSize/2) || (angle() <= _sectorSize/2))) {
-            emit dataChanged();
-        }
+        if(_data.size()) {
+            // Update total number of pings
+            _ping_number++;
 
-        // Update total number of pings
-        _ping_number++;
+            if (_sectorSize == 400
+                    || (angle() >= _angularResolutionGrad - _sectorSize/2) || (angle() <= _sectorSize/2)) {
+                emit dataChanged();
+            }
+        }
 
         // request another transmission
         requestNextProfile();
