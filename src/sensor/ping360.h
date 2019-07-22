@@ -157,7 +157,7 @@ public:
     void set_range(uint newRange)
     {
         if(newRange != range()) {
-            _sample_period = 2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
             emit rangeChanged();
         }
     }
