@@ -128,8 +128,9 @@ void Ping360::handleMessage(const ping_message& msg)
         emit angleChanged();
 
         // Only emit data changed when inside sector range
-        if(_sectorSize == 400
-                || (angle() >= _angularResolutionGrad - _sectorSize/2) || (angle() <= _sectorSize/2)) {
+        if(_data.size() &&
+                (_sectorSize == 400
+                || (angle() >= _angularResolutionGrad - _sectorSize/2) || (angle() <= _sectorSize/2))) {
             emit dataChanged();
         }
 
