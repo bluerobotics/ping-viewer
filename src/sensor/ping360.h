@@ -83,6 +83,7 @@ public:
     void set_transmit_duration(int transmit_duration)
     {
         _transmit_duration = transmit_duration;
+        emit transmitDurationChanged();
     }
 
     /**
@@ -112,6 +113,7 @@ public:
     void set_transmit_frequency(int transmit_frequency)
     {
         _transmit_frequency = transmit_frequency;
+        emit transmitFrequencyChanged();
     }
 
     /**
@@ -175,6 +177,7 @@ public:
     void set_gain_setting(int gain_setting)
     {
         _gain_setting = gain_setting;
+        emit gainSettingChanged();
     }
     Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingChanged)
 
