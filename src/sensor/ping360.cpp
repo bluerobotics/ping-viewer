@@ -116,7 +116,7 @@ void Ping360::handleMessage(const ping_message& msg)
 
         _angle = deviceData.angle();
 
-        _data.resize(deviceData.number_of_samples());
+        _data.resize(deviceData.data_length());
         for (int i = 0; i < deviceData.data_length(); i++) {
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
