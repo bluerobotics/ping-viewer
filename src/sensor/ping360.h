@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <functional>
 
 #include <QProcess>
@@ -203,7 +204,15 @@ public:
      */
     void set_speed_of_sound(uint32_t speed_of_sound)
     {
-        Q_UNUSED(speed_of_sound)
+        if (speed_of_sound != _speed_of_sound) {
+            // range depends on _speed_of_sound
+            // we adjust _speed_of_sound, without affecting the current range setting
+            double desiredRange = round(range());
+            _speed_of_sound = speed_of_sound;
+            _sample_period = 2*desiredRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            emit speedOfSoundChanged();
+            emit rangeChanged();
+        }
     }
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundChanged)
 
