@@ -288,21 +288,23 @@ public:
     Q_PROPERTY(int number_of_points READ number_of_points NOTIFY numberOfPointsChanged)
 
     /**
-     * @brief Return sector size in gradians
+     * @brief Return sector size in degrees
      *
      * @return int
      */
-    int sectorSize() { return _sectorSize; }
+    int sectorSize() { return round(_sectorSize * 360/400.0); }
 
     /**
-     * @brief Set sector size in gradians
+     * @brief Set sector size in degrees
      *
      * @param sectorSize
      */
     void setSectorSize(int sectorSize)
     {
-        if(_sectorSize != sectorSize) {
-            _sectorSize = sectorSize;
+        int sectorSizeGrad = round(sectorSize * 400/360.0);
+
+        if(_sectorSize != sectorSizeGrad) {
+            _sectorSize = sectorSizeGrad;
             emit sectorSizeChanged();
         }
     }
