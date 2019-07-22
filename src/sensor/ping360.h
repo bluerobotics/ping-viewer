@@ -190,24 +190,6 @@ public:
     Q_PROPERTY(QVector<double> data READ data NOTIFY dataChanged)
 
     /**
-     * @brief Get time between pings in ms
-     *
-     * @return uint16_t
-     */
-    uint16_t ping_interval() { return _ping_interval; }
-
-    /**
-     * @brief Set time between pings in ms
-     *
-     * @param ping_interval
-     */
-    void set_ping_interval(uint16_t ping_interval)
-    {
-        Q_UNUSED(ping_interval)
-    }
-    Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalChanged)
-
-    /**
      * @brief Get the speed of sound (mm/s) used for calculating the distance from time-of-flight
      *
      * @return uint32_t
@@ -340,7 +322,6 @@ signals:
     void dataChanged();
     void gainSettingChanged();
     void numberOfPointsChanged();
-    void pingIntervalChanged();
     void pingNumberChanged();
     void reverseDirectionChanged();
     void samplePeriodChanged();
@@ -397,8 +378,6 @@ private:
 
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
-
-    uint16_t _ping_interval = 0;
 
     QTimer _timeoutProfileMessage;
 
