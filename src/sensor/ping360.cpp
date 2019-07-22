@@ -167,6 +167,7 @@ void Ping360::handleMessage(const ping_message& msg)
             emit samplePeriodChanged();
             emit transmitFrequencyChanged();
             emit numberOfPointsChanged();
+            emit rangeChanged();
         }
         break;
     }
