@@ -24,6 +24,7 @@
         <file alias="PingLogger.qml">qml/PingLogger.qml</file>
         <file alias="PingNotificationArea.qml">qml/PingNotificationArea.qml</file>
         <file alias="PingPopup.qml">qml/PingPopup.qml</file>
+        <file alias="PingSlider.qml">qml/PingSlider.qml</file>
         <file alias="PingStatus.qml">qml/PingStatus.qml</file>
         <file alias="Ping360Status.qml">qml/Ping360Status.qml</file>
         <file alias="PolarGrid.qml">qml/PolarGrid.qml</file>
