@@ -62,12 +62,12 @@ Item {
 
             PolarPlot {
                 id: waterfall
-                height: Math.min(ping.sectorSize > 200 ? parent.height : parent.height*2, parent.width*scale)
+                height: Math.min(ping.sectorSize > 180 ? parent.height : parent.height*2, parent.width*scale)
                 width: height
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: ping.sectorSize > 200 ? parent.verticalCenter : parent.bottom
+                anchors.verticalCenter: ping.sectorSize > 180 ? parent.verticalCenter : parent.bottom
 
-                property var scale: ping.sectorSize >= 200 ? 1 : 0.8/Math.sin(ping.sectorSize*Math.PI/400)
+                property var scale: ping.sectorSize >= 180 ? 1 : 0.8/Math.sin(ping.sectorSize*Math.PI/360)
                 property bool verticalFlip: false
                 property bool horizontalFlip: false
 
@@ -168,7 +168,7 @@ Item {
             PolarGrid {
                 id: polarGrid
                 anchors.fill: waterfall
-                angle: ping.sectorSize*360/400
+                angle: ping.sectorSize
                 maxDistance: waterfall.maxDistance
             }
         }
@@ -226,7 +226,7 @@ Item {
                 target: ping
                 // We do not support vertical flips in sector view
                 onSectorSizeChanged: {
-                    if(ping.sectorSize != 400) {
+                    if(ping.sectorSize != 360) {
                         verticalFlipChB.checked = false
                         verticalFlipChB.enabled = false
                     } else {
