@@ -36,7 +36,8 @@ Item {
             PingSlider {
                 Layout.fillWidth: true
                 text: "Range (m)"
-                value: ping.range
+                value: Math.round(ping.range)
+                control.stepSize: 1
                 control.from: 1
                 control.to: 100
                 control.onMoved: ping.range = control.value
