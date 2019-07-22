@@ -23,168 +23,79 @@ Item {
         Layout.fillWidth: true
         ColumnLayout {
             Layout.fillWidth: true
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 5
 
-                Label {
-                    text: "Gain:"
-                }
-                PingComboBox {
-                    id: gainChB
-                    Layout.fillWidth: true
-                    currentIndex: ping.gain_setting
-                    model: ["Low", "Normal", "High"]
-                    onCurrentIndexChanged: ping.gain_setting = currentIndex
-                }
-
-                PingTextField {
-                    id: transmitFrequency
-                    title: "Transmit Frequency (kHz):"
-                    text: ping.transmit_frequency
-                    validator: IntValidator {
-                        bottom: 500
-                        top: 1000
-                    }
-                    onEditingFinished: {
-                        ping.transmit_frequency = parseInt(text)
-                    }
-                }
+            PingSlider {
+                text: "Sector Angle (degrees)"
+                value: ping.sectorSize
+                control.from: 30
+                control.to: 360
+                control.stepSize: 15
+                control.snapMode: Slider.SnapAlways
+                control.onMoved: ping.sectorSize = control.value
             }
-
-            RowLayout {
+            PingSlider {
                 Layout.fillWidth: true
-                spacing: 5
-
-                PingTextField {
-                    title: "Angle Offset:"
-                    text: ping.angle_offset
-                    enabled: true
-                    Layout.fillWidth: true
-                    validator: IntValidator {
-                        bottom: 0
-                        top: 359
-                    }
-                    onEditingFinished: {
-                        ping.angle_offset = parseInt(text)
-                    }
-                }
-
-                PingTextField {
-                    title: "Transmit Duration (ms):"
-                    text: ping.transmit_duration
-                    validator: IntValidator {
-                        bottom: 1
-                        top: 1000
-                    }
-                    onEditingFinished: {
-                        ping.transmit_duration = parseInt(text)
-                    }
-                }
+                text: "Range (m)"
+                value: ping.range
+                control.from: 1
+                control.to: 100
+                control.onMoved: ping.range = control.value
             }
-
-            // TODO: Create ping switch style
-            Switch {
-                text: "Reverse direction:"
-                Layout.columnSpan: 1
-                checked: ping.reverse_direction
-                onCheckedChanged: ping.reverse_direction = checked
-                contentItem.anchors.right: indicator.left
-                contentItem.anchors.margins: spacing
-                indicator.x: width - indicator.width - rightPadding*2
+            PingSlider {
+                Layout.fillWidth: true
+                text: "Receiver Gain"
+                value: ping.gain_setting
+                control.from: 0
+                control.to: 2
+                control.onMoved: ping.gain_setting = control.value
             }
 
             Rectangle { height: 1; Layout.fillWidth: true }
 
-            RowLayout {
-                id: scanModeLayout
+            PingSlider {
                 Layout.fillWidth: true
-                spacing: 5
-
-                Label {
-                    text: "Scan mode:"
-                }
-                PingComboBox {
-                    id: modeComboBox
-                    Layout.fillWidth: true
-                    editable: true
-                    model: ["360", "180", "90", "60", "45", "30"]
-                    validator: IntValidator {
-                        top: 360
-                        bottom: 15
-                    }
-                    onAccepted: {
-                        ping.sectorSize = parseInt(editText)*400/360
-                    }
-                    onCurrentIndexChanged: {
-                        // Not valid index
-                        if(currentIndex == -1) {
-                            return;
-                        }
-
-                        ping.sectorSize = parseInt(model[currentIndex])*400/360
-                    }
-                }
-
-                PingTextField {
-                    title: "Speed (gradian):"
-                    text: ping.angular_speed
-                    validator: IntValidator {
-                        bottom: 1
-                        top: 50
-                    }
-                    onEditingFinished: {
-                        ping.angular_speed = parseInt(text)
-                    }
-                }
+                // TODO: proper symbol for us
+                text: "Transmit Duration (μs)"
+                value: ping.transmit_duration
+                control.from: 5
+                control.to: 1000
+                control.onMoved: ping.transmit_duration = control.value
+            }
+            PingSlider {
+                Layout.fillWidth: true
+                text: "Transmit Frequency (kHz)"
+                value: ping.transmit_frequency
+                control.from: 500
+                control.to: 1000
+                control.stepSize: 20
+                control.onMoved: ping.transmit_frequency = control.value
+            }
+            PingSlider {
+                Layout.fillWidth: true
+                text: "Speed of Sound (m/s)"
+                value: ping.speed_of_sound
+                control.from: 1450
+                control.to: 1550
+                control.onMoved: ping.speed_of_sound = control.value
+            }
+            PingSlider {
+                Layout.fillWidth: true
+                text: "Angular Resolution (gradian)"
+                value: ping.angular_speed
+                control.from: 1
+                control.to: 10
+                control.onMoved: ping.angular_speed = control.value
+            }
+            PingSlider {
+                Layout.fillWidth: true
+                text: "Angle Offset (degree)"
+                value: ping.angle_offset
+                control.from: 0
+                control.to: 359
+                control.onMoved: ping.angle_offset = control.value
             }
 
-            RowLayout {
-                id: scanModeConfLayout
-                Layout.fillWidth: true
-                enabled: false
-                spacing: 5
 
-                PingTextField {
-                    title: "Central Angle(º):"
-                    text: "0"
-                    validator: IntValidator {
-                        bottom: 0
-                        top: 359
-                    }
-                    Layout.fillWidth: true
-                }
-
-                PingTextField {
-                    title: "Angular Size (º):"
-                    text: "60"
-                    visible: modeComboBox.currentIndex == 1
-                    validator: IntValidator {
-                        bottom: 1
-                        top: 270
-                    }
-                }
-            }
-
-            Rectangle { height: 1; Layout.fillWidth: true }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 5
-
-                PingTextField {
-                    title: "Range (m):"
-                    text: ping.range
-                    validator: IntValidator {
-                        bottom: 1
-                        top: 100
-                    }
-                    Layout.fillWidth: true
-                    onEditingFinished: {
-                        ping.range = parseInt(text)
-                    }
-                }
-            }
         }
     }
 }
