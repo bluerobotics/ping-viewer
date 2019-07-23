@@ -98,9 +98,11 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
         }
 
         step = ceil(i * degreeToRadianTimesAngleGradTimes2);
+        float halfstep = step / 2;
+        float deltaDrgree_A = (resultionTimesAngleGradTimes2 / (float) step);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
         for(int currentStep = 0; currentStep < step; currentStep++) {
-            float deltaDegree = (resultionTimesAngleGradTimes2 / (float) step) * (currentStep - step/2);
+            float deltaDegree = deltaDrgree_A * (currentStep - halfstep);
             angleStep = deltaDegree * degreeToRadian + actualAngle - M_PI_2;
             _image.setPixelColor(center.x() + i * cos(angleStep), center.y() + i * sin(angleStep), pointColor);
         }
