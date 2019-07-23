@@ -8,12 +8,12 @@
 PING_LOGGING_CATEGORY(FILEMANAGER, "ping.filemanager");
 
 FileManager::FileManager()
-    : _docDir(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0])
-    , _fmDir(_docDir.dir.filePath(QStringLiteral("PingViewer")))
-    , _gradientsDir(_fmDir.dir.filePath(QStringLiteral("Waterfall_Gradients")), fileTypeExtension[TXT])
-    , _guiLogDir(_fmDir.dir.filePath(QStringLiteral("Gui_Log")), fileTypeExtension[TXT])
-    , _picturesDir(_fmDir.dir.filePath(QStringLiteral("Pictures")), fileTypeExtension[PICTURE])
-    , _sensorLogDir(_fmDir.dir.filePath(QStringLiteral("Sensor_Log")), fileTypeExtension[BINARY])
+    : _docDir{QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]}
+    , _fmDir{_docDir.dir.filePath(QStringLiteral("PingViewer"))}
+    , _gradientsDir{_fmDir.dir.filePath(QStringLiteral("Waterfall_Gradients")), fileTypeExtension[TXT]}
+    , _guiLogDir{_fmDir.dir.filePath(QStringLiteral("Gui_Log")), fileTypeExtension[TXT]}
+    , _picturesDir{_fmDir.dir.filePath(QStringLiteral("Pictures")), fileTypeExtension[PICTURE]}
+    , _sensorLogDir{_fmDir.dir.filePath(QStringLiteral("Sensor_Log")), fileTypeExtension[BINARY]}
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
