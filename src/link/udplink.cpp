@@ -33,7 +33,7 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
     setName(linkConfiguration.name());
 
     _hostAddress = QHostAddress(linkConfiguration.args()->at(0));
-    _port = linkConfiguration.args()->at(1).toInt();
+    _port = linkConfiguration.args()->at(1).toUShort();
 
     // Check protocol detector comments and documentation about correct connect procedure
 

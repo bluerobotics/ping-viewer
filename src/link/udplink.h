@@ -74,5 +74,5 @@ public:
 private:
     QHostAddress _hostAddress;
     QUdpSocket* _udpSocket;
-    uint _port;
+    uint16_t _port;
 };
