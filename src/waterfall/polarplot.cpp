@@ -2,6 +2,7 @@
 #include "polarplot.h"
 
 #include <limits>
+#include <algorithm>
 
 #include <QtConcurrent>
 #include <QPainter>
@@ -66,43 +67,42 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
     Q_UNUSED(length)
 
     static const QPoint center(_image.width()/2, _image.height()/2);
-    static const float degreeToRadian = M_PI/180.0f;
-    static const float gradianToDegree = 180.0f/200.0f;
-    static const float gradianToRadian = M_PI/200.0f;
+    constexpr float degreeToRadian = M_PI/180.0f;
+    constexpr float gradianToDegree = 180.0f/200.0f;
+    constexpr float gradianToRadian = M_PI/200.0f;
+    constexpr float angleResolution = gradianToDegree / 2;
+
+    const float resultionTimesAngleGradTimes2 = 2 * angleResolution * angleGrad;
+    const float degreeToRadianTimesAngleGradTimes2 = 2 * degreeToRadian * angleGrad;
     static QColor pointColor;
     static float step;
     static float angleStep;
-    static float angleResolution = gradianToDegree/2;
     float actualAngle = angle*gradianToRadian;
 
     //TODO: Need a better way to deal with dynamic steps, maybe doing `draw(data, angle++)` with `angleGrad` loop
-    _distances[static_cast<int>(angle)%_angularResolution] = initPoint + length;
+    _distances[static_cast<int>(angle) % _angularResolution] = initPoint + length;
 
-    float maxDistance = 0;
-    for(const auto distance : _distances) {
-        if(distance > maxDistance) {
-            maxDistance = distance;
-        }
-    }
+    float maxDistance = *std::max_element(std::begin(_distances), std::end(_distances));
 
-    if(maxDistance != _maxDistance) {
+    if(!qFuzzyCompare(maxDistance,_maxDistance)) {
         _maxDistance = maxDistance;
         emit maxDistanceChanged();
     }
 
-    const float linearFactor = points.size()/(float)center.x();
+    const float linearFactor = points.size() / (float) center.x();
     for(int i = 1; i < center.x(); i++) {
-        if(i < center.x()*length/_maxDistance) {
-            pointColor = valueToRGB(points[static_cast<int>(i*linearFactor - 1)]);
+        if(i < center.x() * length / _maxDistance) {
+            pointColor = valueToRGB(points[static_cast<int>( i * linearFactor - 1)]);
         } else {
             pointColor = QColor(0, 0, 0, 0);
         }
-        step = ceil(i*2*degreeToRadian*angleGrad);
+
+        step = ceil(i * degreeToRadianTimesAngleGradTimes2);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
         for(int currentStep = 0; currentStep < step; currentStep++) {
-            float deltaDegree = (2*angleResolution*angleGrad/(float)step)*(currentStep - step/2);
-            angleStep = deltaDegree*degreeToRadian+actualAngle - M_PI_2;
-            _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
+            float deltaDegree = (resultionTimesAngleGradTimes2 / (float) step) * (currentStep - step/2);
+            angleStep = deltaDegree * degreeToRadian + actualAngle - M_PI_2;
+            _image.setPixelColor(center.x() + i * cos(angleStep), center.y() + i * sin(angleStep), pointColor);
         }
     }
 
@@ -114,8 +114,8 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 
 void PolarPlot::updateMouseColumnData()
 {
-    static const float rad2grad = 200.0f/M_PI;
-    static const float grad2deg = 180.0f/200.0f;
+    constexpr float rad2grad = 200.0f/M_PI;
+    constexpr float grad2deg = 180.0f/200.0f;
     const QPointF center(width()/2, height()/2);
 
     /**
