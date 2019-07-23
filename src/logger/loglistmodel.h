@@ -128,7 +128,7 @@ private:
      * @param category
      */
     void doAppend(const QString& time, const QString& text, const QColor& color, int category);
-
+    int _size = 0;
     int _categories = 0;
     QVector<int> _roles;
     QHash<int, QByteArray> _roleNames{
@@ -138,7 +138,6 @@ private:
         {{LogListModel::Time}, {"time"}},
         {{LogListModel::Visibility}, {"visibity"}},
     };
-    int _size = 0;
     QHash<int, QVector<QVariant>> _vectors;
 
     QSortFilterProxyModel _filter;
