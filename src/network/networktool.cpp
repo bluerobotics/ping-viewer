@@ -134,12 +134,11 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
             QStringLiteral("release.zip");
 #endif
 
-
-        for(const QJsonValue& artifact : assets) {
+        for(const QJsonValue artifact : assets) {
             if(artifact["name"].toString().contains(extension)) {
                 downloadLink = artifact["browser_download_url"].toString();
                 break;
-            };
+            }
         }
     } else {
         qCWarning(NETWORKTOOL) << "Assets are empty!";

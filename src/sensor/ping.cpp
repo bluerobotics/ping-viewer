@@ -497,7 +497,7 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
     float lastVersionAvailable = 0.0;
 
     auto filesPayload = jsonDocument.array();
-    for(const QJsonValue& filePayload : filesPayload) {
+    for(const QJsonValue filePayload : filesPayload) {
         qCDebug(PING_PROTOCOL_PING) << filePayload["name"].toString();
 
         // Get version from Ping_V(major).(patch)_115kb.hex where (major).(patch) is <version>
