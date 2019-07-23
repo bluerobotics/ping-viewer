@@ -14,8 +14,8 @@ Q_DECLARE_LOGGING_CATEGORY(STYLEMANAGER)
 #define P_PROPERTY(TYPE, NAME, VALUE) \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME##Changed) \
 public: \
-    TYPE NAME() { return _##NAME; }; \
-    void NAME(TYPE NAME) { if(NAME == _##NAME) return; _##NAME = NAME; emit NAME##Changed(); }; \
+    TYPE NAME() { return _##NAME; } \
+    void NAME(TYPE NAME) { if(NAME == _##NAME) return; _##NAME = NAME; emit NAME##Changed(); } \
     Q_SIGNAL void NAME##Changed();\
 private: \
     TYPE _##NAME = VALUE;
@@ -58,7 +58,7 @@ public:
      */
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
-#define CREATE_ICON(NAME) Q_INVOKABLE static QString NAME##Icon() { return iconNameHelper(#NAME); };
+#define CREATE_ICON(NAME) Q_INVOKABLE static QString NAME##Icon() { return iconNameHelper(#NAME); }
     // This list can be generated with: `for f in *; do echo "CREATE_ICON(${f%".svg"})"; done;`
     CREATE_ICON(arrow)
     CREATE_ICON(bell)
@@ -107,7 +107,7 @@ private:
     static QString iconNameHelper(QString functionName)
     {
         return QStringLiteral("/icons/%1.svg").arg(functionName.remove("Icon"));
-    };
+    }
 
     QColor _dark = "black";
     QColor _light = "linen";
