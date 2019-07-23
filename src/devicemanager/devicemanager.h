@@ -30,7 +30,7 @@ public:
      * @return DeviceManager*
      */
     static DeviceManager* self();
-    ~DeviceManager();
+    ~DeviceManager() override;
 
     /**
      * @brief Return a pointer of this singleton to the qml register function
