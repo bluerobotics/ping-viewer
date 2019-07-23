@@ -55,7 +55,7 @@ public:
      *
      * @return QString
      */
-    QString message() const { return _message; };
+    QString message() const { return _message; }
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
 
     /**
@@ -71,7 +71,7 @@ public:
      *
      * @return Flasher::States
      */
-    Flasher::States state() const { return _state; };
+    Flasher::States state() const { return _state; }
     Q_PROPERTY(Flasher::States state READ state NOTIFY stateChanged)
 
     /**
