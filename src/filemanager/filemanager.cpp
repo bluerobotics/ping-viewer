@@ -76,8 +76,8 @@ QString FileManager::createFileName(FileManager::Folder folderType)
         qCWarning(FILEMANAGER) << "Folder pointer does not exist!";
         return {};
     }
-    QString path = folder->dir.path();
-    QString result = path + "/" \
+    const QString path = folder->dir.path();
+    const QString result = path + "/" \
                      + QDateTime::currentDateTime().toString(_fileName) \
                      + folder->extension;
     qCDebug(FILEMANAGER) << "Creating file name:" << result;
