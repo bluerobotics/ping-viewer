@@ -54,15 +54,15 @@ void NetworkManager::download(const QUrl& url, std::function<void(QString)> func
         qCDebug(NETWORKMANAGER) << QStringLiteral("Download %1 finished").arg(url.toString());
         // Save it to a file
         QTemporaryFile temporaryFile;
-        bool ok = temporaryFile.open();
-        auto byteArray = reply->readAll();
-        downloadManager->deleteLater();
-        if(!ok)
+        if(!temporaryFile.open())
         {
             qCWarning(NETWORKMANAGER) << QStringLiteral("Was not possible to create temporary file to save "
                                       "download content. Error: %s").arg(temporaryFile.error());
             return;
         }
+
+        auto byteArray = reply->readAll();
+        downloadManager->deleteLater();
         temporaryFile.write(byteArray);
         temporaryFile.close();
         temporaryFile.setAutoRemove(false);
