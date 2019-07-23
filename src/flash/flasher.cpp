@@ -85,7 +85,7 @@ void Flasher::flash()
         QString output = QStringLiteral("stm32flash is not available! Flash procedure will abort.");
         qCCritical(FLASH) << "Searching in: " << stm32flashPath();
         qCCritical(FLASH) << output;
-        setState(Error, output);
+        setState(States::Error, output);
 
         return;
     }
@@ -100,7 +100,7 @@ void Flasher::flash()
     if(!firmwareFileInfo.exists()) {
         auto errorMsg = QStringLiteral("Firmware file does not exist: %1").arg(_firmwareFilePath);
         qCCritical(FLASH) << errorMsg;
-        setState(Error, errorMsg);
+        setState(States::Error, errorMsg);
         return;
     }
 
@@ -134,7 +134,7 @@ void Flasher::flash()
         {
             if(output.contains(errorString, Qt::CaseInsensitive)) {
                 qCCritical(FLASH) << output;
-                setState(Error, output);
+                setState(States::Error, output);
                 // Break is necessary to avoid messages with multiple keys like:
                 // Error number... Fatal behaviour.. Unexpected port.
                 break;
@@ -147,7 +147,7 @@ void Flasher::flash()
     connect(_firmwareProcess.data(), &QProcess::errorOccurred, this, [this](QProcess::ProcessError error) {
         QString message = QStringLiteral("Unexpected error in process: %1").arg(error);
         qCCritical(FLASH) << message;
-        setState(Error, message);
+        setState(States::Error, message);
     });
 
     connect(_firmwareProcess.data(), qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
@@ -181,7 +181,7 @@ void Flasher::firmwareUpdatePercentage(const QString& output)
             qCDebug(FLASH) << _fw_update_perc;
             if (_fw_update_perc > 99.99) {
                 QThread::msleep(1000);
-                setState(FlashFinished);
+                setState(States::FlashFinished);
             } else {
                 emit flashProgress(_fw_update_perc);
             }

@@ -33,7 +33,7 @@ public:
      * @brief Defines flash state
      *
      */
-    enum States {
+    enum class States : char {
         Error = -1,
         Idle,
         StartingFlash,
