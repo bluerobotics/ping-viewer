@@ -92,7 +92,7 @@ bool FileLink::startConnection()
     return ok;
 };
 
-bool FileLink::isOpen()
+bool FileLink::isOpen() const
 {
     // If filelink exist to create a log, the file will be only created after receiving the first data
     // To return at least a good answer, we do check the path to see if it's writable

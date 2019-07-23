@@ -29,7 +29,7 @@ public:
      *
      * @return QString
      */
-    QString errorString() final { return _port.errorString(); }
+    QString errorString() const final { return _port.errorString(); }
 
     /**
      * @brief Finish connection
@@ -45,7 +45,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final { return _port.isWritable() && _port.isReadable(); }
+    bool isOpen() const final { return _port.isWritable() && _port.isReadable(); }
 
     /**
      * @brief Return a list of all available connections
@@ -59,7 +59,7 @@ public:
      *
      * @return QSerialPort*
      */
-    QSerialPort* port() { return &_port; };
+    QSerialPort* port() { return &_port; }
 
     /**
      * @brief Set link configuration

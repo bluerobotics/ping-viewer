@@ -30,21 +30,21 @@ public:
      *
      * @return qint64
      */
-    qint64 byteSize() final { return _file.bytesAvailable(); }
+    qint64 byteSize() const final { return _file.bytesAvailable(); }
 
     /**
      * @brief Return elapsed time of log
      *
      * @return QTime
      */
-    QTime elapsedTime() final { return _logThread ? _logThread->elapsedTime() : QTime(); }
+    QTime elapsedTime() const final { return _logThread ? _logThread->elapsedTime() : QTime(); }
 
     /**
      * @brief Return a human friendly error message
      *
      * @return QString
      */
-    QString errorString() final { return _file.errorString(); }
+    QString errorString() const final { return _file.errorString(); }
 
     /**
      * @brief Closes connection
@@ -60,7 +60,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final;
+    bool isOpen() const final;
 
     /**
      * @brief Check if connection is writable
@@ -68,21 +68,21 @@ public:
      * @return true
      * @return false
      */
-    bool isWritable() final { return false; }
+    bool isWritable() const final { return false; }
 
     /**
      * @brief Return package index
      *
      * @return int
      */
-    int packageIndex() final { return _logThread ? _logThread->packageIndex() : 0; }
+    int packageIndex() const final { return _logThread ? _logThread->packageIndex() : 0; }
 
     /**
      * @brief Return number of packages
      *
      * @return int
      */
-    int packageSize() final { return _logThread ? _logThread->packageSize() : 0; }
+    int packageSize() const final { return _logThread ? _logThread->packageSize() : 0; }
 
     /**
      * @brief Pause log
@@ -125,7 +125,7 @@ public:
      *
      * @return QTime
      */
-    QTime totalTime() final { return _logThread ? _logThread->totalTime() : QTime(); }
+    QTime totalTime() const final { return _logThread ? _logThread->totalTime() : QTime(); }
 
 private:
     struct Pack {

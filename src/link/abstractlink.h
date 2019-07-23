@@ -32,35 +32,35 @@ public:
      *
      * @return qint64
      */
-    Q_INVOKABLE virtual qint64 byteSize() { return 0; }
+    Q_INVOKABLE virtual qint64 byteSize() const { return 0; }
 
     /**
      * @brief Return the link configuration pointer
      *
      * @return LinkConfiguration*
      */
-    LinkConfiguration* configuration() { return &_linkConfiguration; }
+    const LinkConfiguration* configuration() const { return &_linkConfiguration; }
 
     /**
      * @brief Return elapsed time of connection
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime elapsedTime() { return {}; }
+    Q_INVOKABLE virtual QTime elapsedTime() const { return {}; }
 
     /**
      * @brief Return elapsed time in string format
      *
      * @return QString
      */
-    Q_INVOKABLE virtual QString elapsedTimeString() { return elapsedTime().toString(_timeFormat); }
+    Q_INVOKABLE virtual QString elapsedTimeString() const { return elapsedTime().toString(_timeFormat); }
 
     /**
      * @brief Return error in a human friendly message
      *
      * @return QString
      */
-    virtual QString errorString() { return {}; }
+    virtual QString errorString() const { return {}; }
 
     /**
      * @brief Finish connection
@@ -75,21 +75,21 @@ public:
      * @return true
      * @return false
      */
-    bool isAutoConnect() { return _autoConnect; }
+    bool isAutoConnect() const { return _autoConnect; }
 
     /**
      * @brief Check if connection is open
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool isOpen() { return true; }
+    Q_INVOKABLE virtual bool isOpen() const { return true; }
 
     /**
      * @brief is writable
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool isWritable() { return true; }
+    Q_INVOKABLE virtual bool isWritable() const { return true; }
 
     /**
      * @brief Return a list of available connections
@@ -104,14 +104,14 @@ public:
      *
      * @return int
      */
-    Q_INVOKABLE virtual int packageSize() { return 0; }
+    Q_INVOKABLE virtual int packageSize() const { return 0; }
 
     /**
      * @brief Return package index
      *
      * @return int
      */
-    Q_INVOKABLE virtual int packageIndex() { return 0; }
+    Q_INVOKABLE virtual int packageIndex() const { return 0; }
 
     /**
      * @brief Pause connection
@@ -124,7 +124,7 @@ public:
      *
      * @return const QString
      */
-    const QString name() { return _name; }
+    const QString name() const { return _name; }
 
     /**
      * @brief Set the auto connection state
@@ -180,21 +180,21 @@ public:
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime totalTime() { return {}; }
+    Q_INVOKABLE virtual QTime totalTime() const { return {}; }
 
     /**
      * @brief Return total time in string
      *
      * @return QString
      */
-    Q_INVOKABLE virtual QString totalTimeString() { return totalTime().toString(_timeFormat); }
+    Q_INVOKABLE virtual QString totalTimeString() const { return totalTime().toString(_timeFormat); }
 
     /**
      * @brief Return LinkType
      *
      * @return LinkType
      */
-    LinkType type() { return _type; }
+    LinkType type() const { return _type; }
 
     /**
      * @brief Ask link to write the bytearray
@@ -225,7 +225,7 @@ public:
     const AbstractLink& operator=(const AbstractLink& other);
 
     Q_PROPERTY(qint64 byteSize READ byteSize NOTIFY byteSizeChanged)
-    Q_PROPERTY(LinkConfiguration* configuration READ configuration CONSTANT)
+    Q_PROPERTY(const LinkConfiguration* configuration READ configuration CONSTANT)
     Q_PROPERTY(QTime elapsedTime READ elapsedTime NOTIFY elapsedTimeChanged)
     Q_PROPERTY(QString elapsedTimeString READ elapsedTimeString NOTIFY elapsedTimeChanged)
     Q_PROPERTY(bool isAutoConnect READ isAutoConnect WRITE setAutoConnect NOTIFY autoConnectChanged)

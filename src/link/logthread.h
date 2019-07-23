@@ -49,14 +49,14 @@ public:
      *
      * @return int
      */
-    int packageIndex() { return _logIndex; }
+    int packageIndex() const { return _logIndex; }
 
     /**
      * @brief Return package size
      *
      * @return int
      */
-    int packageSize() { return _log.size() - 1; }
+    int packageSize() const { return _log.size() - 1; }
 
     /**
      * @brief Pause log
