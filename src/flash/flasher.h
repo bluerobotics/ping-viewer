@@ -117,13 +117,14 @@ private:
     void firmwareUpdatePercentage(const QString& output);
     static QString stm32flashPath();
 
+    States _state = States::Idle;
+    bool _verify = true;
     int _baudRate = 57600;
+
     QString _binRelativePath;
     QString _firmwareFilePath;
+    QString _message;
+
     QSharedPointer<QProcess> _firmwareProcess;
     LinkConfiguration _link;
-    QString _message;
-    States _state = States::Idle;
-    const QList<int> _validBaudRates = {57600, 115200, 230400};
-    bool _verify = true;
 };
