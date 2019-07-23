@@ -26,7 +26,7 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 const int Ping::_pingMaxFrequency = 50;
 
 Ping::Ping()
-    :PingSensor()
+    : PingSensor()
     ,_points(_num_points, 0)
 {
     setControlPanel({"qrc:/Ping1DControlPanel.qml"});

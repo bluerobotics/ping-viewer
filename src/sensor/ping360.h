@@ -24,7 +24,7 @@ class Ping360 : public PingSensor
 public:
 
     Ping360();
-    ~Ping360();
+    ~Ping360() override;
 
     /**
      * @brief Add new connection
