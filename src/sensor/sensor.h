@@ -26,7 +26,7 @@ public:
      *
      * @return AbstractLink*
      */
-    AbstractLink* link() const { return _linkIn.data() ? _linkIn->self() : nullptr; };
+    AbstractLink* link() const { return _linkIn.data() ? _linkIn->self() : nullptr; }
     Q_PROPERTY(AbstractLink* link READ link NOTIFY linkUpdate)
 
     /**
@@ -34,7 +34,7 @@ public:
      *
      * @return AbstractLink*
      */
-    AbstractLink* linkLog() const { return _linkOut.data() ? _linkOut->self() : nullptr; };
+    AbstractLink* linkLog() const { return _linkOut.data() ? _linkOut->self() : nullptr; }
     Q_PROPERTY(AbstractLink* linkLog READ linkLog NOTIFY linkLogUpdate)
 
     /**
@@ -42,7 +42,7 @@ public:
      *
      * @return QString
      */
-    QString name() const { return _name; };
+    QString name() const { return _name; }
     Q_PROPERTY(QString name READ name NOTIFY nameUpdate)
 
     /**
@@ -67,7 +67,7 @@ public:
      *
      * @return bool
      */
-    bool connected() const { return _connected; };
+    bool connected() const { return _connected; }
     Q_PROPERTY(bool connected READ connected NOTIFY connectionUpdate)
 
 
@@ -76,7 +76,7 @@ public:
      *
      * @return QMap<QString, QVariant>
      */
-    QMap<QString, QVariant> firmwaresAvailable() const { return _firmwares; };
+    QMap<QString, QVariant> firmwaresAvailable() const { return _firmwares; }
     Q_PROPERTY(QMap<QString, QVariant> firmwaresAvailable READ firmwaresAvailable NOTIFY firmwaresAvailableUpdate)
 
     /**
@@ -87,7 +87,7 @@ public:
      *
      * @return Flasher*
      */
-    Flasher* flasher() { return &_flasher; };
+    Flasher* flasher() { return &_flasher; }
     Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
 
     /**

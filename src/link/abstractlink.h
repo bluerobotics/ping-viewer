@@ -67,7 +67,7 @@ public:
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool finishConnection() { return true;};
+    Q_INVOKABLE virtual bool finishConnection() { return true;}
 
     /**
      * @brief Check if connection is auto connected
@@ -97,7 +97,7 @@ public:
      *
      * @return QStringList
      */
-    Q_INVOKABLE virtual QStringList listAvailableConnections() { return QStringList(); };
+    Q_INVOKABLE virtual QStringList listAvailableConnections() { return QStringList(); }
 
     /**
      * @brief Return the package size
@@ -117,7 +117,7 @@ public:
      * @brief Pause connection
      *
      */
-    Q_INVOKABLE virtual void pause() {};
+    Q_INVOKABLE virtual void pause() {}
 
     /**
      * @brief Return the link name
@@ -147,33 +147,33 @@ public:
      *
      * @param name
      */
-    void setName(const QString& name) { _name = name; emit nameChanged(_name); };
+    void setName(const QString& name) { _name = name; emit nameChanged(_name); }
 
     /**
      * @brief Set package index
      *
      * @param index
      */
-    Q_INVOKABLE virtual void setPackageIndex(int index) { Q_UNUSED(index) };
+    Q_INVOKABLE virtual void setPackageIndex(int index) { Q_UNUSED(index) }
 
     /**
      * @brief Set link type
      *
      * @param type
      */
-    virtual void setType(LinkType type) { _type = type; emit linkChanged(_type); };
+    virtual void setType(LinkType type) { _type = type; emit linkChanged(_type); }
 
     /**
      * @brief Start communication
      *
      */
-    Q_INVOKABLE virtual void start() {};
+    Q_INVOKABLE virtual void start() {}
 
     /**
      * @brief Start connection
      *
      */
-    Q_INVOKABLE virtual bool startConnection() { return true;};
+    Q_INVOKABLE virtual bool startConnection() { return true;}
 
     /**
      * @brief Return total time
@@ -201,7 +201,7 @@ public:
      *
      * @param data
      */
-    void write(const QByteArray& data) { emit sendData(data); };
+    void write(const QByteArray& data) { emit sendData(data); }
 
     /**
      * @brief Ask link to write a char*
@@ -213,7 +213,7 @@ public:
     {
         if(size > 0) {
             emit sendData(QByteArray(data, size));
-        };
+        }
     }
 
     /**

@@ -60,7 +60,7 @@ public:
         QStringList args = QStringList(),
         QString name = QString(),
         PingDeviceType deviceType = PingDeviceType::UNKNOWN
-    ) : _linkConf{args, name, linkType, deviceType} {};
+    ) : _linkConf{args, name, linkType, deviceType} {}
 
     /**
      * @brief Construct a new Link Configuration object
@@ -68,7 +68,7 @@ public:
      * @param confLinkStructure
      */
     LinkConfiguration(LinkConf& confLinkStructure)
-        : _linkConf{confLinkStructure} {};
+        : _linkConf{confLinkStructure} {}
 
     /**
      * @brief Construct a new Link Configuration object
@@ -77,7 +77,7 @@ public:
      */
     LinkConfiguration(const LinkConfiguration& other)
         : QObject(nullptr)
-        , _linkConf{other.configurationStruct()} {};
+        , _linkConf{other.configurationStruct()} {}
 
     /**
      * @brief Destroy the Link Configuration object
@@ -90,28 +90,28 @@ public:
      *
      * @return const QStringList*
      */
-    const QStringList* args() const { return &_linkConf.args; };
+    const QStringList* args() const { return &_linkConf.args; }
 
     /**
      * @brief Return list as copy
      *
      * @return Q_INVOKABLE argsAsConst
      */
-    Q_INVOKABLE QStringList argsAsConst() const { return _linkConf.args; };
+    Q_INVOKABLE QStringList argsAsConst() const { return _linkConf.args; }
 
     /**
      * @brief Return PingDeviceType enumartion for device specific identification
      *
      * @return PingDeviceType
      */
-    PingDeviceType deviceType() const { return _linkConf.deviceType; };
+    PingDeviceType deviceType() const { return _linkConf.deviceType; }
 
     /**
      * @brief Set the Device Type object
      *
      * @param deviceType
      */
-    void setDeviceType(const PingDeviceType deviceType) { _linkConf.deviceType = deviceType; };
+    void setDeviceType(const PingDeviceType deviceType) { _linkConf.deviceType = deviceType; }
 
     /**
      * @brief Check if type is the one in the configuration
@@ -120,35 +120,35 @@ public:
      * @return true
      * @return false
      */
-    bool checkType(LinkType type) const { return _linkConf.type == type; };
+    bool checkType(LinkType type) const { return _linkConf.type == type; }
 
     /**
      * @brief Return configuration as structure
      *
      * @return LinkConf
      */
-    LinkConf configurationStruct() const { return _linkConf; };
+    LinkConf configurationStruct() const { return _linkConf; }
 
     /**
      * @brief Return a pointer for the configuration structure
      *
      * @return const LinkConf*
      */
-    const LinkConf* configurationStructPtr() const { return &_linkConf; };
+    const LinkConf* configurationStructPtr() const { return &_linkConf; }
 
     /**
      * @brief Create and return a configuration string
      *
      * @return const QString
      */
-    Q_INVOKABLE const QString createConfString() const { return _linkConf.args.join(":"); };
+    Q_INVOKABLE const QString createConfString() const { return _linkConf.args.join(":"); }
 
     /**
      * @brief Create and return a configuration in string list format
      *
      * @return const QStringList
      */
-    const QStringList createConfStringList() const { return _linkConf.args; };
+    const QStringList createConfStringList() const { return _linkConf.args; }
 
     /**
      * @brief Create and return old style configuration link
@@ -198,14 +198,14 @@ public:
      *
      * @return Q_INVOKABLE name
      */
-    Q_INVOKABLE QString name() const { return _linkConf.name; };
+    Q_INVOKABLE QString name() const { return _linkConf.name; }
 
     /**
      * @brief Set configuration name
      *
      * @param name
      */
-    void setName(QString name) { _linkConf.name = name; };
+    void setName(QString name) { _linkConf.name = name; }
 
     /**
      * @brief Return serialport system path
@@ -226,14 +226,14 @@ public:
      *
      * @param type
      */
-    void setType(LinkType type) { _linkConf.type = type; };
+    void setType(LinkType type) { _linkConf.type = type; }
 
     /**
      * @brief Return link configuration type
      *
      * @return AbstractLinkNamespace::LinkType
      */
-    Q_INVOKABLE AbstractLinkNamespace::LinkType type() const { return _linkConf.type; };
+    Q_INVOKABLE AbstractLinkNamespace::LinkType type() const { return _linkConf.type; }
 
     /**
      * @brief Return the type in a human readable format
@@ -258,7 +258,7 @@ public:
         default :
             return QStringLiteral("Unknown");
         }
-    };
+    }
 
     /**
      * @brief Will return argument with UDP host name

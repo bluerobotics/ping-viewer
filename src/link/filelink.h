@@ -88,7 +88,7 @@ public:
      * @brief Pause log
      *
      */
-    void pause() final { if(_logThread) _logThread->pauseJob(); };
+    void pause() final { if(_logThread) _logThread->pauseJob(); }
 
     /**
      * @brief Set the configuration object
@@ -110,7 +110,7 @@ public:
      * @brief Start log
      *
      */
-    void start() final { if(_logThread) _logThread->startJob(); };
+    void start() final { if(_logThread) _logThread->startJob(); }
 
     /**
      * @brief Start connection

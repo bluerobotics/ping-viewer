@@ -35,7 +35,7 @@ public:
      * @param time
      * @param data
      */
-    void append(QTime time, QByteArray data) { _log.append(Pack{time, data}); };
+    void append(QTime time, QByteArray data) { _log.append(Pack{time, data}); }
 
     /**
      * @brief Return log elapsed time
@@ -62,7 +62,7 @@ public:
      * @brief Pause log
      *
      */
-    void pauseJob() { _playLog = false; };
+    void pauseJob() { _playLog = false; }
 
     /**
      * @brief Set the package index
@@ -75,7 +75,7 @@ public:
      * @brief Start playing log
      *
      */
-    void startJob() { _playLog = true; start();};
+    void startJob() { _playLog = true; start();}
 
     /**
      * @brief Return total time of log

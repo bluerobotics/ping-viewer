@@ -62,14 +62,14 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _udpSocket->open(QIODevice::ReadWrite); };
+    bool startConnection() final { return _udpSocket->open(QIODevice::ReadWrite); }
 
     /**
      * @brief Return QUdpSocket pointer
      *
      * @return QUdpSocket*
      */
-    QUdpSocket* udpSocket() { return _udpSocket; };
+    QUdpSocket* udpSocket() { return _udpSocket; }
 
 private:
     QHostAddress _hostAddress;

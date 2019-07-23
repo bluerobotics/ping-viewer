@@ -67,14 +67,14 @@ public:
     {
         Q_UNUSED(parent);
         return _size;
-    };
+    }
 
     /**
      * @brief Model of visible items
      *
      * @return QSortFilterProxyModel*
      */
-    QSortFilterProxyModel* filteredModel() { return &_filter; };
+    QSortFilterProxyModel* filteredModel() { return &_filter; }
     Q_PROPERTY(QSortFilterProxyModel* filteredModel READ filteredModel CONSTANT)
 
     /**
