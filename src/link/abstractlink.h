@@ -46,7 +46,7 @@ public:
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime elapsedTime() { return QTime(); }
+    Q_INVOKABLE virtual QTime elapsedTime() { return {}; }
 
     /**
      * @brief Return elapsed time in string format
@@ -60,7 +60,7 @@ public:
      *
      * @return QString
      */
-    virtual QString errorString() { return QString(); }
+    virtual QString errorString() { return {}; }
 
     /**
      * @brief Finish connection
@@ -97,7 +97,7 @@ public:
      *
      * @return QStringList
      */
-    Q_INVOKABLE virtual QStringList listAvailableConnections() { return QStringList(); }
+    Q_INVOKABLE virtual QStringList listAvailableConnections() { return {}; }
 
     /**
      * @brief Return the package size
@@ -180,7 +180,7 @@ public:
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime totalTime() { return QTime(); }
+    Q_INVOKABLE virtual QTime totalTime() { return {} }
 
     /**
      * @brief Return total time in string
