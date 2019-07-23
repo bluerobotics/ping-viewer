@@ -23,7 +23,7 @@ class Ping : public PingSensor
 public:
 
     Ping();
-    ~Ping();
+    ~Ping() override;
 
     /**
      * @brief Add new connection
