@@ -7,6 +7,15 @@
 
 PING_LOGGING_CATEGORY(waterfallGradient, "ping.waterfallGradient")
 
+namespace {
+    // We use those regexps at least 50 times. let's not construct - destroy them.
+    // They take a bit of time to create and operate.
+    QRegularExpression regex_2(QStringLiteral("^#\\S[0-9,a-f]{2}\\b"));
+    QRegularExpression regex_5(QStringLiteral("^#\\S[0-9,a-f]{5}\\b"));
+    QRegularExpression regex_8(QStringLiteral("^#\\S[0-9,a-f]{8}\\b"));
+    QRegularExpression regex_11(QStringLiteral("^#\\S[0-9,a-f]{11}\\b"));
+}
+
 WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors):
     _name(name)
 {
@@ -45,23 +54,36 @@ WaterfallGradient::WaterfallGradient(QFile &file)
         if(line.isEmpty()) {
             continue;
         }
-        qCDebug(waterfallGradient) << "Check line:" << line;
-        for(auto i : {2, 5, 8, 11}) {
-            /*
-                Check for:
-                #RGB
-                #RRGGBB
-                #RRRGGGBBB
-                #RRRRGGGGBBBB
-            */
-            QRegularExpression regex(QStringLiteral("^#\\S[0-9,a-f]{%1}\\b").arg(i));
-            QRegularExpressionMatch match = regex.match(line);
-            if(match.hasMatch()) {
-                qCDebug(waterfallGradient) << "New color:" << match.capturedTexts();
-                colors.append(match.capturedTexts()[0]);
-            }
+        /*
+            Check for:
+            #RGB
+            #RRGGBB
+            #RRRGGGBBB
+            #RRRRGGGGBBBB
+        */
+        QRegularExpressionMatch match = regex_2.match(line);
+        if(match.hasMatch()) {
+            colors.append(match.capturedTexts()[0]);
+            continue;
+        }
+        match = regex_5.match(line);
+        if(match.hasMatch()) {
+            colors.append(match.capturedTexts()[0]);
+            continue;
+        }
+        match = regex_8.match(line);
+        if(match.hasMatch()) {
+            colors.append(match.capturedTexts()[0]);
+            continue;
+        }
+        match = regex_11.match(line);
+        if(match.hasMatch()) {
+            colors.append(match.capturedTexts()[0]);
+            continue;
         }
     }
+    qCDebug(waterfallGradient) << "Colors:" << colors;
+
     const QString name = QFileInfo(file).fileName().split('.')[0].replace('_', ' ');
     qCDebug(waterfallGradient) << "Creating gradient" << name << "with colors:" << colors;
     _isOk = colors.length() > 1 && !name.isEmpty();
