@@ -111,10 +111,8 @@ private:
      *
      */
     struct FolderStruct {
-        FolderStruct(QDir _dir, QString _extension = QString())
-            : dir(_dir), extension(_extension) {};
         QDir dir;
-        QString extension;
+        QString extension = {};
         bool ok = false;
     };
 
