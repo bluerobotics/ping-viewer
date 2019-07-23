@@ -32,7 +32,7 @@ public:
      *
      * @return qint64
      */
-    Q_INVOKABLE virtual qint64 byteSize() { return 0; };
+    Q_INVOKABLE virtual qint64 byteSize() { return 0; }
 
     /**
      * @brief Return the link configuration pointer
@@ -46,28 +46,28 @@ public:
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime elapsedTime() { return QTime(); };
+    Q_INVOKABLE virtual QTime elapsedTime() { return QTime(); }
 
     /**
      * @brief Return elapsed time in string format
      *
      * @return QString
      */
-    Q_INVOKABLE virtual QString elapsedTimeString() { return elapsedTime().toString(_timeFormat); };
+    Q_INVOKABLE virtual QString elapsedTimeString() { return elapsedTime().toString(_timeFormat); }
 
     /**
      * @brief Return error in a human friendly message
      *
      * @return QString
      */
-    virtual QString errorString() { return QString(); };
+    virtual QString errorString() { return QString(); }
 
     /**
      * @brief Finish connection
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool finishConnection() { return true;};
+    Q_INVOKABLE virtual bool finishConnection() { return true;}
 
     /**
      * @brief Check if connection is auto connected
@@ -82,14 +82,14 @@ public:
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool isOpen() { return true; };
+    Q_INVOKABLE virtual bool isOpen() { return true; }
 
     /**
      * @brief is writable
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool isWritable() { return true; };
+    Q_INVOKABLE virtual bool isWritable() { return true; }
 
     /**
      * @brief Return a list of available connections
@@ -97,27 +97,27 @@ public:
      *
      * @return QStringList
      */
-    Q_INVOKABLE virtual QStringList listAvailableConnections() { return QStringList(); };
+    Q_INVOKABLE virtual QStringList listAvailableConnections() { return QStringList(); }
 
     /**
      * @brief Return the package size
      *
      * @return int
      */
-    Q_INVOKABLE virtual int packageSize() { return 0; };
+    Q_INVOKABLE virtual int packageSize() { return 0; }
 
     /**
      * @brief Return package index
      *
      * @return int
      */
-    Q_INVOKABLE virtual int packageIndex() { return 0; };
+    Q_INVOKABLE virtual int packageIndex() { return 0; }
 
     /**
      * @brief Pause connection
      *
      */
-    Q_INVOKABLE virtual void pause() {};
+    Q_INVOKABLE virtual void pause() {}
 
     /**
      * @brief Return the link name
@@ -147,61 +147,61 @@ public:
      *
      * @param name
      */
-    void setName(const QString& name) { _name = name; emit nameChanged(_name); };
+    void setName(const QString& name) { _name = name; emit nameChanged(_name); }
 
     /**
      * @brief Set package index
      *
      * @param index
      */
-    Q_INVOKABLE virtual void setPackageIndex(int index) { Q_UNUSED(index) };
+    Q_INVOKABLE virtual void setPackageIndex(int index) { Q_UNUSED(index) }
 
     /**
      * @brief Set link type
      *
      * @param type
      */
-    virtual void setType(LinkType type) { _type = type; emit linkChanged(_type); };
+    virtual void setType(LinkType type) { _type = type; emit linkChanged(_type); }
 
     /**
      * @brief Start communication
      *
      */
-    Q_INVOKABLE virtual void start() {};
+    Q_INVOKABLE virtual void start() {}
 
     /**
      * @brief Start connection
      *
      */
-    Q_INVOKABLE virtual bool startConnection() { return true;};
+    Q_INVOKABLE virtual bool startConnection() { return true;}
 
     /**
      * @brief Return total time
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime totalTime() { return QTime(); };
+    Q_INVOKABLE virtual QTime totalTime() { return QTime(); }
 
     /**
      * @brief Return total time in string
      *
      * @return QString
      */
-    Q_INVOKABLE virtual QString totalTimeString() { return totalTime().toString(_timeFormat); };
+    Q_INVOKABLE virtual QString totalTimeString() { return totalTime().toString(_timeFormat); }
 
     /**
      * @brief Return LinkType
      *
      * @return LinkType
      */
-    LinkType type() { return _type; };
+    LinkType type() { return _type; }
 
     /**
      * @brief Ask link to write the bytearray
      *
      * @param data
      */
-    void write(const QByteArray& data) { emit sendData(data); };
+    void write(const QByteArray& data) { emit sendData(data); }
 
     /**
      * @brief Ask link to write a char*
@@ -213,7 +213,7 @@ public:
     {
         if(size > 0) {
             emit sendData(QByteArray(data, size));
-        };
+        }
     }
 
     /**

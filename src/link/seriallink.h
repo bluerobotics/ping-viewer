@@ -29,7 +29,7 @@ public:
      *
      * @return QString
      */
-    QString errorString() final { return _port.errorString(); };
+    QString errorString() final { return _port.errorString(); }
 
     /**
      * @brief Finish connection
@@ -45,7 +45,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final { return _port.isWritable() && _port.isReadable(); };
+    bool isOpen() final { return _port.isWritable() && _port.isReadable(); }
 
     /**
      * @brief Return a list of all available connections
@@ -76,7 +76,7 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _port.open(QIODevice::ReadWrite); };
+    bool startConnection() final { return _port.open(QIODevice::ReadWrite); }
 
 private:
     QSerialPort _port;

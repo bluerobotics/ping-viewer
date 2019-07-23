@@ -29,7 +29,7 @@ public:
      *
      * @return QString
      */
-    QString errorString() final { return _udpSocket->errorString(); };
+    QString errorString() final { return _udpSocket->errorString(); }
 
     /**
      * @brief Finish connection
@@ -45,7 +45,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final { return _udpSocket->isWritable() && _udpSocket->isReadable(); };
+    bool isOpen() final { return _udpSocket->isWritable() && _udpSocket->isReadable(); }
 
     /**
      * @brief Set the configuration object
@@ -62,14 +62,14 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _udpSocket->open(QIODevice::ReadWrite); };
+    bool startConnection() final { return _udpSocket->open(QIODevice::ReadWrite); }
 
     /**
      * @brief Return QUdpSocket pointer
      *
      * @return QUdpSocket*
      */
-    QUdpSocket* udpSocket() { return _udpSocket; };
+    QUdpSocket* udpSocket() { return _udpSocket; }
 
 private:
     QHostAddress _hostAddress;
