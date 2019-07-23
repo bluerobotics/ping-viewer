@@ -34,9 +34,8 @@ void FileLink::_writeData(const QByteArray& data)
 
     // This save the data as a structure to deal with the timestamp
     if(_openModeFlag == QIODevice::WriteOnly && _file.isWritable()) {
-        QString time =  QTime::fromMSecsSinceStartOfDay(_timer.elapsed()).toString(_timeFormat);
-        Pack pack{time, data};
-        _inout << pack.time << pack.data;
+        _inout << QTime::fromMSecsSinceStartOfDay(_timer.elapsed()).toString(_timeFormat)
+               << data;
     } else {
         qCWarning(PING_PROTOCOL_FILELINK) << "Something is wrong!";
         qCDebug(PING_PROTOCOL_FILELINK) << "File is opened as write only:" << (_openModeFlag == QIODevice::WriteOnly);
