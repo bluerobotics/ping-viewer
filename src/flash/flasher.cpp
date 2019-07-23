@@ -11,6 +11,9 @@
 
 PING_LOGGING_CATEGORY(FLASH, "ping.flash")
 
+namespace {
+    const QVector<int> validBaudRates = {57600, 115200, 230400};
+}
 Flasher::Flasher(QObject* parent)
     : QObject(parent),
     _binRelativePath(QCoreApplication::applicationDirPath()
@@ -24,9 +27,9 @@ Flasher::Flasher(QObject* parent)
 
 bool Flasher::setBaudRate(int baudRate)
 {
-    if(!_validBaudRates.contains(baudRate)) {
+    if(!validBaudRates.contains(baudRate)) {
         qCCritical(FLASH) << "Invalid baud rate:" << baudRate;
-        qCCritical(FLASH) << "Valid baud rates are:" << _validBaudRates;
+        qCCritical(FLASH) << "Valid baud rates are:" << validBaudRates;
         return false;
     }
 
