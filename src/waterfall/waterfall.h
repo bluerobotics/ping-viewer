@@ -154,10 +154,10 @@ signals:
 
 protected:
     bool _containsMouse;
-    WaterfallGradient _gradient;
-    static QList<WaterfallGradient> _gradients;
-    QPoint _mousePos;
     bool _smooth;
+
+    WaterfallGradient _gradient;
+    QPoint _mousePos;
     QString _theme;
     QStringList _themes;
 

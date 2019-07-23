@@ -10,7 +10,8 @@
 
 PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 
-QList<WaterfallGradient> Waterfall::_gradients {
+namespace {
+QVector<WaterfallGradient> gradients {
     {
         QStringLiteral("Thermal blue"), {
             QColor("#05225f"),
@@ -57,6 +58,7 @@ QList<WaterfallGradient> Waterfall::_gradients {
         }
     },
 };
+}
 
 Waterfall::Waterfall(QQuickItem *parent)
     :QQuickPaintedItem(parent)
@@ -74,7 +76,7 @@ void Waterfall::setGradients()
 {
     loadUserGradients();
 
-    for(auto &gradient : _gradients) {
+    for(const auto &gradient : gradients) {
         _themes.append(gradient.name());
     }
     qCDebug(waterfall) << "Gradients:" << _themes;
@@ -92,19 +94,19 @@ void Waterfall::loadUserGradients()
             qCDebug(waterfall) << "Invalid gradient file:" << fileInfo.fileName();
             continue;
         }
-        if(std::any_of(_gradients.cbegin(), _gradients.cend(), [&](const auto& gradientItem) {
-        return gradientItem.name() == gradient.name();
+        if(std::any_of(gradients.cbegin(), gradients.cend(), [&](const auto& gradientItem) {
+            return gradientItem.name() == gradient.name();
         })) {
             qCDebug(waterfall) << "Gradient already exist:" << gradient.name() << fileInfo.fileName();
             continue;
         }
-        _gradients.append(gradient);
+        gradients.append(gradient);
     }
 }
 
 void Waterfall::setTheme(const QString& theme)
 {
-    for(auto &gradient : _gradients) {
+    for(const auto &gradient : gradients) {
         if(gradient.name() == theme) {
             _gradient = gradient;
             _theme = theme;
