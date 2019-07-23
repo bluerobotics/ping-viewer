@@ -44,7 +44,7 @@ public:
      * @return true if enabled
      * @return false if not enabled
      */
-    bool pingEnable() { return _ping_enable; };
+    bool pingEnable() { return _ping_enable; }
 
     /**
      * @brief Enable or disable the sensor

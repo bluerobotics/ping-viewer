@@ -180,7 +180,7 @@ public:
      *
      * @return QTime
      */
-    Q_INVOKABLE virtual QTime totalTime() { return {} }
+    Q_INVOKABLE virtual QTime totalTime() { return {}; }
 
     /**
      * @brief Return total time in string
