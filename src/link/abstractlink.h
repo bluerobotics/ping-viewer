@@ -97,7 +97,7 @@ public:
      *
      * @return QStringList
      */
-    Q_INVOKABLE virtual QStringList listAvailableConnections() { return QStringList(); }
+    Q_INVOKABLE virtual QStringList listAvailableConnections() { return {}; }
 
     /**
      * @brief Return the package size
