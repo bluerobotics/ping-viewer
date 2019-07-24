@@ -6,8 +6,8 @@ import QtQuick.Layouts 1.3
 RowLayout {
     id: root
 
-    property var text
-    property var value
+    property string text
+    property string value
     property alias control: sliderControl
 
     Label {
