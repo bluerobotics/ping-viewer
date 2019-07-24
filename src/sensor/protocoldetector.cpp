@@ -208,7 +208,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     // Close calls `disconnectFromHost`, this function waits until the socket is totally disconnected,
     // avoiding any future connection problems
-    if(socket.state() == QUdpSocket::UnconnectedState && socket.waitForDisconnected(1000)) {
+    if(socket.state() == QUdpSocket::UnconnectedState || socket.waitForDisconnected(1000)) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "UDP socket disconnected.";
     }
 
