@@ -19,8 +19,8 @@ RowLayout {
     }
 
     Slider {
-        Layout.fillWidth: true
         id: sliderControl
+        Layout.fillWidth: true
         value: root.value
     }
 
