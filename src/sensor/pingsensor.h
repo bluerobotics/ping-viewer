@@ -198,18 +198,18 @@ protected:
     void writeMessage(const ping_message& msg) const;
 
     QString _ascii_text;
-    uint8_t _device_revision;
-    uint8_t _device_type;
-    uint8_t _dstId;
-    uint8_t _firmware_version_major;
-    uint8_t _firmware_version_minor;
-    uint8_t _firmware_version_patch;
-    int _lostMessages;
+    uint8_t _device_revision{0};
+    uint8_t _device_type{0};
+    uint8_t _dstId{0};
+    uint8_t _firmware_version_major{0};
+    uint8_t _firmware_version_minor{0};
+    uint8_t _firmware_version_patch{0};
+    int _lostMessages{0};
     QString _nack_msg;
-    uint8_t _protocol_version_major;
-    uint8_t _protocol_version_minor;
-    uint8_t _protocol_version_patch;
-    uint8_t _srcId;
+    uint8_t _protocol_version_major{0};
+    uint8_t _protocol_version_minor{0};
+    uint8_t _protocol_version_patch{0};
+    uint8_t _srcId{0};
 
 private:
     Q_DISABLE_COPY(PingSensor)
