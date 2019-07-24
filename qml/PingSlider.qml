@@ -29,6 +29,6 @@ RowLayout {
         Layout.fillWidth: true
 
         Layout.preferredWidth: 40
-        text: root.value.toFixed(2)
+        text: root.value
     }
 }
