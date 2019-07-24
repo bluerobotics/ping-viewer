@@ -68,7 +68,6 @@ Item {
                 value: ping.transmit_frequency
                 control.from: 500
                 control.to: 1000
-                control.stepSize: 20
                 control.onMoved: ping.transmit_frequency = control.value
             }
             PingSlider {
