@@ -156,7 +156,7 @@ void Ping360::handleMessage(const ping_message& msg)
             _transmit_duration = _firmwareDefaultTransmitDuration;
             _sample_period = _firmwareDefaultSamplePeriod;
             _transmit_frequency = _viewerDefaultTransmitFrequency;
-            _num_points = _firmwareDefaultNumberOfSamples;
+            _num_points = _viewerDefaultNumberOfSamples;
 
             // request another transmission
             requestNextProfile();

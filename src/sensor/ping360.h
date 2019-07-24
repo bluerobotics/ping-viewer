@@ -350,6 +350,8 @@ private:
      */
 ///@{
 
+    // firmware constants
+    static const uint16_t _firmwareMaxNumberOfPoints = 1200;
     // The firmware defaults at boot
     static const uint8_t _firmwareDefaultGainSetting = 0;
     static const uint16_t _firmwareDefaultAngle = 0;
@@ -360,11 +362,12 @@ private:
 
     // The default transmit frequency to operate with
     static const uint16_t _viewerDefaultTransmitFrequency = 750;
+    static const uint16_t _viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
 
     uint16_t _angle = _firmwareDefaultAngle;
     uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
     uint32_t _gain_setting = _firmwareDefaultGainSetting;
-    uint16_t _num_points = _firmwareDefaultNumberOfSamples;
+    uint16_t _num_points = _viewerDefaultNumberOfSamples;
     uint16_t _sample_period = _firmwareDefaultSamplePeriod;
     uint16_t _transmit_frequency = _viewerDefaultTransmitFrequency;
     QVector<double> _data;
