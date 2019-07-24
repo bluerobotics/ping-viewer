@@ -358,12 +358,15 @@ private:
     static const uint16_t _firmwareDefaultTransmitFrequency = 740;
     static const uint16_t _firmwareDefaultNumberOfSamples = 1024;
 
+    // The default transmit frequency to operate with
+    static const uint16_t _viewerDefaultTransmitFrequency = 750;
+
     uint16_t _angle = _firmwareDefaultAngle;
     uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
     uint32_t _gain_setting = _firmwareDefaultGainSetting;
     uint16_t _num_points = _firmwareDefaultNumberOfSamples;
     uint16_t _sample_period = _firmwareDefaultSamplePeriod;
-    uint16_t _transmit_frequency = _firmwareDefaultTransmitFrequency;
+    uint16_t _transmit_frequency = _viewerDefaultTransmitFrequency;
     QVector<double> _data;
 ///@}
 
