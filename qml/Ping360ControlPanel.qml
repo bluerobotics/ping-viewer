@@ -94,8 +94,6 @@ Item {
                 control.to: 359
                 control.onMoved: ping.angle_offset = control.value
             }
-
-
         }
     }
 }
