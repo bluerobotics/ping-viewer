@@ -157,7 +157,15 @@ public:
     void set_range(uint newRange)
     {
         if(newRange != range()) {
+            _num_points = _firmwareMaxNumberOfPoints;
             _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
+
+            // reduce _sample period until we are within operational parameters
+            // maximize the number of points
+            while(_sample_period < _firmwareMinSamplePeriod) {
+                _num_points--;
+                _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
+            }
             emit rangeChanged();
         }
     }
@@ -352,6 +360,7 @@ private:
 
     // firmware constants
     static const uint16_t _firmwareMaxNumberOfPoints = 1200;
+    static const uint16_t _firmwareMinSamplePeriod = 80;
     // The firmware defaults at boot
     static const uint8_t _firmwareDefaultGainSetting = 0;
     static const uint16_t _firmwareDefaultAngle = 0;
