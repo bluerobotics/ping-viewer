@@ -24,7 +24,7 @@ Item {
 
             Repeater {
                 model: [
-                    "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
+                    "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor + "." + ping.firmware_version_patch,
                     "SRC: " + ping.srcId + " DST: " + ping.dstId,
                     "Connection: " + ping.link.configuration.createConfString(),
                     "Range (m): " + ping.range.toFixed(2),
