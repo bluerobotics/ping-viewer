@@ -36,10 +36,6 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
     _port = linkConfiguration.args()->at(1).toInt();
 
     // Check protocol detector comments and documentation about correct connect procedure
-    // TODO: Maybe UDPLink should provide a static function unify server connection/test
-
-    // Bind port
-    _udpSocket->bind(QHostAddress::Any, _port, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
 
     // Connect with server
     _udpSocket->connectToHost(_hostAddress, _port);
