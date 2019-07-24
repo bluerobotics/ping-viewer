@@ -21,6 +21,7 @@ RowLayout {
     Slider {
         id: sliderControl
         Layout.fillWidth: true
+        wheelEnabled: true
         value: root.value
     }
 
