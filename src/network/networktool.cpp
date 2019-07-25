@@ -12,13 +12,14 @@
 
 PING_LOGGING_CATEGORY(NETWORKTOOL, "ping.networktool")
 
-namespace {
-    QString gitUserRepo = QStringLiteral("bluerobotics/ping-viewer");
-    QString gitUserRepoFirmware = QStringLiteral("bluerobotics/ping-firmware");
-    const QString gitReleases = QStringLiteral("https://api.github.com/repos/%1/releases");
-    const QString repoContents = QStringLiteral("https://api.github.com/repos/%1/contents/%2");
-    const QString projectTag = QStringLiteral(GIT_TAG);
-    const QString userRepoUrl = QStringLiteral(GIT_URL);
+namespace
+{
+QString gitUserRepo = QStringLiteral("bluerobotics/ping-viewer");
+QString gitUserRepoFirmware = QStringLiteral("bluerobotics/ping-firmware");
+const QString gitReleases = QStringLiteral("https://api.github.com/repos/%1/releases");
+const QString repoContents = QStringLiteral("https://api.github.com/repos/%1/contents/%2");
+const QString projectTag = QStringLiteral(GIT_TAG);
+const QString userRepoUrl = QStringLiteral(GIT_URL);
 }
 NetworkTool::NetworkTool()
 {
@@ -27,8 +28,8 @@ NetworkTool::NetworkTool()
     QRegularExpressionMatch regexMatch = regex.match(userRepoUrl);
     if (!regexMatch.hasMatch() || regexMatch.lastCapturedIndex() < 1) {
         qCWarning(NETWORKTOOL) << "Fail to get github user and repository! "
-                                  "It will not be possible to check for updates. "
-                                  "Using default value:" << gitUserRepo;
+                               "It will not be possible to check for updates. "
+                               "Using default value:" << gitUserRepo;
         qCDebug(NETWORKTOOL) << "GIT_URL value:" << QStringLiteral(GIT_URL);
         return;
     }

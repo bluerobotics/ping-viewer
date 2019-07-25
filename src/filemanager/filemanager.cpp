@@ -78,8 +78,8 @@ QString FileManager::createFileName(FileManager::Folder folderType)
     }
     const QString path = folder->dir.path();
     const QString result = path + "/" \
-                     + QDateTime::currentDateTime().toString(_fileName) \
-                     + folder->extension;
+                           + QDateTime::currentDateTime().toString(_fileName) \
+                           + folder->extension;
     qCDebug(FILEMANAGER) << "Creating file name:" << result;
     return result;
 }

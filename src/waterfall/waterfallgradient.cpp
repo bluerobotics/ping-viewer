@@ -7,13 +7,14 @@
 
 PING_LOGGING_CATEGORY(waterfallGradient, "ping.waterfallGradient")
 
-namespace {
-    // We use those regexps at least 50 times. let's not construct - destroy them.
-    // They take a bit of time to create and operate.
-    QRegularExpression regex_2(QStringLiteral("^#\\S[0-9,a-f]{2}\\b"));
-    QRegularExpression regex_5(QStringLiteral("^#\\S[0-9,a-f]{5}\\b"));
-    QRegularExpression regex_8(QStringLiteral("^#\\S[0-9,a-f]{8}\\b"));
-    QRegularExpression regex_11(QStringLiteral("^#\\S[0-9,a-f]{11}\\b"));
+namespace
+{
+// We use those regexps at least 50 times. let's not construct - destroy them.
+// They take a bit of time to create and operate.
+QRegularExpression regex_2(QStringLiteral("^#\\S[0-9,a-f]{2}\\b"));
+QRegularExpression regex_5(QStringLiteral("^#\\S[0-9,a-f]{5}\\b"));
+QRegularExpression regex_8(QStringLiteral("^#\\S[0-9,a-f]{8}\\b"));
+QRegularExpression regex_11(QStringLiteral("^#\\S[0-9,a-f]{11}\\b"));
 }
 
 WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors):

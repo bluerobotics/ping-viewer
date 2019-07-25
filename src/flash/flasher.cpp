@@ -11,17 +11,19 @@
 
 PING_LOGGING_CATEGORY(FLASH, "ping.flash")
 
-namespace {
-    const QVector<int> validBaudRates = {57600, 115200, 230400};
+namespace
+{
+const QVector<int> validBaudRates = {57600, 115200, 230400};
 }
+
 Flasher::Flasher(QObject* parent)
     : QObject(parent)
     , _binRelativePath(QCoreApplication::applicationDirPath()
 #ifdef Q_OS_OSX
-        // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-         + QStringLiteral("/../..")
+                       // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
+                       + QStringLiteral("/../..")
 #endif
-    )
+                      )
 {
 }
 
@@ -68,13 +70,13 @@ QString Flasher::stm32flashPath()
 {
     static QString path = QCoreApplication::applicationDirPath()
 #ifdef Q_OS_OSX
-        + QStringLiteral("/../..")
+                          + QStringLiteral("/../..")
 #endif
-        + QStringLiteral("/stm32flash")
+                          + QStringLiteral("/stm32flash")
 #ifdef Q_OS_WIN
-        + QStringLiteral(".exe")
+                          + QStringLiteral(".exe")
 #endif
-        ;
+                          ;
 
     return path;
 }

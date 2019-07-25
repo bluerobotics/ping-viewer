@@ -10,7 +10,8 @@
 
 PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 
-namespace {
+namespace
+{
 QVector<WaterfallGradient> gradients {
     {
         QStringLiteral("Thermal blue"), {
@@ -95,7 +96,7 @@ void Waterfall::loadUserGradients()
             continue;
         }
         if(std::any_of(gradients.cbegin(), gradients.cend(), [&](const auto& gradientItem) {
-            return gradientItem.name() == gradient.name();
+        return gradientItem.name() == gradient.name();
         })) {
             qCDebug(waterfall) << "Gradient already exist:" << gradient.name() << fileInfo.fileName();
             continue;

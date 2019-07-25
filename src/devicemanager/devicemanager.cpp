@@ -98,9 +98,15 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
     // We could use a single Ping instance, but since we are going to support multiple devices
     // this pointer will hold everything for us
     switch(linkConf->deviceType()) {
-    case PingDeviceType::PING1D : _primarySensor.reset(new Ping()); break;
-    case PingDeviceType::PING360 : _primarySensor.reset(new Ping360()); break;
-    case PingDeviceType::UNKNOWN : assert("Should never happen"); break;
+    case PingDeviceType::PING1D :
+        _primarySensor.reset(new Ping());
+        break;
+    case PingDeviceType::PING360 :
+        _primarySensor.reset(new Ping360());
+        break;
+    case PingDeviceType::UNKNOWN :
+        assert("Should never happen");
+        break;
     }
 
     emit primarySensorChanged();

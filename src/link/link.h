@@ -40,5 +40,5 @@ public:
     AbstractLink* self() const { return _abstractLink; }
 
 private:
-   AbstractLink* _abstractLink;
+    AbstractLink* _abstractLink;
 };
