@@ -1,0 +1,15 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = false
+indent_style = space
+max_line_length = 120
+charset = utf-8
+
+[*.{cpp,hpp,c,h}]
+indent_width = 4
+
+[*.qml]
+indent_width = 4
+
