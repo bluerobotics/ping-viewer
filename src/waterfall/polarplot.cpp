@@ -60,20 +60,21 @@ void PolarPlot::setImage(const QImage &image)
     setImplicitHeight(image.height());
 }
 
-void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint, float length, float angleGrad)
+void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint, float length, float angleGrad,
+                     float sectorSize)
 {
     Q_UNUSED(initPoint)
     Q_UNUSED(length)
 
     static const QPoint center(_image.width()/2, _image.height()/2);
     static const float degreeToRadian = M_PI/180.0f;
-    static const float gradianToDegree = 180.0f/200.0f;
     static const float gradianToRadian = M_PI/200.0f;
     static QColor pointColor;
     static float step;
     static float angleStep;
-    static float angleResolution = gradianToDegree/2;
-    float actualAngle = angle*gradianToRadian;
+
+    const float actualAngle = angle*gradianToRadian;
+    const float halfSection = sectorSize*degreeToRadian/2;
 
     //TODO: Need a better way to deal with dynamic steps, maybe doing `draw(data, angle++)` with `angleGrad` loop
     _distances[static_cast<int>(angle)%_angularResolution] = initPoint + length;
@@ -99,9 +100,15 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
         }
         step = ceil(i*3*angleGrad*gradianToRadian);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
-        for(int currentStep = 0; currentStep < step; currentStep++) {
-            float deltaDegree = (2*angleResolution*angleGrad/(float)step)*(currentStep - step/2);
-            angleStep = deltaDegree*degreeToRadian+actualAngle - M_PI_2;
+        for(int currentStep = 0; currentStep <= step; currentStep++) {
+            float deltaRadian = (angleGrad*gradianToRadian/(float)step)*(currentStep - step/2);
+            float calculatedAngle = deltaRadian + actualAngle;
+            angleStep = calculatedAngle - M_PI_2;
+
+            // Check if we are outside part of the chart
+            if(calculatedAngle > halfSection && calculatedAngle < 2*M_PI - halfSection) {
+                continue;
+            }
             _image.setPixelColor(center.x() + i*cos(angleStep), center.y() + i*sin(angleStep), pointColor);
         }
     }
