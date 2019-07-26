@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <functional>
 
@@ -167,9 +168,16 @@ public:
                 _num_points--;
                 _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
             }
+
             emit numberOfPointsChanged();
             emit samplePeriodChanged();
             emit rangeChanged();
+            emit transmitDurationMaxChanged();
+
+            if (_transmit_duration > transmitDurationMax()) {
+                _transmit_duration = transmitDurationMax();
+                emit transmitDurationChanged();
+            }
         }
     }
     Q_PROPERTY(double range READ range WRITE set_range NOTIFY rangeChanged)
@@ -323,6 +331,11 @@ public:
 
     Q_PROPERTY(int sectorSize READ sectorSize WRITE setSectorSize NOTIFY sectorSizeChanged)
 
+    // The maximum transmit duration is limited internally by the firmware to prevent damage to the hardware
+    // The maximum transmit duration is equal to 64 * the sample period in microseconds
+    int transmitDurationMax() { return std::min(_firmwareMaxTransmitDuration, static_cast<uint16_t>(samplePeriod() * 64e6)); }
+    Q_PROPERTY(int transmitDurationMax READ transmitDurationMax NOTIFY transmitDurationMaxChanged)
+
     /**
      * @brief Get frequency of the profile messages
      *
@@ -407,6 +420,7 @@ signals:
     void rangeChanged();
     void speedOfSoundChanged();
     void transmitDurationChanged();
+    void transmitDurationMaxChanged();
     void transmitFrequencyChanged();
 ///@}
 
@@ -417,8 +431,10 @@ private:
      */
 ///@{
 
+    // TODO: static members should be defined in .cpp
     // firmware constants
     static const uint16_t _firmwareMaxNumberOfPoints = 1200;
+    const uint16_t _firmwareMaxTransmitDuration = 500;
     static const uint16_t _firmwareMinSamplePeriod = 80;
     // The firmware defaults at boot
     static const uint8_t _firmwareDefaultGainSetting = 0;
