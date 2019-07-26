@@ -139,12 +139,12 @@ public:
 
     /**
      * @brief The sonar communicates the _sample_period in units of 25nsec ticks
-     * @return inter-sample period in nanoseconds
+     * @return inter-sample period in seconds
      */
     double samplePeriod() { return _sample_period * _samplePeriodTickDuration; }
 
     /**
-     * @brief return points length in mm
+     * @brief return one-way range in meters
      *
      * @return uint32_t
      */
