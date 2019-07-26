@@ -76,7 +76,7 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _port.open(QIODevice::ReadWrite); };
+    bool startConnection() final override;
 
 private:
     QSerialPort _port;
