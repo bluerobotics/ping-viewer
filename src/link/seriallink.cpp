@@ -47,6 +47,21 @@ bool SerialLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     _port.setPortName(linkConfiguration.args()->at(0));
     _port.setBaudRate(linkConfiguration.args()->at(1).toInt());
+    return true;
+}
+
+bool SerialLink::startConnection()
+{
+    if(!_port.open(QIODevice::ReadWrite)) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Fail to open serial port:" << _port.error();
+        return false;
+    }
+
+    /** ABR fluxogram
+     * 1. Use break to force a 0 logical state for an entire frame
+     * 2. Send U (0b01010101) to allow an automatic baud rate detection
+     * 3. Force a write condition in the serial using the `flush` command
+     */
     _port.setBreakEnabled(true);
     QThread::usleep(500);
     _port.setBreakEnabled(false);
