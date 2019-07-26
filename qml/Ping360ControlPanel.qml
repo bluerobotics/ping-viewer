@@ -86,8 +86,8 @@ GroupBox {
                 Layout.fillWidth: true
                 text: "Transmit Duration (μs)"
                 value: ping.transmit_duration
-                control.from: 5
-                control.to: 1000
+                control.from: ping.transmitDurationMin
+                control.to: ping.transmitDurationMax
                 control.onMoved: ping.transmit_duration = control.value
             }
             PingSlider {
