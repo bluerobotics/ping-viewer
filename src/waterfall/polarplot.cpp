@@ -97,7 +97,7 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
         } else {
             pointColor = QColor(0, 0, 0, 0);
         }
-        step = ceil(i*2*degreeToRadian*angleGrad);
+        step = ceil(i*3*angleGrad*gradianToRadian);
         // The math and logic behind this loop is done in a way that the interaction is done with ints
         for(int currentStep = 0; currentStep < step; currentStep++) {
             float deltaDegree = (2*angleResolution*angleGrad/(float)step)*(currentStep - step/2);
