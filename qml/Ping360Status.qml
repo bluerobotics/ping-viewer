@@ -36,6 +36,7 @@ Item {
                     "Angle Offset (grad): " + ping.angle_offset,
                     "Transmit frequency (kHz): " + ping.transmit_frequency,
                     "Transmit duration (μs): " + ping.transmit_duration,
+                    "Transmit duration maximum (μs): " + ping.transmitDurationMax,
                     "Gain (setting): " + ping.gain_setting,
                     "Speed of sound (mm/s): " + ping.speed_of_sound,
                     "Lost messages (#): " + ping.lost_messages,
