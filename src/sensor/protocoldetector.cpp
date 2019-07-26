@@ -51,10 +51,14 @@ void ProtocolDetector::doScan()
 {
     _active = true;
     LinkConfiguration linkConf;
-    // Scan until we find a ping, then stop
+
+    // Scan until something is connected
     while (_active) {
         auto linksConf = updateLinkConfigurations(_linkConfigs);
         for(LinkConfiguration& tryLinkConf : linksConf) {
+            if(!_active) {
+                break;
+            }
             linkConf = tryLinkConf;
             checkLink(linkConf);
         }
@@ -147,7 +151,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
     int attempts = 0;
 
     // Try to get a valid response, timeout after 10 * 50 ms
-    while (!_detected && attempts++ < 10) {
+    while (_active && !_detected && attempts++ < 10) {
         port.waitForReadyRead(50);
         _detected = checkBuffer(port.readAll(), linkConf);
     }
@@ -190,7 +194,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
     int attempts = 0;
 
     // Try to get a valid response, timeout after 10 * 50 ms
-    while (!_detected && attempts++ < 20) {
+    while (_active && !_detected && attempts++ < 20) {
         socket.waitForReadyRead(50);
         /**
          * The connection state should be checked while looking for new packages
