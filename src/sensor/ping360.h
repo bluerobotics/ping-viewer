@@ -343,6 +343,48 @@ public:
     Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
                                     bool verify = true) final override;
 
+    /**
+     * @brief A list of all availables baudrates to communicate with the sensor
+     *
+     * @return QVector<int>
+     */
+    const QList<int>& validBaudRates();
+    Q_PROPERTY(QVariant validBaudRates READ validBaudRatesAsVariantList CONSTANT)
+
+    /**
+     * @brief Set the communication baud rate
+     *
+     * @param baudRate
+     */
+    Q_INVOKABLE void setBaudRate(int baudRate);
+
+    /**
+     * @brief Set the communication baud rate and request a profile
+     *  This helps user front end changes in the baud rate
+     *
+     * @param baudRate
+     */
+    Q_INVOKABLE void setBaudRateAndRequestProfile(int baudRate);
+
+    /**
+     * @brief Start sensor configuration and baud rate detection
+     *
+     */
+    Q_INVOKABLE void startConfiguration()
+    {
+        _configuring = true;
+        if(_timeoutProfileMessage.isActive()) {
+            _timeoutProfileMessage.stop();
+        }
+        startPreConfigurationProcess();
+    }
+
+    /**
+     * @brief Detect the best baudrate to use the highest possible
+     *
+     */
+    void detectBaudrates();
+
 signals:
     /**
      * @brief emitted when property changes
@@ -396,6 +438,10 @@ private:
     QVector<double> _data;
 ///@}
 
+    // Number of messages to check for best baud rate
+    // using Auto Baud Rate detection
+    static const int _ABRTotalNumberOfMessages = 20;
+
     // _sample_period is the number of timer ticks between each data point
     // each timer tick has a duration of 25 nanoseconds
     static constexpr double _samplePeriodTickDuration = 25e-9;
@@ -404,6 +450,9 @@ private:
     int _angle_offset = 200;
     int _angular_speed = 1;
     uint _central_angle = 1;
+    bool _configuring = true;
+    // Number of messages used to check the best baud rate
+    int _preConfigurationTotalNumberOfMessages = 20;
     bool _reverse_direction = false;
     uint32_t _speed_of_sound = 1500;
 
@@ -421,6 +470,14 @@ private:
 
     QElapsedTimer _messageElapsedTimer;
     QTimer _timeoutProfileMessage;
+
+    /**
+     * @brief This timer allows us to wait for a couple of seconds for an answer.
+     *  If the baudrate is not valid or the sensor is unable to communicate with us because of noise or something else,
+     *  we should trigger the request again, since it forces the request to be made by our side.
+     *  Without this timer, we are going to wait forever for a reply without asking again.
+     */
+    QTimer _baudrateConfigurationTimer;
 
     // Helper structure to hold frequency information for each message
     struct MessageFrequencyHelper {
@@ -449,6 +506,20 @@ private:
     void loadLastSensorConfigurationSettings();
     void updateSensorConfigurationSettings();
     void setLastSensorConfiguration();
+
+    const QVariantList& validBaudRatesAsVariantList() const;
+    QVariantList _validBaudRates = {
+        2500000,
+        2304000,
+        2000000,
+        921600,
+        570600,
+        460800,
+        257600,
+        250000,
+        230400,
+        115200,
+    };
 
     /**
      * @brief Request the next profile based in the class configuration
@@ -489,6 +560,24 @@ private:
      *
      */
     void startPreConfigurationProcess();
+
+    /**
+     * @brief Request and calculate the necessary amount of messages to get the best baud rate possible
+     *  You can check the following description to understand how this is done.
+     *  1 - A timer is used with the timeout of 100ms to wait for the `CommonId::DEVICE_INFORMATION` message.
+     *          The objective of this timer is to not wait forever, the sensor plus the communication channel latency
+     *          has a 100ms window to reply the message, if the message is not answered inside this timeout window,
+     *          the procedure will check that as a communication failure and a negative point will be added in this baud
+     *          rate.
+     *  2 - After the total number of messages `_ABRTotalNumberOfMessages` for a specific baud rate is done,
+     *          the procedure will check if the total number of messages are valid, and if its, this baud rate will be
+     *          used to do the communication between ping-viewer and the sensor. But, if the baud rate is not valid
+     *          and a single message is lost, the function will change the baud rate to a lower frequency and will
+     *          restart the check again for the new baud rate.
+     * 3 - If a single baud rate is not valid, the lowest one will be used.
+     *
+     */
+    void checkBaudrateProcess();
 
     /**
      * @brief Take care of github payload and detect new versions available
