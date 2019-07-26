@@ -40,6 +40,9 @@ Ping360::Ping360()
 
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
         qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
+        // Since ping360 uses automatic baudrate detection
+        // it's necessary to start the connection to force baud rate changes
+        link()->startConnection();
         requestNextProfile();
     });
 }
