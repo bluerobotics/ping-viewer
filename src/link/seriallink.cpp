@@ -52,6 +52,12 @@ bool SerialLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
 bool SerialLink::startConnection()
 {
+    // Check if port was already open
+    if(isOpen()) {
+        qCDebug(PING_PROTOCOL_SERIALLINK) << "Serial port will be restarted.";
+        finishConnection();
+    }
+
     if(!_port.open(QIODevice::ReadWrite)) {
         qCWarning(PING_PROTOCOL_SERIALLINK) << "Fail to open serial port:" << _port.error();
         return false;
