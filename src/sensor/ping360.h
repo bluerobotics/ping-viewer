@@ -174,10 +174,7 @@ public:
             emit rangeChanged();
             emit transmitDurationMaxChanged();
 
-            if (_transmit_duration > transmitDurationMax()) {
-                _transmit_duration = transmitDurationMax();
-                emit transmitDurationChanged();
-            }
+            adjustTransmitDuration();
         }
     }
     Q_PROPERTY(double range READ range WRITE set_range NOTIFY rangeChanged)
@@ -331,9 +328,16 @@ public:
 
     Q_PROPERTY(int sectorSize READ sectorSize WRITE setSectorSize NOTIFY sectorSizeChanged)
 
-    // The maximum transmit duration is limited internally by the firmware to prevent damage to the hardware
-    // The maximum transmit duration is equal to 64 * the sample period in microseconds
-    int transmitDurationMax() { return std::min(_firmwareMaxTransmitDuration, static_cast<uint16_t>(samplePeriod() * 64e6)); }
+    /**
+     * @brief The maximum transmit duration that will be applied is limited internally by the
+     * firmware to prevent damage to the hardware
+     * The maximum transmit duration is equal to 64 * the sample period in microseconds
+     * @return the maximum transmit duration allowed in microseconds
+     */
+    int transmitDurationMax()
+    {
+        return std::min(_firmwareMaxTransmitDuration, static_cast<uint16_t>(samplePeriod() * 64e6));
+    }
     Q_PROPERTY(int transmitDurationMax READ transmitDurationMax NOTIFY transmitDurationMaxChanged)
 
     /**
@@ -347,6 +351,60 @@ public:
     }
 
     Q_PROPERTY(float profileFrequency READ profileFrequency NOTIFY messageFrequencyChanged)
+
+    /**
+     * @brief automatic transmit duration adjustment
+     * @param automatic true to adjust the transmit duration automatically when the range is adjusted
+     */
+    void setAutoTransmitDuration(bool automatic)
+    {
+        if (_autoTransmitDuration == automatic) {
+            return;
+        }
+
+        _autoTransmitDuration = automatic;
+        emit autoTransmitDurationChanged();
+
+        if (_autoTransmitDuration) {
+            adjustTransmitDuration();
+        }
+    }
+
+    /**
+     * @brief automatic transmit duration adjustment
+     * @return true if transmit duration is automatically adjusted when the range is changed
+     */
+    bool autoTransmitDuration() { return _autoTransmitDuration; }
+    Q_PROPERTY(bool autoTransmitDuration READ autoTransmitDuration WRITE setAutoTransmitDuration NOTIFY
+               autoTransmitDurationChanged)
+
+    /**
+     * @brief adjust the transmit duration according to automatic mode, and current configuration
+     */
+    void adjustTransmitDuration()
+    {
+        if (_autoTransmitDuration) {
+            /*
+             * Per firmware engineer:
+             * 1. Starting point is TxPulse in usec = ((one-way range in metres) * 4000) / (Velocity of sound in metres per second)
+             * 2. Then check that TxPulse is wide enough for currently selected sample interval in usec, i.e.,
+             *    if TxPulse < (1.25 * sample interval) then TxPulse = (1.25 * sample interval)
+             * 3. Perform limit checking
+             */
+
+            // 1
+            int autoDuration = round(4000*range()/_speed_of_sound);
+            // 2 (transmit duration is microseconds, samplePeriod() is nanoseconds)
+            autoDuration = std::max(static_cast<int>(1.25*samplePeriod()/1000), autoDuration);
+            // 3
+            _transmit_duration = std::max(static_cast<int>(_firmwareMinTransmitDuration),
+                                          std::min(transmitDurationMax(), autoDuration));
+            emit transmitDurationChanged();
+        } else if (_transmit_duration > transmitDurationMax()) {
+            _transmit_duration = transmitDurationMax();
+            emit transmitDurationChanged();
+        }
+    }
 
     /**
      * @brief Do firmware sensor update
@@ -409,6 +467,7 @@ signals:
     void angleChanged();
     void angleOffsetChanged();
     void angularSpeedChanged();
+    void autoTransmitDurationChanged();
     void dataChanged();
     void gainSettingChanged();
     void messageFrequencyChanged();
@@ -435,6 +494,7 @@ private:
     // firmware constants
     static const uint16_t _firmwareMaxNumberOfPoints = 1200;
     const uint16_t _firmwareMaxTransmitDuration = 500;
+    const uint16_t _firmwareMinTransmitDuration = 5;
     static const uint16_t _firmwareMinSamplePeriod = 80;
     // The firmware defaults at boot
     static const uint8_t _firmwareDefaultGainSetting = 0;
@@ -468,6 +528,7 @@ private:
     // Ping360 has a 200 offset by default
     int _angle_offset = 200;
     int _angular_speed = 1;
+    bool _autoTransmitDuration = true;
     uint _central_angle = 1;
     bool _configuring = true;
     // Number of messages used to check the best baud rate
