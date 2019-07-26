@@ -167,6 +167,8 @@ public:
                 _num_points--;
                 _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
             }
+            emit numberOfPointsChanged();
+            emit samplePeriodChanged();
             emit rangeChanged();
         }
     }
@@ -220,6 +222,7 @@ public:
             _speed_of_sound = speed_of_sound;
             _sample_period = 2*desiredRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
             emit speedOfSoundChanged();
+            emit samplePeriodChanged();
             emit rangeChanged();
         }
     }
