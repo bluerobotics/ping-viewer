@@ -37,13 +37,16 @@ Ping360::Ping360()
 
     // Add timer for worst case scenario
     _timeoutProfileMessage.setInterval(_sensorTimeout);
+    _baudrateConfigurationTimer.setInterval(100);
 
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
         qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
-        // Since ping360 uses automatic baudrate detection
-        // it's necessary to start the connection to force baud rate changes
-        link()->startConnection();
         requestNextProfile();
+    });
+
+    connect(&_baudrateConfigurationTimer, &QTimer::timeout, this, [this] {
+        qCWarning(PING_PROTOCOL_PING360) << "Device Info timeout";
+        checkBaudrateProcess();
     });
 
     // Start timer to calculate frequency for each message type
@@ -58,7 +61,20 @@ void Ping360::startPreConfigurationProcess()
     msg.set_requested_id(CommonId::DEVICE_INFORMATION);
     msg.updateChecksum();
     writeMessage(msg);
-    _timeoutProfileMessage.start();
+}
+
+void Ping360::checkBaudrateProcess()
+{
+    // We use the pre configuration message to check for valid baud rates
+    startPreConfigurationProcess();
+
+    static int count = _ABRTotalNumberOfMessages;
+    if(count--) {
+        _baudrateConfigurationTimer.start();
+    } else {
+        detectBaudrates();
+        count = 20;
+    }
 }
 
 void Ping360::loadLastSensorConfigurationSettings()
@@ -74,7 +90,6 @@ void Ping360::updateSensorConfigurationSettings()
 void Ping360::connectLink(LinkType connType, const QStringList& connString)
 {
     Sensor::connectLink(LinkConfiguration{connType, connString});
-    startPreConfigurationProcess();
 }
 
 void Ping360::requestNextProfile()
@@ -121,6 +136,19 @@ void Ping360::handleMessage(const ping_message& msg)
     emit messageFrequencyChanged();
 
     switch (msg.message_id()) {
+
+    case CommonId::DEVICE_INFORMATION: {
+        if(_configuring) {
+            _baudrateConfigurationTimer.start();
+            checkBaudrateProcess();
+            return;
+        } else {
+            _baudrateConfigurationTimer.stop();
+            _timeoutProfileMessage.start();
+            requestNextProfile();
+            return;
+        }
+    }
 
     case Ping360Id::DEVICE_DATA: {
         // Parse message
@@ -231,6 +259,107 @@ void Ping360::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
 void Ping360::resetSensorLocalVariables()
 {
     //TODO
+}
+
+const QList<int>& Ping360::validBaudRates()
+{
+    static QList<int> validBaudRates;
+    if(validBaudRates.isEmpty()) {
+        for(const auto& variant : _validBaudRates) {
+            validBaudRates.append(variant.toInt());
+        }
+    }
+    return validBaudRates;
+}
+
+const QVariantList& Ping360::validBaudRatesAsVariantList() const
+{
+    return _validBaudRates;
+}
+
+void Ping360::setBaudRate(int baudRate)
+{
+    // It's only possible to change baudrates in serial connections
+    if(link()->type() != LinkType::Serial) {
+        return;
+    }
+
+    // Since ping360 uses automatic baudrate detection
+    // it's necessary to start the connection to force baud rate changes
+    SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
+    if(!serialLink) {
+        qCWarning(PING_PROTOCOL_PING360) << "Link is serial type, but cast was not possible!";
+        return;
+    }
+
+    qCDebug(PING_PROTOCOL_PING360) << "Moving to baud rate:" << baudRate;
+    serialLink->setBaudRate(baudRate);
+    link()->startConnection();
+    emit linkUpdate();
+}
+
+void Ping360::setBaudRateAndRequestProfile(int baudRate)
+{
+    setBaudRate(baudRate);
+    QThread::usleep(100);
+    requestNextProfile();
+}
+
+void Ping360::detectBaudrates()
+{
+    // Check all valid baudrates
+    static int index = 0;
+
+    // baudrate to error
+    static QMap<int, int> baudRateToError;
+
+    // last parser error count
+    static int lastParserErrorCount = 0;
+    static int lastParserMsgsCount = 0;
+
+    if(!_configuring) {
+        return;
+    }
+
+    if(index < validBaudRates().size()) {
+        setBaudRate(validBaudRates()[index]);
+    }
+
+    int lastCounter = -1;
+
+    // We have already something to calculate
+    if(index != 0) {
+        // Get previous baud rate and error margin
+        lastCounter =
+            // Number of messages that failed to parse
+            parserErrors() - lastParserErrorCount +
+            // Number of messages that was lost
+            _ABRTotalNumberOfMessages - (parsedMsgs() - lastParserMsgsCount);
+
+        baudRateToError[validBaudRates()[index - 1]] = lastCounter;
+    }
+    lastParserErrorCount = parserErrors();
+    lastParserMsgsCount = parsedMsgs();
+    index++;
+
+    // We are in the end of the list or someone is the winner!
+    if(index == validBaudRates().size() || lastCounter == 0) {
+        _configuring = false;
+
+        // We are not in the end of the list, so there is a valid baud rate that is faster
+        // than the lowest speed
+        if(index != validBaudRates().size()) {
+            index = 0;
+            while(baudRateToError[validBaudRates()[index]] != 0) {
+                index++;
+            }
+        } else {
+            // We are in the end of the list, we are going to use the lowest baud rate
+            index = validBaudRates().size() - 1;
+        }
+
+        setBaudRate(validBaudRates()[index]);
+    }
 }
 
 Ping360::~Ping360()
