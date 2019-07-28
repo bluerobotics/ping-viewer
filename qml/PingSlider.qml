@@ -9,6 +9,7 @@ RowLayout {
     property var text
     property alias value : sliderControl.value
     property alias control: sliderControl
+    property var valueText : null
 
     Label {
         horizontalAlignment: Text.AlignRight
@@ -27,8 +28,7 @@ RowLayout {
 
     Label {
         Layout.fillWidth: true
-
         Layout.preferredWidth: 40
-        text: root.value
+        text: valueText !== null ? valueText : root.value
     }
 }
