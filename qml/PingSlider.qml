@@ -7,7 +7,7 @@ RowLayout {
     id: root
 
     property var text
-    property var value
+    property alias value : sliderControl.value
     property alias control: sliderControl
 
     Label {
@@ -23,7 +23,6 @@ RowLayout {
         Layout.fillWidth: true
         stepSize: 1
         wheelEnabled: true
-        value: root.value
     }
 
     Label {
