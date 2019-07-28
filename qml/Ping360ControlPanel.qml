@@ -25,15 +25,6 @@ Item {
             Layout.fillWidth: true
 
             PingSlider {
-                text: "Sector Angle (degrees)"
-                value: ping.sectorSize
-                control.from: 30
-                control.to: 360
-                control.stepSize: 15
-                control.snapMode: Slider.SnapAlways
-                control.onMoved: ping.sectorSize = control.value
-            }
-            PingSlider {
                 Layout.fillWidth: true
                 text: "Range (m)"
                 value: Math.round(ping.range)
@@ -42,13 +33,25 @@ Item {
                 control.to: 100
                 control.onMoved: ping.range = control.value
             }
-            PingSlider {
-                Layout.fillWidth: true
+
+            PingComboSlider {
                 text: "Receiver Gain"
-                value: ping.gain_setting
-                control.from: 0
-                control.to: 2
-                control.onMoved: ping.gain_setting = control.value
+                Layout.fillWidth: true
+                startingIndex: ping.gain_setting
+                model: ["Low", "Medium", "High"]
+                onOptionChanged: {
+                    ping.gain_setting = key
+                }
+            }
+
+            PingComboSlider {
+                Layout.fillWidth: true
+                text: "Sector Angle (degrees)"
+                startingIndex: 5
+                model: [60, 90, 120, 180, 360]
+                onOptionChanged: {
+                    ping.sectorSize = value
+                }
             }
 
             Rectangle { height: 1; Layout.fillWidth: true }
