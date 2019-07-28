@@ -71,6 +71,9 @@ void DeviceManager::stopDetecting()
 
 void DeviceManager::connectLink(LinkConfiguration* linkConf)
 {
+    // Stop detector if we are going to connect with something
+    stopDetecting();
+
     // Find configuration in vector with valid index
     int objIndex = -1;
     for(int i{0}; i < _sensors[Connection].size(); i++) {
