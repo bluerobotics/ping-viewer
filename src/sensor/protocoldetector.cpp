@@ -134,12 +134,13 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
         return false;
     }
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Port is open";
+
     port.setBaudRate(baudrate);
     port.setBreakEnabled(true);
     QThread::usleep(500);
     port.setBreakEnabled(false);
     QThread::msleep(11);
-    port.write("U");
+    port.write("UUU");
     port.flush();
     QThread::msleep(11);
 
