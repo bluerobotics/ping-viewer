@@ -54,48 +54,67 @@ Item {
                 }
             }
 
-            Rectangle { height: 1; Layout.fillWidth: true }
+            RowLayout {
+                Layout.alignment: Qt.AlignRight
+                PingImage {
+                    id: advancedSettingsButton
+                    source: StyleManager.configureIcon()
+                    height: 50
+                    width: 50
+                    selected: false
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            advancedSettingsButton.selected = !advancedSettingsButton.selected
+                        }
+                    }
+                }
+            }
 
-            PingSlider {
-                Layout.fillWidth: true
-                // TODO: proper symbol for us
-                text: "Transmit Duration (μs)"
-                value: ping.transmit_duration
-                control.from: 5
-                control.to: 1000
-                control.onMoved: ping.transmit_duration = control.value
-            }
-            PingSlider {
-                Layout.fillWidth: true
-                text: "Transmit Frequency (kHz)"
-                value: ping.transmit_frequency
-                control.from: 500
-                control.to: 1000
-                control.onMoved: ping.transmit_frequency = control.value
-            }
-            PingSlider {
-                Layout.fillWidth: true
-                text: "Speed of Sound (m/s)"
-                value: ping.speed_of_sound
-                control.from: 1450
-                control.to: 1550
-                control.onMoved: ping.speed_of_sound = control.value
-            }
-            PingSlider {
-                Layout.fillWidth: true
-                text: "Angular Resolution (gradian)"
-                value: ping.angular_speed
-                control.from: 1
-                control.to: 10
-                control.onMoved: ping.angular_speed = control.value
-            }
-            PingSlider {
-                Layout.fillWidth: true
-                text: "Angle Offset (degree)"
-                value: ping.angle_offset
-                control.from: 0
-                control.to: 359
-                control.onMoved: ping.angle_offset = control.value
+            ColumnLayout {
+                id: advancedSettings
+                visible: advancedSettingsButton.selected
+                PingSlider {
+                    Layout.fillWidth: true
+                    // TODO: proper symbol for us
+                    text: "Transmit Duration (μs)"
+                    value: ping.transmit_duration
+                    control.from: 5
+                    control.to: 1000
+                    control.onMoved: ping.transmit_duration = control.value
+                }
+                PingSlider {
+                    Layout.fillWidth: true
+                    text: "Transmit Frequency (kHz)"
+                    value: ping.transmit_frequency
+                    control.from: 500
+                    control.to: 1000
+                    control.onMoved: ping.transmit_frequency = control.value
+                }
+                PingSlider {
+                    Layout.fillWidth: true
+                    text: "Speed of Sound (m/s)"
+                    value: ping.speed_of_sound
+                    control.from: 1450
+                    control.to: 1550
+                    control.onMoved: ping.speed_of_sound = control.value
+                }
+                PingSlider {
+                    Layout.fillWidth: true
+                    text: "Angular Resolution (gradian)"
+                    value: ping.angular_speed
+                    control.from: 1
+                    control.to: 10
+                    control.onMoved: ping.angular_speed = control.value
+                }
+                PingSlider {
+                    Layout.fillWidth: true
+                    text: "Angle Offset (degree)"
+                    value: ping.angle_offset
+                    control.from: 0
+                    control.to: 359
+                    control.onMoved: ping.angle_offset = control.value
+                }
             }
         }
     }
