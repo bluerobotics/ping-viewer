@@ -77,6 +77,12 @@ LinkConfiguration::Error LinkConfiguration::error() const
     return NoErrors;
 }
 
+void LinkConfiguration::setArgs(const QStringList& args)
+{
+    _linkConf.args = args;
+    emit configurationChanged();
+}
+
 QString LinkConfiguration::serialPort()
 {
     if(!checkType(LinkType::Serial) || !_linkConf.args.size()) {
@@ -159,5 +165,6 @@ QDataStream& operator>>(QDataStream &in, LinkConfiguration &linkConfiguration)
                             name,
                             static_cast<PingDeviceType>(variantDeviceType.toInt())
                         );
+    emit linkConfiguration.configurationChanged();
     return in;
 }

@@ -100,6 +100,13 @@ public:
     Q_INVOKABLE QStringList argsAsConst() const { return _linkConf.args; };
 
     /**
+     * @brief Set link configuration arguments
+     *
+     * @param args
+     */
+    void setArgs(const QStringList& args);
+
+    /**
      * @brief Return PingDeviceType enumartion for device specific identification
      *
      * @return PingDeviceType
@@ -285,6 +292,11 @@ public:
         this->_linkConf = other.configurationStruct();
         return *this;
     }
+
+    Q_PROPERTY(QString string READ createFullConfString NOTIFY configurationChanged)
+
+signals:
+    void configurationChanged();
 
 private:
     static const QMap<Error, QString> _errorMap;
