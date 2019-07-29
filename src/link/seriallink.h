@@ -56,10 +56,11 @@ public:
 
     /**
      * @brief Return a list of available ports
+     * Any change in the port should be notified and dealed via `configurationChanged()`
      *
      * @return QSerialPort*
      */
-    QSerialPort* port() { return &_port; };
+    const QSerialPort* port() const { return &_port; };
 
     /**
      * @brief Set link configuration
