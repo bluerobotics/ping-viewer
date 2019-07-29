@@ -31,7 +31,7 @@ Item {
     property var hoverParent: undefined
     property var icon: undefined
     property var item: null
-    property real marginMult: 1.05
+    property real margin: 10
     property real startAngle: 0
 
     onItemChanged: {
@@ -164,8 +164,8 @@ Item {
         id: itemRect
         opacity: 0
 
-        height: item != null ? item.height*marginMult : 0
-        width: item != null ? item.width*marginMult : 0
+        height: item != null ? item.height + pingItem.margin*2 : 0
+        width: item != null ? item.width + pingItem.margin*2: 0
         color: pingItem.color
         property bool hide: true
 
