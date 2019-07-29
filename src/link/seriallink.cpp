@@ -73,7 +73,7 @@ bool SerialLink::startConnection()
     QThread::usleep(500);
     _port.setBreakEnabled(false);
     QThread::msleep(11);
-    _port.write("U");
+    _port.write("UUU");
     _port.flush();
     QThread::msleep(11);
 
