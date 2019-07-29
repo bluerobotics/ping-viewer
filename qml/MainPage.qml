@@ -49,7 +49,7 @@ Item {
 
         PingItem {
             id: settingsMenu
-            marginMult: 1
+            margin: 0
             icon: StyleManager.settingsIcon()
             item: ColumnLayout {
                 spacing: 0
