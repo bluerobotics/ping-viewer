@@ -18,7 +18,7 @@ Item {
         icon: StyleManager.bellIcon()
         state: "bottom-right"
         visible: true
-        marginMult: 1
+        margin: 0
         item: ColumnLayout {
             id: mainNotificationLayout
             spacing: 5
