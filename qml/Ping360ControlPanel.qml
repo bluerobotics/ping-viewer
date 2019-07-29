@@ -69,6 +69,21 @@ Item {
                         }
                     }
                 }
+
+                PingImage {
+                    id: firmwareUpdateButton
+                    source: StyleManager.chipIcon()
+                    height: 50
+                    width: 50
+                    enabled: false
+                    selected: false
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            firmwareUpdateButton.selected = !firmwareUpdateButton.selected
+                        }
+                    }
+                }
             }
 
             ColumnLayout {
