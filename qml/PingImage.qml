@@ -26,6 +26,6 @@ Item {
         id: colorOverlay
         anchors.fill: image
         source: image
-        color: selected ? Material.foreground : Material.primary
+        color: !root.enabled ? Material.background : selected ? Material.foreground : Material.primary
     }
 }
