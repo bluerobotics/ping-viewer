@@ -122,6 +122,21 @@ GroupBox {
                 control.to: 359
                 control.onMoved: ping.angle_offset = control.value
             }
+            RowLayout {
+                Button {
+                    id: autoBaudRateChB
+                    text: "Auto baudrate"
+                    onClicked: ping.startConfiguration()
+                }
+                PingComboBox {
+                    model: ping.validBaudRates
+                    Layout.fillWidth: true
+                    enabled: !autoBaudRateChB.checked
+                    onCurrentTextChanged: {
+                        ping.setBaudRateAndRequestProfile(parseInt(currentText))
+                    }
+                }
+            }
         }
     }
 }
