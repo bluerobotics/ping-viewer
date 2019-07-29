@@ -26,7 +26,7 @@ Item {
                 model: [
                     "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
                     "SRC: " + ping.srcId + " DST: " + ping.dstId,
-                    "Connection: " + ping.link.configuration.createConfString(),
+                    "Connection: " + ping.link.configuration.string,
                     "Distance (mm): " + ping.distance,
                     "Auto (bool): " + ping.mode_auto,
                     "Scan Start (mm): " + ping.start_mm,
