@@ -91,7 +91,6 @@ Item {
                 visible: advancedSettingsButton.selected
                 PingSlider {
                     Layout.fillWidth: true
-                    // TODO: proper symbol for us
                     text: "Transmit Duration (μs)"
                     value: ping.transmit_duration
                     control.from: 5
