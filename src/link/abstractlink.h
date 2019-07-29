@@ -217,7 +217,7 @@ public:
     }
 
     Q_PROPERTY(qint64 byteSize READ byteSize NOTIFY byteSizeChanged)
-    Q_PROPERTY(LinkConfiguration* configuration READ configuration CONSTANT)
+    Q_PROPERTY(LinkConfiguration* configuration READ configuration NOTIFY configurationChanged)
     Q_PROPERTY(QTime elapsedTime READ elapsedTime NOTIFY elapsedTimeChanged)
     Q_PROPERTY(QString elapsedTimeString READ elapsedTimeString NOTIFY elapsedTimeChanged)
     Q_PROPERTY(bool isAutoConnect READ isAutoConnect WRITE setAutoConnect NOTIFY autoConnectChanged)
@@ -231,6 +231,7 @@ public:
 
 signals:
     void availableConnectionsChanged();
+    void configurationChanged();
     void nameChanged(const QString& name);
     void autoConnectChanged();
     void linkChanged(AbstractLinkNamespace::LinkType link);

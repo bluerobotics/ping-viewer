@@ -47,6 +47,7 @@ bool SerialLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     _port.setPortName(linkConfiguration.args()->at(0));
     _port.setBaudRate(linkConfiguration.args()->at(1).toInt());
+    emit configurationChanged();
     return true;
 }
 
