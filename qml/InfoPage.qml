@@ -320,10 +320,10 @@ Item {
                 Text {
                     text: "This action will reset the appication settings and do a restart of the program, do you want to proceed ?"
                     clip: true
-                    Layout.maximumWidth: parent.width - 50
+                    Layout.margins: 25
                     Layout.columnSpan: 5
-                    horizontalAlignment: Text.AlignHCenter
                     Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter
                     color: Material.primary
                     wrapMode: Text.WordWrap
                 }
