@@ -30,6 +30,7 @@ Item {
                     "Range (m): " + ping.range.toFixed(2),
                     "Sample period (μs): " + ping.sample_period,
                     "Number of samples (#): " + ping.number_of_points,
+                    "Profile frequency (Hz): " + ping.profileFrequency.toFixed(2),
                     "Ping (#): " + ping.ping_number,
                     "Angle (grad): " + ping.angle,
                     "Angle Offset (grad): " + ping.angle_offset,
