@@ -39,8 +39,9 @@ Item {
             return
         }
         item.parent = itemRect
-        item.enabled = false
-        item.visible = false
+        // The content can change while the item is open
+        item.enabled = clicked
+        item.visible = clicked
         item.z = 1
         item.opacity = itemRect.opacity
         item.anchors.horizontalCenter = itemRect.horizontalCenter
