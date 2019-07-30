@@ -18,19 +18,16 @@ PingSlider {
     id: root
 
     property alias model: internalTicks.model
-    property var startingIndex
+    property var startingIndex: null
+    property var startingValue: null
     signal optionChanged(var key, var value)
 
     valueText: model[value]
+    value: 0
 
     control.from: 0
     control.to: model.length - 1
-
     control.stepSize: 1
-
-    onStartingIndexChanged: {
-        root.value = startingIndex
-    }
 
     onValueChanged: {
         optionChanged(value, model[value])
@@ -64,6 +61,14 @@ PingSlider {
                     x: -width/2
                 }
             }
+        }
+    }
+
+    Component.onCompleted: {
+        if (root.startingIndex !== null) {
+            root.value = root.startingIndex;
+        } else if (root.startingValue !== null) {
+            root.value = root.model.indexOf(root.startingValue);
         }
     }
 }
