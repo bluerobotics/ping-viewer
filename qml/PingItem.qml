@@ -163,9 +163,8 @@ Item {
     Rectangle {
         id: itemRect
         opacity: 0
-
-        height: item != null ? item.height + pingItem.margin*2 : 0
-        width: item != null ? item.width + pingItem.margin*2: 0
+        implicitWidth: item !== null ? item.implicitWidth + pingItem.margin*2 : 0
+        implicitHeight: item !== null ? item.implicitHeight + pingItem.margin*2 : 0
         color: pingItem.color
         property bool hide: true
 
