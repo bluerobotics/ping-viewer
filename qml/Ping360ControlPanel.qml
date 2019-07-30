@@ -19,14 +19,12 @@ GroupBox {
     ColumnLayout {
         Layout.fillWidth: true
 
-        PingSlider {
+        PingComboSlider {
             Layout.fillWidth: true
             text: "Range (m)"
-            value: Math.round(ping.range)
-            control.stepSize: 1
-            control.from: 1
-            control.to: 100
-            control.onMoved: ping.range = control.value
+            model: [1, 2, 5, 10, 20, 30, 40, 50, 60]
+            onOptionChanged: ping.range = value
+            startingValue: Math.round(ping.range)
         }
 
         PingComboSlider {
