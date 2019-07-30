@@ -3,6 +3,7 @@
 #include <cmath>
 #include <functional>
 
+#include <QElapsedTimer>
 #include <QProcess>
 #include <QSharedPointer>
 #include <QTimer>
@@ -320,6 +321,18 @@ public:
     Q_PROPERTY(int sectorSize READ sectorSize WRITE setSectorSize NOTIFY sectorSizeChanged)
 
     /**
+     * @brief Get frequency of the profile messages
+     *
+     * @return float
+     */
+    float profileFrequency()
+    {
+        return messageFrequencies[Ping360Id::DEVICE_DATA].frequency;
+    }
+
+    Q_PROPERTY(float profileFrequency READ profileFrequency NOTIFY messageFrequencyChanged)
+
+    /**
      * @brief Do firmware sensor update
      *
      * @param fileUrl firmware file path
@@ -340,6 +353,7 @@ signals:
     void angularSpeedChanged();
     void dataChanged();
     void gainSettingChanged();
+    void messageFrequencyChanged();
     void numberOfPointsChanged();
     void pingNumberChanged();
     void reverseDirectionChanged();
@@ -405,7 +419,30 @@ private:
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
 
+    QElapsedTimer _messageElapsedTimer;
     QTimer _timeoutProfileMessage;
+
+    // Helper structure to hold frequency information for each message
+    struct MessageFrequencyHelper {
+        float frequency = 0;
+        int lastElapsedTime = 0;
+        // LPF IIR alpha coefficient
+        float alpha = 0.8f;
+        void setElapsed(int timeMs)
+        {
+            // If timeMs is zero, reset structure.
+            // Otherwise start it
+            if(lastElapsedTime == 0 || timeMs == 0) {
+                lastElapsedTime = timeMs;
+                return;
+            }
+            float elapsedMs = (timeMs - lastElapsedTime)*0.001;
+            frequency = (1.0f - alpha)/elapsedMs + alpha*frequency;
+            lastElapsedTime = timeMs;
+        }
+    };
+
+    QHash<uint16_t, MessageFrequencyHelper> messageFrequencies;
 
     void handleMessage(const ping_message& msg) final; // handle incoming message
 
