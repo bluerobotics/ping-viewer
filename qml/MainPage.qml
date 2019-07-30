@@ -19,7 +19,7 @@ Item {
     focus: true
 
     property var ping: DeviceManager.primarySensor
-    property var sensorVisualizer: ping.sensorVisualizer(root)
+    property var sensorVisualizer: ping ? ping.sensorVisualizer(root) : null
 
     Column {
         z: 1
@@ -107,10 +107,11 @@ Item {
             item: InfoPage {
                 id: infoPage
                 anchors.fill: parent
-                deviceFirmware: ping.firmware_version_major + "." + ping.firmware_version_minor
-                deviceID: ping.srcId
-                deviceRevision: ping.device_revision
-                deviceType: ping.device_type
+                deviceFirmware: ping ?
+                    ping.firmware_version_major + "." + ping.firmware_version_minor : null
+                deviceID: ping ? ping.srcId : null
+                deviceRevision: ping ? ping.device_revision : null
+                deviceType: ping ? ping.device_type : null
             }
             onHideItemChanged: {
                 if(hideItem == false) {
@@ -137,7 +138,7 @@ Item {
             PingButton {
                 id: replayStartBt
                 text: "▮▮"
-                enabled: !ping.link.isWritable()
+                enabled: ping ? !ping.link.isWritable() : false
                 onClicked: {
                     if(text == "▶") {
                         text = "▮▮"
@@ -157,11 +158,11 @@ Item {
 
             Slider {
                 id: replaySlider
-                enabled: !ping.link.isWritable()
+                enabled: ping ? !ping.link.isWritable() : false
                 from: 0
-                value: ping.link.packageIndex
+                value: ping ? ping.link.packageIndex : 0
                 stepSize: 1
-                to: ping.link.packageSize
+                to: ping ? ping.link.packageSize : 0
                 onValueChanged: {
                     if(ping.link.packageIndex !== value) {
                         ping.link.packageIndex = value
@@ -172,7 +173,9 @@ Item {
 
             Text {
                 id: replayElapsed
-                text: ping.link.isWritable() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
+                text: ping ?
+                    ping.link.isWritable() ? "00:00:00.000 / 00:00:00.000" : ping.link.elapsedTimeString + " / " + ping.link.totalTimeString
+                    : null
                 color: Material.primary
             }
 
