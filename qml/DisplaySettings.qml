@@ -68,7 +68,8 @@ Item {
                     }
 
                     Loader {
-                        sourceComponent: DeviceManager.primarySensor.sensorVisualizer().displaySettings
+                        sourceComponent: DeviceManager.primarySensor ?
+                            DeviceManager.primarySensor.sensorVisualizer().displaySettings : null
                         Layout.columnSpan:  5
                         Layout.fillWidth: true
                         Layout.fillHeight: true
