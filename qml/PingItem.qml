@@ -31,13 +31,22 @@ Item {
     property var hoverParent: undefined
     property var icon: undefined
     property var item: null
+    property var lastItem: null
     property real margin: 10
     property real startAngle: 0
 
     onItemChanged: {
-        if(item == null) {
+        // Remove parent of the last item and make it not visible
+        if(lastItem !== null) {
+            lastItem.parent = null
+            lastItem.visible = false
+        }
+
+        if(item === null) {
             return
         }
+
+        lastItem = item
         item.parent = itemRect
         // The content can change while the item is open
         item.enabled = clicked
