@@ -8,8 +8,6 @@ PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 DeviceManager::DeviceManager() :
     _detector(new ProtocolDetector())
 {
-    emit primarySensorChanged();
-
     for(const auto& key : _roleNames.keys()) {
         _roles.append(key);
         _sensors.insert(key, {});
