@@ -69,7 +69,6 @@ void DeviceManager::stopDetecting()
     qCDebug(DEVICEMANAGER) << "Stop protocol detector service.";
     _detector->stop();
     _detectorThread.quit();
-    _detectorThread.wait();
 }
 
 void DeviceManager::connectLink(LinkConfiguration* linkConf)
@@ -153,4 +152,5 @@ DeviceManager* DeviceManager::self()
 DeviceManager::~DeviceManager()
 {
     stopDetecting();
+    _detectorThread.wait();
 }
