@@ -72,7 +72,7 @@ public:
     QUdpSocket* udpSocket() { return _udpSocket; };
 
 private:
-    QHostAddress _hostAddress;
+    QString _hostAddress;
     QUdpSocket* _udpSocket;
     uint _port;
 };
