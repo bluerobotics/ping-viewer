@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
 
     // Singleton register
     qRegisterMetaType<AbstractLinkNamespace::LinkType>();
+    qRegisterMetaType<PingEnumNamespace::PingDeviceType>();
+    qRegisterMetaType<PingEnumNamespace::PingMessageId>();
+
     qmlRegisterSingletonType<DeviceManager>("DeviceManager", 1, 0, "DeviceManager",
                                             DeviceManager::qmlSingletonRegister);
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
@@ -65,6 +68,11 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableMetaObject(
         AbstractLinkNamespace::staticMetaObject,
         "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "This is another enum."
+    );
+
+    qmlRegisterUncreatableMetaObject(
+        PingEnumNamespace::staticMetaObject,
+        "PingEnumNamespace", 1, 0, "PingEnumNamespace", "Namespace for Ping protocol enums access from QML."
     );
 
     // DPI support and HiDPI pixmaps
