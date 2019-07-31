@@ -13,29 +13,29 @@ PING_LOGGING_CATEGORY(waterfall, "ping.waterfall")
 QList<WaterfallGradient> Waterfall::_gradients {
     {
         QStringLiteral("Thermal blue"), {
-            QColor("#05225f"),
-            QColor("#6aa84f"),
-            QColor("#ffff00"),
-            QColor("#7f6000"),
-            QColor("#5c0f08"),
+            QColor(5,34,95),
+            QColor(106,168,79),
+            QColor(255,255,0),
+            QColor(127,96,0),
+            QColor(92,15,8),
         }
     },
     {
         QStringLiteral("Thermal black"), {
             Qt::black,
-            QColor("#6aa84f"),
-            QColor("#ffff00"),
-            QColor("#7f6000"),
-            QColor("#5c0f08"),
+            QColor(106,168,79),
+            QColor(255,255,0),
+            QColor(127,96,0),
+            QColor(92,15,8),
         }
     },
     {
         QStringLiteral("Thermal white"), {
             Qt::white,
-            QColor("#6aa84f"),
-            QColor("#ffff00"),
-            QColor("#7f6000"),
-            QColor("#5c0f08"),
+            QColor(106,168,79),
+            QColor(255,255,0),
+            QColor(127,96,0),
+            QColor(92,15,8),
         }
     },
     {
@@ -52,8 +52,8 @@ QList<WaterfallGradient> Waterfall::_gradients {
     },
     {
         QStringLiteral("Monochrome sepia"), {
-            QColor("#302113"),
-            QColor("#e8c943"),
+            QColor(48,33,19),
+            QColor(232,201,67),
         }
     },
 };
