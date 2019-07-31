@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableMetaObject(
         AbstractLinkNamespace::staticMetaObject,
-        "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "This is another enum."
+        "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "Namespace for LinkType enum access from QML."
     );
 
     qmlRegisterUncreatableMetaObject(
