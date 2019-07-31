@@ -2,6 +2,32 @@
  * @brief This header defines some macros to help SettingsManager development
  */
 
+#include <QVariant>
+
+/**
+ *@brief call the correct method for Qvariants that have bool values
+ */
+template<bool> bool qVariantValueOf(const QVariant& variant)
+{
+    return variant.toBool();
+}
+
+/**
+ *@brief call the correct method for Qvariants that have int values
+ */
+template<int> int qVariantValueOf(const QVariant& variant)
+{
+    return variant.toInt();
+}
+
+/**
+ *@brief call the correct method for Qvariants that have T values
+ */
+template<typename T> T qVariantValueOf(const QVariant& variant)
+{
+    return variant.value<T>();
+}
+
 /**
  * @brief Defines a simple propriety
  * The output will be something like:
@@ -13,7 +39,7 @@
  *        // Always check settings content, make sure that everything is updated
  *        QVariant variant = _settings.value(QStringLiteral(myName)); \
  *        if(variant.isValid()) { \
- *            _myName = variant.value<myType>(); \
+ *            _myName = ::qVariantValueOf<myType>(variant); \
  *        } else { \
  *            _myName = defaultValue; \
  *            myType(_myType); \
@@ -40,7 +66,7 @@ public: \
     TYPE NAME() { \
         QVariant variant = _settings.value(QStringLiteral(#NAME)); \
         if(variant.isValid()) { \
-            _ ## NAME = variant.value<TYPE>(); \
+            _ ## NAME = ::qVariantValueOf<TYPE>(variant); \
         } else { \
             _ ## NAME = DEFAULT_VALUE; \
             NAME(_ ## NAME); \
