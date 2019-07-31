@@ -66,8 +66,10 @@ public:
      *
      * @param connType
      * @param connString
+     * @param deviceType
      */
-    Q_INVOKABLE void connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString);
+    Q_INVOKABLE void connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,
+                                         PingEnumNamespace::PingDeviceType deviceType);
 
     /**
      * @brief Append configuration to the list of available connections
