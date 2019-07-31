@@ -142,7 +142,6 @@ public:
 signals:
     void antialiasingChanged();
 
-    void mouseDepthChanged();
     void mouseConfidenceChanged();
     // TODO: mouseMove should be renamed
     void mouseMove();
