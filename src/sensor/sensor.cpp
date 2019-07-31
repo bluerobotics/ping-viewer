@@ -19,7 +19,6 @@ Sensor::Sensor()
     ,_linkOut(nullptr)
     ,_parser(nullptr)
 {
-    emit connectionUpdate();
     connect(this, &Sensor::connectionOpen, this, [this] {
         _connected = true;
         emit this->connectionUpdate();
