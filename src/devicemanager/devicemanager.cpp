@@ -103,9 +103,11 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
     _sensors[Connected][objIndex] = true;
 }
 
-void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString)
+void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,
+                                        PingEnumNamespace::PingDeviceType deviceType)
 {
     auto linkConfiguration = LinkConfiguration{connType, connString};
+    linkConfiguration.setDeviceType(deviceType);
 
     // Append configuration as device of type "None"
     // This will create and populate all necessary roles before connecting
