@@ -216,14 +216,6 @@ public:
         };
     }
 
-    /**
-     * @brief Copy operation
-     *
-     * @param other
-     * @return const AbstractLink&
-     */
-    const AbstractLink& operator=(const AbstractLink& other);
-
     Q_PROPERTY(qint64 byteSize READ byteSize NOTIFY byteSizeChanged)
     Q_PROPERTY(LinkConfiguration* configuration READ configuration CONSTANT)
     Q_PROPERTY(QTime elapsedTime READ elapsedTime NOTIFY elapsedTimeChanged)

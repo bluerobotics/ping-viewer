@@ -11,12 +11,4 @@ AbstractLink::AbstractLink(QObject* parent)
 {
 }
 
-const AbstractLink& AbstractLink::operator=(const AbstractLink& other)
-{
-    _autoConnect = other._autoConnect;
-    _type = other._type;
-    _name = other._name;
-    return *this;
-}
-
 AbstractLink::~AbstractLink() = default;
