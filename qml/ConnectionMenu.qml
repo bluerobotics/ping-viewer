@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 
 import AbstractLinkNamespace 1.0
 import DeviceManager 1.0
+import PingEnumNamespace 1.0
 import SettingsManager 1.0
 import Util 1.0
 
@@ -12,23 +13,6 @@ Item {
     id: root
     property var ping: null
     property var serialPortList: null
-
-    function connect(connectionTypeEnum) {
-        // Only connect from user input
-        if(!parent.visible) {
-            return
-        }
-
-        // Do not connect if no valid type or input
-        if(connectionTypeEnum < AbstractLinkNamespace.None || connectionTypeEnum >= AbstractLinkNamespace.Last) {
-            print("The connection configuration type is not valid!")
-            return
-        }
-
-        // Transform arguments to Array and remove connectionTypeEnum from it
-        var nextArgs = Array.prototype.slice.call(arguments).slice(1)
-        DeviceManager.connectLinkDirectly(connectionTypeEnum, nextArgs)
-    }
 
     Connections {
         target: ping
@@ -68,7 +52,6 @@ Item {
     GroupBox {
         id: connectionLayout
         title: "Connection configuration"
-        enabled: true
         // Hack
         label.x: width/2 - label.contentWidth/2
         width: parent.width
@@ -81,39 +64,51 @@ Item {
             columnSpacing: 5
 
             Text {
-                text: "Communication:"
-                enabled: true
+                text: "Device:"
                 color: Material.primary
             }
 
             ComboBox {
-                id: conntype
-                enabled: true
-                Layout.columnSpan:  4
+                id: deviceCB
                 Layout.fillWidth: true
-                Layout.minimumWidth: 150
+                textRole: "name"
+                //TODO: This model should be provided by someone else and not to be hardcoded here
+                model: ListModel {
+                    ListElement {
+                        name: "Ping1D"
+                        deviceId: PingEnumNamespace.PingDeviceType.PING1D
+                    }
+                    ListElement {
+                        name: "Ping360"
+                        deviceId: PingEnumNamespace.PingDeviceType.PING360
+                    }
+                }
+            }
+
+            Text {
+                text: "Communication:"
+                color: Material.primary
+            }
+
+            PingComboBox {
+                id: conntype
+                Layout.columnSpan:  2
+                Layout.fillWidth: true
                 // Check AbstractLinkNamespace::LinkType for correct index type
-                // None = 0, File, Serial, Udp, Tcp, Sim...
-                model: SettingsManager.debugMode ?
-                    ["Serial (default)", "UDP", "Simulation"] : ["Serial (default)", "UDP"]
+                // None = 0, File, Serial, Udp, Tcp..
+                // Simulation is done via normal device manager since it does not need user configuration
+                model: ["Serial (default)", "UDP"]
                 onActivated: {
                     switch(index) {
                         case 0: // Serial
                             udpLayout.enabled = false
                             serialLayout.enabled = true
-                            connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
                             break
 
                         case 1: // UDP
                             udpLayout.enabled = true
                             serialLayout.enabled = false
-                            connect(AbstractLinkNamespace.Udp, udpIp.text, udpPort.text)
                             break
-
-                        case 2: // Simulation
-                            udpLayout.enabled = false
-                            serialLayout.enabled = false
-                            connect(AbstractLinkNamespace.Ping1DSimulation)
                     }
                 }
             }
@@ -135,11 +130,6 @@ Item {
                     Layout.columnSpan:  2
                     Layout.fillWidth: true
                     model: serialPortList
-                    onActivated: {
-                        if (currentIndex > -1) {
-                            connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
-                        }
-                    }
 
                     onModelChanged: {
                         var maxWidth = width
@@ -160,9 +150,6 @@ Item {
                 ComboBox {
                     id: baudrateBox
                     model: [115200, 9600]
-                    onActivated: {
-                        connect(AbstractLinkNamespace.Serial, serialPortsCB.currentText, baudrateBox.currentText)
-                    }
                 }
             }
 
@@ -205,9 +192,33 @@ Item {
                         bottom: 1
                         top: 65535
                     }
-                    onEditingFinished: {
-                        connect(AbstractLinkNamespace.Udp, udpIp.text, text)
+                }
+            }
+
+            Button {
+                text: "Connect"
+                Layout.fillWidth: true
+                Layout.columnSpan: 5
+
+                // Disable if using an invalid UDP address
+                enabled: conntype.currentIndex === 0 || udpIp.isValid
+
+                onClicked: {
+                    var connectionConf = null
+                    var connectionDevice = deviceCB.model.get(deviceCB.currentIndex).deviceId
+                    var connectionType = null
+                    switch(conntype.currentIndex) {
+                        case 0: // Serial
+                            connectionType = AbstractLinkNamespace.Serial
+                            connectionConf = [serialPortsCB.currentText, baudrateBox.currentText]
+                            break
+
+                        case 1: // UDP
+                            connectionType = AbstractLinkNamespace.Udp
+                            connectionConf = [udpIp.text, udpPort.text]
+                            break
                     }
+                    DeviceManager.connectLinkDirectly(connectionType, connectionConf, connectionDevice)
                 }
             }
         }
