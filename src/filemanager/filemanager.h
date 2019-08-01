@@ -7,7 +7,7 @@
 #include <QStringList>
 #include <QUrl>
 
-Q_DECLARE_LOGGING_CATEGORY(FILEMANAGER);
+Q_DECLARE_LOGGING_CATEGORY(FILEMANAGER)
 
 class QJSEngine;
 class QQmlEngine;
