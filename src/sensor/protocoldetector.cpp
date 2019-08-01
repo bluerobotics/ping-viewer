@@ -251,13 +251,13 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
 {
     // Call function asynchronously:
     auto checkPort = [](const QSerialPortInfo& portInfo) {
-        QSerialPort port(portInfo);
-        bool ok = port.open(QIODevice::ReadWrite);
+        QSerialPort serialPort(portInfo);
+        bool ok = serialPort.open(QIODevice::ReadWrite);
         if(!ok) {
-            qCWarning(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to open serial port:" << port.error();
+            qCWarning(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to open serial port:" << serialPort.error();
         }
         // Close will check if is open
-        port.close();
+        serialPort.close();
         return ok;
     };
 
