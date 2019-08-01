@@ -79,15 +79,15 @@ void Ping360::connectLink(LinkType connType, const QStringList& connString)
 
 void Ping360::requestNextProfile()
 {
-    // Calculate the next depta step
+    // Calculate the next delta step
     int steps = _angular_speed;
     if(_reverse_direction) {
         steps *= -1;
     }
 
     // Check if steps is in sector
-    auto isInside = [this](int steps) -> bool {
-        int relativeAngle = (steps + angle() + _angularResolutionGrad)%_angularResolutionGrad;
+    auto isInside = [this](int iSteps) -> bool {
+        int relativeAngle = (iSteps + angle() + _angularResolutionGrad)%_angularResolutionGrad;
         if(relativeAngle >= _angularResolutionGrad/2)
         {
             relativeAngle -= _angularResolutionGrad;
