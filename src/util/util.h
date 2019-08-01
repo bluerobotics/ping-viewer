@@ -6,7 +6,7 @@
 class QJSEngine;
 class QQmlEngine;
 
-Q_DECLARE_LOGGING_CATEGORY(util);
+Q_DECLARE_LOGGING_CATEGORY(util)
 
 class QQuickView;
 
