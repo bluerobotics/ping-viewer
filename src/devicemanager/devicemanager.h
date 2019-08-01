@@ -8,7 +8,7 @@
 #include "protocoldetector.h"
 #include "sensor.h"
 
-Q_DECLARE_LOGGING_CATEGORY(DEVICEMANAGER);
+Q_DECLARE_LOGGING_CATEGORY(DEVICEMANAGER)
 
 class QJSEngine;
 class QQmlEngine;
@@ -142,7 +142,7 @@ signals:
     void primarySensorChanged();
 
 private:
-    Q_DISABLE_COPY(DeviceManager);
+    Q_DISABLE_COPY(DeviceManager)
 
     /**
      * @brief Construct a new Device Manager object
