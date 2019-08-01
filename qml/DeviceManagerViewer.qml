@@ -130,15 +130,15 @@ PingPopup {
                 Layout.fillHeight: true
                 clip: true
                 model: DeviceManager
+                spacing: 2
 
                 delegate: Rectangle {
                     height: 40
-                    width: parent.width
-                    border.width: 1
-                    border.color: "gray"
-                    color: "transparent"
+                    width: mainLayout.width
+                    color: internalMouseArea.containsMouse ? "darkgray" : "transparent"
 
                     MouseArea {
+                        id: internalMouseArea
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
@@ -146,12 +146,6 @@ PingPopup {
                             // We should check if Sensor device is created and if it's really connected and
                             // communicating with the device
                             root.close()
-                        }
-                        ToolTip {
-                            x: parent.mouseX
-                            y: parent.mouseY - height - 5
-                            visible: parent.containsMouse
-                            text: "Connect."
                         }
                     }
 
