@@ -27,8 +27,21 @@ RowLayout {
     }
 
     Label {
-        Layout.fillWidth: true
         Layout.preferredWidth: 40
-        text: valueText !== null ? valueText : root.value
+        text: valueText !== null ? valueText : ""
+        visible: valueText !== null
+    }
+
+    SpinBox {
+        id: spinBox
+        Layout.minimumWidth: 150
+        Layout.maximumWidth: 150
+        visible: valueText === null
+        from: sliderControl.from
+        to: sliderControl.to
+        value: sliderControl.value
+        onValueChanged: sliderControl.value = value
+        stepSize: sliderControl.stepSize
+        editable: true
     }
 }
