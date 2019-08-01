@@ -16,6 +16,6 @@ enum LinkType {
     Last,
 };
 Q_ENUM_NS(LinkType)
-};
+}
 
 using namespace AbstractLinkNamespace;
