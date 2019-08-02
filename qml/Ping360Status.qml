@@ -10,7 +10,8 @@ Item {
     property var ping: null
 
     Rectangle {
-        anchors.centerIn: parent
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
 
         color: "black"
         opacity: 0.75
