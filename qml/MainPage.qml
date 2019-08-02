@@ -207,7 +207,7 @@ Item {
         // Bug: https://bugreports.qt.io/browse/QTBUG-63710
         Component.onCompleted: folder = FileManager.getPathFrom(FileManager.SensorLog)
         onAccepted: {
-            ping.connectLink(AbstractLinkNamespace.File, [fileUrl, "r"])
+            DeviceManager.playLogFile(AbstractLinkNamespace.File, [fileUrl, "r"])
             replayFileName.text = "File: " + fileName
         }
     }
