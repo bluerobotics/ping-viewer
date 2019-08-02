@@ -73,6 +73,14 @@ public:
                                          PingEnumNamespace::PingDeviceType deviceType);
 
     /**
+     * @brief Play a log file
+     *
+     * @param connType
+     * @param connString
+     */
+    Q_INVOKABLE void playLogFile(AbstractLinkNamespace::LinkType connType, const QStringList& connString);
+
+    /**
      * @brief Append configuration to the list of available connections
      *
      * @param linkConf

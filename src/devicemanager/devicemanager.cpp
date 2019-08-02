@@ -1,4 +1,5 @@
 #include "devicemanager.h"
+#include "filelink.h"
 #include "logger.h"
 #include "ping.h"
 #include "ping360.h"
@@ -114,6 +115,18 @@ void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType
 {
     auto linkConfiguration = LinkConfiguration{connType, connString};
     linkConfiguration.setDeviceType(deviceType);
+
+    // Append configuration as device of type "None"
+    // This will create and populate all necessary roles before connecting
+    append(linkConfiguration);
+    connectLink(&linkConfiguration);
+}
+
+void DeviceManager::playLogFile(AbstractLinkNamespace::LinkType connType, const QStringList& connString)
+{
+    // Update link configuration with sensor information that is included in the log file
+    auto linkConfiguration = LinkConfiguration{connType, connString};
+    linkConfiguration.setDeviceType(FileLink::staticLogSensorStruct(linkConfiguration).sensor.type.ping);
 
     // Append configuration as device of type "None"
     // This will create and populate all necessary roles before connecting
