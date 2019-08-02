@@ -365,7 +365,8 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
     // Wait for bytes to be written before finishing the connection
     while (serialLink->port()->bytesToWrite()) {
         qCDebug(PING_PROTOCOL_PING) << "Waiting for bytes to be written...";
-        serialLink->port()->waitForBytesWritten();
+        // We are not changing the connection structure, only waiting for bytes to be written
+        const_cast<QSerialPort*>(serialLink->port())->waitForBytesWritten();
         qCDebug(PING_PROTOCOL_PING) << "Done !";
     }
 
