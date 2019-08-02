@@ -21,6 +21,7 @@ DeviceManager::DeviceManager() :
         qCDebug(DEVICEMANAGER) << "Available devices:" << links;
         updateAvailableConnections(links);
     });
+    connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this, &DeviceManager::append);
     append({AbstractLinkNamespace::Ping1DSimulation, {}, "Ping1D Simulation", PingDeviceType::PING1D}, "Ping1D");
     append({AbstractLinkNamespace::Ping360Simulation, {}, "Ping360 Simulation", PingDeviceType::PING360}, "Ping360");
 }
@@ -60,11 +61,13 @@ void DeviceManager::startDetecting()
 {
     qCDebug(DEVICEMANAGER) << "Start protocol detector service.";
     _detectorThread.start();
+    _ping360EthernetFinder.start();
 }
 
 void DeviceManager::stopDetecting()
 {
     qCDebug(DEVICEMANAGER) << "Stop protocol detector service.";
+    _ping360EthernetFinder.stop();
     _detector->stop();
     _detectorThread.quit();
 }
