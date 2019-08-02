@@ -64,18 +64,7 @@ bool SerialLink::startConnection()
         return false;
     }
 
-    /** ABR fluxogram
-     * 1. Use break to force a 0 logical state for an entire frame
-     * 2. Send U (0b01010101) to allow an automatic baud rate detection
-     * 3. Force a write condition in the serial using the `flush` command
-     */
-    _port.setBreakEnabled(true);
-    QThread::usleep(500);
-    _port.setBreakEnabled(false);
-    QThread::msleep(11);
-    _port.write("UUU");
-    _port.flush();
-    QThread::msleep(11);
+    forceSensorAutomaticBaudRateDetection();
 
     return true;
 }
@@ -102,6 +91,31 @@ QStringList SerialLink::listAvailableConnections()
         emit availableConnectionsChanged();
     }
     return list;
+}
+
+void SerialLink::setBaudRate(int baudRate)
+{
+    _port.setBaudRate(baudRate);
+    QStringList args = _linkConfiguration.argsAsConst();
+    args[1] = QString::number(baudRate);
+    _linkConfiguration.setArgs(args);
+    forceSensorAutomaticBaudRateDetection();
+}
+
+void SerialLink::forceSensorAutomaticBaudRateDetection()
+{
+    /** ABR fluxogram
+     * 1. Use break to force a 0 logical state for an entire frame
+     * 2. Send U (0b01010101) to allow an automatic baud rate detection
+     * 3. Force a write condition in the serial using the `flush` command
+     */
+    _port.setBreakEnabled(true);
+    QThread::usleep(500);
+    _port.setBreakEnabled(false);
+    QThread::msleep(11);
+    _port.write("UUU");
+    _port.flush();
+    QThread::msleep(11);
 }
 
 SerialLink::~SerialLink()

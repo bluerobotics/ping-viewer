@@ -79,6 +79,19 @@ public:
      */
     bool startConnection() final override;
 
+    /**
+     * @brief Set a valid baudrate
+     *
+     * @param baudRate
+     */
+    void setBaudRate(int baudRate);
+
+    /**
+     * @brief Force sensor to do automatic baud rate detection
+     *
+     */
+    void forceSensorAutomaticBaudRateDetection();
+
 private:
     QSerialPort _port;
 };
