@@ -429,7 +429,7 @@ private:
     static const uint16_t _viewerDefaultTransmitFrequency = 750;
     static const uint16_t _viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
 
-    uint16_t _angle = _firmwareDefaultAngle;
+    uint16_t _angle = 200;
     uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
     uint32_t _gain_setting = _firmwareDefaultGainSetting;
     uint16_t _num_points = _viewerDefaultNumberOfSamples;
