@@ -8,6 +8,7 @@
 #include "link.h"
 #include "parser.h"
 #include "protocoldetector.h"
+#include "sensorinfo.h"
 
 // TODO: rename to Device?
 /**
@@ -18,7 +19,13 @@ class Sensor : public QObject
 {
     Q_OBJECT
 public:
-    Sensor();
+    /**
+     * @brief Construct a new Sensor object
+     *  This class is an abstraction layer for different sensors
+     *
+     * @param sensorInfo
+     */
+    Sensor(SensorInfo sensorInfo);
     ~Sensor();
 
     /**
@@ -138,6 +145,9 @@ protected:
     Parser* _parser; // communication implementation
 
     QString _name; // TODO: populate
+
+    // Hold sensor information of the class
+    SensorInfo _sensorInfo;
 
     // Hold the sensor visualizer item
     QSharedPointer<QQuickItem> _sensorVisualizer;

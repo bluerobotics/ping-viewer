@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
+#include "filelink.h"
 #include "filemanager.h"
 #include "sensor.h"
 
@@ -12,12 +13,13 @@ Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 
 const QUrl Sensor::_defaultControlPanelUrl("qrc:/NoControlPanel.qml");
 
-Sensor::Sensor()
+Sensor::Sensor(SensorInfo sensorInfo)
     :_connected(false)
     ,_controlPanelUrl(_defaultControlPanelUrl)
     ,_linkIn(new Link())
     ,_linkOut(nullptr)
     ,_parser(nullptr)
+    ,_sensorInfo(sensorInfo)
 {
     connect(this, &Sensor::connectionOpen, this, [this] {
         _connected = true;
@@ -97,6 +99,13 @@ void Sensor::connectLinkLog(const LinkConfiguration& logConf)
     }
 
     _linkOut = QSharedPointer<Link>(new Link(logConf));
+
+    // Configure log file
+    auto fileLink = qobject_cast<FileLink*>(linkLog());
+    if(fileLink) {
+        fileLink->logSensorStruct()->setSensorInfo(_sensorInfo);
+    }
+
     linkLog()->startConnection();
 
     if(!linkLog()->isOpen()) {
