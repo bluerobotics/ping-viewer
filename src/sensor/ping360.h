@@ -353,6 +353,18 @@ public:
     Q_PROPERTY(float profileFrequency READ profileFrequency NOTIFY messageFrequencyChanged)
 
     /**
+     * @brief The maximum transmit duration that will be applied is limited internally by the
+     * firmware to prevent damage to the hardware
+     * The maximum transmit duration is equal to 64 * the sample period in microseconds
+     * @return the maximum transmit duration allowed in microseconds
+     */
+    int transmitDurationMin()
+    {
+        return _firmwareMinTransmitDuration;
+    }
+    Q_PROPERTY(int transmitDurationMin READ transmitDurationMin CONSTANT)
+
+    /**
      * @brief automatic transmit duration adjustment
      * @param automatic true to adjust the transmit duration automatically when the range is adjusted
      */
