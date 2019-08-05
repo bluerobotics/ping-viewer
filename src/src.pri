@@ -27,3 +27,5 @@ include($$PWD/settings/settings.pri)
 include($$PWD/style/style.pri)
 include($$PWD/util/util.pri)
 include($$PWD/waterfall/waterfall.pri)
+include($$PWD/qtquickcomponents/qtquickcomponents.pri)
+
