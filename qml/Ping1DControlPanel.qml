@@ -186,21 +186,21 @@ ColumnLayout {
                     // Length
                     if(ping.length_mm !== lengthMm) {
                         // Check if length is less than minLengthMm
-                        var lengthMm = lengthMm
-                        if(lengthMm < minLengthMm) {
-                            lengthMm = minLengthMm
+                        var internalLengthMm = lengthMm
+                        if(internalLengthMm < minLengthMm) {
+                            internalLengthMm = minLengthMm
                         }
 
                         // Check if length is inside our maxDepthMm
-                        lengthMm = Math.min(lengthMm, maxDepthMm - ping.start_mm)
+                        internalLengthMm = Math.min(lengthMm, maxDepthMm - ping.start_mm)
 
                         // If length is invalid, set minLengthMm
-                        if(isNaN(lengthMm)) {
-                            lengthMm = minLengthMm
+                        if(isNaN(internalLengthMm)) {
+                            internalLengthMm = minLengthMm
                         }
 
                         // Set new value
-                        ping.length_mm = lengthMm
+                        ping.length_mm = internalLengthMm
                     }
                 }
 
