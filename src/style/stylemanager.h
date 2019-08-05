@@ -5,20 +5,12 @@
 #include <QLoggingCategory>
 #include <QQmlApplicationEngine>
 
+#include "pingproperties.h"
+
 class QJSEngine;
 class QQmlEngine;
 
 Q_DECLARE_LOGGING_CATEGORY(STYLEMANAGER)
-
-// TODO: Move this macro to somewhere else and use it in other classes
-#define P_PROPERTY(TYPE, NAME, VALUE) \
-    Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME##Changed) \
-public: \
-    TYPE NAME() { return _##NAME; }; \
-    void NAME(TYPE NAME) { if(NAME == _##NAME) return; _##NAME = NAME; emit NAME##Changed(); }; \
-    Q_SIGNAL void NAME##Changed();\
-private: \
-    TYPE _##NAME = VALUE;
 
 /**
  * @brief Manage the project StyleManager
