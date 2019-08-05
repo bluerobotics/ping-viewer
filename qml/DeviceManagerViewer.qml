@@ -130,15 +130,25 @@ PingPopup {
                 Layout.fillHeight: true
                 clip: true
                 model: DeviceManager
-
+                spacing: 4
                 delegate: Rectangle {
+                    id: rectDelegate
                     height: 40
                     width: parent.width
-                    border.width: 1
-                    border.color: "gray"
                     color: "transparent"
+                    Rectangle {
+                       height: 1
+                       color: 'gray'
+                       anchors {
+                           left: rectDelegate.left
+                           right: rectDelegate.right
+                           top: rectDelegate.bottom
+                       }
+                       visible: index < DeviceManager.count - 1
+                    }
 
                     MouseArea {
+                        id: buttonMouseArea
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
