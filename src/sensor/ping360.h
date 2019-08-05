@@ -502,23 +502,22 @@ private:
      */
 ///@{
 
-    // TODO: static members should be defined in .cpp
     // firmware constants
-    static const uint16_t _firmwareMaxNumberOfPoints = 1200;
-    const uint16_t _firmwareMaxTransmitDuration = 500;
-    const uint16_t _firmwareMinTransmitDuration = 5;
-    static const uint16_t _firmwareMinSamplePeriod = 80;
+    static const uint16_t _firmwareMaxNumberOfPoints;
+    static const uint16_t _firmwareMaxTransmitDuration;
+    static const uint16_t _firmwareMinTransmitDuration;
+    static const uint16_t _firmwareMinSamplePeriod;
     // The firmware defaults at boot
-    static const uint8_t _firmwareDefaultGainSetting = 0;
-    static const uint16_t _firmwareDefaultAngle = 0;
-    static const uint16_t _firmwareDefaultTransmitDuration = 32;
-    static const uint16_t _firmwareDefaultSamplePeriod = 80;
-    static const uint16_t _firmwareDefaultTransmitFrequency = 740;
-    static const uint16_t _firmwareDefaultNumberOfSamples = 1024;
+    static const uint8_t _firmwareDefaultGainSetting;
+    static const uint16_t _firmwareDefaultAngle;
+    static const uint16_t _firmwareDefaultTransmitDuration;
+    static const uint16_t _firmwareDefaultSamplePeriod;
+    static const uint16_t _firmwareDefaultTransmitFrequency;
+    static const uint16_t _firmwareDefaultNumberOfSamples;
 
     // The default transmit frequency to operate with
-    static const uint16_t _viewerDefaultTransmitFrequency = 750;
-    static const uint16_t _viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
+    static const uint16_t _viewerDefaultTransmitFrequency;
+    static const uint16_t _viewerDefaultNumberOfSamples;
 
     uint16_t _angle = 200;
     uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
