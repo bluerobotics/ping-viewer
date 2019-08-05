@@ -88,7 +88,7 @@ GroupBox {
                 value: ping.transmit_duration
                 control.from: ping.transmitDurationMin
                 control.to: ping.transmitDurationMax
-                control.onMoved: ping.transmit_duration = control.value
+                control.onValueChanged: ping.transmit_duration = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -96,7 +96,7 @@ GroupBox {
                 value: ping.transmit_frequency
                 control.from: 500
                 control.to: 1000
-                control.onMoved: ping.transmit_frequency = control.value
+                onValueChanged: ping.transmit_frequency = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -104,7 +104,7 @@ GroupBox {
                 value: ping.speed_of_sound
                 control.from: 1450
                 control.to: 1550
-                control.onMoved: ping.speed_of_sound = control.value
+                onValueChanged: ping.speed_of_sound = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -112,7 +112,7 @@ GroupBox {
                 value: ping.angular_speed
                 control.from: 1
                 control.to: 10
-                control.onMoved: ping.angular_speed = control.value
+                onValueChanged: ping.angular_speed = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -120,7 +120,7 @@ GroupBox {
                 value: ping.angle_offset
                 control.from: 0
                 control.to: 359
-                control.onMoved: ping.angle_offset = control.value
+                onValueChanged: ping.angle_offset = control.value
             }
             RowLayout {
                 Button {
