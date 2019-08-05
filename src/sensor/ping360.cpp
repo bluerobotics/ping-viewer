@@ -24,6 +24,23 @@
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
+// firmware constants
+const uint16_t Ping360::_firmwareMaxNumberOfPoints = 1200;
+const uint16_t Ping360::_firmwareMaxTransmitDuration = 500;
+const uint16_t Ping360::_firmwareMinTransmitDuration = 5;
+const uint16_t Ping360::_firmwareMinSamplePeriod = 80;
+// The firmware defaults at boot
+const uint8_t Ping360::_firmwareDefaultGainSetting = 0;
+const uint16_t Ping360::_firmwareDefaultAngle = 0;
+const uint16_t Ping360::_firmwareDefaultTransmitDuration = 32;
+const uint16_t Ping360::_firmwareDefaultSamplePeriod = 80;
+const uint16_t Ping360::_firmwareDefaultTransmitFrequency = 740;
+const uint16_t Ping360::_firmwareDefaultNumberOfSamples = 1024;
+
+// The default transmit frequency to operate with
+const uint16_t Ping360::_viewerDefaultTransmitFrequency = 750;
+const uint16_t Ping360::_viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
+
 Ping360::Ping360()
     :PingSensor()
 {
