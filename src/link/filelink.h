@@ -16,6 +16,7 @@
  */
 class FileLink : public AbstractLink
 {
+    Q_OBJECT
 public:
     /**
      * @brief Construct a new File Link object
