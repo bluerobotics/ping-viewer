@@ -173,6 +173,11 @@ void Ping360::handleMessage(const ping_message& msg)
 
         _angle = deviceData.angle();
 
+        // request another transmission immediately
+        requestNextProfile();
+        // Restart timer
+        _timeoutProfileMessage.start();
+
         _data.resize(deviceData.data_length());
         for (int i = 0; i < deviceData.data_length(); i++) {
             _data.replace(i, deviceData.data()[i] / 255.0);
@@ -194,13 +199,6 @@ void Ping360::handleMessage(const ping_message& msg)
                 emit dataChanged();
             }
         }
-
-        // request another transmission
-        requestNextProfile();
-
-        // Restart timer
-        _timeoutProfileMessage.start();
-
         break;
     }
 
