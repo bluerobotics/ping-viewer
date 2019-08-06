@@ -18,10 +18,10 @@ FileLink::FileLink(QObject* parent)
 {
     _timer.start();
     setType(LinkType::File);
-    connect(this, &AbstractLink::sendData, this, &FileLink::_writeData);
+    connect(this, &AbstractLink::sendData, this, &FileLink::writeData);
 }
 
-void FileLink::_writeData(const QByteArray& data)
+void FileLink::writeData(const QByteArray& data)
 {
     // Check if we have already opened the file
     if(!_file.isOpen()) {

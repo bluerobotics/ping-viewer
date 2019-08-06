@@ -141,5 +141,5 @@ private:
 
     std::unique_ptr<LogThread> _logThread;
 
-    void _writeData(const QByteArray& data);
+    void writeData(const QByteArray& data);
 };
