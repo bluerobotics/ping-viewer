@@ -10,12 +10,23 @@ Item {
     property var ping: null
 
     Rectangle {
-        anchors.centerIn: parent
-
+        id: rect
         color: "black"
         opacity: 0.75
         height: innerCol.height + 2 * marginPix
         width: innerCol.width + 5 * marginPix
+        x: root.width / 2
+        y: root.height / 2
+
+        MouseArea {
+            anchors.fill: parent
+            drag.target: rect
+            drag.minimumX: 0
+            drag.minimumY: 0
+            drag.maximumX: root.width - rect.width
+            drag.maximumY: root.height - rect.height
+        }
+
         ColumnLayout {
             id: innerCol
             anchors.left: parent.left
