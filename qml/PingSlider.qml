@@ -14,22 +14,8 @@ RowLayout {
     property var valueText: null
 
     onValueChanged: {
-        console.log("-----")
-        console.log("Current values: min" + from + " max" + to + "value " + value)
-        console.log("SpinBox From:" + spinBox.from + " to " + spinBox.to + " value: " + spinBox.value + " currentValue " + value)
-        console.log("sliderControl From:" + sliderControl.from + " to " + sliderControl.to + " value: " + sliderControl.value + " currentValue " + value)
-        console.log("-----")
-
-        if (spinBox.to < value) {
-            spinBox.to = value + 1
-        }
         spinBox.value = value
-
-        if (sliderControl.to < value) {
-            sliderControl.to = value + 1
-        }
         sliderControl.value = value
-
     }
 
     Label {

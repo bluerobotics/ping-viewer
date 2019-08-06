@@ -83,12 +83,23 @@ GroupBox {
             id: advancedSettings
             visible: advancedSettingsButton.selected
             PingSlider {
+                id: transmitDurationSlider
                 Layout.fillWidth: true
                 text: "Transmit Duration (μs)"
                 from: ping.transmitDurationMin
                 to: ping.transmitDurationMax
-                value: ping.transmit_duration
                 onValueChanged: ping.transmit_duration = control.value
+                // does not work
+                // value: ping.transmit_duration
+
+                // works
+                Connections {
+                    target: ping
+                    onTransmit_durationChanged : {
+                        transmitDurationSlider.value = ping.transmit_duration
+                    }
+                }
+
             }
 
             PingSlider {
