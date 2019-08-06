@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "abstractlink.h"
+#include "logsensorstruct.h"
 #include "logthread.h"
 
 /**
@@ -128,6 +129,23 @@ public:
      */
     QTime totalTime() final { return _logThread ? _logThread->totalTime() : QTime(); };
 
+    /**
+     * @brief Returns a pointer of LogSensorStruct
+     *  TODO: This function and everything related to the log file handle should be done by a new class
+     *
+     * @return LogSensorStruct*
+     */
+    LogSensorStruct* logSensorStruct() { return &_logSensorStruct; };
+
+    /**
+     * @brief Return a LogSensorStruct from LinkConfiguration
+     *  TODO: This function and everything related to the log file handle should be done by a new class
+     *
+     * @param linkConfiguration
+     * @return LogSensorStruct
+     */
+    static LogSensorStruct staticLogSensorStruct(const LinkConfiguration& linkConfiguration);
+
 private:
     struct Pack {
         QString time;
@@ -140,7 +158,10 @@ private:
     QFile _file;
     QDataStream _inout;
 
+    LogSensorStruct _logSensorStruct;
+
     std::unique_ptr<LogThread> _logThread;
 
     void writeData(const QByteArray& data);
+    void processFile();
 };

@@ -30,6 +30,9 @@ void FileLink::writeData(const QByteArray& data)
             qCDebug(PING_PROTOCOL_FILELINK) << "File was not open.";
             return;
         }
+
+        // Create log header
+        _inout << _logSensorStruct;
     }
 
     // This save the data as a structure to deal with the timestamp
@@ -61,12 +64,6 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     _file.setFileName(linkConfiguration.args()->at(0));
 
-    return true;
-}
-
-bool FileLink::startConnection()
-{
-    // WriteOnly is used only to save data
     if(_openModeFlag == QIODevice::WriteOnly) {
         // The file will be created when something is received
         // Avoiding empty files
@@ -77,36 +74,101 @@ bool FileLink::startConnection()
     // Everything after this point is to deal with reading data
     bool ok = _file.open(QIODevice::ReadWrite);
     if(ok) {
-        Pack pack;
-        if(_logThread) {
-            // Disconnect LogThread
-            disconnect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
-            disconnect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
-            disconnect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
+        LogSensorStruct logSensorStruct;
+        // Check if file is valid
+        _inout >> logSensorStruct;
+        if(!logSensorStruct.isValid()) {
+            qCWarning(PING_PROTOCOL_FILELINK) << "Log file does not contain a valid header.";
+            qCDebug(PING_PROTOCOL_FILELINK) << logSensorStruct;
+            // Close file since it's not valid
+            _file.close();
+            return false;
         }
-        _logThread.reset(new LogThread());
-        connect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
-        connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
-        connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
-        while(true) {
-            // Get data
-            _inout >> pack.time >> pack.data;
 
-            // Check if we have a new package
-            if(pack.time.isEmpty()) {
-                qCDebug(PING_PROTOCOL_FILELINK) << "No more packages !";
-                break;
-            }
-
-            QTime time = QTime::fromString(pack.time, _timeFormat);
-            _logThread->append(time, pack.data);
-        }
-        _logThread->start();
-        emit elapsedTimeChanged();
-        emit totalTimeChanged();
+        // Update internal struct
+        _logSensorStruct = logSensorStruct;
+        qCDebug(PING_PROTOCOL_FILELINK) << "Valid log file.";
+        qCDebug(PING_PROTOCOL_FILELINK) << _logSensorStruct;
+    } else {
+        qCWarning(PING_PROTOCOL_FILELINK) << "It's not possible to open the file.";
     }
     return ok;
+}
+
+bool FileLink::startConnection()
+{
+    // The file will be created when something is received
+    // Avoiding empty files
+    if(_openModeFlag == QIODevice::WriteOnly) {
+        return QFileInfo(QFileInfo(_file).canonicalPath()).isWritable();
+    }
+
+    if(!isOpen()) {
+        return false;
+    }
+
+    if(_logThread) {
+        // Disconnect LogThread
+        disconnect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
+        disconnect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
+        disconnect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
+    }
+    _logThread.reset(new LogThread());
+    connect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
+    connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
+    connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
+
+    processFile();
+    return true;
 };
+
+void FileLink::processFile()
+{
+    Pack pack;
+
+    while(true) {
+        // Get data
+        _inout >> pack.time >> pack.data;
+
+        // Check if we have a new package
+        if(pack.time.isEmpty()) {
+            qCDebug(PING_PROTOCOL_FILELINK) << "No more packages !";
+            break;
+        }
+
+        auto time = QTime::fromString(pack.time, _timeFormat);
+        _logThread->append(time, pack.data);
+    }
+    _logThread->start();
+    emit elapsedTimeChanged();
+    emit totalTimeChanged();
+}
+
+LogSensorStruct FileLink::staticLogSensorStruct(const LinkConfiguration& linkConfiguration)
+{
+    // Check if configuration is valid
+    auto openModeFlag = linkConfiguration.args()->at(1)[0] == "r" ? QIODevice::ReadOnly : QIODevice::WriteOnly;
+    if(openModeFlag == QIODevice::WriteOnly) {
+        qCWarning(PING_PROTOCOL_FILELINK) << "Can't get LogSensorStruct from WriteOnly file.";
+        return {};
+    }
+
+    // Check if file is valid
+    QFile file(linkConfiguration.args()->at(0));
+    bool ok = file.open(openModeFlag);
+    if(!ok) {
+        qCWarning(PING_PROTOCOL_FILELINK) << "Can't open file.";
+        return {};
+    }
+
+    // Extract log header from file
+    QDataStream in(&file);
+    LogSensorStruct logSensorStruct;
+    in >> logSensorStruct;
+    file.close();
+
+    return logSensorStruct;
+}
 
 bool FileLink::isOpen()
 {
