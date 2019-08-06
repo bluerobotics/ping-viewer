@@ -543,7 +543,7 @@ private:
     int _angular_speed = 1;
     bool _autoTransmitDuration = true;
     uint _central_angle = 1;
-    bool _configuring = true;
+    bool _configuring = false;
     // Number of messages used to check the best baud rate
     int _preConfigurationTotalNumberOfMessages = 20;
     bool _reverse_direction = false;
