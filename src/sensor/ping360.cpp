@@ -42,7 +42,7 @@ const uint16_t Ping360::_viewerDefaultTransmitFrequency = 750;
 const uint16_t Ping360::_viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
 
 Ping360::Ping360()
-    :PingSensor()
+    :PingSensor(PingDeviceType::PING360)
 {
     // QVector crashs when constructed in initialization list
     _data = QVector<double>(_maxNumberOfPoints, 0);
