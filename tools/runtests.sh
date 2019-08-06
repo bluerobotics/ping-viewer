@@ -19,7 +19,7 @@ if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
     exit 1
 fi
 
-echob "Running style script:"
+echob "Running doxygen script:"
 ${scriptpath}/testdoxygen.sh || exit 1
 
 echob "Compile code in test mode:"
