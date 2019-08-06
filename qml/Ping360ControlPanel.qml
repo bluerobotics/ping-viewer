@@ -85,41 +85,42 @@ GroupBox {
             PingSlider {
                 Layout.fillWidth: true
                 text: "Transmit Duration (μs)"
+                from: ping.transmitDurationMin
+                to: ping.transmitDurationMax
                 value: ping.transmit_duration
-                control.from: ping.transmitDurationMin
-                control.to: ping.transmitDurationMax
-                control.onValueChanged: ping.transmit_duration = control.value
+                onValueChanged: ping.transmit_duration = control.value
             }
+
             PingSlider {
                 Layout.fillWidth: true
                 text: "Transmit Frequency (kHz)"
                 value: ping.transmit_frequency
-                control.from: 500
-                control.to: 1000
+                from: 500
+                to: 1000
                 onValueChanged: ping.transmit_frequency = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
                 text: "Speed of Sound (m/s)"
                 value: ping.speed_of_sound
-                control.from: 1450
-                control.to: 1550
+                from: 1450
+                to: 1550
                 onValueChanged: ping.speed_of_sound = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
                 text: "Angular Resolution (gradian)"
                 value: ping.angular_speed
-                control.from: 1
-                control.to: 10
+                from: 1
+                to: 10
                 onValueChanged: ping.angular_speed = control.value
             }
             PingSlider {
                 Layout.fillWidth: true
                 text: "Angle Offset (degree)"
                 value: ping.angle_offset
-                control.from: 0
-                control.to: 359
+                from: 0
+                to: 359
                 onValueChanged: ping.angle_offset = control.value
             }
             RowLayout {
