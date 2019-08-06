@@ -14,7 +14,7 @@ public:
      * @brief Construct a new Ping Sensor object
      *
      */
-    PingSensor();
+    PingSensor(PingDeviceType pingDeviceType);
 
     /**
      * @brief Destroy the Ping Sensor object
