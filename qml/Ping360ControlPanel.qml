@@ -88,27 +88,16 @@ GroupBox {
                 text: "Transmit Duration (μs)"
                 from: ping.transmitDurationMin
                 to: ping.transmitDurationMax
-                onValueChanged: ping.transmit_duration = control.value
-                // does not work
-                // value: ping.transmit_duration
-
-                // works
-                Connections {
-                    target: ping
-                    onTransmit_durationChanged : {
-                        transmitDurationSlider.value = ping.transmit_duration
-                    }
-                }
-
+                onValueChanged: ping.transmit_duration = value
+                value: ping.transmit_duration
             }
-
             PingSlider {
                 Layout.fillWidth: true
                 text: "Transmit Frequency (kHz)"
                 value: ping.transmit_frequency
                 from: 500
                 to: 1000
-                onValueChanged: ping.transmit_frequency = control.value
+                onValueChanged: ping.transmit_frequency = value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -116,7 +105,7 @@ GroupBox {
                 value: ping.speed_of_sound
                 from: 1450
                 to: 1550
-                onValueChanged: ping.speed_of_sound = control.value
+                onValueChanged: ping.speed_of_sound = value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -124,7 +113,7 @@ GroupBox {
                 value: ping.angular_speed
                 from: 1
                 to: 10
-                onValueChanged: ping.angular_speed = control.value
+                onValueChanged: ping.angular_speed = value
             }
             PingSlider {
                 Layout.fillWidth: true
@@ -132,7 +121,7 @@ GroupBox {
                 value: ping.angle_offset
                 from: 0
                 to: 359
-                onValueChanged: ping.angle_offset = control.value
+                onValueChanged: ping.angle_offset = value
             }
             RowLayout {
                 Button {
