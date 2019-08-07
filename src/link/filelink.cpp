@@ -120,7 +120,7 @@ void FileLink::processFile()
 {
     Pack pack;
 
-    while(true) {
+    while(!_inout.atEnd()) {
         // Get data
         _inout >> pack.time >> pack.data;
 
