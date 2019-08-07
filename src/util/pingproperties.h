@@ -5,14 +5,12 @@
 /** Calls the correct operator == in the P_PROPERTY macro */
 template<typename T> bool pingIsSame(const T& a, const T& b)
 {
+    if constexpr (std::is_floating_point<T>::value) {
+        return qFuzzyCompare(a, b);
+    }
+
     return a == b;
 }
-
-/** Calls the correct operator == in the P_PROPERTY macro */
-template<> bool pingIsSame<float>(const float& a, const float &b);
-
-/** Calls the correct operator == in the P_PROPERTY macro */
-template<> bool pingIsSame<double>(const double& a, const double& b);
 
 #define P_PROPERTY(TYPE, NAME, VALUE) \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME##Changed) \
