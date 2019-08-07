@@ -52,6 +52,7 @@ template<typename T> T qVariantValueOf(const QVariant& variant)
  *        if(_myName == value) { return; }
  *        _myName = value;
  *        _settings.setValue(QStringLiteral("myName"), qVariantFromValue(value));
+ *        _settings.sync();
  *        qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg("myName") << value;
  *        emit myNameChanged();
  *    }
@@ -78,6 +79,7 @@ public: \
         if(_ ## NAME == value) { return; }\
         _ ## NAME = value; \
         _settings.setValue(QStringLiteral(#NAME), qVariantFromValue(value)); \
+        _settings.sync(); \
         qCDebug(SETTINGSMANAGER) << QStringLiteral("Save %1 with:").arg(#NAME) << value;\
         emit NAME ## Changed(); \
     } \
