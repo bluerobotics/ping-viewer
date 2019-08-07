@@ -602,8 +602,6 @@ private:
 
     const QVariantList& validBaudRatesAsVariantList() const;
     QVariantList _validBaudRates = {
-        2500000,
-        2304000,
         2000000,
         921600,
         570600,
