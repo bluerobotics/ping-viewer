@@ -44,6 +44,7 @@ void SettingsManager::set(QString& settingName, QVariant& value)
         qCDebug(SETTINGSMANAGER) << QStringLiteral("In %1:").arg(settingName) << value;
     }
     _settings.setValue(settingName, value);
+    _settings.sync();
 }
 
 QObject* SettingsManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
