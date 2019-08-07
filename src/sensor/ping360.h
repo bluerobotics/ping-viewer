@@ -85,8 +85,10 @@ public:
      */
     void set_transmit_duration(int transmit_duration)
     {
-        _transmit_duration = transmit_duration;
-        emit transmitDurationChanged();
+        if (_transmit_duration != transmit_duration) {
+            _transmit_duration = transmit_duration;
+            emit transmitDurationChanged();
+        }
     }
 
     /**

@@ -210,7 +210,10 @@ void Ping360::handleMessage(const ping_message& msg)
             qCWarning(PING_PROTOCOL_PING360) << "transducer control was NACKED, reverting to default settings";
 
             _gain_setting = _firmwareDefaultGainSetting;
-            _transmit_duration = _firmwareDefaultTransmitDuration;
+            if (_transmit_duration != _firmwareDefaultTransmitDuration) {
+                _transmit_duration = _firmwareDefaultTransmitDuration;
+                emit transmitDurationChanged();
+            }
             _sample_period = _firmwareDefaultSamplePeriod;
             _transmit_frequency = _viewerDefaultTransmitFrequency;
             _num_points = _viewerDefaultNumberOfSamples;
@@ -222,7 +225,6 @@ void Ping360::handleMessage(const ping_message& msg)
             _timeoutProfileMessage.start();
 
             emit gainSettingChanged();
-            emit transmitDurationChanged();
             emit samplePeriodChanged();
             emit transmitFrequencyChanged();
             emit numberOfPointsChanged();
