@@ -60,7 +60,7 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     // Read or create the log ?
     // This flag does not change how the file will be open (ReadWrite)
-    _openModeFlag = linkConfiguration.args()->at(1)[0] == "r" ? QIODevice::ReadOnly : QIODevice::WriteOnly;
+    _openModeFlag = linkConfiguration.args()->at(1)[0] == 'r' ? QIODevice::ReadOnly : QIODevice::WriteOnly;
 
     _file.setFileName(linkConfiguration.args()->at(0));
 
@@ -147,7 +147,7 @@ void FileLink::processFile()
 LogSensorStruct FileLink::staticLogSensorStruct(const LinkConfiguration& linkConfiguration)
 {
     // Check if configuration is valid
-    auto openModeFlag = linkConfiguration.args()->at(1)[0] == "r" ? QIODevice::ReadOnly : QIODevice::WriteOnly;
+    auto openModeFlag = linkConfiguration.args()->at(1)[0] == 'r' ? QIODevice::ReadOnly : QIODevice::WriteOnly;
     if(openModeFlag == QIODevice::WriteOnly) {
         qCWarning(PING_PROTOCOL_FILELINK) << "Can't get LogSensorStruct from WriteOnly file.";
         return {};
