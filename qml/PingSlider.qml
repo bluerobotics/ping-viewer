@@ -33,7 +33,6 @@ RowLayout {
         wheelEnabled: true
         from: root.from
         to: root.to
-        onValueChanged: root.value = value
     }
 
     Label {
@@ -49,8 +48,27 @@ RowLayout {
         visible: valueText === null
         from: root.from
         to: root.to
-        onValueChanged: root.value = value
         stepSize: sliderControl.stepSize
         editable: true
+    }
+
+    Binding on value {
+        when: sliderControl.pressed
+        value: sliderControl.value
+    }
+
+    Binding on value {
+        when: spinBox.up.pressed
+        value: spinBox.value
+    }
+
+    Binding on value {
+        when: spinBox.down.pressed
+        value: spinBox.value
+    }
+
+    Binding on value {
+        when: spinBox.focus
+        value: spinBox.value
     }
 }
