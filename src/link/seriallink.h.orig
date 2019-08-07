@@ -92,8 +92,7 @@ public:
      */
     void forceSensorAutomaticBaudRateDetection();
 
-    void writeSync(const char* data, int size) final override
-    {
+    void writeSync(const char* data, int size) final override {
         _port.write(data, size);
         _port.flush();
     }

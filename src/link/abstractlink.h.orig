@@ -212,7 +212,7 @@ public:
     void write(const char* data, int size)
     {
         if(size > 0) {
-            if (_type == LinkType::Serial) {
+            if (_type == LinkType::Serial){
                 writeSync(data, size);
             } else {
                 emit sendData(QByteArray(data, size));
