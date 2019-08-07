@@ -576,8 +576,15 @@ private:
     struct MessageFrequencyHelper {
         float frequency = 0;
         int lastElapsedTime = 0;
-        // LPF IIR alpha coefficient
-        float alpha = 0.8f;
+
+        /** LPF IIR alpha coefficient
+         *  This creates an order 1 IIR filter with a fixed cutoff frequency.
+         *  The filter equation is described as $H(z) = \frac{1-\alpha}{1-\alpha Z}$,
+         *  where $\alpha$ is defined by: $\alpha = \frac{F_s - F_{cutoff}}{F_s}$,
+         *  fixing the system $(H(z)$) with a cutoff frequency of $(1 - \alpha)\omega$.
+         */
+        float alpha = 0;
+        float cutoffFrequency = 3; // Fix cutoff frequency to 3Hz
         void setElapsed(int timeMs)
         {
             // If timeMs is zero, reset structure.
@@ -586,9 +593,11 @@ private:
                 lastElapsedTime = timeMs;
                 return;
             }
-            float elapsedMs = (timeMs - lastElapsedTime)*0.001;
-            frequency = (1.0f - alpha)/elapsedMs + alpha*frequency;
-            lastElapsedTime = timeMs;
+            float elapsedMs = (timeMs - lastElapsedTime)*0.001f;
+            float actualFrequency = 1.0f/elapsedMs;
+            alpha = (actualFrequency - cutoffFrequency)/actualFrequency;
+            frequency = (1.0f - alpha)*actualFrequency + alpha*frequency;
+            lastElapsedTime = elapsedMs;
         }
     };
 
