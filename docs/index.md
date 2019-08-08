@@ -45,7 +45,7 @@ Download [this .AppImage file](https://github.com/bluerobotics/ping-viewer/relea
 
 To begin using the device, connect it to a USB - UART converter that operates on 5V like [this](https://www.bluerobotics.com/store/comm-control-power/tether-interface/bluart-r1-rp/) Blue Robotics adapter. Then connect the converter to your computer's USB port. The Ping Viewer application should automatically detect your device and begin displaying data. If it does not, check the [FAQ and Troubleshooting](faq-and-troubleshooting.md) guide.
 
-Visit the [Connection Settings](connection-settings.md) menu for more connection options.
+Visit the [Device Manager](device-manager.md) menu for more connection options.
 
 ## Principle of Operation
 
