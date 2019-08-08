@@ -26,6 +26,7 @@ void SliderRuler::setCount(int count)
     if (count != m_count) {
         m_count = count;
         emit countChanged(m_count);
+        update();
     }
 }
 
@@ -39,6 +40,7 @@ void SliderRuler::setShowText(bool showText)
     if (showText != m_showText) {
         m_showText = showText;
         emit showTextChanged(m_showText);
+        update();
     }
 }
 
@@ -52,6 +54,7 @@ void SliderRuler::setTo(double to)
     if (!qFuzzyCompare(to, m_to)) {
         m_to = to;
         emit toChanged(m_to);
+        update();
     }
 }
 
@@ -65,6 +68,7 @@ void SliderRuler::setFrom(double from)
     if (!qFuzzyCompare(from, m_from)) {
         m_from = from;
         emit fromChanged(m_from);
+        update();
     }
 }
 
