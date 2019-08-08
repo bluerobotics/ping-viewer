@@ -13,7 +13,7 @@ nav:
             - Firmware Update: firmware-update.md
         - Application Settings:
             - Display Settings: display-settings.md
-            - Connection Settings: connection-settings.md
+            - Device Manager: device-manager.md
         - Notificiations and Updates: notifications-and-updates.md
         - Replay Data: replay-data.md
         - Application Information: application-information.md
