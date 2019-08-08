@@ -341,15 +341,12 @@ void Ping360::detectBaudrates()
     static int lastParserErrorCount = 0;
     static int lastParserMsgsCount = 0;
 
+    // Check error margin
+    int lastCounter = -1;
+
     if(!_configuring) {
         return;
     }
-
-    if(index < validBaudRates().size()) {
-        setBaudRate(validBaudRates()[index]);
-    }
-
-    int lastCounter = -1;
 
     // We have already something to calculate
     if(index != 0) {
@@ -364,10 +361,9 @@ void Ping360::detectBaudrates()
     }
     lastParserErrorCount = parserErrors();
     lastParserMsgsCount = parsedMsgs();
-    index++;
 
     // We are in the end of the list or someone is the winner!
-    if(index == validBaudRates().size() || lastCounter == 0) {
+    if(index == validBaudRates().size() - 1 || lastCounter == 0) {
         _configuring = false;
 
         // The actual baud rate is the winner, don't need to set a new one
@@ -389,7 +385,13 @@ void Ping360::detectBaudrates()
         }
 
         setBaudRate(validBaudRates()[index]);
+        qCDebug(PING_PROTOCOL_PING360) << "Baud rate procedure done.";
+        return;
     }
+
+    // Check next baud rate
+    setBaudRate(validBaudRates()[index]);
+    index++;
 }
 
 Ping360::~Ping360()
