@@ -17,7 +17,7 @@ template<> bool pingIsSame<double>(const double& a, const double& b);
 #define P_PROPERTY(TYPE, NAME, VALUE) \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME##Changed) \
 public: \
-    TYPE NAME() { return _##NAME; } \
+    TYPE NAME() const { return _##NAME; } \
     void NAME(TYPE NAME) { \
         if(pingIsSame(NAME, _##NAME)) return; \
         _##NAME = NAME; emit NAME##Changed(); \

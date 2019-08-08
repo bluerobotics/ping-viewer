@@ -52,3 +52,8 @@ StyleManager* StyleManager::self()
     static StyleManager* self = new StyleManager();
     return self;
 }
+
+QColor StyleManager::textColor() const
+{
+    return theme() == StyleManager::Dark ? "#90CAF9" : "#2196F3";
+}

@@ -86,6 +86,11 @@ public:
     };
     Q_ENUM(Theme)
 
+    /**
+     * @brief returns the color used for text in the theme
+     */
+    QColor textColor() const;
+
     P_PROPERTY(int, theme, Theme::Dark)
 
 private:

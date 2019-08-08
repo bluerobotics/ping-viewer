@@ -1,4 +1,5 @@
 #include "sliderruler.h"
+#include "stylemanager.h"
 
 // std
 #include <cmath>
@@ -7,14 +8,17 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include <QPalette>
-#include <QFontMetrics>
 
 SliderRuler::SliderRuler(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_count(-1)
     , m_showText(true)
-    , m_controlColor("#90CAF9")
+    , m_controlColor(StyleManager::self()->textColor())
 {
+    connect(StyleManager::self(), &StyleManager::themeChanged, this, [this] {
+        m_controlColor = StyleManager::self()->textColor();
+        update();
+    });
 }
 
 void SliderRuler::setCount(int count)
