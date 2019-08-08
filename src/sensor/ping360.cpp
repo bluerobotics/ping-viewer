@@ -86,11 +86,16 @@ void Ping360::checkBaudrateProcess()
     startPreConfigurationProcess();
 
     static int count = _ABRTotalNumberOfMessages;
+
+    // We are starting to check the new baud rate
+    if(count == _ABRTotalNumberOfMessages) {
+        detectBaudrates();
+    }
+
     if(count--) {
         _baudrateConfigurationTimer.start();
     } else {
-        detectBaudrates();
-        count = 20;
+        count = _ABRTotalNumberOfMessages;
     }
 }
 
