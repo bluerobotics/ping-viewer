@@ -370,6 +370,12 @@ void Ping360::detectBaudrates()
     if(index == validBaudRates().size() || lastCounter == 0) {
         _configuring = false;
 
+        // The actual baud rate is the winner, don't need to set a new one
+        if(lastCounter == 0) {
+            qCDebug(PING_PROTOCOL_PING360) << "Baud rate procedure done.";
+            return;
+        }
+
         // We are not in the end of the list, so there is a valid baud rate that is faster
         // than the lowest speed
         if(index != validBaudRates().size()) {
