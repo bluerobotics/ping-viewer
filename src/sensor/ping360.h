@@ -464,6 +464,7 @@ public:
         if(_timeoutProfileMessage.isActive()) {
             _timeoutProfileMessage.stop();
         }
+        _resetBaudRateDetection = true;
         checkBaudrateProcess();
     }
 
@@ -571,6 +572,7 @@ private:
      *  Without this timer, we are going to wait forever for a reply without asking again.
      */
     QTimer _baudrateConfigurationTimer;
+    bool _resetBaudRateDetection = true;
 
     // Helper structure to hold frequency information for each message
     struct MessageFrequencyHelper {

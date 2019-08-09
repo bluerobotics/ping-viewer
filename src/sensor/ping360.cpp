@@ -87,6 +87,10 @@ void Ping360::checkBaudrateProcess()
 
     static int count = _ABRTotalNumberOfMessages;
 
+    if(_resetBaudRateDetection) {
+        count = _ABRTotalNumberOfMessages;
+    }
+
     // We are starting to check the new baud rate
     if(count == _ABRTotalNumberOfMessages) {
         detectBaudrates();
@@ -341,6 +345,14 @@ void Ping360::detectBaudrates()
     // last parser error count
     static int lastParserErrorCount = 0;
     static int lastParserMsgsCount = 0;
+
+    if(_resetBaudRateDetection) {
+        _resetBaudRateDetection = false;
+        index = 0;
+        baudRateToError.clear();
+        lastParserErrorCount = 0;
+        lastParserMsgsCount = 0;
+    };
 
     // Check error margin
     int lastCounter = -1;
