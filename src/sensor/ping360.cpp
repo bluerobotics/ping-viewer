@@ -49,6 +49,7 @@ Ping360::Ping360()
 
     setControlPanel({"qrc:/Ping360ControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
+    setSensorStatusModel({"qrc:/Ping360StatusModel.qml"});
 
     connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
 
