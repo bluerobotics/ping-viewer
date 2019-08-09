@@ -10,7 +10,8 @@ PingSensor::PingSensor()
     ,_lostMessages(0)
 {
     _parser = new PingParserExt();
-    connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate);
+    connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate,
+            Qt::DirectConnection);
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsUpdate);
 }
 
