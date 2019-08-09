@@ -575,7 +575,7 @@ private:
     // Helper structure to hold frequency information for each message
     struct MessageFrequencyHelper {
         float frequency = 0;
-        int lastElapsedTime = 0;
+        int lastTimeMs = 0;
 
         /** LPF IIR alpha coefficient
          *  This creates an order 1 IIR filter with a fixed cutoff frequency.
@@ -589,15 +589,21 @@ private:
         {
             // If timeMs is zero, reset structure.
             // Otherwise start it
-            if(lastElapsedTime == 0 || timeMs == 0) {
-                lastElapsedTime = timeMs;
+            if(lastTimeMs == 0 || timeMs == 0) {
+                lastTimeMs = timeMs;
                 return;
             }
-            float elapsedMs = (timeMs - lastElapsedTime)*0.001f;
+            // If the last message was years ago or too fast, restart the lastTimeMs
+            float elapsedMs = (timeMs - lastTimeMs)*0.001f;
             float actualFrequency = 1.0f/elapsedMs;
+            if(qFuzzyIsNull(actualFrequency) || std::isinf(actualFrequency) || std::isnan(actualFrequency)) {
+                lastTimeMs = timeMs;
+                return;
+            }
+
             alpha = (actualFrequency - cutoffFrequency)/actualFrequency;
             frequency = (1.0f - alpha)*actualFrequency + alpha*frequency;
-            lastElapsedTime = elapsedMs;
+            lastTimeMs = timeMs;
         }
     };
 
