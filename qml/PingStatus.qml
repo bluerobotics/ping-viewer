@@ -1,13 +1,41 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.12
+
+import DeviceManager 1.0
 
 Item {
     id: root
     anchors.fill: parent
 
     property var marginPix: 10
-    property var ping: null
+    property var ping: DeviceManager.primarySensor
+
+    property var sensorModel: ping.sensorStatusModel(root)
+    DelegateModel {
+        id: baseModel
+        property var title: "Base data:"
+
+        model: [
+            "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
+            "SRC: " + ping.srcId + " DST: " + ping.dstId,
+            "Device type: " + ping.device_type,
+            "Device Revision: " + ping.device_revision,
+            "Connection: " + ping.link.configuration.string,
+            "RX Packets (#): " + ping.parsed_msgs,
+            "RX Errors (#): " + ping.parser_errors,
+            "Lost messages (#): " + ping.lost_messages,
+            "Ascii text:\n" + ping.ascii_text,
+            "Error message:\n" + ping.err_msg,
+        ]
+
+        delegate: Text {
+            text: modelData
+            color: "white"
+            font.pointSize: 8
+        }
+    }
 
     Rectangle {
         id: rect
@@ -33,36 +61,18 @@ Item {
             anchors.top: parent.top
             anchors.margins: marginPix
 
+            Label {
+                text: baseModel.title
+            }
             Repeater {
-                model: [
-                    "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
-                    "SRC: " + ping.srcId + " DST: " + ping.dstId,
-                    "Connection: " + ping.link.configuration.string,
-                    "Distance (mm): " + ping.distance,
-                    "Auto (bool): " + ping.mode_auto,
-                    "Scan Start (mm): " + ping.start_mm,
-                    "Scan Length (mm): " + ping.length_mm,
-                    "Ping (#): " + ping.ping_number,
-                    "Transmit duration (μs): " + ping.transmit_duration,
-                    "Ping interval (ms): " + ping.ping_interval,
-                    "Gain (setting): " + ping.gain_setting,
-                    "Confidence (%): " + ping.confidence,
-                    "Speed of sound (mm/s): " + ping.speed_of_sound,
-                    "Processor temperature (C): " + (ping.processor_temperature / 100).toFixed(1),
-                    "PCB temperature (C): " + (ping.pcb_temperature / 100).toFixed(1),
-                    "Board voltage (V): " + (ping.board_voltage / 1000).toFixed(2),
-                    "Lost messages (#): " + ping.lost_messages,
-                    "RX Packets (#): " + ping.parsed_msgs,
-                    "RX Errors (#): " + ping.parser_errors,
-                    "Ascii text:\n" + ping.ascii_text,
-                    "Error message:\n" + ping.err_msg,
-                ]
-                Text {
-                    text: modelData
-                    color: "white"
-                    font.family: "unicode"
-                    font.pointSize: 8
-                }
+                model: baseModel
+            }
+
+            Label {
+                text: sensorModel.title
+            }
+            Repeater {
+                model: sensorModel.model
             }
         }
     }
