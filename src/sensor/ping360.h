@@ -464,7 +464,7 @@ public:
         if(_timeoutProfileMessage.isActive()) {
             _timeoutProfileMessage.stop();
         }
-        startPreConfigurationProcess();
+        checkBaudrateProcess();
     }
 
     /**
