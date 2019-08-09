@@ -163,13 +163,12 @@ void Ping360::handleMessage(const ping_message& msg)
         if(_configuring) {
             _baudrateConfigurationTimer.start();
             checkBaudrateProcess();
-            return;
         } else {
             _baudrateConfigurationTimer.stop();
             _timeoutProfileMessage.start();
             requestNextProfile();
-            return;
         }
+        return;
     }
 
     case Ping360Id::DEVICE_DATA: {
