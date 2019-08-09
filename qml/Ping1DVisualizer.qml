@@ -135,12 +135,6 @@ Item {
         id: readout
     }
 
-    // TODO: this item should be provided by the sensor, like the visualizer and control panel
-    PingStatus {
-        ping: root.ping
-        visible: SettingsManager.debugMode
-    }
-
     function confidenceToColor(confidence) {
         return Qt.rgba(2*(1 - confidence/100), 2*confidence/100, 0)
     }
