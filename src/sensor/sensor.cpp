@@ -131,6 +131,17 @@ void Sensor::setSensorVisualizer(const QUrl& url)
     _sensorVisualizerUrl = url;
 }
 
+void Sensor::setSensorStatusModel(const QUrl& url)
+{
+    if(!url.isValid()) {
+        qCCritical(PING_PROTOCOL_SENSOR) << "Invalid url:" << url;
+        _sensorStatusModelUrl.setUrl({});
+        return;
+    }
+
+    _sensorStatusModelUrl = url;
+}
+
 bool Sensor::createQQuickItem(QObject* parent, const QUrl& resource, QSharedPointer<QQuickItem>& pointerQuickItem)
 {
     QQmlEngine* engine = qmlEngine(parent);
@@ -178,6 +189,20 @@ QQuickItem* Sensor::sensorVisualizer(QObject* parent)
     }
 
     return _sensorVisualizer.get();
+}
+
+QQuickItem* Sensor::sensorStatusModel(QObject* parent)
+{
+    // Check if item already exist, if not create it
+    if(_sensorStatusModel.isNull()) {
+        if(!createQQuickItem(parent, _sensorStatusModelUrl, _sensorStatusModel)) {
+            qCCritical(PING_PROTOCOL_SENSOR) << "Failed to create sensor status.";
+            return nullptr;
+        }
+    }
+    _sensorStatusModel->setProperty("sensor", QVariant::fromValue(this));
+
+    return _sensorStatusModel.get();
 }
 
 Sensor::~Sensor() = default;
