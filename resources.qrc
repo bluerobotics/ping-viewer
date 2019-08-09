@@ -28,6 +28,7 @@
         <file alias="PingStatus.qml">qml/PingStatus.qml</file>
         <file alias="Ping1DStatusModel.qml">qml/Ping1DStatusModel.qml</file>
         <file alias="Ping360Status.qml">qml/Ping360Status.qml</file>
+        <file alias="Ping360StatusModel.qml">qml/Ping360StatusModel.qml</file>
         <file alias="PolarGrid.qml">qml/PolarGrid.qml</file>
         <file alias="ValueReadout.qml">qml/ValueReadout.qml</file>
         <file alias="PingTextField.qml">qml/PingTextField.qml</file>
