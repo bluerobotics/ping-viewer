@@ -96,7 +96,9 @@ QStringList SerialLink::listAvailableConnections()
 
 void SerialLink::setBaudRate(int baudRate)
 {
+    _port.close();
     _port.setBaudRate(baudRate);
+    startConnection();
     QStringList args = _linkConfiguration.argsAsConst();
     args[1] = QString::number(baudRate);
     _linkConfiguration.setArgs(args);
