@@ -151,12 +151,6 @@ void Ping360::handleMessage(const ping_message& msg)
 {
     qCDebug(PING_PROTOCOL_PING360) << "Handling Message:" << msg.message_id();
 
-    // Update frequency for each
-    messageFrequencies[msg.message_id()].setElapsed(_messageElapsedTimer.elapsed());
-    // Since we don't have a huge number of messages and this variable is pretty simple,
-    // we can use a single signal to update someone about the frequency update
-    emit messageFrequencyChanged();
-
     switch (msg.message_id()) {
 
     case CommonId::DEVICE_INFORMATION: {
@@ -241,6 +235,13 @@ void Ping360::handleMessage(const ping_message& msg)
         qWarning(PING_PROTOCOL_PING360) << "UNHANDLED MESSAGE ID:" << msg.message_id();
         break;
     }
+
+    // Update frequency for each
+    messageFrequencies[msg.message_id()].setElapsed(_messageElapsedTimer.elapsed());
+    // Since we don't have a huge number of messages and this variable is pretty simple,
+    // we can use a single signal to update someone about the frequency update
+    emit messageFrequencyChanged();
+
     emit parsedMsgsUpdate();
 }
 
