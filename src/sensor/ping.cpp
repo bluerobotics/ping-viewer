@@ -31,6 +31,7 @@ Ping::Ping()
 {
     setControlPanel({"qrc:/Ping1DControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping1DVisualizer.qml"});
+    setSensorStatusModel({"qrc:/Ping1DStatusModel.qml"});
 
     _periodicRequestTimer.setInterval(1000);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
