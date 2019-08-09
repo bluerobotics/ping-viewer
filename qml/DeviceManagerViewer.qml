@@ -130,12 +130,11 @@ PingPopup {
                 Layout.fillHeight: true
                 clip: true
                 model: DeviceManager
-                spacing: 4
                 delegate: Rectangle {
                     id: rectDelegate
                     height: 40
                     width: parent.width
-                    color: "transparent"
+                    color: buttonMouseArea.containsMouse ? 'gainsboro' : 'transparent'
                     Rectangle {
                        height: 1
                        color: 'gray'
@@ -156,12 +155,6 @@ PingPopup {
                             // We should check if Sensor device is created and if it's really connected and
                             // communicating with the device
                             root.close()
-                        }
-                        ToolTip {
-                            x: parent.mouseX
-                            y: parent.mouseY - height - 5
-                            visible: parent.containsMouse
-                            text: "Connect."
                         }
                     }
 
