@@ -186,12 +186,6 @@ Item {
         }
     }
 
-    // TODO: this item should be provided by the sensor, like the visualizer and control panel
-    Ping360Status {
-        ping: root.ping
-        visible: SettingsManager.debugMode
-    }
-
     function transformValue(value, precision) {
         return typeof(value) == "number" ? value.toFixed(precision) : value + ' '
     }
