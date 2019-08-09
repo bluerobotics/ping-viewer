@@ -320,7 +320,6 @@ void Ping360::setBaudRate(int baudRate)
 
     qCDebug(PING_PROTOCOL_PING360) << "Moving to baud rate:" << baudRate;
     serialLink->setBaudRate(baudRate);
-    link()->startConnection();
     emit linkUpdate();
 }
 
