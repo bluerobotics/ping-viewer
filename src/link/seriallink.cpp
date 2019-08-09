@@ -20,7 +20,7 @@ SerialLink::SerialLink(QObject* parent)
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) {
         _port.write(data);
         _port.flush();
-    });
+    }, Qt::DirectConnection);
 
     connect(&_port, &QSerialPort::errorOccurred, this, [this](QSerialPort::SerialPortError error) {
         switch(error) {
