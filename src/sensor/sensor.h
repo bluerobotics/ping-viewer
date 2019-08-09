@@ -105,6 +105,13 @@ public:
     void setSensorVisualizer(const QUrl& url);
 
     /**
+     * @brief Set the sensor status model url
+     *
+     * @param url
+     */
+    void setSensorStatusModel(const QUrl& url);
+
+    /**
      * @brief Return a qml component that will take care of the main control panel for the sensor
      *
      * @param parent
@@ -119,6 +126,13 @@ public:
      */
     Q_INVOKABLE virtual QQuickItem* sensorVisualizer(QObject* parent = nullptr);
 
+    /**
+     * @brief Return a qml component that will take care of sensor status
+     *
+     * @param parent
+     * @return QQuickItem* sensorStatusModel
+     */
+    Q_INVOKABLE virtual QQuickItem* sensorStatusModel(QObject* parent = nullptr);
 
 protected:
     bool _connected;
@@ -142,6 +156,10 @@ protected:
     // Hold the sensor visualizer item
     QSharedPointer<QQuickItem> _sensorVisualizer;
     QUrl _sensorVisualizerUrl;
+
+    // Hold the sensor status visualizer item
+    QSharedPointer<QQuickItem> _sensorStatusModel;
+    QUrl _sensorStatusModelUrl;
 
     /**
      * @brief Helper function to create QQuickItems
