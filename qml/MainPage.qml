@@ -230,6 +230,12 @@ Item {
             radialGradient : sensorVisualizer.toString().includes("Ping360") ? radialGradient : linearGradient
     }
 
+    PingStatus {
+        // We need to be over the mainvisualizer
+        z: sensorVisualizer.z + 1
+        visible: SettingsManager.debugMode
+    }
+
     // Linear and radial background gradients for different sensors
     Component {
         id: linearGradient
