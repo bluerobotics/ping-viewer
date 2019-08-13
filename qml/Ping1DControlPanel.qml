@@ -13,12 +13,10 @@ ColumnLayout {
     id: root
     property var ping: DeviceManager.primarySensor
 
-    GroupBox {
+    PingGroupBox {
         id: pingGroup
         title: "Ping"
         enabled: ping.connected
-        // Hack
-        label.x: width/2 - label.contentWidth/2
         Layout.fillWidth: true
 
         ColumnLayout {

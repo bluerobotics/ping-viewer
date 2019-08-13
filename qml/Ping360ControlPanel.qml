@@ -7,12 +7,10 @@ import DeviceManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
-GroupBox {
+PingGroupBox {
     id: root
     title: "Ping360"
     enabled: ping.connected
-    // Hack
-    label.x: width/2 - label.contentWidth/2
     Layout.fillWidth: true
     property var ping: DeviceManager.primarySensor
 

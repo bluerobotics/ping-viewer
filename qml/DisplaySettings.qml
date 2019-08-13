@@ -12,11 +12,9 @@ import StyleManager 1.0
 ColumnLayout {
     id: settingsLayout
     RowLayout {
-        GroupBox {
+        PingGroupBox {
             id: displayGroup
             title: "Display"
-            // Hack
-            label.x: width/2 - label.contentWidth/2
             Layout.fillWidth: true
 
             GridLayout {
