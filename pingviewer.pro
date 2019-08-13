@@ -29,6 +29,9 @@ RESOURCES += \
 *msvc {
     QMAKE_CXXFLAGS += /WX \
         /wd4305 \ # Remove truncated warnings, msvc does not provide some non double values
+
+    # Necessary for register changes in serial layer for timer latency
+    QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'"
 }
 
 include(lib/maddy/maddy.pri)
