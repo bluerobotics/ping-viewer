@@ -302,12 +302,10 @@ Item {
     PingPopup {
         id: popup
 
-        GroupBox {
+        PingGroupBox {
             id: resetSettingsGroup
             title: "Reset settings"
             enabled: true
-            // Hack
-            label.x: width/2 - label.contentWidth/2
             anchors.fill: parent
 
             GridLayout {

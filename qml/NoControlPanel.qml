@@ -3,10 +3,9 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-GroupBox {
+PingGroupBox {
     id: root
     title: "No sensor"
-    label.x: width/2 - label.contentWidth/2
     ColumnLayout {
         Label {
             text: "Please connect with a device:"

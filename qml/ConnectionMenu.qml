@@ -49,11 +49,9 @@ Item {
         }
     }
 
-    GroupBox {
+    PingGroupBox {
         id: connectionLayout
         title: "Connection configuration"
-        // Hack
-        label.x: width/2 - label.contentWidth/2
         width: parent.width
 
         GridLayout {

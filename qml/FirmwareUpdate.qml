@@ -42,12 +42,10 @@ Item {
         }
     }
 
-    GroupBox {
+    PingGroupBox {
         id: firmwareGroup
         title: "Firmware Update"
         enabled: true
-        // Hack
-        label.x: width/2 - label.contentWidth/2
         width: 600
 
         ColumnLayout {
