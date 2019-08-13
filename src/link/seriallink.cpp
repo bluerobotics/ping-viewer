@@ -6,6 +6,16 @@
 
 #include "seriallink.h"
 
+#ifdef Q_OS_LINUX
+    #include <sys/ioctl.h>
+    #include <termios.h>
+    #include <linux/serial.h>
+#endif
+#ifdef Q_OS_WIN
+    #include <Windows.h>
+    #include <QSettings>
+#endif
+
 Q_LOGGING_CATEGORY(PING_PROTOCOL_SERIALLINK, "ping.protocol.seriallink")
 
 SerialLink::SerialLink(QObject* parent)
@@ -99,11 +109,158 @@ void SerialLink::setBaudRate(int baudRate)
     _port.close();
     _port.setBaudRate(baudRate);
     startConnection();
+    setLowLatency();
+
     QStringList args = _linkConfiguration.argsAsConst();
     args[1] = QString::number(baudRate);
     _linkConfiguration.setArgs(args);
     forceSensorAutomaticBaudRateDetection();
 }
+
+#ifdef Q_OS_MACOS
+bool SerialLink::setLowLatency()
+{
+    qCWarning(PING_PROTOCOL_SERIALLINK) << "No support for low latency mode in macOS.";
+    //no light at the end of the tunnel for macOS
+    return false;
+}
+#endif
+
+#ifdef Q_OS_LINUX
+bool SerialLink::setLowLatency()
+{
+    auto handle = _port.handle();
+
+    if(!handle) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to get serial handle from OS.";
+        return false;
+    }
+
+    // Our first attempt is with termios2
+    struct termios2 {
+        tcflag_t c_iflag;       /* input mode flags */
+        tcflag_t c_oflag;       /* output mode flags */
+        tcflag_t c_cflag;       /* control mode flags */
+        tcflag_t c_lflag;       /* local mode flags */
+        cc_t c_line;            /* line discipline */
+        cc_t c_cc[19];          /* control characters */
+        speed_t c_ispeed;       /* input speed */
+        speed_t c_ospeed;       /* output speed */
+    } tio2;
+    if (::ioctl(handle, TCGETS2, &tio2) != -1) {
+        // If it's already in low latency, no further configuration is necessary
+        if (!(tio2.c_cflag & ASYNC_LOW_LATENCY)) {
+            tio2.c_cflag |= ASYNC_LOW_LATENCY;
+            ::ioctl(handle, TCSETS2, &tio2);
+        } else {
+            qCDebug(PING_PROTOCOL_SERIALLINK) << "Low latency mode is already in termios2.";
+        }
+    } else {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to get termios2 struct from system.";
+    }
+
+    // Check again same configuration with serial_struct
+    serial_struct serial;
+    ::memset(&serial, 0, sizeof(serial));
+    if (::ioctl(handle, TIOCGSERIAL, &serial) == -1) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to get serial_struct from system.";
+        return false;
+    }
+
+    // If it's already in low latency, no further configuration is necessary
+    if (serial.flags & ASYNC_LOW_LATENCY) {
+        qCDebug(PING_PROTOCOL_SERIALLINK) << "Low latency mode is already in serial_struct.";
+        return true;
+    }
+
+    // It's not possible to check for errors since the driver may not support it
+    serial.flags |= ASYNC_LOW_LATENCY;
+    ::ioctl(handle, TIOCSSERIAL, &serial);
+
+    //light at the end of the tunnel
+    return true;
+}
+#endif
+
+#ifdef Q_OS_WIN
+// TODO: On windows the change of latency timer works in the second attempt sometimes.
+// This needs further investigation and improvement.
+bool SerialLink::setLowLatency()
+{
+    auto handle = _port.handle();
+
+    if(!handle) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to get serial handle from OS.";
+        return false;
+    }
+
+    if(handle) {
+        // Configure timeout
+        COMMTIMEOUTS currentCommTimeouts;
+        ::ZeroMemory(&currentCommTimeouts, sizeof(currentCommTimeouts));
+
+        if(::GetCommTimeouts(handle, &currentCommTimeouts)) {
+            currentCommTimeouts.ReadIntervalTimeout = 1;
+            if (!::SetCommTimeouts(handle, &currentCommTimeouts)) {
+                qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to set read interval timeout.";
+                qCDebug(PING_PROTOCOL_SERIALLINK) << "System error:" << ::GetLastError();
+            }
+        } else {
+            qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to get COMMTIMEOUTS struct from system.";
+            qCDebug(PING_PROTOCOL_SERIALLINK) << "System error:" << ::GetLastError();
+        }
+    } else {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to get serial handle from OS.";
+    }
+
+    // Set low latency mode with windows register system
+    // HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\FTDIBUS\VID_XXXX+PID_XXXX+ABCDEFGH\0000\Device Parameters\LatencyTimer
+
+    // Create VID/PID/serial number register string path
+    QSerialPortInfo serialPortInfo(_port);
+    const QString deviceSettingsIdentification = QStringLiteral("VID_%1+PID_%2+%3")
+            .arg(serialPortInfo.vendorIdentifier(), 4, 16, QChar('0'))
+            .arg(serialPortInfo.productIdentifier(), 4, 16, QChar('0'))
+            .arg(serialPortInfo.serialNumber());
+    const QString settingsSystemKey =
+        QStringLiteral(
+            R"(HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\FTDIBUS\%1\0000\Device Parameters\)")
+        .arg(deviceSettingsIdentification);
+    qCDebug(PING_PROTOCOL_SERIALLINK) << "Register path:" << settingsSystemKey;
+
+    // Change register LatencyTimer value to 1ms
+    QSettings settings(settingsSystemKey, QSettings::NativeFormat);
+
+    // Variable exist, so our path is valid
+    QVariant latencyTimerValue = settings.value("LatencyTimer");
+    if(!latencyTimerValue.isValid()) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Variable does not exist, register path is wrong.";
+        return false;
+    }
+
+    if(latencyTimerValue.toInt() == 1) {
+        qCDebug(PING_PROTOCOL_SERIALLINK) << "Low latency timer is already in register.";
+        return true;
+    }
+
+    if(!settings.isWritable()) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Register is not writable.";
+        return false;
+    }
+
+    settings.setValue("LatencyTimer", 1);
+    settings.sync();
+    auto settingsStatus = settings.status();
+    if(settingsStatus != QSettings::NoError) {
+        qCWarning(PING_PROTOCOL_SERIALLINK) << "Failed to save LatencyTimer setting.";
+        qCDebug(PING_PROTOCOL_SERIALLINK) << "Settings status:" << settingsStatus;
+        return false;
+    }
+
+    //light at the end of the tunnel
+    return true;
+}
+#endif
 
 void SerialLink::forceSensorAutomaticBaudRateDetection()
 {

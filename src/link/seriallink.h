@@ -92,6 +92,21 @@ public:
      */
     void forceSensorAutomaticBaudRateDetection();
 
+    /**
+     * @brief Set the serial port to work in low latency mode
+     * This function was based in a series of links and documentations:
+     *  - http://www.tekkotsu.org/dox/hal/SerialCommPort_8cc_source.html
+     *  - https://www.pjrc.com/tmp/host_software/receive_test.c
+     *  - https://opensource.apple.com/source/ntp/ntp-124/ntpd/refclock_parse.c
+     *  - https://docs.microsoft.com/pt-br/windows/win32/api/winbase/nf-winbase-setcommtimeouts
+     *  - https://docs.microsoft.com/pt-br/windows/win32/api/winbase/ns-winbase-commtimeouts
+     *  - https://www.ftdichip.com/Support/Knowledgebase/index.html?settingacustomdefaultlaten.htm
+     *
+     * @return true
+     * @return false
+     */
+    bool setLowLatency();
+
 private:
     QSerialPort _port;
 };
