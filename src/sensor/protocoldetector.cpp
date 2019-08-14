@@ -147,7 +147,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 
     // Probe
     port.write(_deviceInformationMessageByteArray);
-    port.waitForBytesWritten();
+    port.waitForBytesWritten(100);
 
     int attempts = 0;
 
