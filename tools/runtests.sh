@@ -28,7 +28,7 @@ rm -rf $build_test
 mkdir -p ${build_test}
 qmake -o ${build_test} -r -Wall -Wlogic -Wparser CONFIG+=test ${projectpath}
 make -C ${build_test}
-$build_test/pingviewer
+xvfb-run --server-args="-screen 0 1024x768x24" $build_test/pingviewer || exit 1
 
 echob "Do runtime test:"
 ${scriptpath}/compile.sh --autokill --no-deploy --debug || exit 1
