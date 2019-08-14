@@ -31,7 +31,7 @@ make -C ${build_test}
 $build_test/pingviewer
 
 echob "Do runtime test:"
-${scriptpath}/compile.sh --autokill --no-deploy --debug
+${scriptpath}/compile.sh --autokill --no-deploy --debug || exit 1
 export DISPLAY=:99.0
 build_folder="$projectpath/build"
-xvfb-run --server-args="-screen 0 1024x768x24" ${build_folder}/pingviewer
+xvfb-run --server-args="-screen 0 1024x768x24" ${build_folder}/pingviewer || exit 1
