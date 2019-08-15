@@ -690,6 +690,12 @@ private:
     void checkBaudrateProcess();
 
     /**
+     * @brief Stop necessary timers and variables that deals with sensor configuration
+     *
+     */
+    void stopConfiguration();
+
+    /**
      * @brief Take care of github payload and detect new versions available
      *
      * @param jsonDocument

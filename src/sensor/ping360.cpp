@@ -84,6 +84,13 @@ Ping360::Ping360()
 
 void Ping360::startPreConfigurationProcess()
 {
+    // Stop all configuration/message timers if link is not writable
+    if(!link()->isWritable()) {
+        qCDebug(PING_PROTOCOL_PING360) << "Not possible to start the preconfiguration process with a non-writable channel.";
+        stopConfiguration();
+        return;
+    }
+
     // Fetch sensor configuration to update class variables
     // TODO: Ping base class should abstract the request message to allow version compatibility between protocol versions
     common_general_request msg;
@@ -170,6 +177,12 @@ void Ping360::handleMessage(const ping_message& msg)
     switch (msg.message_id()) {
 
     case CommonId::DEVICE_INFORMATION: {
+        // Stop all configuration/message timers if link is not writable
+        if(!link()->isWritable()) {
+            stopConfiguration();
+            return;
+        }
+
         if(_configuring) {
             _baudrateConfigurationTimer.start();
             checkBaudrateProcess();
@@ -192,8 +205,10 @@ void Ping360::handleMessage(const ping_message& msg)
         // request another transmission
         requestNextProfile();
 
-        // Restart timer
-        _timeoutProfileMessage.start();
+        // Restart timer, if the channel allows it
+        if(link()->isWritable()) {
+            _timeoutProfileMessage.start();
+        }
 
         _data.resize(deviceData.data_length());
         for (int i = 0; i < deviceData.data_length(); i++) {
@@ -414,6 +429,17 @@ void Ping360::detectBaudrates()
     // Check next baud rate
     setBaudRate(validBaudRates()[index]);
     index++;
+}
+
+void Ping360::stopConfiguration()
+{
+    _configuring = false;
+    if(_timeoutProfileMessage.isActive()) {
+        _timeoutProfileMessage.stop();
+    }
+    if(_baudrateConfigurationTimer.isActive()) {
+        _baudrateConfigurationTimer.stop();
+    }
 }
 
 Ping360::~Ping360()
