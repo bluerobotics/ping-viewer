@@ -15,7 +15,7 @@ FileLink::FileLink(QObject* parent)
     , _openModeFlag(QIODevice::ReadWrite)
     , _timer()
     , _inout(&_file)
-    , _logThread(nullptr)
+    , _processLog(nullptr)
 {
     _timer.start();
     setType(LinkType::File);
@@ -108,10 +108,13 @@ bool FileLink::startConnection()
         return false;
     }
 
-    _logThread.reset(new LogThread());
-    connect(_logThread.get(), &LogThread::newPackage, this, &FileLink::newData);
-    connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::packageIndexChanged);
-    connect(_logThread.get(), &LogThread::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
+    _processLog.reset(new ProcessLog());
+    _processLog->moveToThread(&_processLogThread);
+    connect(&_processLogThread, &QThread::started, _processLog.get(), &ProcessLog::run);
+    connect(&_processLogThread, &QThread::finished, _processLog.get(), &ProcessLog::stop);
+    connect(_processLog.get(), &ProcessLog::newPackage, this, &FileLink::newData);
+    connect(_processLog.get(), &ProcessLog::packageIndexChanged, this, &FileLink::packageIndexChanged);
+    connect(_processLog.get(), &ProcessLog::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
 
     processFile();
     return true;
@@ -132,9 +135,9 @@ void FileLink::processFile()
         }
 
         auto time = QTime::fromString(pack.time, _timeFormat);
-        _logThread->append(time, pack.data);
+        _processLog->append(time, pack.data);
     }
-    _logThread->start();
+    _processLogThread.start();
     emit elapsedTimeChanged();
     emit totalTimeChanged();
 }
@@ -175,6 +178,13 @@ bool FileLink::isOpen()
 
 bool FileLink::finishConnection()
 {
+    // Stop reading log process if it's running
+    if(_processLogThread.isRunning()) {
+        _processLog->stop();
+        _processLogThread.quit();
+        _processLogThread.wait();
+    }
+
     // Only close files that are open
     if(_file.isOpen()) {
         _file.close();
