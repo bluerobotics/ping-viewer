@@ -91,6 +91,14 @@ void Ping360::startPreConfigurationProcess()
         return;
     }
 
+    // Baud rate configuration is only done in serial channels
+    if(link()->type() != LinkType::Serial) {
+        _configuring = false;
+        if(_baudrateConfigurationTimer.isActive()) {
+            _baudrateConfigurationTimer.stop();
+        }
+    }
+
     // Fetch sensor configuration to update class variables
     // TODO: Ping base class should abstract the request message to allow version compatibility between protocol versions
     common_general_request msg;
@@ -183,7 +191,8 @@ void Ping360::handleMessage(const ping_message& msg)
             return;
         }
 
-        if(_configuring) {
+        // Baud rate configuration is only done in serial channels
+        if(_configuring && link()->type() == LinkType::Serial) {
             _baudrateConfigurationTimer.start();
             checkBaudrateProcess();
         } else {
