@@ -167,6 +167,7 @@ Item {
                     if(ping.link.packageIndex !== value) {
                         ping.link.packageIndex = value
                         ping.link.start()
+                        replayStartBt.text = "▮▮"
                     }
                 }
             }
