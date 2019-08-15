@@ -2,17 +2,17 @@
 
 #include <QByteArray>
 #include <QLoggingCategory>
+#include <QThread>
 #include <QTime>
-#include <QTimer>
 #include <QVector>
 
-Q_DECLARE_LOGGING_CATEGORY(LOGTHREAD)
+Q_DECLARE_LOGGING_CATEGORY(PING_PROCESSLOG)
 
 /**
  * @brief Play sensor logs
  *
  */
-class LogThread : public QTimer
+class ProcessLog : public QObject
 {
     Q_OBJECT
 public:
@@ -21,13 +21,13 @@ public:
      *
      * @param parent
      */
-    LogThread(QObject *parent = nullptr);
+    ProcessLog(QObject *parent = nullptr);
 
     /**
      * @brief Destroy the Log Thread object
      *
      */
-    ~LogThread();
+    ~ProcessLog();
 
     /**
      * @brief Append new log message
@@ -62,7 +62,13 @@ public:
      * @brief Pause log
      *
      */
-    void pauseJob() { _playLog = false; };
+    void pause() { _play = false; };
+
+    /**
+     * @brief Stop log
+     *
+     */
+    void stop() { _stop = true; };
 
     /**
      * @brief Set the package index
@@ -75,7 +81,16 @@ public:
      * @brief Start playing log
      *
      */
-    void startJob() { _playLog = true; start();};
+    void start() { _play = true; _stop = false; };
+
+    /**
+     * @brief Run the main process
+     *  This function runs in the thread and can be stopped by the stop() call.
+     *  The function needs a thread to allow a better time response to answer as a sensor for the user,
+     *  this same behaviour is not possible via QTimers since it depends of the main thread to do the signal-slot call
+     *  and it has a resolution of 1ms.
+     */
+    void run();
 
     /**
      * @brief Return total time of log
@@ -98,5 +113,6 @@ private:
 
     QVector<Pack> _log;
     int _logIndex;
-    bool _playLog;
+    bool _play;
+    bool _stop;
 };
