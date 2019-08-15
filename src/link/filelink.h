@@ -3,13 +3,14 @@
 #include <QDataStream>
 #include <QElapsedTimer>
 #include <QFile>
+#include <QThread>
 #include <QTime>
 
 #include <memory>
 
 #include "abstractlink.h"
 #include "logsensorstruct.h"
-#include "logthread.h"
+#include "processlog.h"
 
 /**
  * @brief File connection class
@@ -39,7 +40,7 @@ public:
      *
      * @return QTime
      */
-    QTime elapsedTime() final { return _logThread ? _logThread->elapsedTime() : QTime(); };
+    QTime elapsedTime() final { return _processLog ? _processLog->elapsedTime() : QTime(); };
 
     /**
      * @brief Return a human friendly error message
@@ -77,20 +78,20 @@ public:
      *
      * @return int
      */
-    int packageIndex() final { return _logThread ? _logThread->packageIndex() : 0; };
+    int packageIndex() final { return _processLog ? _processLog->packageIndex() : 0; };
 
     /**
      * @brief Return number of packages
      *
      * @return int
      */
-    int packageSize() final { return _logThread ? _logThread->packageSize() : 0; };
+    int packageSize() final { return _processLog ? _processLog->packageSize() : 0; };
 
     /**
      * @brief Pause log
      *
      */
-    void pause() final { if(_logThread) _logThread->pauseJob(); };
+    void pause() final { if(_processLog) _processLog->pause(); };
 
     /**
      * @brief Set the configuration object
@@ -106,13 +107,13 @@ public:
      *
      * @param index
      */
-    void setPackageIndex(int index) { if(_logThread) _logThread->setPackageIndex(index); }
+    void setPackageIndex(int index) { if(_processLog) _processLog->setPackageIndex(index); }
 
     /**
      * @brief Start log
      *
      */
-    void start() final { if(_logThread) _logThread->startJob(); };
+    void start() final { if(_processLog) _processLog->start(); };
 
     /**
      * @brief Start connection
@@ -127,7 +128,7 @@ public:
      *
      * @return QTime
      */
-    QTime totalTime() final { return _logThread ? _logThread->totalTime() : QTime(); };
+    QTime totalTime() final { return _processLog ? _processLog->totalTime() : QTime(); };
 
     /**
      * @brief Returns a pointer of LogSensorStruct
@@ -160,7 +161,8 @@ private:
 
     LogSensorStruct _logSensorStruct;
 
-    std::unique_ptr<LogThread> _logThread;
+    std::unique_ptr<ProcessLog> _processLog;
+    QThread _processLogThread;
 
     void writeData(const QByteArray& data);
     void processFile();
