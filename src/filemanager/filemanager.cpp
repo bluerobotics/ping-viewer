@@ -24,7 +24,7 @@ FileManager::FileManager()
         if(!f->dir.exists()) {
             qCDebug(FILEMANAGER) << "Create folder" << f->dir.path();
             f->ok = rootDir.mkpath(f->dir.path());
-            qCDebug(FILEMANAGER) << (f->ok ? "Done." : ("Error while creating folder" + f->dir.path()));
+            qCDebug(FILEMANAGER) << (f->ok ? QStringLiteral("Done.") : (QStringLiteral("Error while creating folder") + f->dir.path()));
             // Something is wrong, continue with the others
             if(!f->ok) {
                 continue;

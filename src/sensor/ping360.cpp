@@ -47,9 +47,9 @@ Ping360::Ping360()
     // QVector crashs when constructed in initialization list
     _data = QVector<double>(_maxNumberOfPoints, 0);
 
-    setControlPanel({"qrc:/Ping360ControlPanel.qml"});
-    setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
-    setSensorStatusModel({"qrc:/Ping360StatusModel.qml"});
+    setControlPanel({QStringLiteral("qrc:/Ping360ControlPanel.qml")});
+    setSensorVisualizer({QStringLiteral("qrc:/Ping360Visualizer.qml")});
+    setSensorStatusModel({QStringLiteral("qrc:/Ping360StatusModel.qml")});
 
     connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
 

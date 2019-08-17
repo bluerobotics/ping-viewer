@@ -29,9 +29,9 @@ Ping::Ping()
     :PingSensor(PingDeviceType::PING1D)
     ,_points(_num_points, 0)
 {
-    setControlPanel({"qrc:/Ping1DControlPanel.qml"});
-    setSensorVisualizer({"qrc:/Ping1DVisualizer.qml"});
-    setSensorStatusModel({"qrc:/Ping1DStatusModel.qml"});
+    setControlPanel({QStringLiteral("qrc:/Ping1DControlPanel.qml")});
+    setSensorVisualizer({QStringLiteral("qrc:/Ping1DVisualizer.qml")});
+    setSensorStatusModel({QStringLiteral("qrc:/Ping1DStatusModel.qml")});
 
     _periodicRequestTimer.setInterval(1000);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
