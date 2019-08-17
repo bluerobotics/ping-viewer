@@ -1,9 +1,10 @@
-#include "filemanager.h"
+#include "filemanager/filemanager.h"
+#include "logger/logger.h"
+
 #include "waterfall.h"
 
 #include <limits>
 
-#include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
 #include <QVector>

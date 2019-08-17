@@ -1,12 +1,12 @@
-#include "filemanager.h"
+#include "filemanager/filemanager.h"
 #include "polarplot.h"
 
 #include <limits>
 
-#include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
 #include <QVector>
+#include <QTimer>
 
 PING_LOGGING_CATEGORY(polarplot, "ping.polarplot")
 

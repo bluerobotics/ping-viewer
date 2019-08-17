@@ -1,5 +1,6 @@
-#include "logger.h"
 #include "settingsmanager.h"
+
+#include "logger/logger.h"
 
 #include <QQmlEngine>
 

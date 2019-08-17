@@ -4,11 +4,12 @@
 #include <QQuickItem>
 #include <QPointer>
 
-#include "flasher.h"
-#include "link.h"
+#include "flash/flasher.h"
+#include "link/link.h"
+#include "link/sensorinfo.h"
+
 #include "parser.h"
 #include "protocoldetector.h"
-#include "sensorinfo.h"
 
 // TODO: rename to Device?
 /**

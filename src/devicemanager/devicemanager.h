@@ -4,10 +4,11 @@
 #include <QLoggingCategory>
 #include <QThread>
 
-#include "abstractlinknamespace.h"
-#include "ping360ethernetfinder.h"
-#include "protocoldetector.h"
-#include "sensor.h"
+#include "link/abstractlinknamespace.h"
+
+#include "sensor/ping360ethernetfinder.h"
+#include "sensor/protocoldetector.h"
+#include "sensor/sensor.h"
 
 Q_DECLARE_LOGGING_CATEGORY(DEVICEMANAGER)
 

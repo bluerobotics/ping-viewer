@@ -5,7 +5,7 @@
 #include <QLoggingCategory>
 #include <QQmlApplicationEngine>
 
-#include "pingproperties.h"
+#include "util/pingproperties.h"
 
 class QJSEngine;
 class QQmlEngine;

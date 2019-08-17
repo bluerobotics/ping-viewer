@@ -1,5 +1,6 @@
-#include "logger.h"
 #include "flasher.h"
+
+#include "logger/logger.h"
 
 #include <QCoreApplication>
 #include <QDebug>

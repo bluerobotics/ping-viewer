@@ -1,8 +1,10 @@
-#include "logger.h"
-#include "maddy/parser.h"
-#include "networkmanager.h"
 #include "networktool.h"
-#include "notificationmanager.h"
+#include "networkmanager.h"
+
+#include "logger/logger.h"
+#include "maddy/parser.h"
+#include "notification/notificationmanager.h"
+
 
 #include <QJsonArray>
 #include <QJsonDocument>

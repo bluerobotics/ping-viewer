@@ -1,10 +1,11 @@
+#include "sensor.h"
+
 #include <QDateTime>
 #include <QDebug>
 #include <QLoggingCategory>
 
-#include "filelink.h"
-#include "filemanager.h"
-#include "sensor.h"
+#include "link/filelink.h"
+#include "filemanager/filemanager.h"
 
 #include <ping-message.h>
 #include <ping-message-common.h>

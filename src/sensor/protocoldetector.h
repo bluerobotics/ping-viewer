@@ -2,8 +2,8 @@
 
 #include <QThread>
 
-#include "abstractlink.h"
-#include "linkconfiguration.h"
+#include "link/abstractlink.h"
+#include "link/linkconfiguration.h"
 #include "parser-ping.h"
 
 class QSerialPortInfo;

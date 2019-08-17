@@ -1,7 +1,7 @@
 #pragma once
 
 #include "abstractlink.h"
-#include "parser-ping.h"
+#include "sensor/parser-ping.h"
 
 /**
  * @brief Simulation connection class

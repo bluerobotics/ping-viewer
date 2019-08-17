@@ -1,9 +1,7 @@
 #pragma once
 
 #include <QLinearGradient>
-#include <QtDebug>
-
-#include "logger.h"
+#include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(waterfallGradient)
 

@@ -10,21 +10,21 @@
     #include <KCrash>
 #endif
 
-#include "abstractlink.h"
-#include "devicemanager.h"
-#include "filemanager.h"
-#include "flasher.h"
-#include "linkconfiguration.h"
-#include "logger.h"
-#include "notificationmanager.h"
-#include "ping.h"
-#include "ping360.h"
-#include "polarplot.h"
-#include "settingsmanager.h"
-#include "sliderruler.h"
-#include "stylemanager.h"
-#include "util.h"
-#include "waterfallplot.h"
+#include "devicemanager/devicemanager.h"
+#include "filemanager/filemanager.h"
+#include "flash/flasher.h"
+#include "link/abstractlink.h"
+#include "link/linkconfiguration.h"
+#include "logger/logger.h"
+#include "notification/notificationmanager.h"
+#include "qtquickcomponents/sliderruler.h"
+#include "sensor/ping.h"
+#include "sensor/ping360.h"
+#include "settings/settingsmanager.h"
+#include "style/stylemanager.h"
+#include "util/util.h"
+#include "waterfall/polarplot.h"
+#include "waterfall/waterfallplot.h"
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 

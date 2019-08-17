@@ -16,10 +16,10 @@
 
 #include "hexvalidator.h"
 #include "link/seriallink.h"
-#include "networkmanager.h"
-#include "networktool.h"
-#include "notificationmanager.h"
-#include "settingsmanager.h"
+#include "network/networkmanager.h"
+#include "network/networktool.h"
+#include "notification/notificationmanager.h"
+#include "settings/settingsmanager.h"
 
 Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 

@@ -1,5 +1,7 @@
-#include "logger.h"
 #include "pingsensor.h"
+
+#include "logger/logger.h"
+
 #include "ping-message-common.h"
 #include "ping-message-ping1d.h"
 

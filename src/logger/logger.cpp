@@ -1,11 +1,10 @@
-#include "filemanager.h"
+#include "filemanager/filemanager.h"
 #include "logger.h"
 
 #include <iostream>
 #include <QDebug>
 #include <QString>
 #include <QTime>
-#include <QtConcurrent>
 #include <QColor>
 #include <QQmlEngine>
 

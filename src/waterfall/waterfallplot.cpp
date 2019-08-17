@@ -1,12 +1,14 @@
-#include "filemanager.h"
 #include "waterfallplot.h"
+
+#include "filemanager/filemanager.h"
+#include "logger/logger.h"
 
 #include <limits>
 
-#include <QtConcurrent>
 #include <QPainter>
 #include <QtMath>
 #include <QVector>
+#include <QTimer>
 
 PING_LOGGING_CATEGORY(waterfallplot, "ping.waterfallplot")
 

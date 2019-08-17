@@ -3,7 +3,7 @@
 #include <QStandardPaths>
 
 #include "filemanager.h"
-#include "logger.h"
+#include "logger/logger.h"
 
 PING_LOGGING_CATEGORY(FILEMANAGER, "ping.filemanager");
 

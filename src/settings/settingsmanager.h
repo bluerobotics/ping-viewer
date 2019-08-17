@@ -4,10 +4,11 @@
 #include <QSettings>
 #include <QStringListModel>
 
-#include "linkconfiguration.h"
-#include "qjsonsettings.h"
-#include "settingsmanagerhelper.h"
-#include "varianttree.h"
+#include "link/linkconfiguration.h"
+
+#include "settings/qjsonsettings.h"
+#include "settings/settingsmanagerhelper.h"
+#include "settings/varianttree.h"
 
 class QJSEngine;
 class QQmlEngine;

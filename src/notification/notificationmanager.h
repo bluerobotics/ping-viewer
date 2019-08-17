@@ -2,8 +2,8 @@
 
 #include <QLoggingCategory>
 
-#include "stylemanager.h"
-#include "notificationmodel.h"
+#include "style/stylemanager.h"
+#include "notification/notificationmodel.h"
 
 class QJSEngine;
 class QQmlEngine;

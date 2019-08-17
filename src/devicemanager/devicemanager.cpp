@@ -1,8 +1,8 @@
 #include "devicemanager.h"
-#include "filelink.h"
-#include "logger.h"
-#include "ping.h"
-#include "ping360.h"
+#include "link/filelink.h"
+#include "logger/logger.h"
+#include "sensor/ping.h"
+#include "sensor/ping360.h"
 
 PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 

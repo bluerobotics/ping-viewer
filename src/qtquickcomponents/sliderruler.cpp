@@ -1,5 +1,6 @@
 #include "sliderruler.h"
-#include "stylemanager.h"
+
+#include "style/stylemanager.h"
 
 // std
 #include <cmath>

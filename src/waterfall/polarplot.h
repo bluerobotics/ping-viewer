@@ -3,7 +3,8 @@
 #include <QQuickPaintedItem>
 #include <QImage>
 
-#include "logger.h"
+#include "logger/logger.h"
+
 #include "ringvector.h"
 #include "waterfall.h"
 #include "waterfallgradient.h"

@@ -1,7 +1,8 @@
+#include "logthread.h"
+
 #include <QDebug>
 
-#include "logger.h"
-#include "logthread.h"
+#include "logger/logger.h"
 
 PING_LOGGING_CATEGORY(LOGTHREAD, "ping.logthread");
 

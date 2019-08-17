@@ -1,6 +1,6 @@
 #pragma once
 
-#include "linkconfiguration.h"
+#include "link/linkconfiguration.h"
 
 #include <QLoggingCategory>
 #include <QProcess>

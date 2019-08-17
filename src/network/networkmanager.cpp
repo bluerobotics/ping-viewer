@@ -1,5 +1,6 @@
-#include "logger.h"
 #include "networkmanager.h"
+
+#include "logger/logger.h"
 
 #include <QDebug>
 #include <QJsonDocument>

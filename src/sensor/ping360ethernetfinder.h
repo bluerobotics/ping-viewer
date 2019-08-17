@@ -3,7 +3,7 @@
 #include <QTimer>
 #include <QUdpSocket>
 
-#include "linkconfiguration.h"
+#include "link/linkconfiguration.h"
 
 /**
  * @brief This class will scan the network for Ping360 devices

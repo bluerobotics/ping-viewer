@@ -1,8 +1,9 @@
+#include "util.h"
+
 #include <QSerialPortInfo>
 #include <QtCharts/QXYSeries>
 
-#include "logger.h"
-#include "util.h"
+#include "logger/logger.h"
 
 PING_LOGGING_CATEGORY(util, "ping.util");
 

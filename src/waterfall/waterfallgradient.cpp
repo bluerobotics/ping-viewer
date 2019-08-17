@@ -4,6 +4,7 @@
 #include <QtDebug>
 
 #include "waterfallgradient.h"
+#include "logger/logger.h"
 
 PING_LOGGING_CATEGORY(waterfallGradient, "ping.waterfallGradient")
 

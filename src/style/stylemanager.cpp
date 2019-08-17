@@ -1,6 +1,7 @@
-#include "logger.h"
-#include "settingsmanager.h"
 #include "stylemanager.h"
+
+#include "logger/logger.h"
+#include "settings/settingsmanager.h"
 
 #include <QDebug>
 #include <QGuiApplication>
