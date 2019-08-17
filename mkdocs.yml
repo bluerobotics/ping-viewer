@@ -19,7 +19,9 @@ nav:
         - Hotkeys and Shortcuts: hotkeys-and-shortcuts.md
         - Logging and User Files: logging-and-user-files.md
         - FAQ and Troubleshooting: faq-and-troubleshooting.md
-        - Developers and OEMs: developers-and-oems.md
+    - Developers:
+        - Build Instructions: build-instructions.md
+        - Libraries and Tools: libraries-and-tools.md
 extra_css:
     - css/center_images.css
 site_dir: ping-viewer
