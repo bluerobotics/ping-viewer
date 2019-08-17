@@ -1,0 +1,26 @@
+add_library(
+    link
+STATIC
+    abstractlink.cpp
+    filelink.cpp
+    link.cpp
+    linkconfiguration.cpp
+    logsensorstruct.cpp
+    logthread.cpp
+    ping1dsimulationlink.cpp
+    ping360simulationlink.cpp
+    sensorinfo.cpp
+    seriallink.cpp
+    simulationlink.cpp
+    tcplink.cpp
+    udplink.cpp
+    abstractlinknamespace.h
+)
+
+target_link_libraries(link
+PRIVATE
+    Qt5::Core
+    Qt5::Network
+    Qt5::SerialPort
+    Qt5::Gui
+)
