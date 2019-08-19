@@ -1,4 +1,5 @@
 import QtGraphicalEffects 1.0
+import QtMultimedia 5.12
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
@@ -258,6 +259,31 @@ Item {
         }
     }
 
+    // Sound effect for screenshot
+    SoundEffect {
+        id: cameraShutterSound
+        source: "qrc:/sounds/camera-shutter.wav"
+    }
+    // Flash effect for screenshot
+    Rectangle {
+        anchors.fill: root
+        opacity: 0
+        color: "lightsteelblue"
+        OpacityAnimator {
+            id: shutterAnimation
+            target: parent
+            from: 0
+            to: 1
+            duration: 200
+            loops: 1
+        }
+    }
+
+    function playScreenshotAnimation() {
+        cameraShutterSound.play()
+        shutterAnimation.start()
+    }
+
     Keys.onPressed: {
         print("Key pressed: ", event.key)
 
@@ -265,6 +291,7 @@ Item {
             print("Grab screen image")
             event.accepted = true
 
+            playScreenshotAnimation()
             root.grabToImage(function(result) {
                 print("Grab screen image callback")
                 result.saveToFile(FileManager.createFileName(FileManager.Pictures))
@@ -281,6 +308,7 @@ Item {
             case Qt.Key_W:
                 print("Grab visualizer image.")
                 event.accepted = true
+                playScreenshotAnimation()
                 sensorVisualizer.captureVisualizer()
                 break;
 
