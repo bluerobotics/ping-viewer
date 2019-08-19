@@ -63,4 +63,7 @@
         <file alias="Ping1D.gif">qml/gifs/Ping1D.gif</file>
         <file alias="Ping360.gif">qml/gifs/Ping360.gif</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file alias="camera-shutter.wav">qml/sounds/camera-shutter.wav</file>
+    </qresource>
 </RCC>
