@@ -63,9 +63,6 @@ void PolarPlot::setImage(const QImage &image)
 void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint, float length, float angleGrad,
                      float sectorSize)
 {
-    Q_UNUSED(initPoint)
-    Q_UNUSED(length)
-
     static const QPoint center(_image.width()/2, _image.height()/2);
     static const float degreeToRadian = M_PI/180.0f;
     static const float gradianToRadian = M_PI/200.0f;
