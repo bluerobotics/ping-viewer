@@ -6,8 +6,9 @@
 #include <QUrl>
 
 #include "filelink.h"
+#include "logger.h"
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_FILELINK, "ping.protocol.filelink")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_FILELINK, "ping.protocol.filelink")
 
 FileLink::FileLink(QObject* parent)
     : AbstractLink(parent)

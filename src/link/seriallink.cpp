@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QTimer>
 
+#include "logger.h"
 #include "seriallink.h"
 
 #ifdef Q_OS_LINUX
@@ -16,7 +17,7 @@
     #include <QSettings>
 #endif
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_SERIALLINK, "ping.protocol.seriallink")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_SERIALLINK, "ping.protocol.seriallink")
 
 SerialLink::SerialLink(QObject* parent)
     : AbstractLink(parent)

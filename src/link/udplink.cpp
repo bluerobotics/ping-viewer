@@ -2,9 +2,10 @@
 #include <QLoggingCategory>
 #include <QNetworkDatagram>
 
+#include "logger.h"
 #include "udplink.h"
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_UDPLINK, "ping.protocol.udplink")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_UDPLINK, "ping.protocol.udplink")
 
 UDPLink::UDPLink(QObject* parent)
     : AbstractLink(parent)
