@@ -22,7 +22,7 @@
 #include "notificationmanager.h"
 #include "settingsmanager.h"
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
 // firmware constants
 const uint16_t Ping360::_firmwareMaxNumberOfPoints = 1200;

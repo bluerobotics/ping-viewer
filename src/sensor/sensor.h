@@ -6,6 +6,7 @@
 
 #include "flasher.h"
 #include "link.h"
+#include "logger.h"
 #include "parser.h"
 #include "protocoldetector.h"
 #include "sensorinfo.h"
