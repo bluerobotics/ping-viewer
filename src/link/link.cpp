@@ -2,7 +2,7 @@
 #include <QLoggingCategory>
 
 #include "link.h"
-
+#include "logger.h"
 #include "filelink.h"
 #include "ping1dsimulationlink.h"
 #include "ping360simulationlink.h"
@@ -11,7 +11,7 @@
 #include "tcplink.h"
 #include "udplink.h"
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_LINK, "ping.protocol.link")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_LINK, "ping.protocol.link")
 
 Link::Link(LinkType linkType, QString name, QObject* parent)
     : QObject(parent)
