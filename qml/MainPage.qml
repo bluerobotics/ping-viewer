@@ -260,30 +260,39 @@ Item {
 
     Keys.onPressed: {
         print("Key pressed: ", event.key)
-        if (event.key == Qt.Key_S) {
+
+        if(event.key == Qt.Key_S) {
             print("Grab screen image")
             event.accepted = true
 
             root.grabToImage(function(result) {
                 print("Grab screen image callback")
-                print(FileManager.createFileName(FileManager.Pictures))
                 result.saveToFile(FileManager.createFileName(FileManager.Pictures))
             })
+            return;
+        }
 
-        // This are the base shortcuts that are common between all visualization items
-        } else if(event.key == Qt.Key_W) {
-            print("Grab visualizer image.")
-            event.accepted = true
-            sensorVisualizer.captureVisualizer()
+        if(sensorVisualizer == null) {
+            print("No visualizer to handle shortcut.")
+            return;
+        }
 
-        }  else if(event.key == Qt.Key_R) {
-            print("Clear visualizer.")
-            event.accepted = true
-            sensorVisualizer.clear()
+        switch(event.key) {
+            case Qt.Key_W:
+                print("Grab visualizer image.")
+                event.accepted = true
+                sensorVisualizer.captureVisualizer()
+                break;
 
-        } else {
-            // Let the visualizer use specialized shortcuts if necessary
-            event.accepted = sensorVisualizer.handleShortcut(event.key)
+            case Qt.Key_R:
+                print("Clear visualizer.")
+                event.accepted = true
+                sensorVisualizer.clear()
+                break;
+
+            default:
+                print("Ask the visualizer to handle shortcut.")
+                event.accepted = sensorVisualizer.handleShortcut(event.key)
         }
     }
 }
