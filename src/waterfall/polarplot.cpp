@@ -146,7 +146,7 @@ void PolarPlot::updateMouseColumnData()
     _mouseSampleAngle = grad*grad2deg;
 
     // Calculate mouse distance in meters
-    _mouseSampleDistance = std::hypotf(delta.x(), delta.y())*_maxDistance*1e-3;
+    _mouseSampleDistance = std::hypotf(delta.x(), delta.y())*_maxDistance;
 
     emit mouseSampleAngleChanged();
     emit mouseSampleDistanceChanged();
