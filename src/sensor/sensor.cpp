@@ -9,7 +9,7 @@
 #include <ping-message.h>
 #include <ping-message-common.h>
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_SENSOR, "ping.protocol.sensor")
 
 const QUrl Sensor::_defaultControlPanelUrl("qrc:/NoControlPanel.qml");
 

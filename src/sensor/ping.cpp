@@ -21,7 +21,7 @@
 #include "notificationmanager.h"
 #include "settingsmanager.h"
 
-Q_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
+PING_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
 const int Ping::_pingMaxFrequency = 50;
 

@@ -2,8 +2,9 @@
 #include <QLoggingCategory>
 
 #include "hexvalidator.h"
+#include "logger.h"
 
-Q_LOGGING_CATEGORY(HEX_VALIDATOR, "ping.hexvalidator")
+PING_LOGGING_CATEGORY(HEX_VALIDATOR, "ping.hexvalidator")
 
 bool HexValidator::check(const QByteArray& bytes)
 {
