@@ -38,7 +38,7 @@ RowLayout {
         wheelEnabled: true
         from: root.from
         to: root.to
-
+        enabled: visible
         background: SliderRuler {
             id: ticks
             anchors.fill: parent
@@ -67,6 +67,7 @@ RowLayout {
         to: root.to
         stepSize: sliderControl.stepSize
         editable: true
+        enabled: visible
     }
 
     Binding on value {
