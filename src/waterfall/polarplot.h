@@ -116,7 +116,7 @@ private:
      */
     void updateMouseColumnData();
 
-    QVector<int> _distances;
+    QVector<float> _distances;
     QImage _image;
     float _maxDistance;
     float _mouseSampleAngle;
