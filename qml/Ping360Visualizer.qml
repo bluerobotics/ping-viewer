@@ -209,23 +209,19 @@ Item {
     Component {
         id: displaySettings
         GridLayout {
+            id: settingsLayout
             anchors.fill: parent
             columns: 5
             rowSpacing: 5
             columnSpacing: 5
+            property bool isFullCircle: true
 
             // Sensor connections should be done inside component
             // Components are local '.qml' descriptions, so it's not possible get outside connections
             Connections {
                 target: ping
-                // We do not support vertical flips in sector view
                 onSectorSizeChanged: {
-                    if(ping.sectorSize != 360) {
-                        verticalFlipChB.checked = false
-                        verticalFlipChB.enabled = false
-                    } else {
-                        verticalFlipChB.enabled = true
-                    }
+                    settingsLayout.isFullCircle = ping.sectorSize == 360
                 }
             }
 
@@ -235,8 +231,16 @@ Item {
                 checked: false
                 Layout.columnSpan: 5
                 Layout.fillWidth: true
+                // We do not support vertical flips in sector view
+                enabled: settingsLayout.isFullCircle
                 onCheckStateChanged: {
                     waterfall.verticalFlip = checkState
+                }
+
+                // Disable vertical flip in sector view  or when horizontal is selected
+                Binding on checked {
+                    when: horizontalFlipChB.checked || !settingsLayout.isFullCircle
+                    value: false
                 }
             }
 
@@ -248,6 +252,12 @@ Item {
                 Layout.fillWidth: true
                 onCheckStateChanged: {
                     waterfall.horizontalFlip = checkState
+                }
+
+                // Disable when vertical is selected
+                Binding on checked {
+                    when: verticalFlipChB.checked
+                    value: false
                 }
             }
 
