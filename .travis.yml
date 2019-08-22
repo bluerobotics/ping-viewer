@@ -23,7 +23,7 @@ matrix:
             - git
             - build-essential
             - qt512base
-            - qt512charts-no-lgpl qt512graphicaleffects qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
+            - qt512charts-no-lgpl qt512graphicaleffects qt512multimedia qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
             - libgl1-mesa-dev
             - xvfb
       env:
@@ -45,7 +45,7 @@ matrix:
             - git
             - build-essential
             - qt512base
-            - qt512charts-no-lgpl qt512graphicaleffects qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
+            - qt512charts-no-lgpl qt512graphicaleffects qt512multimedia qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
             - libgl1-mesa-dev
       env:
         - DESC="AppImage deploy"
