@@ -15,6 +15,7 @@ uint16_t PolarPlot::_angularResolution = 400;
 
 PolarPlot::PolarPlot(QQuickItem *parent)
     :Waterfall(parent)
+    ,_backgroundImage(1, 1, QImage::Format_RGBA8888)
     ,_distances(_angularResolution, 0)
     ,_image(2500, 2500, QImage::Format_RGBA8888)
     ,_maxDistance(0)
@@ -30,6 +31,20 @@ PolarPlot::PolarPlot(QQuickItem *parent)
     _updateTimer->start(50);
 
     connect(this, &Waterfall::mousePosChanged, this, &PolarPlot::updateMouseColumnData);
+    connect(this, &Waterfall::themeChanged, this, &PolarPlot::clear);
+    connect(this, &QQuickItem::widthChanged, this, &PolarPlot::updateMask);
+    connect(this, &QQuickItem::heightChanged, this, &PolarPlot::updateMask);
+}
+
+void PolarPlot::updateMask()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    _polarBackgroundMask.clear();
+#else
+    QPainterPath newPath;
+    _polarBackgroundMask = newPath;
+#endif
+    _polarBackgroundMask.addEllipse(0, 0, width(), height());
 }
 
 void PolarPlot::clear()
@@ -37,6 +52,7 @@ void PolarPlot::clear()
     qCDebug(polarplot) << "Cleaning waterfall and restarting internal variables";
     _image.fill(Qt::transparent);
     _distances.fill(0, _angularResolution);
+    _backgroundImage.fill(valueToRGB(0));
     _maxDistance = 0;
 }
 
@@ -49,6 +65,8 @@ void PolarPlot::paint(QPainter *painter)
 
     // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
     pix = QPixmap::fromImage(_image, Qt::NoFormatConversion);
+    _painter->setClipPath(_polarBackgroundMask);
+    _painter->drawImage(QRect(0, 0, width(), height()), _backgroundImage);
     _painter->drawPixmap(QRect(0, 0, width(), height()), pix, QRect(0, 0, _image.width(), _image.height()));
 }
 
