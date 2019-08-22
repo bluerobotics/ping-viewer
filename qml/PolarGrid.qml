@@ -34,6 +34,7 @@ Item {
         }
 
         delegate: Text {
+            font.bold: true
             font.pixelSize: 15
             // Calculate the angle and radius for each item
             // The final angle in radians will be the last angle in the right side
