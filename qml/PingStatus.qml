@@ -79,4 +79,33 @@ Item {
             y = root.height / 2
         }
     }
+
+    // Take care of the item position while resizing parent
+    property var parentWidth: null
+    property var parentHeight: null
+    Connections {
+        target: root.parent
+        onWidthChanged: {
+            if (parentWidth) {
+                var scaleW = root.parent.width/parentWidth
+                if (scaleW) {
+                    rect.x *= scaleW
+                    parentWidth = root.parent.width
+                }
+                return
+            }
+            parentWidth = root.parent.width
+        }
+        onHeightChanged: {
+            if (parentHeight) {
+                var scaleH = root.parent.height/parentHeight
+                if (scaleH) {
+                    rect.y *= scaleH
+                    parentHeight = root.parent.height
+                }
+                return
+            }
+            parentHeight = root.parent.height
+        }
+    }
 }
