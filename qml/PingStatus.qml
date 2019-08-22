@@ -43,8 +43,6 @@ Item {
         opacity: 0.75
         height: innerCol.height + 2 * marginPix
         width: innerCol.width + 5 * marginPix
-        x: root.width / 2
-        y: root.height / 2
 
         MouseArea {
             anchors.fill: parent
@@ -74,6 +72,11 @@ Item {
             Repeater {
                 model: sensorModel.model
             }
+        }
+
+        Component.onCompleted: {
+            x = root.width / 2
+            y = root.height / 2
         }
     }
 }
