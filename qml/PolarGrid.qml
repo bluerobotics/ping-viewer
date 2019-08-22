@@ -30,7 +30,7 @@ Item {
             } else if(root.maxDistance < 2) {
                 precision = 2
             }
-            return distance*scalar.toFixed(precision) + units
+            return (distance*scalar).toFixed(precision) + units
         }
 
         delegate: Text {
