@@ -562,7 +562,7 @@ private:
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
 
-    QElapsedTimer _messageElapsedTimer;
+    QTimer _messageFrequencyTimer;
     QTimer _timeoutProfileMessage;
 
     /**
@@ -576,36 +576,38 @@ private:
 
     // Helper structure to hold frequency information for each message
     struct MessageFrequencyHelper {
-        float frequency = 0;
-        int lastTimeMs = 0;
+        // Hold last frequency
+        float frequency;
+        // Hold the last number of messages
+        int numberOfMessages = 0;
 
-        /** LPF IIR alpha coefficient
-         *  This creates an order 1 IIR filter with a fixed cutoff frequency.
-         *  The filter equation is described as $H(z) = \frac{1-\alpha}{1-\alpha Z}$,
-         *  where $\alpha$ is defined by: $\alpha = \frac{F_s - F_{cutoff}}{F_s}$,
-         *  fixing the system $(H(z)$) with a cutoff frequency of $(1 - \alpha)\omega$.
+        /**
+         * @brief Increase the number of messages parsed
+         *
+         * @param number of messages
          */
-        float alpha = 0;
-        float cutoffFrequency = 3; // Fix cutoff frequency to 3Hz
-        void setElapsed(int timeMs)
+        void updateNumberOfMessages(int number = 1)
         {
-            // If timeMs is zero, reset structure.
-            // Otherwise start it
-            if(lastTimeMs == 0 || timeMs == 0) {
-                lastTimeMs = timeMs;
-                return;
-            }
-            // If the last message was years ago or too fast, restart the lastTimeMs
-            float elapsedMs = (timeMs - lastTimeMs)*0.001f;
-            float actualFrequency = 1.0f/elapsedMs;
-            if(qFuzzyIsNull(actualFrequency) || std::isinf(actualFrequency) || std::isnan(actualFrequency)) {
-                lastTimeMs = timeMs;
-                return;
-            }
+            numberOfMessages += number;
+        }
 
-            alpha = (actualFrequency - cutoffFrequency)/actualFrequency;
-            frequency = (1.0f - alpha)*actualFrequency + alpha*frequency;
-            lastTimeMs = timeMs;
+        /**
+         * @brief Update frequency of structure with the elapsed time between calls
+         *
+         * @param milliseconds elapsed number of milliseconds since last call
+         */
+        float updateFrequencyFromMilliseconds(float milliseconds)
+        {
+            if(qFuzzyIsNull(milliseconds) || std::isinf(milliseconds) || std::isnan(milliseconds)) {
+                return 0;
+            }
+            // Update frequency
+            frequency = static_cast<float>(numberOfMessages)/(milliseconds*0.001f);
+
+            // Clear number of messages to the next call
+            numberOfMessages = 0;
+
+            return frequency;
         }
     };
 
