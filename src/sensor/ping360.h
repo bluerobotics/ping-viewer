@@ -216,7 +216,7 @@ public:
     uint32_t speed_of_sound() { return _speed_of_sound; }
 
     /**
-     * @brief Set speed of sound (mm/s) used for calculating distance from time-of-flight
+     * @brief Set speed of sound (m/s) used for calculating distance from time-of-flight
      *
      * @param speed_of_sound
      */
