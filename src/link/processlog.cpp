@@ -33,6 +33,7 @@ void ProcessLog::run()
     emit packageIndexChanged(_logIndex);
     emit newPackage(data);
 
+    _logIndex++;
     // Check if we have data before sending
     if(_logIndex >=  _log.size()) {
         qCDebug(PING_PROCESSLOG) << "End of the log.";
@@ -40,7 +41,6 @@ void ProcessLog::run()
     }
 
     static int diffMSecs;
-    _logIndex++;
     diffMSecs = _log[_logIndex].time.msecsSinceStartOfDay() - lastMSecs;
 
     // Something is wrong, we need to go 'back to the future'
