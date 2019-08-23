@@ -38,6 +38,7 @@ void ProcessLog::run()
     if(_logIndex >=  _log.size()) {
         qCDebug(PING_PROCESSLOG) << "End of the log.";
         stop();
+        return;
     }
 
     static int diffMSecs;
