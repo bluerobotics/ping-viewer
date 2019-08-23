@@ -162,13 +162,13 @@ public:
     {
         if(newRange != range()) {
             _num_points = _firmwareMaxNumberOfPoints;
-            _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
+            _sample_period = calculateSamplePeriod(newRange);
 
             // reduce _sample period until we are within operational parameters
             // maximize the number of points
             while(_sample_period < _firmwareMinSamplePeriod) {
                 _num_points--;
-                _sample_period = ceil(2*newRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration));
+                _sample_period = calculateSamplePeriod(newRange);
             }
 
             emit numberOfPointsChanged();
@@ -227,7 +227,7 @@ public:
             // we adjust _speed_of_sound, without affecting the current range setting
             double desiredRange = round(range());
             _speed_of_sound = speed_of_sound;
-            _sample_period = 2*desiredRange/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+            _sample_period = calculateSamplePeriod(desiredRange);
             emit speedOfSoundChanged();
             emit samplePeriodChanged();
             emit rangeChanged();
@@ -630,6 +630,14 @@ private:
         230400,
         115200,
     };
+
+    /**
+     * @brief Calculate sample period from distance
+     *
+     * @param distance
+     * @return uint16_t
+     */
+    uint16_t calculateSamplePeriod(float distance);
 
     /**
      * @brief Request the next profile based in the class configuration

@@ -1,6 +1,7 @@
 #include "ping360.h"
 
 #include <algorithm>
+#include <limits>
 #include <functional>
 
 #include <QCoreApplication>
@@ -449,6 +450,24 @@ void Ping360::stopConfiguration()
     if(_baudrateConfigurationTimer.isActive()) {
         _baudrateConfigurationTimer.stop();
     }
+}
+
+uint16_t Ping360::calculateSamplePeriod(float distance)
+{
+    float calculatedSamplePeriod = 2.0f*distance/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
+    if(qFuzzyIsNull(calculatedSamplePeriod) || calculatedSamplePeriod < 0
+            || calculatedSamplePeriod > std::numeric_limits<uint16_t>::max()) {
+        qCWarning(PING_PROTOCOL_PING360) << "Invalid calculation of sample period. Going to use firmware default values.";
+        qCDebug(PING_PROTOCOL_PING360) << "calculatedSamplePeriod: " << calculatedSamplePeriod
+                                       << "distance:" << distance
+                                       << "_num_points" << _num_points
+                                       << "_speed_of_sound" << _speed_of_sound
+                                       << "_samplePeriodTickDuration" << _samplePeriodTickDuration;
+
+        return _firmwareDefaultSamplePeriod;
+    }
+
+    return static_cast<uint16_t>(calculatedSamplePeriod);
 }
 
 Ping360::~Ping360()
