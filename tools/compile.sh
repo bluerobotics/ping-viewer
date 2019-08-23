@@ -74,9 +74,11 @@ runstep() {
 
     # This prints a '.' while the command is evaluated
     sh -c "while sleep 1; do printf '.'; done;" &
+    echopid=$!
     eval "$1" >>$verboseoutput 2>&1
-    kill $!
-    [ $? == 0 ] || {
+    returncode=$?
+    kill $echopid
+    [ $returncode == 0 ] || {
         echob "✖"
         cat $verboseoutput
         error "$name failed." $errormsg
