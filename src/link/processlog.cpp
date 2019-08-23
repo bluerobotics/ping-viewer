@@ -35,7 +35,7 @@ void ProcessLog::run()
 
     _logIndex++;
     // Check if we have data before sending
-    if(_logIndex >=  _log.size()) {
+    if(_logIndex >= _log.size()) {
         qCDebug(PING_PROCESSLOG) << "End of the log.";
         stop();
         return;
