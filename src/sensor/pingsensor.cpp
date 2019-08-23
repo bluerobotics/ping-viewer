@@ -6,7 +6,7 @@
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PINGSENSOR, "ping.protocol.pingsensor")
 
 PingSensor::PingSensor(PingDeviceType pingDeviceType)
-    : Sensor( {SensorFamily::PING, static_cast<int>(pingDeviceType)} )
+    : Sensor( {SensorFamily::PING, {static_cast<int>(pingDeviceType)}} )
 {
     _parser = new PingParserExt();
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate,
