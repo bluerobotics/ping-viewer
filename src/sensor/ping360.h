@@ -323,6 +323,10 @@ public:
         int sectorSizeGrad = round(sectorSize * 400/360.0);
 
         if(_sectorSize != sectorSizeGrad) {
+            // Reset reverse direction when back to full scan
+            if(sectorSizeGrad == 400) {
+                _reverse_direction = false;
+            }
             _sectorSize = sectorSizeGrad;
             emit sectorSizeChanged();
         }
