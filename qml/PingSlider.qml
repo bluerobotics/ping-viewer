@@ -75,6 +75,11 @@ RowLayout {
     }
 
     Binding on value {
+        when: sliderControl.moved
+        value: sliderControl.value
+    }
+
+    Binding on value {
         when: spinBox.up.pressed
         value: spinBox.value
     }
