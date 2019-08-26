@@ -242,6 +242,17 @@ void Ping360::handleMessage(const ping_message& msg)
             }
         }
 
+        // This properties are changed internally only when the link is not writable
+        // Such information is normally sync between our application and the sensor
+        // So with normal links such attribution is not necessary
+        if(!link()->isWritable()) {
+            set_gain_setting(deviceData.gain_setting());
+            set_transmit_duration(deviceData.transmit_duration());
+            set_sample_period(deviceData.sample_period());
+            set_transmit_frequency(deviceData.transmit_frequency());
+            set_number_of_points(deviceData.data_length());
+        }
+
         break;
     }
 
