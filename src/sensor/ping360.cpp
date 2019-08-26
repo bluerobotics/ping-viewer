@@ -364,7 +364,7 @@ void Ping360::setBaudRate(int baudRate)
 void Ping360::setBaudRateAndRequestProfile(int baudRate)
 {
     setBaudRate(baudRate);
-    QThread::usleep(100);
+    QThread::msleep(100);
     requestNextProfile();
 }
 
