@@ -227,7 +227,7 @@ public:
     Q_PROPERTY(int packageSize READ packageSize NOTIFY packageSizeChanged)
     Q_PROPERTY(QTime totalTime READ totalTime NOTIFY totalTimeChanged)
     Q_PROPERTY(QString totalTimeString READ totalTimeString NOTIFY totalTimeChanged)
-    Q_PROPERTY(LinkType type READ type WRITE setType NOTIFY linkChanged)
+    Q_PROPERTY(AbstractLinkNamespace::LinkType type READ type WRITE setType NOTIFY linkChanged)
 
 signals:
     void availableConnectionsChanged();
