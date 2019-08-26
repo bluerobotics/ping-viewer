@@ -264,6 +264,17 @@ Item {
             }
 
             CheckBox {
+                id: flipAScan
+                text: "Flip A-Scan"
+                checked: false
+                Layout.columnSpan: 5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    chart.flip = !checkState
+                }
+            }
+
+            CheckBox {
                 id: smoothDataChB
                 text: "Smooth Data"
                 checked: true
