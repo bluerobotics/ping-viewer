@@ -15,48 +15,46 @@ ProcessLog::ProcessLog(QObject *parent)
 
 void ProcessLog::run()
 {
-    // Check for stop condition
-    if(_stop) {
-        return;
+    int diffMSecs = 0;
+    int lastMSecs = 0;
+
+    while(!_stop) {
+        // Check for pause condition and valid log index
+        if(!_play) {
+            QThread::msleep(200);
+            continue;
+        }
+
+        const QByteArray& data = _log[_logIndex].data;
+        lastMSecs = _log[_logIndex].time.msecsSinceStartOfDay();
+        emit packageIndexChanged(_logIndex);
+        emit newPackage(data);
+
+        _logIndex++;
+        // Check if we have data before sending
+        if(_logIndex >= _log.size()) {
+            qCDebug(PING_PROCESSLOG) << "End of the log.";
+
+            // Restart thread and wait for user interaction
+            _logIndex = 0;
+            _play = false;
+            continue;
+        }
+
+        diffMSecs = _log[_logIndex].time.msecsSinceStartOfDay() - lastMSecs;
+
+        // Something is wrong, we need to go 'back to the future'
+        if(diffMSecs < 0) {
+            qCWarning(PING_PROCESSLOG) << "Sample time is negative from previous sample! Trying to recover..";
+            qCDebug(PING_PROCESSLOG) << "First time:" << _log.constFirst().time;
+            qCDebug(PING_PROCESSLOG) << "Last time:" << _log.constLast().time;
+            qCDebug(PING_PROCESSLOG) << "Actual index:" << _logIndex
+                                     << "Time[n-1, n]:" << _log[_logIndex - 1].time << _log[_logIndex].time;
+            continue;
+        }
+
+        QThread::msleep(diffMSecs);
     }
-
-    // Check for pause condition and valid log index
-    if(!_play) {
-        QThread::msleep(200);
-        run();
-        return;
-    }
-
-    static int lastMSecs = 0;
-    const QByteArray& data = _log[_logIndex].data;
-    lastMSecs = _log[_logIndex].time.msecsSinceStartOfDay();
-    emit packageIndexChanged(_logIndex);
-    emit newPackage(data);
-
-    _logIndex++;
-    // Check if we have data before sending
-    if(_logIndex >= _log.size()) {
-        qCDebug(PING_PROCESSLOG) << "End of the log.";
-        stop();
-        return;
-    }
-
-    static int diffMSecs;
-    diffMSecs = _log[_logIndex].time.msecsSinceStartOfDay() - lastMSecs;
-
-    // Something is wrong, we need to go 'back to the future'
-    if(diffMSecs < 0) {
-        qCWarning(PING_PROCESSLOG) << "Sample time is negative from previous sample! Trying to recover..";
-        qCDebug(PING_PROCESSLOG) << "First time:" << _log.constFirst().time;
-        qCDebug(PING_PROCESSLOG) << "Last time:" << _log.constLast().time;
-        qCDebug(PING_PROCESSLOG) << "Actual index:" << _logIndex
-                                 << "Time[n-1, n]:" << _log[_logIndex - 1].time << _log[_logIndex].time;
-        run();
-        return;
-    }
-
-    QThread::msleep(diffMSecs);
-    run();
 }
 
 QTime ProcessLog::totalTime()
