@@ -5,10 +5,12 @@ import Util 1.0
 Item {
     id: root
     anchors.margins: 0
-    transform: Rotation { origin.x: width/2; origin.y: height/2; angle: 90}
 
+    property bool flip: false
     property real maxDepthToDraw: 0
     property real minDepthToDraw: 0
+
+    transform: Rotation { origin.x: width/2; origin.y: height/2; angle: flip ? -90 : 90}
 
     function correctChartSize() {
         chart.height = width
