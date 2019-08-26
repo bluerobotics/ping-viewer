@@ -271,10 +271,10 @@ void SerialLink::forceSensorAutomaticBaudRateDetection()
      * 3. Force a write condition in the serial using the `flush` command
      */
     _port.setBreakEnabled(true);
-    QThread::usleep(500);
+    QThread::msleep(10);
     _port.setBreakEnabled(false);
-    QThread::msleep(11);
-    _port.write("UUU");
+    QThread::usleep(10);
+    _port.write(QByteArray("U").repeated(10));
     _port.flush();
     QThread::msleep(11);
 }
