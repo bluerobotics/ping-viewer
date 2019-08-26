@@ -21,7 +21,7 @@ PingGroupBox {
         PingComboSlider {
             Layout.fillWidth: true
             text: "Range (m)"
-            model: [1, 2, 5, 10, 20, 30, 40, 50, 60]
+            model: [1, 2, 5, 10, 15, 20, 30, 40, 50, 60]
             onOptionChanged: ping.range = value
             startingValue: Math.round(ping.range)
         }
