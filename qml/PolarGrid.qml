@@ -45,7 +45,8 @@ Item {
             x: (1.2*width/2 + itemRadius)*Math.cos(itemRadian) + Math.abs((1.2*width/2)*Math.sin(itemRadian)) + repeater.centerX - width/2
             y: (1.1*height/2 + itemRadius)*Math.sin(itemRadian) - Math.abs((1.1*height/2)*Math.cos(itemRadian)) + repeater.centerY - height/2
             style: Text.Outline
-            styleColor: "white"
+            color: "white"
+            styleColor: "black"
         }
     }
 
