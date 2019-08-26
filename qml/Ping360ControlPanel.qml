@@ -3,6 +3,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import AbstractLinkNamespace 1.0
 import DeviceManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
@@ -122,6 +123,7 @@ PingGroupBox {
                 onValueChanged: ping.angle_offset = value
             }
             RowLayout {
+                visible: ping.link.type == AbstractLinkNamespace.Serial
                 Button {
                     id: autoBaudRateChB
                     text: "Auto baudrate"
