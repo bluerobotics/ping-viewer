@@ -170,6 +170,11 @@ Item {
                         ping.link.start()
                         replayStartBt.text = "▮▮"
                     }
+
+                    if(ping.link.packageIndex === 0) {
+                        replayStartBt.text = "▶"
+                    }
+
                 }
             }
 
