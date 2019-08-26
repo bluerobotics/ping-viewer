@@ -130,11 +130,32 @@ PingGroupBox {
                     onClicked: ping.startConfiguration()
                 }
                 PingComboBox {
+                    id: baudRateComboBox
                     model: ping.validBaudRates
                     Layout.fillWidth: true
                     enabled: !autoBaudRateChB.checked
                     onCurrentTextChanged: {
-                        ping.setBaudRateAndRequestProfile(parseInt(currentText))
+                        if(currentText != ping.link.configuration.serialBaudrate()) {
+                            ping.setBaudRateAndRequestProfile(parseInt(currentText))
+                        }
+                    }
+
+                    Connections {
+                        target: ping
+                        onLinkChanged: {
+                            // Change baud rate in combobox if the one of the sensor changes
+                            if(ping.link.configuration.serialBaudrate() == baudRateComboBox.currentText) {
+                                return
+                            }
+
+                            var newIndex = baudRateComboBox.find(ping.link.configuration.serialBaudrate())
+                            if(newIndex === -1) {
+                                print("Baud rate is valid for this sensor.")
+                                return
+                            }
+
+                            baudRateComboBox.currentIndex = newIndex
+                        }
                     }
                 }
             }
