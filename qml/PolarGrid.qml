@@ -25,12 +25,15 @@ Item {
         function formatDistance(distance) {
             // Change precision based in distance
             var precision = 0
-            if(2 < root.maxDistance && root.maxDistance < 5) {
+            if(root.maxDistance < 5) {
                 precision = 1
-            } else if(root.maxDistance < 2) {
-                precision = 2
             }
-            return (distance*scalar).toFixed(precision) + units
+            // Round number to the displayed precision
+            // This is done my moving the nth (precision) decimal number to the 'units' position
+            // and after that back to the decimal position
+            // $result = \frac{round(x \times 10^p)}{10^p}$
+            var powerOfTen = Math.pow(10, precision)
+            return (Math.round(distance*scalar*powerOfTen)/powerOfTen).toFixed(precision) + units
         }
 
         delegate: Text {
