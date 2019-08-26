@@ -404,16 +404,16 @@ public:
         if (_autoTransmitDuration) {
             /*
              * Per firmware engineer:
-             * 1. Starting point is TxPulse in usec = ((one-way range in metres) * 4000) / (Velocity of sound in metres per second)
+             * 1. Starting point is TxPulse in usec = ((one-way range in metres) * 8000) / (Velocity of sound in metres per second)
              * 2. Then check that TxPulse is wide enough for currently selected sample interval in usec, i.e.,
-             *    if TxPulse < (1.25 * sample interval) then TxPulse = (1.25 * sample interval)
+             *    if TxPulse < (2.5 * sample interval) then TxPulse = (2.5 * sample interval)
              * 3. Perform limit checking
              */
 
             // 1
-            int autoDuration = round(4000*range()/_speed_of_sound);
+            int autoDuration = round(8000*range()/_speed_of_sound);
             // 2 (transmit duration is microseconds, samplePeriod() is nanoseconds)
-            autoDuration = std::max(static_cast<int>(1.25*samplePeriod()/1000), autoDuration);
+            autoDuration = std::max(static_cast<int>(2.5*samplePeriod()/1000), autoDuration);
             // 3
             _transmit_duration = std::max(static_cast<int>(_firmwareMinTransmitDuration),
                                           std::min(transmitDurationMax(), autoDuration));
