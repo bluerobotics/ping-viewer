@@ -226,7 +226,7 @@ public:
      *
      * @return int
      */
-    int serialBaudrate();
+    Q_INVOKABLE int serialBaudrate();
 
     /**
      * @brief Set the Type object
