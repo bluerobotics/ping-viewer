@@ -100,6 +100,20 @@ public:
     Q_PROPERTY(int transmit_duration READ transmit_duration WRITE set_transmit_duration NOTIFY transmitDurationChanged)
 
     /**
+     * @brief Set the sample period
+     *  The user does not need to change it, should be used internally
+     *
+     * @param sample_period
+     */
+    void set_sample_period(uint16_t sample_period)
+    {
+        if(sample_period != _sample_period) {
+            _sample_period = sample_period;
+            emit samplePeriodChanged();
+        }
+    }
+
+    /**
      * @brief Return the sample period in ms
      *
      * @return int
