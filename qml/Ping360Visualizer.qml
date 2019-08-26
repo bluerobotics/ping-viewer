@@ -179,6 +179,8 @@ Item {
             Layout.maximumWidth: 250
             Layout.preferredWidth: 100
             Layout.minimumWidth: 75
+            // By default for ping360 the chart starts from the bottom
+            flip: true
         }
 
         Settings {
