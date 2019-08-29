@@ -318,6 +318,21 @@ public:
      * @return int
      */
     int number_of_points() { return _num_points; }
+
+    /**
+     * @brief Set the number of points
+     *
+     * @param num_points
+     */
+    void set_number_of_points(int num_points)
+    {
+        if(num_points != _num_points) {
+            _num_points = num_points;
+            emit numberOfPointsChanged();
+            // Range uses number of points to calculate it, emit signal to update interface
+            emit rangeChanged();
+        }
+    }
     Q_PROPERTY(int number_of_points READ number_of_points NOTIFY numberOfPointsChanged)
 
     /**
