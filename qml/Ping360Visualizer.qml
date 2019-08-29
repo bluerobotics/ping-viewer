@@ -278,7 +278,7 @@ Item {
                 id: smoothDataChB
                 text: "Smooth Data"
                 checked: true
-                Layout.columnSpan:  5
+                Layout.columnSpan: 5
                 Layout.fillWidth: true
                 onCheckStateChanged: {
                     waterfall.smooth = checkState
@@ -289,7 +289,7 @@ Item {
                 id: antialiasingDataChB
                 text: "Antialiasing"
                 checked: true
-                Layout.columnSpan:  5
+                Layout.columnSpan: 5
                 Layout.fillWidth: true
                 onCheckStateChanged: {
                     waterfall.antialiasing = checkState
@@ -302,7 +302,7 @@ Item {
 
             ComboBox {
                 id: plotThemeCB
-                Layout.columnSpan:  4
+                Layout.columnSpan: 4
                 Layout.fillWidth: true
                 Layout.minimumWidth: 200
                 model: waterfall.themes
