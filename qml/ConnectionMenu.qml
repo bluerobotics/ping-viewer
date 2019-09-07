@@ -13,6 +13,7 @@ Item {
     id: root
     property var ping: null
     property var serialPortList: null
+    signal closeRequest()
 
     Connections {
         target: ping
@@ -218,6 +219,7 @@ Item {
                             break
                     }
                     DeviceManager.connectLinkDirectly(connectionType, connectionConf, connectionDevice)
+                    closeRequest()
                 }
             }
         }
