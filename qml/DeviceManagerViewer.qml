@@ -35,15 +35,7 @@ PingPopup {
                 onClicked: {
                     print(stack.depth)
                     if(stack.depth == 1) {
-                        stack.push(
-                            Qt.createComponent(
-                                "qrc:/ConnectionMenu.qml"
-                            ).createObject(stack, {
-                                "ping": Qt.binding(function() { return DeviceManager.primarySensor}),
-                                "width": Qt.binding(function() { return stack.width}),
-                                "height": Qt.binding(function() { return stack.height})
-                            })
-                        )
+                        stack.push(connectionMenu)
                     } else {
                         stack.pop()
                     }
@@ -54,6 +46,18 @@ PingPopup {
                 text: "Cancel"
                 Layout.fillWidth: true
                 onClicked: root.close()
+            }
+        }
+    }
+
+    Component {
+        id: connectionMenu
+        ConnectionMenu {
+            ping: DeviceManager.primarySensor
+            width: stack.width
+            height: stack.height
+            onCloseRequest: {
+                root.close()
             }
         }
     }
