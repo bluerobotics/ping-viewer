@@ -100,6 +100,7 @@ signals:
     void maxDistanceChanged();
     void mouseSampleAngleChanged();
     void mouseSampleDistanceChanged();
+    void sectorSizeDegreesChanged();
 
 private:
     Q_DISABLE_COPY(PolarPlot)
@@ -126,6 +127,7 @@ private:
     float _mouseSampleDistance;
     QPainter *_painter;
     QPainterPath _polarBackgroundMask;
+    float _sectorSizeDegrees;
     static uint16_t _angularResolution;
     QTimer* _updateTimer;
 };
