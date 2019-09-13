@@ -20,6 +20,7 @@ PolarPlot::PolarPlot(QQuickItem *parent)
     ,_image(2500, 2500, QImage::Format_RGBA8888)
     ,_maxDistance(0)
     ,_painter(nullptr)
+    ,_sectorSizeDegrees(0)
     ,_updateTimer(new QTimer(this))
 {
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -34,6 +35,7 @@ PolarPlot::PolarPlot(QQuickItem *parent)
     connect(this, &Waterfall::themeChanged, this, &PolarPlot::clear);
     connect(this, &QQuickItem::widthChanged, this, &PolarPlot::updateMask);
     connect(this, &QQuickItem::heightChanged, this, &PolarPlot::updateMask);
+    connect(this, &PolarPlot::sectorSizeDegreesChanged, this, &PolarPlot::updateMask);
 }
 
 void PolarPlot::updateMask()
@@ -44,7 +46,9 @@ void PolarPlot::updateMask()
     QPainterPath newPath;
     _polarBackgroundMask = newPath;
 #endif
-    _polarBackgroundMask.addEllipse(0, 0, width(), height());
+    // Create a centered pizza path that has dynamic angles
+    _polarBackgroundMask.moveTo({width()/2, height()/2});
+    _polarBackgroundMask.arcTo({0, 0, width(), height()}, -_sectorSizeDegrees/2 + 90, _sectorSizeDegrees);
 }
 
 void PolarPlot::clear()
@@ -90,6 +94,11 @@ void PolarPlot::draw(const QVector<double>& points, float angle, float initPoint
 
     const float actualAngle = angle*gradianToRadian;
     const float halfSection = sectorSize*degreeToRadian/2;
+
+    if(_sectorSizeDegrees != sectorSize) {
+        _sectorSizeDegrees = sectorSize;
+        emit sectorSizeDegreesChanged();
+    }
 
     //TODO: Need a better way to deal with dynamic steps, maybe doing `draw(data, angle++)` with `angleGrad` loop
     _distances[static_cast<int>(angle)%_angularResolution] = initPoint + length;
