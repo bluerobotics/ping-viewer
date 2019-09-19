@@ -42,6 +42,9 @@ const uint16_t Ping360::_firmwareDefaultNumberOfSamples = 1024;
 const uint16_t Ping360::_viewerDefaultTransmitFrequency = 750;
 const uint16_t Ping360::_viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
 
+// Physical properties of the sensor
+const float Ping360::_angularSpeedGradPerMs = 400.0f/2400.0f;
+
 Ping360::Ping360()
     :PingSensor(PingDeviceType::PING360)
 {
@@ -61,6 +64,14 @@ Ping360::Ping360()
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
         qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
         requestNextProfile();
+
+        static int timeoutedTime = 0;
+        timeoutedTime += _timeoutProfileMessage.interval();
+        if(timeoutedTime > _sensorRestartTimeoutMs)
+        {
+            timeoutedTime = 0;
+            _timeoutProfileMessage.setInterval(_sensorTimeout);
+        }
     });
 
     connect(&_baudrateConfigurationTimer, &QTimer::timeout, this, [this] {
@@ -217,7 +228,9 @@ void Ping360::handleMessage(const ping_message& msg)
 
         // Restart timer, if the channel allows it
         if(link()->isWritable()) {
-            _timeoutProfileMessage.start();
+            // Use 200ms for network delay
+            const int profileRunningTimeout = _angular_speed/_angularSpeedGradPerMs + 200;
+            _timeoutProfileMessage.start(profileRunningTimeout);
         }
 
         _data.resize(deviceData.data_length());
