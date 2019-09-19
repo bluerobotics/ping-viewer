@@ -11,8 +11,8 @@ Item {
 
     property var marginPix: 10
     property var ping: DeviceManager.primarySensor
-
     property var sensorModel: ping.sensorStatusModel(root)
+
     DelegateModel {
         id: baseModel
         property var title: "Base data:"
@@ -62,15 +62,17 @@ Item {
             Label {
                 text: baseModel.title
             }
+            //We disable the models with visibility to avoid unnecessary CPU usage in realocation
+            //TODO: We should improve it to remove the amount of CPU and realocation when visible
             Repeater {
-                model: baseModel
+                model: root.visible ? baseModel : []
             }
 
             Label {
                 text: sensorModel.title
             }
             Repeater {
-                model: sensorModel.model
+                model: root.visible ? sensorModel.model : []
             }
         }
 
