@@ -10,7 +10,7 @@
 #include <QTimer>
 
 #include "parser.h"
-#include "parser-ping.h"
+#include "pingparserext.h"
 #include "ping-message-common.h"
 #include "ping-message-ping360.h"
 #include "protocoldetector.h"
