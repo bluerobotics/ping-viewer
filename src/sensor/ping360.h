@@ -555,6 +555,9 @@ private:
     static const uint16_t _viewerDefaultTransmitFrequency;
     static const uint16_t _viewerDefaultNumberOfSamples;
 
+    // Physical properties of the sensor
+    static const float _angularSpeedGradPerMs;
+
     uint16_t _angle = 200;
     uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
     uint32_t _gain_setting = _firmwareDefaultGainSetting;
@@ -591,6 +594,8 @@ private:
     int _maxNumberOfPoints = 2048;
     // The sensor can take 4s to answer, we are also using an extra 200ms for latency
     int _sensorTimeout = 4200;
+    // The sensor will reset the position after 30s without communication
+    int _sensorRestartTimeoutMs = 30000;
 
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
