@@ -1,4 +1,4 @@
-#include "parser-ping.h"
+#include "pingparserext.h"
 
 void PingParserExt::clearBuffer()
 {
