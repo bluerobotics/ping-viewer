@@ -6,14 +6,13 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 
+import DeviceManager 1.0
 import Flasher 1.0
 import SettingsManager 1.0
 
-Item {
+RowLayout {
     id: root
-    height: childrenRect.height
-    width: childrenRect.width
-    property var ping: null
+    property var ping: DeviceManager.primarySensor
     property var running: false
 
     Connections {
@@ -41,126 +40,125 @@ Item {
             }
         }
     }
+        PingGroupBox {
+            id: firmwareGroup
+            title: "Firmware Update"
+            enabled: true
+            Layout.fillWidth: true
 
-    PingGroupBox {
-        id: firmwareGroup
-        title: "Firmware Update"
-        enabled: true
-        width: 600
+            ColumnLayout {
+                anchors.fill: parent
 
-        ColumnLayout {
-            anchors.fill: parent
-
-            RowLayout {
-                Layout.fillWidth: true
-
-                ComboBox {
-                    id: automaticUpdateCB
-                    model: ["Automatic Update", "Manual Update"]
+                RowLayout {
                     Layout.fillWidth: true
+
+                    ComboBox {
+                        id: automaticUpdateCB
+                        model: ["Automatic Update", "Manual Update"]
+                        Layout.fillWidth: true
+                    }
+
+                    ComboBox {
+                        id: baudComboBox
+                        // This should use the same values in Flasher::_validBaudRates
+                        model: [57600, 115200, 230400]
+                        Layout.fillWidth: true
+                        visible: SettingsManager.debugMode
+                    }
+
+                    CheckBox {
+                        id: verifyCB
+                        text: "Verify"
+                        visible: SettingsManager.debugMode
+                        checked: true
+                    }
+
+                    CheckBox {
+                        id: bootLoaderCB
+                        text: "Send reset"
+                        visible: SettingsManager.debugMode
+                        checked: true
+                    }
                 }
 
-                ComboBox {
-                    id: baudComboBox
-                    // This should use the same values in Flasher::_validBaudRates
-                    model: [57600, 115200, 230400]
+                RowLayout {
                     Layout.fillWidth: true
-                    visible: SettingsManager.debugMode
-                }
 
-                CheckBox {
-                    id: verifyCB
-                    text: "Verify"
-                    visible: SettingsManager.debugMode
-                    checked: true
-                }
+                    Label {
+                        text: "Current Firmware: " + ping.firmware_version_major + "." + ping.firmware_version_minor
+                    }
 
-                CheckBox {
-                    id: bootLoaderCB
-                    text: "Send reset"
-                    visible: SettingsManager.debugMode
-                    checked: true
-                }
-            }
+                    Label {
+                        id: firmwareLabel
+                        text: "Firmware File: " + fileDialog.fileName
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                        visible: automaticUpdateCB.currentIndex === 1
+                    }
 
-            RowLayout {
-                Layout.fillWidth: true
+                    Label {
+                        text: "Latest version: "
+                        visible: automaticUpdateCB.currentIndex === 0
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
 
-                Label {
-                    text: "Current Firmware: " + ping.firmware_version_major + "." + ping.firmware_version_minor
-                }
+                    ComboBox {
+                        id: fwCombo
+                        visible: automaticUpdateCB.currentIndex === 0
+                        model: Object.keys(ping.firmwaresAvailable)
+                        Layout.minimumWidth: 220
+                    }
 
-                Label {
-                    id: firmwareLabel
-                    text: "Firmware File: " + fileDialog.fileName
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignRight
-                    visible: automaticUpdateCB.currentIndex === 1
-                }
-
-                Label {
-                    text: "Latest version: "
-                    visible: automaticUpdateCB.currentIndex === 0
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignRight
-                }
-
-                ComboBox {
-                    id: fwCombo
-                    visible: automaticUpdateCB.currentIndex === 0
-                    model: Object.keys(ping.firmwaresAvailable)
-                    Layout.minimumWidth: 220
+                    PingButton {
+                        id: browseBt
+                        text: "Browse.."
+                        enabled: !running
+                        visible: automaticUpdateCB.currentIndex === 1
+                        onClicked: {
+                            fileDialog.visible = true
+                        }
+                    }
                 }
 
                 PingButton {
-                    id: browseBt
-                    text: "Browse.."
-                    enabled: !running
-                    visible: automaticUpdateCB.currentIndex === 1
+                    text: "Firmware Update"
+                    Layout.fillWidth: true
+                    enabled: !running && ((fwCombo.currentText != "" && !browseBt.visible) || (fileDialog.fileName != "" && browseBt.visible))
+
                     onClicked: {
-                        fileDialog.visible = true
+                        var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
+                        var verify = SettingsManager.debugMode ? verifyCB.checked : true
+                        var path = automaticUpdateCB.currentIndex ? fileDialog.fileUrl : ping.firmwaresAvailable[fwCombo.currentText]
+                        running = true
+                        ping.firmwareUpdate(path, bootLoaderCB.checked, baud, verifyCB.checked)
                     }
                 }
-            }
 
-            PingButton {
-                text: "Firmware Update"
-                Layout.fillWidth: true
-                enabled: !running && ((fwCombo.currentText != "" && !browseBt.visible) || (fileDialog.fileName != "" && browseBt.visible))
+                ProgressBar {
+                    id: flashProgress
+                    indeterminate: !running
+                    Layout.fillWidth: true
+                    value: 0.0
+                    from: 0.0
+                    to: 100.0
+                }
 
-                onClicked: {
-                    var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600
-                    var verify = SettingsManager.debugMode ? verifyCB.checked : true
-                    var path = automaticUpdateCB.currentIndex ? fileDialog.fileUrl : ping.firmwaresAvailable[fwCombo.currentText]
-                    running = true
-                    ping.firmwareUpdate(path, bootLoaderCB.checked, baud, verifyCB.checked)
+                Label {
+                    text: "Error:"
+                    font.bold: true
+                    visible: ping.flasher.message !== ""
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                }
+
+                Label {
+                    text: ping.flasher.message
+                    visible: ping.flasher.message !== ""
+                    Layout.fillWidth: true
                 }
             }
-
-            ProgressBar {
-                id: flashProgress
-                indeterminate: !running
-                Layout.fillWidth: true
-                value: 0.0
-                from: 0.0
-                to: 100.0
-            }
-
-            Label {
-                text: "Error:"
-                font.bold: true
-                visible: ping.flasher.message !== ""
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-
-            Label {
-                text: ping.flasher.message
-                visible: ping.flasher.message !== ""
-                Layout.fillWidth: true
-            }
         }
-    }
 
     PingFileDialog {
         id: fileDialog
