@@ -11,6 +11,7 @@ import AbstractLinkNamespace 1.0
 import DeviceManager 1.0
 import FileManager 1.0
 import Ping 1.0
+import PingEnumNamespace 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
@@ -55,22 +56,6 @@ Item {
             item: ColumnLayout {
                 spacing: 0
                 PingItem {
-                    id: displayItem
-                    isSubItem: true
-                    icon: StyleManager.sunIcon()
-
-                    item: DisplaySettings {
-                        id: displaySettings
-                    }
-
-                    onHideItemChanged: {
-                        if(hideItem == false) {
-                            deviceManagerMenu.hideItem = true
-                        }
-                    }
-                }
-
-                PingItem {
                     id: deviceManagerMenu
                     isSubItem: true
                     icon: StyleManager.connectIcon()
@@ -85,9 +70,46 @@ Item {
                     onHideItemChanged: {
                         if(hideItem == false) {
                             displayItem.hideItem = true
+                            firmwareUpdateItem.hideItem = true
                         }
                     }
                 }
+                PingItem {
+                    id: displayItem
+                    isSubItem: true
+                    icon: StyleManager.sunIcon()
+
+                    item: DisplaySettings {
+                        id: displaySettings
+                    }
+
+                    onHideItemChanged: {
+                        if(hideItem == false) {
+                            deviceManagerMenu.hideItem = true
+                            firmwareUpdateItem.hideItem = true
+                        }
+                    }
+                }
+                PingItem {
+                    id: firmwareUpdateItem
+                    visible: ping ? ping.link.configuration.deviceType() == PingEnumNamespace.PingDeviceType.PING1D : false
+                    isSubItem: true
+                    icon: StyleManager.chipIcon()
+
+                    item: FirmwareUpdate {
+                        id: firmwareUpdate
+                        visible: false
+                        ping: root.ping
+                    }
+
+                    onHideItemChanged: {
+                        if(hideItem == false) {
+                            deviceManagerMenu.hideItem = true
+                            displayItem.hideItem = true
+                        }
+                    }
+                }
+
             }
             onHideItemChanged: {
                 if(hideItem == false) {
