@@ -53,7 +53,7 @@ RowLayout {
     }
 
     Label {
-        Layout.preferredWidth: 40
+        Layout.preferredWidth: 80
         text: valueText !== null ? valueText : ""
         visible: valueText !== null
     }
