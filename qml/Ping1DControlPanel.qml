@@ -83,19 +83,35 @@ ColumnLayout {
                     indicator.x: width - indicator.width - rightPadding
                 }
 
-
                 PingImage {
                     id: advancedSettingsButton
-                    source: StyleManager.configureIcon()
+                    source: StyleManager.arrowIcon()
                     height: 50
                     width: 50
                     selected: SettingsManager.enableSensorAdvancedConfiguration
+                    angle: 90
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
                             advancedSettingsButton.selected = !advancedSettingsButton.selected
                             SettingsManager.enableSensorAdvancedConfiguration = advancedSettingsButton.selected
                         }
+                    }
+
+                    onSelectedChanged: {
+                        arrowRotation.from = selected ? 0 : 180
+                        arrowRotation.to = selected ? 180 : 0
+                        arrowRotation.running = true
+                    }
+
+                    RotationAnimator on rotation {
+                        id: arrowRotation
+                        from: startAngle
+                        to: startAngle
+                        duration: 200
+                        direction: RotationAnimation.Shortest
+                        running: false
+                        easing.type: animationType
                     }
                 }
 
