@@ -50,15 +50,32 @@ PingGroupBox {
             Layout.alignment: Qt.AlignRight
             PingImage {
                 id: advancedSettingsButton
-                source: StyleManager.configureIcon()
+                source: StyleManager.arrowIcon()
                 height: 50
                 width: 50
                 selected: false
+                angle: 90
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
                         advancedSettingsButton.selected = !advancedSettingsButton.selected
                     }
+                }
+
+                onSelectedChanged: {
+                    arrowRotation.from = selected ? 0 : angle + 90
+                    arrowRotation.to = selected ? angle + 90 : 0
+                    arrowRotation.running = true
+                }
+
+                RotationAnimator on rotation {
+                    id: arrowRotation
+                    from: startAngle
+                    to: startAngle
+                    duration: 200
+                    direction: RotationAnimation.Shortest
+                    running: false
+                    easing.type: animationType
                 }
             }
         }
