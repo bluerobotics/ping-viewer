@@ -106,7 +106,7 @@ RowLayout {
                     PingComboBox {
                         id: fwCombo
                         visible: automaticUpdateCB.currentIndex === 0
-                        model: Object.keys(ping.firmwaresAvailable)
+                        model: ping && ping.firmwaresAvailable ? Object.keys(ping.firmwaresAvailable) : []
                         Layout.minimumWidth: 220
                     }
 
@@ -147,14 +147,14 @@ RowLayout {
                 Label {
                     text: "Error:"
                     font.bold: true
-                    visible: ping.flasher.message !== ""
+                    visible: ping && ping.flasher.message !== ""
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                 }
 
                 Label {
-                    text: ping.flasher.message
-                    visible: ping.flasher.message !== ""
+                    text: ping ? ping.flasher.message : ""
+                    visible: ping ? ping.flasher.message !== "" : ""
                     Layout.fillWidth: true
                 }
             }
