@@ -107,7 +107,7 @@ public:
     void setArgs(const QStringList& args);
 
     /**
-     * @brief Return PingDeviceType enumartion for device specific identification
+     * @brief Return PingDeviceType enumeration for device specific identification
      *
      * @return PingDeviceType
      */
