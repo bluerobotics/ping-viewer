@@ -23,8 +23,6 @@ DeviceManager::DeviceManager() :
         updateAvailableConnections(links);
     });
     connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this, &DeviceManager::append);
-    append({AbstractLinkNamespace::Ping1DSimulation, {}, "Ping1D Simulation", PingDeviceType::PING1D}, "Ping1D");
-    append({AbstractLinkNamespace::Ping360Simulation, {}, "Ping360 Simulation", PingDeviceType::PING360}, "Ping360");
 }
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName)
