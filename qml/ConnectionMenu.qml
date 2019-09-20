@@ -35,7 +35,8 @@ Item {
                     udpIp.text = ping.link.configuration.argsAsConst()[0]
                     udpPort.text = ping.link.configuration.argsAsConst()[1]
                     break
-                case AbstractLinkNamespace.PinkSimulation:
+                case AbstractLinkNamespace.Ping1DSimulation:
+                case AbstractLinkNamespace.Ping360Simulation:
                     conntype.currentIndex = 2
                     udpLayout.enabled = false
                     serialLayout.enabled = false
@@ -96,7 +97,7 @@ Item {
                 // Check AbstractLinkNamespace::LinkType for correct index type
                 // None = 0, File, Serial, Udp, Tcp..
                 // Simulation is done via normal device manager since it does not need user configuration
-                model: ["Serial (default)", "UDP"]
+                model: ["Serial (default)", "UDP", "Simulation"]
                 onActivated: {
                     switch(index) {
                         case 0: // Serial
@@ -108,6 +109,10 @@ Item {
                             udpLayout.enabled = true
                             serialLayout.enabled = false
                             break
+
+                        case 2: // Simulation
+                            udpLayout.enabled = false
+                            serialLayout.enabled = false
                     }
                 }
             }
@@ -216,6 +221,15 @@ Item {
                         case 1: // UDP
                             connectionType = AbstractLinkNamespace.Udp
                             connectionConf = [udpIp.text, udpPort.text]
+                            break
+
+                        case 2: // Simulation
+                            if(connectionDevice == PingEnumNamespace.PingDeviceType.PING1D)
+                                connectionType = AbstractLinkNamespace.Ping1DSimulation
+                            else {
+                                connectionType = AbstractLinkNamespace.Ping360Simulation
+                            }
+                            connectionConf = [" ", " "]
                             break
                     }
                     DeviceManager.connectLinkDirectly(connectionType, connectionConf, connectionDevice)
