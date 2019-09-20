@@ -44,6 +44,16 @@ public:
     Q_INVOKABLE QStringList serialPortList();
 
     /**
+     * @brief Check if the application is running under macos
+     *
+     * @return bool
+     */
+    Q_INVOKABLE bool isMac() const
+    {
+        return QSysInfo::prettyProductName().contains(QStringLiteral("macos"), Qt::CaseInsensitive);
+    }
+
+    /**
      * @brief  Restart application
      *  Based in https://stackoverflow.com/a/7947551/7988054
      */
