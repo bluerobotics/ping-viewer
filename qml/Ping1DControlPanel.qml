@@ -210,7 +210,7 @@ ColumnLayout {
                     text: ping.start_mm
                     validator: IntValidator {
                         bottom: 0
-                        top: maxDepthMm
+                        top: startLength.parent.maxDepthMm
                     }
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
@@ -225,7 +225,7 @@ ColumnLayout {
                     text: ping.length_mm
                     validator: IntValidator {
                         bottom: 0
-                        top: maxDepthMm
+                        top: startLength.parent.maxDepthMm
                     }
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
