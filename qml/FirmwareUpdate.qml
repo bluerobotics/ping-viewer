@@ -52,13 +52,13 @@ RowLayout {
                 RowLayout {
                     Layout.fillWidth: true
 
-                    ComboBox {
+                    PingComboBox {
                         id: automaticUpdateCB
                         model: ["Automatic Update", "Manual Update"]
                         Layout.fillWidth: true
                     }
 
-                    ComboBox {
+                    PingComboBox {
                         id: baudComboBox
                         // This should use the same values in Flasher::_validBaudRates
                         model: [57600, 115200, 230400]
@@ -103,7 +103,7 @@ RowLayout {
                         horizontalAlignment: Text.AlignRight
                     }
 
-                    ComboBox {
+                    PingComboBox {
                         id: fwCombo
                         visible: automaticUpdateCB.currentIndex === 0
                         model: Object.keys(ping.firmwaresAvailable)
