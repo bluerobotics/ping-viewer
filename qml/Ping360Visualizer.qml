@@ -229,38 +229,13 @@ Item {
             }
 
             CheckBox {
-                id: verticalFlipChB
-                text: "Flip Vertically"
-                checked: false
-                Layout.columnSpan: 5
-                Layout.fillWidth: true
-                // We do not support vertical flips in sector view
-                enabled: settingsLayout.isFullCircle
-                onCheckStateChanged: {
-                    waterfall.verticalFlip = checkState
-                }
-
-                // Disable vertical flip in sector view  or when horizontal is selected
-                Binding on checked {
-                    when: horizontalFlipChB.checked || !settingsLayout.isFullCircle
-                    value: false
-                }
-            }
-
-            CheckBox {
                 id: horizontalFlipChB
-                text: "Flip Horizontally"
+                text: "Head down"
                 checked: false
                 Layout.columnSpan: 5
                 Layout.fillWidth: true
                 onCheckStateChanged: {
                     waterfall.horizontalFlip = checkState
-                }
-
-                // Disable when vertical is selected
-                Binding on checked {
-                    when: verticalFlipChB.checked
-                    value: false
                 }
             }
 
