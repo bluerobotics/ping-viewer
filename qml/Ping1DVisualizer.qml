@@ -10,6 +10,7 @@ import DeviceManager 1.0
 import FileManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
+import Util 1.0
 
 Item {
     id: root
@@ -181,7 +182,7 @@ Item {
             CheckBox {
                 id: antialiasingDataChB
                 text: "Antialiasing"
-                checked: true
+                checked: !Util.isMac()
                 Layout.columnSpan:  5
                 Layout.fillWidth: true
                 onCheckStateChanged: {
