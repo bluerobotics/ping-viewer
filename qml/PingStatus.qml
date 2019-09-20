@@ -17,7 +17,7 @@ Item {
         id: baseModel
         property var title: "Base data:"
 
-        model: [
+        model: ping ? [
             "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
             "SRC: " + ping.srcId + " DST: " + ping.dstId,
             "Device type: " + ping.device_type,
@@ -28,7 +28,7 @@ Item {
             "Lost messages (#): " + ping.lost_messages,
             "Ascii text:\n" + ping.ascii_text,
             "Error message:\n" + ping.err_msg,
-        ]
+        ] : []
 
         delegate: Text {
             text: modelData
