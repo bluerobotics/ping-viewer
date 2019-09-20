@@ -128,6 +128,21 @@ PingPopup {
                 }
             }
 
+            Rectangle {
+                height: 2
+                Layout.fillWidth: true
+                color: 'gainsboro'
+            }
+
+            Label {
+                id: noSensorLabel
+                visible: list.count === 0
+                Layout.fillWidth: true
+                font.pixelSize: 20
+                horizontalAlignment: Text.AlignHCenter
+                text: "No devices detected"
+            }
+
             ListView {
                 id: list
                 Layout.fillWidth: true
