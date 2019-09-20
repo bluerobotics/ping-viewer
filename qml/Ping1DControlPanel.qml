@@ -98,27 +98,11 @@ ColumnLayout {
                         }
                     }
                 }
-
-                PingImage {
-                    id: firmwareUpdateButton
-                    source: StyleManager.chipIcon()
-                    height: 50
-                    width: 50
-                    selected: false
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            firmwareUpdateButton.selected = !firmwareUpdateButton.selected
-                            firmwareUpdate.visible = firmwareUpdateButton.selected
-                        }
-                    }
-                }
             }
 
             RowLayout {
                 spacing: 5
                 visible: SettingsManager.enableSensorAdvancedConfiguration
-
 
                 CheckBox {
                     id: autoGainChB
@@ -235,11 +219,5 @@ ColumnLayout {
                 }
             }
         }
-    }
-
-    FirmwareUpdate {
-        id: firmwareUpdate
-        visible: false
-        ping: root.ping
     }
 }
