@@ -111,7 +111,7 @@ public:
      *
      * @return PingDeviceType
      */
-    PingDeviceType deviceType() const { return _linkConf.deviceType; };
+    Q_INVOKABLE PingEnumNamespace::PingDeviceType deviceType() const { return _linkConf.deviceType; };
 
     /**
      * @brief Set the Device Type object
