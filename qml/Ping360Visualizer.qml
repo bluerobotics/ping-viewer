@@ -296,6 +296,17 @@ Item {
                 }
             }
 
+            CheckBox {
+                id: removeAScanChB
+                text: "A-Scan"
+                checked: true
+                Layout.columnSpan:  5
+                Layout.fillWidth: true
+                onCheckStateChanged: {
+                    chart.visible = checkState
+                }
+            }
+
             Label {
                 text: "Plot Theme:"
             }
@@ -312,6 +323,7 @@ Item {
             Settings {
                 category: "Ping360Visualizer"
                 property alias plotThemeIndex: plotThemeCB.currentIndex
+                property alias removeAScanState:removeAScanChB.checkState
                 property alias smoothDataState: smoothDataChB.checkState
                 property alias waterfallAntialiasingData: antialiasingDataChB.checkState
             }
