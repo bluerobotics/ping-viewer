@@ -7,7 +7,7 @@ Item {
 
     // It's not possible to use DelegateModel without parent
     property var model: DelegateModel {
-        model: [
+        model: sensor ? [
             "Distance (mm): " + sensor.distance,
             "Auto (bool): " + sensor.mode_auto,
             "Scan Start (mm): " + sensor.start_mm,
@@ -21,7 +21,7 @@ Item {
             "Processor temperature (C): " + (sensor.processor_temperature / 100).toFixed(1),
             "PCB temperature (C): " + (sensor.pcb_temperature / 100).toFixed(1),
             "Board voltage (V): " + (sensor.board_voltage / 1000).toFixed(2),
-        ]
+        ] : []
 
         delegate: Text {
             text: modelData
