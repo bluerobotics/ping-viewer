@@ -6,6 +6,7 @@ Item {
     id: root
 
     property alias source: image.source
+    property double angle: 0
     property bool selected: false
 
     Image {
@@ -27,5 +28,6 @@ Item {
         anchors.fill: image
         source: image
         color: !root.enabled ? Material.background : selected ? Material.foreground : Material.primary
+        transform: Rotation { origin.x: width/2; origin.y: height/2; axis {x: 0; y: 0; z: 1} angle: root.angle}
     }
 }
