@@ -114,14 +114,6 @@ PingGroupBox {
                 to: 10
                 onValueChanged: ping.angular_speed = value
             }
-            PingSlider {
-                Layout.fillWidth: true
-                text: "Angle Offset (degree)"
-                value: ping.angle_offset
-                from: 0
-                to: 359
-                onValueChanged: ping.angle_offset = value
-            }
             RowLayout {
                 visible: ping.link.type == AbstractLinkNamespace.Serial
                 Button {
