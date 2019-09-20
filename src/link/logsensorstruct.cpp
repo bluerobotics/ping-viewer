@@ -1,6 +1,5 @@
 #include <QDataStream>
 #include <QDebug>
-#include <QSysInfo>
 
 #include "logsensorstruct.h"
 
