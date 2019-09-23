@@ -46,8 +46,9 @@ public:
      * @brief Helper function to request profiles from sensor based in the actual position
      *
      * @param delta number of grads/steps from the actual position
+     * @param transmit request profile data
      */
-    Q_INVOKABLE void deltaStep(int delta)
+    Q_INVOKABLE void deltaStep(int delta, bool transmit = true)
     {
         // Force delta to be positive and inside our polar space
         while(delta < 0) {
@@ -64,7 +65,7 @@ public:
         msg.set_sample_period(_sample_period);
         msg.set_transmit_frequency(_transmit_frequency);
         msg.set_number_of_samples(_num_points);
-        msg.set_transmit(1);
+        msg.set_transmit(transmit);
 
         msg.updateChecksum();
         writeMessage(msg);
