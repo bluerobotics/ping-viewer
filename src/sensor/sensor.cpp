@@ -214,4 +214,9 @@ QQuickItem* Sensor::sensorStatusModel(QObject* parent)
     return _sensorStatusModel.get();
 }
 
+void Sensor::resetSettings()
+{
+    qCWarning(PING_PROTOCOL_SENSOR) << "No reset settings definition.";
+}
+
 Sensor::~Sensor() = default;
