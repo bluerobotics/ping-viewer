@@ -99,6 +99,12 @@ public:
     Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
 
     /**
+     * @brief Reset sensor configuration
+     *
+     */
+    Q_INVOKABLE virtual void resetSettings();
+
+    /**
      * @brief Set the control panel url
      *
      * @param url
