@@ -61,6 +61,7 @@ public:
     CREATE_ICON(configure)
     CREATE_ICON(connect)
     CREATE_ICON(disk)
+    CREATE_ICON(firmwareUpdate)
     CREATE_ICON(info)
     CREATE_ICON(lock)
     CREATE_ICON(report)
