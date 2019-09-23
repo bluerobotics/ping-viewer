@@ -494,6 +494,21 @@ uint16_t Ping360::calculateSamplePeriod(float distance)
     return static_cast<uint16_t>(calculatedSamplePeriod);
 }
 
+void Ping360::resetSettings()
+{
+    qCDebug(PING_PROTOCOL_PING360) << "Settings will be reseted.";
+
+    _gain_setting = _firmwareDefaultGainSetting;
+    _angle = _firmwareDefaultAngle;
+    _transmit_duration = _firmwareDefaultTransmitDuration;
+    _sample_period = _firmwareDefaultSamplePeriod;
+    _transmit_frequency = _firmwareDefaultTransmitFrequency;
+    _num_points = _firmwareDefaultNumberOfSamples;
+    deltaStep(_angle_offset, false);
+
+    // Signals will be update in the next profile, it's possible that old profiles contain older configurations
+}
+
 Ping360::~Ping360()
 {
     updateSensorConfigurationSettings();
