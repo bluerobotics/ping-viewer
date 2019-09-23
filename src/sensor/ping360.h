@@ -38,6 +38,12 @@ public:
     Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
 
     /**
+     * @brief Reset device settings
+     *
+     */
+    Q_INVOKABLE void resetSettings() override final;
+
+    /**
      * @brief debug function
      */
     void printSensorInformation() const override final;
