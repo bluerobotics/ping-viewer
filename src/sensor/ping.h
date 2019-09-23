@@ -34,6 +34,12 @@ public:
     Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
 
     /**
+     * @brief Reset device settings
+     *
+     */
+    Q_INVOKABLE void resetSettings() override final;
+
+    /**
      * @brief debug function
      */
     void printSensorInformation() const override final;
@@ -364,6 +370,13 @@ private:
      * @brief Sensor variables
      */
 ///@{
+    // The firmware defaults at boot
+    static const bool _firmwareDefaultAutoMode;
+    static const int _firmwareDefaultGainSetting;
+    static const bool _firmwareDefaultPingEnable;
+    static const uint16_t _firmwareDefaultPingInterval;
+    static const uint32_t _firmwareDefaultSpeedOfSound;
+
     uint16_t _board_voltage;
     uint8_t _device_model;
     uint32_t _distance = 0; // mm

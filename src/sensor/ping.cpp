@@ -25,6 +25,12 @@ PING_LOGGING_CATEGORY(PING_PROTOCOL_PING, "ping.protocol.ping")
 
 const int Ping::_pingMaxFrequency = 50;
 
+const bool Ping::_firmwareDefaultAutoMode = true;
+const int Ping::_firmwareDefaultGainSetting = 1;
+const bool Ping::_firmwareDefaultPingEnable = true;
+const uint16_t Ping::_firmwareDefaultPingInterval = 250;
+const uint32_t Ping::_firmwareDefaultSpeedOfSound = 1500;
+
 Ping::Ping()
     :PingSensor(PingDeviceType::PING1D)
     ,_points(_num_points, 0)
@@ -473,6 +479,17 @@ void Ping::setPingFrequency(float pingFrequency)
         do_continuous_start(ContinuousId::PROFILE);
     }
     qCDebug(PING_PROTOCOL_PING) << "Ping frequency" << pingFrequency;
+}
+
+void Ping::resetSettings()
+{
+    qCDebug(PING_PROTOCOL_PING) << "Settings will be reseted.";
+    set_speed_of_sound(_firmwareDefaultSpeedOfSound);
+    set_mode_auto(_firmwareDefaultAutoMode);
+    set_ping_interval(_firmwareDefaultPingInterval);
+    set_gain_setting(_firmwareDefaultGainSetting);
+    pingEnable(_firmwareDefaultPingEnable);
+    resetSensorLocalVariables();
 }
 
 void Ping::printSensorInformation() const
