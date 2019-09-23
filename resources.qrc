@@ -44,6 +44,7 @@
         <file alias="configure.svg">qml/icons/configure.svg</file>
         <file alias="connect.svg">qml/icons/connect.svg</file>
         <file alias="disk.svg">qml/icons/disk.svg</file>
+        <file alias="firmwareUpdate.svg">qml/icons/firmware-update.svg</file>
         <file alias="info.svg">qml/icons/info.svg</file>
         <file alias="lock.svg">qml/icons/lock.svg</file>
         <file alias="report.svg">qml/icons/report.svg</file>
