@@ -298,6 +298,7 @@ Item {
 
             Settings {
                 category: "Ping360Visualizer"
+                property alias flipAScanState: flipAScan.checkState
                 property alias plotThemeIndex: plotThemeCB.currentIndex
                 property alias removeAScanState:removeAScanChB.checkState
                 property alias smoothDataState: smoothDataChB.checkState
