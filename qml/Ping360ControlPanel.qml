@@ -48,6 +48,12 @@ PingGroupBox {
 
         RowLayout {
             Layout.alignment: Qt.AlignRight
+            PingButton {
+                text: "Reset settings"
+                Layout.fillWidth: true
+                onClicked: ping.resetSettings()
+            }
+
             PingImage {
                 id: advancedSettingsButton
                 source: StyleManager.arrowIcon()
