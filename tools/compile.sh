@@ -197,10 +197,13 @@ echo ""
 echob "Start to deploy project.."
 
 if [[ $machine = *"Linux"* ]]; then
+    # For all crazy things necessary for linuxdeployqt, check https://github.com/probonopd/linuxdeployqt/issues/340
     runstep "mkdir -p ${deployfolder}" "Deploy folder created" "Failed to create deploy folder in ${buildfolder}"
     for i in "${linuxdeployfiles[@]}"; do
         runstep "cp ${i} ${deployfolder}" "Move file to deploy folder ""${i}" "Failed to deploy file: ""${i}"
     done
+    runstep "mkdir -p ${deployfolder}/usr/share/doc/libc6/" "Add libc6 path" "Failed to add libc6 path"
+    runstep "cp /usr/share/doc/libc6/copyright ${deployfolder}/usr/share/doc/libc6/copyright || touch ${deployfolder}/usr/share/doc/libc6/copyright" "Create libc6 copyright" "Failed to create libc6 copyright file"
     runstep "wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip -O /tmp/stm32flash_linux.zip" "Download stm32flash_linux" "Faile to download stm32flash_linux"
     runstep "unzip /tmp/stm32flash_linux.zip -d /tmp" "Unzip stm32flash" "Fail to unzip stm32flash"
     runstep "chmod +x /tmp/stm32flash" "Convert stm32flash to executable" "Failed to turn stm32flash in executable"
