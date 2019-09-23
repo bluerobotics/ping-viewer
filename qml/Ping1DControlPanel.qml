@@ -83,6 +83,12 @@ ColumnLayout {
                     indicator.x: width - indicator.width - rightPadding
                 }
 
+                PingButton {
+                    text: "Reset settings"
+                    Layout.columnSpan: 1
+                    onClicked: ping.resetSettings()
+                }
+
                 PingImage {
                     id: advancedSettingsButton
                     source: StyleManager.arrowIcon()
