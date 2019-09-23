@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QRegularExpression>
 #include <QSerialPortInfo>
+#include <QStandardPaths>
 #include <QThread>
 
 PING_LOGGING_CATEGORY(FLASH, "ping.flash")
@@ -64,17 +65,32 @@ void Flasher::setVerify(bool verify)
 
 QString Flasher::stm32flashPath()
 {
+    static const QString binaryName =
+#ifdef Q_OS_WIN
+        "stm32flash.exe";
+#else
+        "stm32flash";
+#endif
+
 #ifdef Q_OS_OSX
     // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-    static QString absoluteBinPath = QCoreApplication::applicationDirPath() + "/../..";
+    static const QString absoluteBinPath = QCoreApplication::applicationDirPath() + "/../..";
 #else
-    static QString absoluteBinPath = QCoreApplication::applicationDirPath();
+    static const QString absoluteBinPath = QCoreApplication::applicationDirPath();
 #endif
-#ifdef Q_OS_WIN
-    return absoluteBinPath + "/stm32flash.exe";
-#else
-    return absoluteBinPath + "/stm32flash";
-#endif
+
+    const QString localPathString = absoluteBinPath + "/" + binaryName;
+    if(QFile::exists(localPathString)) {
+        qCDebug(FLASH) << "Found program in:" << localPathString;
+        return localPathString;
+    }
+
+    // Check if program is installed
+    QString absoluteSystemBinPath = QStandardPaths::findExecutable(binaryName);
+    if(!absoluteSystemBinPath.isEmpty()) {
+        qCDebug(FLASH) << "Found program in:" << absoluteSystemBinPath;
+    }
+    return absoluteSystemBinPath;
 }
 
 void Flasher::flash()
