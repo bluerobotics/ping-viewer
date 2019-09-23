@@ -287,7 +287,7 @@ Item {
                 text: "Plot Theme:"
             }
 
-            ComboBox {
+            PingComboBox {
                 id: plotThemeCB
                 Layout.columnSpan: 4
                 Layout.fillWidth: true
