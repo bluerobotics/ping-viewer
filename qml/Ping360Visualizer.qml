@@ -49,7 +49,9 @@ Item {
 
     function draw(points, angle, initialPoint, length, angleStep, sectorSize) {
         waterfall.draw(points, angle, initialPoint, length, angleStep, sectorSize)
-        chart.draw(points, length + initialPoint, initialPoint)
+        if(chart.visible) {
+            chart.draw(points, length + initialPoint, initialPoint)
+        }
     }
 
     QC1.SplitView {
