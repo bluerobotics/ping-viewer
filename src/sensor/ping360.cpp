@@ -217,7 +217,7 @@ void Ping360::handleMessage(const ping_message& msg)
 
     case Ping360Id::DEVICE_DATA: {
         // Parse message
-        const ping360_device_data deviceData(msg);
+        const ping360_device_data deviceData = *static_cast<const ping360_device_data*>(&msg);
 
         // Get angle to request next message
         _angle = deviceData.angle();
