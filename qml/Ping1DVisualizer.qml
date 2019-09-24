@@ -182,9 +182,16 @@ Item {
             CheckBox {
                 id: antialiasingDataChB
                 text: "Antialiasing"
-                checked: !Util.isMac()
-                Layout.columnSpan:  5
+                property bool isMac: Util.isMac()
+                checked: !isMac
+                visible: !isMac || SettingsManager.debugMode
+                Layout.columnSpan: 5
                 Layout.fillWidth: true
+                onVisibleChanged: {
+                    if(!visible && isMac) {
+                        checked = false
+                    }
+                }
                 onCheckStateChanged: {
                     waterfall.antialiasing = checkState
                 }
