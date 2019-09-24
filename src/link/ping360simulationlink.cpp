@@ -24,6 +24,7 @@ void Ping360SimulationLink::randomUpdate()
     deviceData.set_gain_setting(1);
     deviceData.set_angle(counter%angularResolution);
     deviceData.set_transmit_duration(1000);
+    deviceData.set_sample_period(80);
     deviceData.set_transmit_frequency(700);
     deviceData.set_number_of_samples(numberOfSamples);
     deviceData.set_data_length(numberOfSamples);
