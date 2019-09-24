@@ -35,7 +35,7 @@ PingViewer attempts to connect to UDP ports 9090 ([Ping1D](https://bluerobotics.
 
 > Note: To connect the application to a Ping device on a remote host (eg. a Raspberry Pi) you can use the pingproxy program in the bluerobotics-ping python package:
 >
-> `sudo pip install bluerobotics-ping`
+> `pip install --user bluerobotics-ping`
 >
 > `python -m brping/pingproxy --device <device>`
 >
