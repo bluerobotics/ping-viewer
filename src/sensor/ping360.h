@@ -63,18 +63,17 @@ public:
 
         int nextPoint = (_angle+delta)%_angularResolutionGrad;
 
-        ping360_transducer msg;
-        msg.set_mode(1);
-        msg.set_gain_setting(_gain_setting);
-        msg.set_angle(nextPoint);
-        msg.set_transmit_duration(_transmit_duration);
-        msg.set_sample_period(_sample_period);
-        msg.set_transmit_frequency(_transmit_frequency);
-        msg.set_number_of_samples(_num_points);
-        msg.set_transmit(transmit);
+        transducer_message.set_mode(1);
+        transducer_message.set_gain_setting(_gain_setting);
+        transducer_message.set_angle(nextPoint);
+        transducer_message.set_transmit_duration(_transmit_duration);
+        transducer_message.set_sample_period(_sample_period);
+        transducer_message.set_transmit_frequency(_transmit_frequency);
+        transducer_message.set_number_of_samples(_num_points);
+        transducer_message.set_transmit(transmit);
 
-        msg.updateChecksum();
-        writeMessage(msg);
+        transducer_message.updateChecksum();
+        writeMessage(transducer_message);
     }
 
     /**
@@ -655,6 +654,11 @@ private:
             return frequency;
         }
     };
+
+    /* Used to improve execution time in frequently function calls
+     * avoiding message unnecessary constructions and desconstruction
+    */
+    ping360_transducer transducer_message;
 
     QHash<uint16_t, MessageFrequencyHelper> messageFrequencies;
 
