@@ -51,7 +51,7 @@ public:
 
 signals:
 
-    void availableLinkFound(const LinkConfiguration& linkConf, const QString& deviceName);
+    void availableLinkFound(const QVector<LinkConfiguration>& availableLinkConfigurations, const QString& detector);
 
 private slots:
 
