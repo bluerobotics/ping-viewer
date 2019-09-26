@@ -19,6 +19,7 @@ void Ping360EthernetFinder::doBroadcast()
     // described in the communications manual.
     QByteArray datagram = "Discovery";
     _broadcastSocket.writeDatagram(datagram, QHostAddress::Broadcast, 30303);
+    _broadcastSocket.writeDatagram(datagram, QHostAddress("192.168.2.255"), 30303);
 }
 
 void Ping360EthernetFinder::processBroadcastResponses()
