@@ -18,11 +18,9 @@ DeviceManager::DeviceManager() :
     connect(&_detectorThread, &QThread::started, _detector, &ProtocolDetector::scan);
     // We need to take care here to not erase configurations that are already connected
     // Also we should remove or set Connected to false if device is disconnected
-    connect(_detector, &ProtocolDetector::availableLinksChanged, this, [this](auto links) {
-        qCDebug(DEVICEMANAGER) << "Available devices:" << links;
-        updateAvailableConnections(links);
-    });
-    connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this, &DeviceManager::append);
+    connect(_detector, &ProtocolDetector::availableLinksChanged, this, &DeviceManager::updateAvailableConnections);
+    connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this,
+            &DeviceManager::updateAvailableConnections);
 }
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName, const QString& detectorName)
@@ -136,6 +134,7 @@ void DeviceManager::playLogFile(AbstractLinkNamespace::LinkType connType, const 
 void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations,
         const QString& detector)
 {
+    qCDebug(DEVICEMANAGER) << "Available devices:" << availableLinkConfigurations;
     // Make all connections unavailable by default
     for(int i{0}; i < _sensors[Available].size(); i++) {
         auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
