@@ -32,8 +32,8 @@ void Ping360EthernetFinder::processBroadcastResponses()
         sender = QHostAddress(sender.toIPv4Address());
         // Basic validation to check we didn't get some lost packet from wherever
         if(datagram.contains("PING360")) {
-            emit availableLinkFound({LinkType::Udp, {sender.toString(), "12345"}, "Ping360 Port", PingDeviceType::PING360},
-                                    "Ping360");
+            emit availableLinkFound({{LinkType::Udp, {sender.toString(), "12345"}, "Ping360 Port", PingDeviceType::PING360}},
+            QStringLiteral("Ping360 Ethernet Protocol Detector"));
         }
     }
 }
