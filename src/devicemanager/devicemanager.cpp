@@ -25,7 +25,7 @@ DeviceManager::DeviceManager() :
     connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this, &DeviceManager::append);
 }
 
-void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName)
+void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName, const QString& detectorName)
 {
     for(int i{0}; i < _sensors[Connection].size(); i++) {
         auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
@@ -48,6 +48,7 @@ void DeviceManager::append(const LinkConfiguration& linkConf, const QString& dev
     _sensors[Available].append(true);
     _sensors[Connection].append(QVariant::fromValue(QSharedPointer<LinkConfiguration>(new LinkConfiguration(linkConf))));
     _sensors[Connected].append(false); // TODO: Make it true for primarySensor
+    _sensors[DetectorName].append(detectorName);
     _sensors[Name].append(deviceName);
 
     const auto& indexRow = index(line);
@@ -132,14 +133,16 @@ void DeviceManager::playLogFile(AbstractLinkNamespace::LinkType connType, const 
     connectLink(&linkConfiguration);
 }
 
-void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations)
+void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations,
+        const QString& detector)
 {
     // Make all connections unavailable by default
     for(int i{0}; i < _sensors[Available].size(); i++) {
         auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
         //TODO: rework this check, check linkconfiguration capabilities or add new ones for this case
         if(linkConf->type() == AbstractLinkNamespace::Ping1DSimulation
-                || linkConf->type() == AbstractLinkNamespace::Ping360Simulation) {
+                || linkConf->type() == AbstractLinkNamespace::Ping360Simulation
+                || _sensors[DetectorName][i] != detector) {
             continue;
         }
         _sensors[Available][i] = false;
@@ -148,7 +151,7 @@ void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>&
     }
 
     for(const auto& link : availableLinkConfigurations) {
-        append(link, PingHelper::nameFromDeviceType(link.deviceType()));
+        append(link, PingHelper::nameFromDeviceType(link.deviceType()), detector);
     }
 }
 
