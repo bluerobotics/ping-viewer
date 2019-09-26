@@ -65,7 +65,7 @@ void ProtocolDetector::doScan()
         }
 
         QVector<LinkConfiguration> availableLinksCopy = _availableLinks;
-        emit availableLinksChanged(availableLinksCopy);
+        emit availableLinksChanged(availableLinksCopy, QStringLiteral("Ping Protocol Detector"));
         _availableLinks.clear();
         QThread::msleep(500);
     }
