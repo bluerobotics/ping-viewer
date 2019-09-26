@@ -85,8 +85,10 @@ public:
      *
      * @param linkConf
      * @param deviceName
+     * @param detectorName
      */
-    void append(const LinkConfiguration& linkConf, const QString& deviceName = "None");
+    void append(const LinkConfiguration& linkConf, const QString& deviceName = "None",
+                const QString& detectorName = "None");
 
     /**
      * @brief Returns the data stored under the given role for the item referred to by the index
@@ -165,8 +167,10 @@ private:
      * @brief Update list of available links
      *
      * @param availableLinkConfigurations
+     * @param detectorName
      */
-    void updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations);
+    void updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations,
+                                    const QString& detectorName);
 
     // Role and names
     enum Roles {
@@ -174,12 +178,14 @@ private:
         Connected,
         Connection,
         Name,
+        DetectorName,
     };
     QHash<int, QByteArray> _roleNames {
         {{Available}, {"available"}},
         {{Connected}, {"connected"}},
         {{Connection}, {"connection"}},
         {{Name}, {"name"}},
+        {{DetectorName}, {"detectorName"}},
     };
 
     QSharedPointer<Sensor> _primarySensor;
