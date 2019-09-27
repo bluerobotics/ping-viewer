@@ -8,7 +8,8 @@ nav:
     - Quick Start: index.md
     - Viewer Guide:
         - Device Settings:
-            - Settings: device-settings.md
+            - Ping1D: device-settings-ping1d.md
+            - Ping360: device-settings-ping360.md
             - Firmware Update: firmware-update.md
         - Application Settings:
             - Display Settings: display-settings.md
