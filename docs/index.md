@@ -112,7 +112,7 @@ The color scheme (gradient) of the Waterfall can be [customized](display-setting
 
 See [here](display-settings.md) for instructions to switch between meters and feet for the application display.
 
-To adjust the update rate and other Ping device settings, visit the [device configuration](device-settings) page.
+To adjust the update rate and other Ping device settings, visit the [device configuration](device-settings-ping1d) page.
 
 ## Interpreting Profile Data
 
