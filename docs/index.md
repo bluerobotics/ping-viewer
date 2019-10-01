@@ -62,7 +62,7 @@ The Ping Viewer window consists of four important components:
 
 The Distance Readout displays the distance to the target in the most recent measurement. This is the distance to the seafloor in [depth sounding](https://en.wikipedia.org/wiki/Depth_sounding) applications.
 
-The confidence measurement for the most recent sample is displayed below the distance in the Distance readout. The color of the Distance Readout reflects the current confidence measurement, where red = 0% <-> green = 100%. // TODO better gradient explanation (picture)
+The confidence measurement for the most recent sample is displayed below the distance in the Distance readout. The color of the Distance Readout reflects the current confidence measurement, where green = 100%, yellow = 50% and red = 0%: ![](/ping-viewer/images/gradient-green-red.png)
 
 The size of the distance readout can be [moved and adjusted](hotkeys-and-shortcuts.md#mouse-shortcuts).
 
