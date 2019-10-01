@@ -8,8 +8,6 @@ This section describes the user-accessible files used by the Ping Viewer applica
 
 Ping Viewer will create a folder called `PingViewer` in your user documents folder:
 
-TODO use full path
-
 * Windows: `~/My Documents/PingViewer`
 * Mac: `~/Documents/PingViewer`
 * Linux: `~/Documents/PingViewer`
