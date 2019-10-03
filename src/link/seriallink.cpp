@@ -26,7 +26,7 @@ SerialLink::SerialLink(QObject* parent)
 
     connect(&_port, &QIODevice::readyRead, this, [this]() {
         emit newData(_port.readAll());
-    });
+    }, Qt::DirectConnection);
 
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) {
         _port.write(data);
