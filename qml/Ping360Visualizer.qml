@@ -21,6 +21,22 @@ Item {
     anchors.fill: parent
     property var ping: DeviceManager.primarySensor
 
+    /** Some visual elements doesn't need to be refreshed in sensor sample frequency
+      * Improves UI performance
+      */
+
+    Timer {
+        interval: 50
+        running: true
+        repeat: true
+        onTriggered: {
+            shapeSpinner.angle = (ping.angle + 0.25)*180/200
+            if(chart.visible) {
+                chart.draw(ping.data, ping.range, 0)
+            }
+        }
+    }
+
     Connections {
         target: ping
 
@@ -36,21 +52,13 @@ Item {
         }
 
         onDataChanged: {
-            shapeSpinner.angle = (ping.angle + 0.25)*180/200
-            root.draw(ping.data, ping.angle, 0, ping.range, ping.angular_speed, ping.sectorSize)
+            waterfall.draw(ping.data, ping.angle, 0, ping.range, ping.angular_speed, ping.sectorSize)
         }
     }
 
     onWidthChanged: {
         if(chart.Layout.minimumWidth === chart.width) {
             waterfall.parent.width = width - chart.width
-        }
-    }
-
-    function draw(points, angle, initialPoint, length, angleStep, sectorSize) {
-        waterfall.draw(points, angle, initialPoint, length, angleStep, sectorSize)
-        if(chart.visible) {
-            chart.draw(points, length + initialPoint, initialPoint)
         }
     }
 
