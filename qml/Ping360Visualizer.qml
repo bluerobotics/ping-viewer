@@ -88,9 +88,6 @@ Item {
                     anchors.centerIn: parent
                     vendorExtensionsEnabled: false
                     property var angle: 0
-                    property var centerX: waterfall.width/2
-                    property var centerY: waterfall.height/2
-                    property var radius: waterfall.width/2
 
                     ShapePath {
                         id: shapePathSpinner
