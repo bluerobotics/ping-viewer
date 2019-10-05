@@ -11,6 +11,8 @@
 
 SliderRuler::SliderRuler(QQuickItem *parent)
     : QQuickPaintedItem(parent)
+    , m_from(0)
+    , m_to(100)
     , m_count(-1)
     , m_showText(true)
 {
