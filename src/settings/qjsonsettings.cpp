@@ -101,7 +101,7 @@ QJsonObject QJsonSettings::object(int index) const
     return _rootValue.toArray().at(index).toObject();
 }
 
-QJsonObject QJsonSettings::object(QString& key) const
+QJsonObject QJsonSettings::object(const QString& key) const
 {
     int size = _rootValue.toArray().size();
     for(int i = 0; i < size; i++) {

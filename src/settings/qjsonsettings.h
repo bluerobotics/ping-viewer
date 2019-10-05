@@ -116,7 +116,7 @@ public:
      * @param key
      * @return Q_INVOKABLE object
      */
-    Q_INVOKABLE QJsonObject object(QString& key) const;
+    Q_INVOKABLE QJsonObject object(const QString& key) const;
 
 private:
     Q_DISABLE_COPY(QJsonSettings)
