@@ -39,7 +39,7 @@ public:
         StartingFlash,
         Flashing,
         FlashFinished,
-    } states;
+    };
     Q_ENUM(States)
 
     /**
