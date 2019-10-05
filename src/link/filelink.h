@@ -107,7 +107,7 @@ public:
      *
      * @param index
      */
-    void setPackageIndex(int index) { if(_processLog) _processLog->setPackageIndex(index); }
+    void setPackageIndex(int index) final override { if(_processLog) _processLog->setPackageIndex(index); }
 
     /**
      * @brief Start log
