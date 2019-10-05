@@ -7,6 +7,7 @@ const QString AbstractLink::_timeFormat = QStringLiteral("hh:mm:ss.zzz");
 
 AbstractLink::AbstractLink(QObject* parent)
     : QObject(parent)
+    , _autoConnect(false)
     , _type(LinkType::None)
 {
 }
