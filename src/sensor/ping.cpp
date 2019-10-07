@@ -35,6 +35,7 @@ Ping::Ping()
     :PingSensor(PingDeviceType::PING1D)
     ,_points(_num_points, 0)
 {
+    setName("Ping1D");
     setControlPanel({"qrc:/Ping1DControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping1DVisualizer.qml"});
     setSensorStatusModel({"qrc:/Ping1DStatusModel.qml"});
