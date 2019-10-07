@@ -421,7 +421,6 @@ private:
 
     /**
      * @brief Reset sensor local variables
-     *  TODO: This variables should be moved to a structure
      *
      */
     void resetSensorLocalVariables();
