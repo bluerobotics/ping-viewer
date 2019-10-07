@@ -85,7 +85,8 @@ RowLayout {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "Current Firmware: " + ping.firmware_version_major + "." + ping.firmware_version_minor
+                        property string version: ping ? ping.firmware_version_major + "." + ping.firmware_version_minor : "-"
+                        text: "Current Firmware: " + version
                     }
 
                     Label {
