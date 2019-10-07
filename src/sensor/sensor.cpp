@@ -219,4 +219,14 @@ void Sensor::resetSettings()
     qCWarning(PING_PROTOCOL_SENSOR) << "No reset settings definition.";
 }
 
+void Sensor::setName(const QString& name)
+{
+    if(_name == name) {
+        return;
+    }
+
+    _name = name;
+    emit nameUpdate();
+}
+
 Sensor::~Sensor() = default;

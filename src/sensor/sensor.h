@@ -165,7 +165,7 @@ protected:
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation
 
-    QString _name; // TODO: populate
+    QString _name;
 
     // Hold sensor information of the class
     SensorInfo _sensorInfo;
@@ -188,6 +188,13 @@ protected:
      * @return false QQuickItem is not accessible or created
      */
     bool createQQuickItem(QObject* parent, const QUrl& resource, QSharedPointer<QQuickItem>& pointerQuickItem);
+
+    /**
+     * @brief Set the sensor name
+     *
+     * @param name
+     */
+    void setName(const QString& name);
 
 signals:
     void autoDetectUpdate(bool autodetect);
