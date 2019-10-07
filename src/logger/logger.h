@@ -100,6 +100,13 @@ public:
      */
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
+    /**
+     * @brief File path of the application log
+     *
+     * @return QString
+     */
+    bool isEmpty() const { return _file.size() == 0; };
+
 signals:
     void registeredCategoryChanged();
 
