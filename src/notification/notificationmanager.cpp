@@ -8,7 +8,7 @@ PING_LOGGING_CATEGORY(NOTIFICATIONMANAGER, "ping.notificationmanager")
 
 NotificationManager::NotificationManager()
 {
-    connect(&_model, &NotificationModel::dataChanged, this, [this] { emit modelUpdate(); });
+    connect(&_model, &NotificationModel::dataChanged, this, &NotificationManager::modelUpdate);
 }
 
 void NotificationManager::create(const QString& text, QColor color, QString icon)
