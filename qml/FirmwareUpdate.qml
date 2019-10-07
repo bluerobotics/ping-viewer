@@ -16,7 +16,7 @@ RowLayout {
     property var running: false
 
     Connections {
-        target: ping.flasher
+        target: ping ? ping.flasher : null
         onFlashProgress: {
             running = true
             flashProgress.value = progress
