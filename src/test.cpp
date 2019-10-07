@@ -25,6 +25,7 @@
 void Test::initTestCase()
 {
     FileManager::self();
+    Logger::self()->installHandler();
     SettingsManager::self();
 }
 
@@ -71,6 +72,20 @@ void Test::fileManager()
     }
 
     // TODO: Populate gradients folder and test FileManager.getFilesFrom
+}
+
+void Test::logger()
+{
+    auto logger = Logger::self();
+
+    logger->logMessage(
+        "This is the result of our test build!"
+        ,QtMsgType::QtDebugMsg
+        , {__FILE__, __LINE__, __FUNCTION__, "Test category"}
+    );
+    logger->flush();
+
+    QVERIFY2(!logger->isEmpty(), qPrintable("Log file is empty."));
 }
 
 void Test::ringVector()

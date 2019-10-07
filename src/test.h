@@ -21,6 +21,12 @@ private slots:
     void fileManager();
 
     /**
+     * @brief Test logger singleton
+     *
+     */
+    void logger();
+
+    /**
      * @brief Test ring vector
      *
      */
