@@ -69,7 +69,7 @@ Item {
             }
 
             Label {
-                text: sensorModel.title
+                text: sensorModel ? sensorModel.title : "No title"
             }
             Repeater {
                 model: root.visible ? sensorModel.model : []
