@@ -261,7 +261,7 @@ Item {
 
     PingStatus {
         // We need to be over the mainvisualizer
-        z: sensorVisualizer.z + 1
+        z: sensorVisualizer ? sensorVisualizer.z + 1 : 0
         visible: SettingsManager.debugMode
     }
 
