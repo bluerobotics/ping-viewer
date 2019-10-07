@@ -126,7 +126,7 @@ void Ping::loadLastPingConfigurationSettings()
     }
 
     // Load settings for device using device id
-    QVariant pingConfigurationVariant = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString(_srcId)});
+    QVariant pingConfigurationVariant = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString(_commonVariables.srcId)});
     if(pingConfigurationVariant.type() != QVariant::Map) {
         qCWarning(PING_PROTOCOL_PING) << "No valid PingConfiguration in settings." << pingConfigurationVariant.type();
         return;
@@ -145,7 +145,8 @@ void Ping::updatePingConfigurationSettings()
     for(const auto& key : _pingConfiguration.keys()) {
         auto& dataStruct = _pingConfiguration[key];
         dataStruct.set(dataStruct.getClassValue());
-        SettingsManager::self()->setMapValue({"Ping", "PingConfiguration", QString(_srcId), key}, dataStruct.value);
+        SettingsManager::self()->setMapValue({"Ping", "PingConfiguration", QString(_commonVariables.srcId), key},
+                                             dataStruct.value);
     }
 }
 
@@ -171,7 +172,7 @@ void Ping::handleMessage(const ping_message& msg)
     // the device id is already supplied in every message header
     case Ping1dId::DEVICE_ID: {
         ping1d_device_id m(msg);
-        _srcId = m.source_device_id();
+        _commonVariables.srcId = m.source_device_id();
 
         emit srcIdUpdate();
     }
@@ -413,10 +414,10 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
 
 void Ping::setLastPingConfiguration()
 {
-    if(_lastPingConfigurationSrcId == _srcId) {
+    if(_lastPingConfigurationSrcId == _commonVariables.srcId) {
         return;
     }
-    _lastPingConfigurationSrcId = _srcId;
+    _lastPingConfigurationSrcId = _commonVariables.srcId;
     if(!link()->isWritable()) {
         qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
         return;
@@ -530,7 +531,8 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
     }
     emit firmwaresAvailableUpdate();
 
-    auto sensorVersion = QString("%1.%2").arg(_firmware_version_major).arg(_firmware_version_minor).toFloat();
+    auto sensorVersion = QString("%1.%2").arg(_commonVariables.firmware_version_major).arg(
+                             _commonVariables.firmware_version_minor).toFloat();
     static QString firmwareUpdateSteps{"https://github.com/bluerobotics/ping-viewer/wiki/firmware-update"};
     if(lastVersionAvailable > sensorVersion) {
         QString newVersionText =
@@ -542,17 +544,7 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
 
 void Ping::resetSensorLocalVariables()
 {
-    _ascii_text = QString();
-    _nack_msg = QString();
-
-    _srcId = 0;
-    _dstId = 0;
-
-    _device_type = 0;
-    _device_model = 0;
-    _device_revision = 0;
-    _firmware_version_major = 0;
-    _firmware_version_minor = 0;
+    _commonVariables.reset();
 
     _distance = 0;
     _confidence = 0;
