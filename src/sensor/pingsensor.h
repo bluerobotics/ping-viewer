@@ -40,7 +40,7 @@ public:
      *
      * @return uint8_t source id
      */
-    uint8_t srcId() const { return _srcId; }
+    uint8_t srcId() const { return _commonVariables.srcId; }
     Q_PROPERTY(int srcId READ srcId NOTIFY srcIdUpdate)
 
     /**
@@ -48,7 +48,7 @@ public:
      *
      * @return uint8_t destination ID
      */
-    uint8_t dstId() const { return _dstId; }
+    uint8_t dstId() const { return _commonVariables.dstId; }
     Q_PROPERTY(int dstId READ dstId NOTIFY dstIdUpdate)
 
     //TODO: move functions from snake case to camel case
@@ -57,7 +57,7 @@ public:
      *
      * @return uint8_t firmware major version number
      */
-    uint8_t firmware_version_major() const { return _firmware_version_major; }
+    uint8_t firmware_version_major() const { return _commonVariables.firmware_version_major; }
     Q_PROPERTY(int firmware_version_major READ firmware_version_major NOTIFY firmwareVersionMajorUpdate)
 
     /**
@@ -65,7 +65,7 @@ public:
      *
      * @return uint8_t firmware minor version number
      */
-    uint16_t firmware_version_minor() const { return _firmware_version_minor; }
+    uint16_t firmware_version_minor() const { return _commonVariables.firmware_version_minor; }
     Q_PROPERTY(int firmware_version_minor READ firmware_version_minor NOTIFY firmwareVersionMinorUpdate)
 
     /**
@@ -73,7 +73,7 @@ public:
      *
      * @return uint8_t firmware patch version number
      */
-    uint16_t firmware_version_patch() const { return _firmware_version_patch; }
+    uint16_t firmware_version_patch() const { return _commonVariables.firmware_version_patch; }
     Q_PROPERTY(int firmware_version_patch READ firmware_version_patch NOTIFY firmwareVersionPatchUpdate)
 
     /**
@@ -81,7 +81,7 @@ public:
      *
      * @return uint8_t Device type number
      */
-    uint8_t device_type() const { return _device_type; }
+    uint8_t device_type() const { return _commonVariables.device_type; }
     Q_PROPERTY(int device_type READ device_type NOTIFY deviceTypeUpdate)
 
     /**
@@ -89,7 +89,7 @@ public:
      *
      * @return uint8_t Device model number
      */
-    uint8_t device_revision() const { return _device_revision; }
+    uint8_t device_revision() const { return _commonVariables.device_revision; }
     Q_PROPERTY(int device_revision READ device_revision NOTIFY deviceRevisionUpdate)
 
     /**
@@ -97,7 +97,7 @@ public:
      *
      * @return QString
      */
-    QString asciiText() const { return _ascii_text; }
+    QString asciiText() const { return _commonVariables.ascii_text; }
     Q_PROPERTY(QString ascii_text READ asciiText NOTIFY asciiTextUpdate)
 
     /**
@@ -106,7 +106,7 @@ public:
      *
      * @return QString
      */
-    QString errMsg() const { return _nack_msg; }
+    QString errMsg() const { return _commonVariables.nack_msg; }
     Q_PROPERTY(QString err_msg READ errMsg NOTIFY nackMsgUpdate)
 
     /**
@@ -197,19 +197,32 @@ protected:
      */
     void writeMessage(const ping_message& msg) const;
 
-    QString _ascii_text;
-    uint8_t _device_revision{0};
-    uint8_t _device_type{0};
-    uint8_t _dstId{0};
-    uint8_t _firmware_version_major{0};
-    uint8_t _firmware_version_minor{0};
-    uint8_t _firmware_version_patch{0};
+    // Common variables between all ping devices
+    struct CommonVariables {
+        QString ascii_text;
+        uint8_t device_revision{0};
+        uint8_t device_type{0};
+        uint8_t dstId{0};
+        uint8_t firmware_version_major{0};
+        uint8_t firmware_version_minor{0};
+        uint8_t firmware_version_patch{0};
+        QString nack_msg;
+        uint8_t protocol_version_major{0};
+        uint8_t protocol_version_minor{0};
+        uint8_t protocol_version_patch{0};
+        uint8_t srcId{0};
+
+        /**
+         * @brief Reset variables to default values
+         *
+         */
+        inline void reset()
+        {
+            *this = {};
+        }
+    } _commonVariables;
+
     int _lostMessages{0};
-    QString _nack_msg;
-    uint8_t _protocol_version_major{0};
-    uint8_t _protocol_version_minor{0};
-    uint8_t _protocol_version_patch{0};
-    uint8_t _srcId{0};
 
 private:
     Q_DISABLE_COPY(PingSensor)
