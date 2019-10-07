@@ -107,6 +107,12 @@ public:
      */
     bool isEmpty() const { return _file.size() == 0; };
 
+    /**
+     * @brief Force stream to flush all data to the log file
+     *
+     */
+    void flush() { _fileStream.flush(); };
+
 signals:
     void registeredCategoryChanged();
 
