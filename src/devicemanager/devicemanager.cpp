@@ -45,7 +45,7 @@ void DeviceManager::append(const LinkConfiguration& linkConf, const QString& dev
     beginInsertRows(QModelIndex(), line, line);
     _sensors[Available].append(true);
     _sensors[Connection].append(QVariant::fromValue(QSharedPointer<LinkConfiguration>(new LinkConfiguration(linkConf))));
-    _sensors[Connected].append(false); // TODO: Make it true for primarySensor
+    _sensors[Connected].append(false);
     _sensors[DetectorName].append(detectorName);
     _sensors[Name].append(deviceName);
 
