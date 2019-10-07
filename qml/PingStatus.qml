@@ -11,7 +11,7 @@ Item {
 
     property var marginPix: 10
     property var ping: DeviceManager.primarySensor
-    property var sensorModel: ping.sensorStatusModel(root)
+    property var sensorModel: ping ? ping.sensorStatusModel(root) : null
 
     DelegateModel {
         id: baseModel
