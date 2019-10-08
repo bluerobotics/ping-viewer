@@ -122,8 +122,17 @@ Item {
             return
         }
 
-        x = clamp(x, margin, parent.width - root.width - margin)
-        y = clamp(y, margin, parent.height - root.height - margin)
+        // Calculate the maximum available position
+        var maxWidth = parent.width - root.width - margin
+        var maxHeight = parent.height - root.height - margin
+
+        // Check if the window can contain the item
+        if(maxWidth < 0 || maxHeight < 0) {
+            return
+        }
+
+        x = clamp(x, margin, maxWidth)
+        y = clamp(y, margin, maxHeight)
     }
 
     // Component is used when the application is started for the first time in a computer
