@@ -76,6 +76,13 @@ public:
         , _linkConf {other.configurationStruct()} {};
 
     /**
+     * @brief Construct a new Link Configuration object from string configuration
+     *
+     * @param configurationString
+     */
+    LinkConfiguration(const QString& configurationString);
+
+    /**
      * @brief Destroy the Link Configuration object
      *
      */
