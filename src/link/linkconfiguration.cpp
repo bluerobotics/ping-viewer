@@ -13,6 +13,26 @@ const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
     {InvalidUrl, "Url not formatted properly."},
 };
 
+LinkConfiguration::LinkConfiguration(const QString& configurationString)
+    : QObject(nullptr)
+{
+    auto configurationStringList = configurationString.split(":");
+
+    auto deviceType = configurationStringList.first();
+    if (deviceType == PingHelper::nameFromDeviceType(PingDeviceType::PING1D)) {
+        _linkConf.deviceType = PingDeviceType::PING1D;
+    } else if (deviceType == PingHelper::nameFromDeviceType(PingDeviceType::PING360)) {
+        _linkConf.deviceType = PingDeviceType::PING360;
+    }
+    if (_linkConf.deviceType != PingDeviceType::UNKNOWN) {
+        configurationStringList.removeFirst();
+    }
+
+    _linkConf.type = static_cast<LinkType>(configurationStringList.first().toInt());
+    configurationStringList.removeFirst();
+    _linkConf.args = configurationStringList;
+}
+
 const QString LinkConfiguration::createFullConfString() const
 {
     QStringList args {_linkConf.args};
