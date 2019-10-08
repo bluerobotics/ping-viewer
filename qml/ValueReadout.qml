@@ -84,21 +84,15 @@ Item {
 
     MouseArea {
         anchors.fill: parent
+        drag.target: parent
         z: 1
         //acceptedButtons: Qt.LeftButton
-        property var previousPosition
         onPressed: {
             cursorShape = Qt.ClosedHandCursor
             previousPosition = Qt.point(mouseX, mouseY)
         }
         onReleased: {
             cursorShape = Qt.OpenHandCursor
-        }
-        onPositionChanged: {
-            var dx = mouseX - previousPosition.x
-            var dy = mouseY - previousPosition.y
-            root.x += dx
-            root.y += dy
         }
         onWheel: {
             readout.font.pointSize += wheel.angleDelta.y/120
