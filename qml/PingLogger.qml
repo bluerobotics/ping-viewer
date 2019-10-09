@@ -40,10 +40,12 @@ Item {
                 text: time
                 color: foreground == undefined ? "purple" : foreground
             }
-            Text {
+            TextEdit {
+                text: display
                 width: parent.width - leftText.width
                 wrapMode: Text.WordWrap
-                text: display
+                readOnly: true
+                selectByMouse: true
                 color: foreground == undefined ? "purple" : foreground
             }
         }
