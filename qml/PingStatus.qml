@@ -25,6 +25,8 @@ Item {
             "Connection: " + ping.link.configuration.string,
             "RX Packets (#): " + ping.parsed_msgs,
             "RX Errors (#): " + ping.parser_errors,
+            "TX speed (Bytes/s): " + ping.link.upSpeed,
+            "RX speed (Bytes/s): " + ping.link.downSpeed,
             "Lost messages (#): " + ping.lost_messages,
             "Ascii text:\n" + ping.ascii_text,
             "Error message:\n" + ping.err_msg,
