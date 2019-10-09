@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QTime>
+#include <QTimer>
 
 #include "linkconfiguration.h"
 
@@ -216,6 +217,26 @@ public:
         };
     }
 
+    /**
+     * @brief Download speed of link in bits
+     *
+     * @return float
+     */
+    float downSpeed()
+    {
+        return _bitRateDownSpeed.speed;
+    }
+
+    /**
+     * @brief Upload speed of link in bits
+     *
+     * @return float
+     */
+    float upSpeed()
+    {
+        return _bitRateUpSpeed.speed;
+    }
+
     Q_PROPERTY(qint64 byteSize READ byteSize NOTIFY byteSizeChanged)
     Q_PROPERTY(LinkConfiguration* configuration READ configuration NOTIFY configurationChanged)
     Q_PROPERTY(QTime elapsedTime READ elapsedTime NOTIFY elapsedTimeChanged)
@@ -228,6 +249,8 @@ public:
     Q_PROPERTY(QTime totalTime READ totalTime NOTIFY totalTimeChanged)
     Q_PROPERTY(QString totalTimeString READ totalTimeString NOTIFY totalTimeChanged)
     Q_PROPERTY(AbstractLinkNamespace::LinkType type READ type WRITE setType NOTIFY linkChanged)
+    Q_PROPERTY(float upSpeed READ upSpeed NOTIFY linkChanged)
+    Q_PROPERTY(float downSpeed READ downSpeed NOTIFY linkChanged)
 
 signals:
     void availableConnectionsChanged();
@@ -237,6 +260,7 @@ signals:
     void linkChanged(AbstractLinkNamespace::LinkType link);
     void newData(const QByteArray& data);
     void sendData(const QByteArray& data);
+    void speedChanged();
 
     void byteSizeChanged();
     void packageSizeChanged();
@@ -251,5 +275,22 @@ protected:
 private:
     bool _autoConnect;
     QString _name;
+    QTimer _oneSecondTimer;
     LinkType _type;
+
+    // Up and down speed logic
+    struct BitRateSpeed {
+        float speed;
+        float numberOfBytes;
+
+        /**
+         * @brief Reset total number of bytes and set the current speed
+         *
+         */
+        void update()
+        {
+            speed = numberOfBytes;
+            numberOfBytes = 0;
+        }
+    } _bitRateUpSpeed, _bitRateDownSpeed;
 };
