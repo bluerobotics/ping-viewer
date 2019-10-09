@@ -250,6 +250,6 @@ protected:
 
 private:
     bool _autoConnect;
-    LinkType _type;
     QString _name;
+    LinkType _type;
 };
