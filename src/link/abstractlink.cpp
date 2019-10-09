@@ -10,6 +10,19 @@ AbstractLink::AbstractLink(QObject* parent)
     , _autoConnect(false)
     , _type(LinkType::None)
 {
+    connect(this, &AbstractLink::newData, this, [&](const QByteArray& data) {
+        _bitRateDownSpeed.numberOfBytes += data.size();
+    });
+    connect(this, &AbstractLink::sendData, this, [&](const QByteArray& data) {
+        _bitRateUpSpeed.numberOfBytes += data.size();
+    });
+    connect(&_oneSecondTimer, &QTimer::timeout, this, [&]() {
+        _bitRateDownSpeed.update();
+        _bitRateUpSpeed.update();
+        emit speedChanged();
+    });
+
+    _oneSecondTimer.start(1000);
 }
 
 AbstractLink::~AbstractLink() = default;
