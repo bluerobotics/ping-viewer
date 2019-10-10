@@ -9,7 +9,7 @@
 #include <QPainter>
 #include <QPalette>
 
-SliderRuler::SliderRuler(QQuickItem *parent)
+SliderRuler::SliderRuler(QQuickItem* parent)
     : QQuickPaintedItem(parent)
     , m_from(0)
     , m_to(100)
@@ -27,10 +27,7 @@ void SliderRuler::setCount(int count)
     }
 }
 
-int SliderRuler::count() const
-{
-    return m_count;
-}
+int SliderRuler::count() const { return m_count; }
 
 void SliderRuler::setShowText(bool showText)
 {
@@ -41,10 +38,7 @@ void SliderRuler::setShowText(bool showText)
     }
 }
 
-bool SliderRuler::showText() const
-{
-    return m_showText;
-}
+bool SliderRuler::showText() const { return m_showText; }
 
 void SliderRuler::setTo(double to)
 {
@@ -55,10 +49,7 @@ void SliderRuler::setTo(double to)
     }
 }
 
-double SliderRuler::to() const
-{
-    return m_to;
-}
+double SliderRuler::to() const { return m_to; }
 
 void SliderRuler::setFrom(double from)
 {
@@ -69,31 +60,22 @@ void SliderRuler::setFrom(double from)
     }
 }
 
-double SliderRuler::from() const
-{
-    return m_from;
-}
+double SliderRuler::from() const { return m_from; }
 
-QPointF SliderRuler::beginLine() const
-{
-    return m_beginLine;
-}
+QPointF SliderRuler::beginLine() const { return m_beginLine; }
 
-QPointF SliderRuler::endLine() const
-{
-    return m_endLine;
-}
+QPointF SliderRuler::endLine() const { return m_endLine; }
 
 void SliderRuler::setColor(const QColor& color)
 {
-    if(m_controlColor != color) {
+    if (m_controlColor != color) {
         m_controlColor = color;
         emit colorChanged(m_controlColor);
         update();
     }
 }
 
-void SliderRuler::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void SliderRuler::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     Q_UNUSED(oldGeometry)
 
@@ -114,7 +96,7 @@ void SliderRuler::geometryChanged(const QRectF &newGeometry, const QRectF &oldGe
     update();
 }
 
-void SliderRuler::paint(QPainter *painter)
+void SliderRuler::paint(QPainter* painter)
 {
     painter->save();
 
@@ -133,9 +115,7 @@ void SliderRuler::paint(QPainter *painter)
     // the number of spaces:
     // you can set the total divisions by calling setCount
     // if you don't we try to pick up a number.
-    const int spaceCount = m_count != -1 ? m_count
-                           : m_to - m_from > 50 ? 50
-                           : static_cast<int>(m_to - m_from);
+    const int spaceCount = m_count != -1 ? m_count : m_to - m_from > 50 ? 50 : static_cast<int>(m_to - m_from);
 
     const int tickCount = spaceCount + 1;
 
@@ -146,7 +126,7 @@ void SliderRuler::paint(QPainter *painter)
     painter->drawLine(m_beginLine, m_endLine);
 
     // add the ticks and the text.
-    for(int i = 0; i < tickCount; i++) {
+    for (int i = 0; i < tickCount; i++) {
         const bool isBigTick = spaceCount > 20 ? i % 10 == 0 : true;
         if (!isBigTick)
             continue;

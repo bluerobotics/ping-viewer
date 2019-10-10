@@ -5,8 +5,7 @@
 /**
  * @brief Display a ruler with ticks and labels
  */
-class SliderRuler : public QQuickPaintedItem
-{
+class SliderRuler : public QQuickPaintedItem {
     Q_OBJECT
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
     Q_PROPERTY(double from READ from WRITE setFrom NOTIFY fromChanged)
@@ -17,12 +16,11 @@ class SliderRuler : public QQuickPaintedItem
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
-
     /**
      * @brief Constructs an empty SliderRuler.
      *  The SliderRuler can be used as a background item for sliders.
      */
-    SliderRuler(QQuickItem *parent = nullptr);
+    SliderRuler(QQuickItem* parent = nullptr);
 
     /**
      * @brief Return component color
@@ -75,7 +73,7 @@ public:
      * @brief Called when a geometryChange ocours.
      * Recalculates the Line.
      */
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
 public Q_SLOTS:
     /**
@@ -111,7 +109,7 @@ protected:
     /**
      * @brief refreshes the visuals
      */
-    virtual void paint(QPainter *painter) override;
+    virtual void paint(QPainter* painter) override;
 
 Q_SIGNALS:
     /**
@@ -144,12 +142,12 @@ Q_SIGNALS:
     /**
      * @brief emitted when the beginLine changes
      */
-    void beginLineChanged(const QPointF &beginLine);
+    void beginLineChanged(const QPointF& beginLine);
 
     /**
      * @brief emitted when the endLine changes
      */
-    void endLineChanged(const QPointF &endLine);
+    void endLineChanged(const QPointF& endLine);
 
 private:
     double m_from;
