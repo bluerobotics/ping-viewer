@@ -11,8 +11,7 @@ Q_DECLARE_LOGGING_CATEGORY(NETWORKTOOL)
  * @brief Manage the project NetworkTool
  *
  */
-class NetworkTool : public QObject
-{
+class NetworkTool : public QObject {
     Q_OBJECT
 public:
     /**
@@ -21,7 +20,6 @@ public:
      * @return NetworkTool*
      */
     static NetworkTool* self();
-
 
     /**
      * @brief Check if a new interface version is available
@@ -58,6 +56,7 @@ public:
      * @return QObject*
      */
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
+
 private:
     Q_DISABLE_COPY(NetworkTool)
     /**

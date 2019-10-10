@@ -1,7 +1,7 @@
+#include "networktool.h"
 #include "logger.h"
 #include "maddy/parser.h"
 #include "networkmanager.h"
-#include "networktool.h"
 #include "notificationmanager.h"
 
 #include <QJsonArray>
@@ -12,7 +12,6 @@
 
 PING_LOGGING_CATEGORY(NETWORKTOOL, "ping.networktool")
 
-
 QString NetworkTool::_gitUserRepo = "bluerobotics/ping-viewer";
 QString NetworkTool::_gitUserRepoFirmware = "bluerobotics/ping-firmware";
 
@@ -22,10 +21,10 @@ NetworkTool::NetworkTool()
     const static QRegularExpression regex(R"(github.com\/([^.]*))");
     QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
     if (!regexMatch.hasMatch() || regexMatch.lastCapturedIndex() < 1) {
-        qCWarning(NETWORKTOOL) <<
-                               "Fail to get github user and repository! "
-                               "It will not be possible to check for updates. "
-                               "Using default value:" << _gitUserRepo;
+        qCWarning(NETWORKTOOL) << "Fail to get github user and repository! "
+                                  "It will not be possible to check for updates. "
+                                  "Using default value:"
+                               << _gitUserRepo;
         qCDebug(NETWORKTOOL) << "GIT_URL value:" << QStringLiteral(GIT_URL);
         return;
     }
@@ -34,11 +33,8 @@ NetworkTool::NetworkTool()
 
 void NetworkTool::checkInterfaceUpdate()
 {
-    static const QUrl url{QStringLiteral("https://api.github.com/repos/%1/releases").arg(_gitUserRepo)};
-    NetworkManager::self()->requestJson(
-        url,
-        self()->checkNewVersionInGitHubPayload
-    );
+    static const QUrl url {QStringLiteral("https://api.github.com/repos/%1/releases").arg(_gitUserRepo)};
+    NetworkManager::self()->requestJson(url, self()->checkNewVersionInGitHubPayload);
 }
 
 void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocument)
@@ -62,7 +58,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     int actualVersion = regexMatch.hasMatch() ? semverToInt(projectTag.mid(1)) : -1.0;
 
     // If this version does not follow vd+.d+.d+, this is a test or continuous release
-    if(regexMatch.hasMatch()) {
+    if (regexMatch.hasMatch()) {
         qCDebug(NETWORKTOOL) << "Running release version:" << projectTag << "#" << actualVersion;
     } else {
         releaseTagRegex.setPattern(QStringLiteral(R"([t,v]\d+\.\d+\.\d+)"));
@@ -70,7 +66,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     }
 
     auto versionsAvailable = jsonDocument.array();
-    if(versionsAvailable.isEmpty()) {
+    if (versionsAvailable.isEmpty()) {
         qCWarning(NETWORKTOOL) << "GitHub json it's not an array!";
         qCDebug(NETWORKTOOL) << jsonDocument;
         return;
@@ -84,12 +80,12 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     lastReleaseAvailable.version = actualVersion;
 
     // Check payload
-    for(const QJsonValue& versionPayload : versionsAvailable) {
+    for (const QJsonValue& versionPayload : versionsAvailable) {
         auto versionString = versionPayload[QStringLiteral("tag_name")].toString();
         qCDebug(NETWORKTOOL) << "Testing version:" << versionString;
 
         regexMatch = releaseTagRegex.match(versionString);
-        if(!regexMatch.hasMatch()) {
+        if (!regexMatch.hasMatch()) {
             qCDebug(NETWORKTOOL) << "Not a release." << regexMatch;
             continue;
         }
@@ -98,7 +94,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
         // strip leading character with .mid(1)
         auto version = semverToInt(versionString.mid(1));
         qCDebug(NETWORKTOOL) << "comparing version:" << versionString << "#" << version;
-        if(version > lastReleaseAvailable.version) {
+        if (version > lastReleaseAvailable.version) {
             lastReleaseAvailable.version = version;
             lastReleaseAvailable.versionString = versionString;
             lastReleaseAvailable.json = versionPayload;
@@ -106,13 +102,13 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     }
 
     // No new version available
-    if(actualVersion == lastReleaseAvailable.version) {
+    if (actualVersion == lastReleaseAvailable.version) {
         qCInfo(NETWORKTOOL) << "Already running last release version.";
         return;
     }
 
     // If it's running a test release and this is not the last available
-    if(actualVersion < 0 && projectTag != lastReleaseAvailable.versionString) {
+    if (actualVersion < 0 && projectTag != lastReleaseAvailable.versionString) {
         NotificationManager::self()->create(
             "This isn't a release!\n\rPlease download a release version.", "red", StyleManager::reportIcon());
     }
@@ -122,23 +118,23 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
 
     // Try to find the correct file to download
     auto assets = lastReleaseAvailable.json["assets"].toArray();
-    if(!assets.isEmpty()) {
+    if (!assets.isEmpty()) {
 
-// Astyle is not smart enough
-// *INDENT-OFF*
+        // Astyle is not smart enough
+        // *INDENT-OFF*
         static const QString extension =
 #ifdef Q_OS_LINUX
             QStringLiteral("x86_64.AppImage");
 #endif
 #ifdef Q_OS_OSX
-            QStringLiteral("release.dmg");
+        QStringLiteral("release.dmg");
 #else
             QStringLiteral("release.zip");
 #endif
-// *INDENT-ON*
+        // *INDENT-ON*
 
-        for(const QJsonValue& artifact : assets) {
-            if(artifact["name"].toString().contains(extension)) {
+        for (const QJsonValue& artifact : assets) {
+            if (artifact["name"].toString().contains(extension)) {
                 downloadLink = artifact["browser_download_url"].toString();
                 break;
             };
@@ -152,20 +148,20 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     std::stringstream markdownInput(lastReleaseAvailable.json[QStringLiteral("body")].toString().toStdString());
     std::shared_ptr<maddy::Parser> parser = std::make_shared<maddy::Parser>();
 
-    QString newVersionText =
-        QStringLiteral("New version: %1 - %2<br>%3").arg(
-            lastReleaseAvailable.versionString,
-            //TODO: Move the breakline feature to maddy after italic and bold PRs approved
-            QString::fromStdString(parser->Parse(markdownInput)).remove("<p>").remove("</p>").replace("\r", "<br>"),
-            QString("<a href=\"%1\">DOWNLOAD IT HERE!</a>").arg(downloadLink)
-        );
-    NotificationManager::self()->create(
-        newVersionText, "green", StyleManager::infoIcon());
+    QString newVersionText = QStringLiteral("New version: %1 - %2<br>%3")
+                                 .arg(lastReleaseAvailable.versionString,
+                                     // TODO: Move the breakline feature to maddy after italic and bold PRs approved
+                                     QString::fromStdString(parser->Parse(markdownInput))
+                                         .remove("<p>")
+                                         .remove("</p>")
+                                         .replace("\r", "<br>"),
+                                     QString("<a href=\"%1\">DOWNLOAD IT HERE!</a>").arg(downloadLink));
+    NotificationManager::self()->create(newVersionText, "green", StyleManager::infoIcon());
 }
 
 void NetworkTool::scheduleUpdateCheck()
 {
-    QTimer *timer = new QTimer(this);
+    QTimer* timer = new QTimer(this);
     QObject::connect(timer, &QTimer::timeout, this, [timer] {
         checkInterfaceUpdate();
         timer->deleteLater();
@@ -176,7 +172,8 @@ void NetworkTool::scheduleUpdateCheck()
 
 void NetworkTool::checkNewFirmware(const QString& sensorName, std::function<void(QJsonDocument&)> function)
 {
-    static const QUrl url{QStringLiteral("https://api.github.com/repos/%1/contents/%2").arg(_gitUserRepoFirmware, sensorName)};
+    static const QUrl url {
+        QStringLiteral("https://api.github.com/repos/%1/contents/%2").arg(_gitUserRepoFirmware, sensorName)};
     NetworkManager::self()->requestJson(url, function);
 }
 
@@ -195,8 +192,5 @@ NetworkTool* NetworkTool::self()
 }
 
 // Start update check
-void _pingViewerUpdateCheck()
-{
-    NetworkTool::self()->scheduleUpdateCheck();
-}
+void _pingViewerUpdateCheck() { NetworkTool::self()->scheduleUpdateCheck(); }
 Q_COREAPP_STARTUP_FUNCTION(_pingViewerUpdateCheck);
