@@ -11,7 +11,7 @@
 PING_LOGGING_CATEGORY(PING_PROTOCOL_FILELINK, "ping.protocol.filelink")
 
 FileLink::FileLink(QObject* parent)
-    : AbstractLink(parent)
+    : AbstractLink("FileLink", parent)
     , _openModeFlag(QIODevice::ReadWrite)
     , _timer()
     , _inout(&_file)
