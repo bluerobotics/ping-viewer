@@ -25,9 +25,9 @@ FileLink::FileLink(QObject* parent)
 void FileLink::writeData(const QByteArray& data)
 {
     // Check if we have already opened the file
-    if(!_file.isOpen()) {
+    if (!_file.isOpen()) {
         qCDebug(PING_PROTOCOL_FILELINK) << "File will be opened.";
-        if(!_file.open(QIODevice::ReadWrite)) {
+        if (!_file.open(QIODevice::ReadWrite)) {
             qCDebug(PING_PROTOCOL_FILELINK) << "File was not open.";
             return;
         }
@@ -37,9 +37,9 @@ void FileLink::writeData(const QByteArray& data)
     }
 
     // This save the data as a structure to deal with the timestamp
-    if(_openModeFlag == QIODevice::WriteOnly && _file.isWritable()) {
-        QString time =  QTime::fromMSecsSinceStartOfDay(_timer.elapsed()).toString(_timeFormat);
-        Pack pack{time, data};
+    if (_openModeFlag == QIODevice::WriteOnly && _file.isWritable()) {
+        QString time = QTime::fromMSecsSinceStartOfDay(_timer.elapsed()).toString(_timeFormat);
+        Pack pack {time, data};
         _inout << pack.time << pack.data;
     } else {
         qCWarning(PING_PROTOCOL_FILELINK) << "Something is wrong!";
@@ -52,7 +52,7 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 {
     _linkConfiguration = linkConfiguration;
     qCDebug(PING_PROTOCOL_FILELINK) << linkConfiguration;
-    if(!linkConfiguration.isValid()) {
+    if (!linkConfiguration.isValid()) {
         qCDebug(PING_PROTOCOL_FILELINK) << LinkConfiguration::errorToString(linkConfiguration.error());
         return false;
     }
@@ -65,7 +65,7 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     _file.setFileName(linkConfiguration.args()->at(0));
 
-    if(_openModeFlag == QIODevice::WriteOnly) {
+    if (_openModeFlag == QIODevice::WriteOnly) {
         // The file will be created when something is received
         // Avoiding empty files
         // Check if path is writable
@@ -74,11 +74,11 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     // Everything after this point is to deal with reading data
     bool ok = _file.open(QIODevice::ReadWrite);
-    if(ok) {
+    if (ok) {
         LogSensorStruct logSensorStruct;
         // Check if file is valid
         _inout >> logSensorStruct;
-        if(!logSensorStruct.isValid()) {
+        if (!logSensorStruct.isValid()) {
             qCWarning(PING_PROTOCOL_FILELINK) << "Log file does not contain a valid header.";
             qCDebug(PING_PROTOCOL_FILELINK) << logSensorStruct;
             // Close file since it's not valid
@@ -100,11 +100,11 @@ bool FileLink::startConnection()
 {
     // The file will be created when something is received
     // Avoiding empty files
-    if(_openModeFlag == QIODevice::WriteOnly) {
+    if (_openModeFlag == QIODevice::WriteOnly) {
         return QFileInfo(QFileInfo(_file).canonicalPath()).isWritable();
     }
 
-    if(!isOpen()) {
+    if (!isOpen()) {
         return false;
     }
 
@@ -124,12 +124,12 @@ void FileLink::processFile()
 {
     Pack pack;
 
-    while(!_inout.atEnd()) {
+    while (!_inout.atEnd()) {
         // Get data
         _inout >> pack.time >> pack.data;
 
         // Check if we have a new package
-        if(pack.time.isEmpty()) {
+        if (pack.time.isEmpty()) {
             qCDebug(PING_PROTOCOL_FILELINK) << "No more packages !";
             break;
         }
@@ -146,7 +146,7 @@ LogSensorStruct FileLink::staticLogSensorStruct(const LinkConfiguration& linkCon
 {
     // Check if configuration is valid
     auto openModeFlag = linkConfiguration.args()->at(1)[0] == 'r' ? QIODevice::ReadOnly : QIODevice::WriteOnly;
-    if(openModeFlag == QIODevice::WriteOnly) {
+    if (openModeFlag == QIODevice::WriteOnly) {
         qCWarning(PING_PROTOCOL_FILELINK) << "Can't get LogSensorStruct from WriteOnly file.";
         return {};
     }
@@ -154,7 +154,7 @@ LogSensorStruct FileLink::staticLogSensorStruct(const LinkConfiguration& linkCon
     // Check if file is valid
     QFile file(linkConfiguration.args()->at(0));
     bool ok = file.open(openModeFlag);
-    if(!ok) {
+    if (!ok) {
         qCWarning(PING_PROTOCOL_FILELINK) << "Can't open file.";
         return {};
     }
@@ -173,26 +173,23 @@ bool FileLink::isOpen()
     // If filelink exist to create a log, the file will be only created after receiving the first data
     // To return at least a good answer, we do check the path to see if it's writable
     return (QFileInfo(QFileInfo(_file).canonicalPath()).isWritable() && _openModeFlag == QIODevice::WriteOnly)
-           || _file.isReadable(); // If file is readable it's already opened and working
+        || _file.isReadable(); // If file is readable it's already opened and working
 };
 
 bool FileLink::finishConnection()
 {
     // Stop reading log process if it's running
-    if(_processLogThread.isRunning()) {
+    if (_processLogThread.isRunning()) {
         _processLog->stop();
         _processLogThread.quit();
         _processLogThread.wait();
     }
 
     // Only close files that are open
-    if(_file.isOpen()) {
+    if (_file.isOpen()) {
         _file.close();
     }
     return true;
 }
 
-FileLink::~FileLink()
-{
-    finishConnection();
-}
+FileLink::~FileLink() { finishConnection(); }

@@ -13,20 +13,16 @@ UDPLink::UDPLink(QObject* parent)
 {
     setType(LinkType::Udp);
 
-    connect(_udpSocket, &QIODevice::readyRead, this, [this]() {
-        emit newData(_udpSocket->readAll());
-    });
+    connect(_udpSocket, &QIODevice::readyRead, this, [this]() { emit newData(_udpSocket->readAll()); });
 
-    connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) {
-        _udpSocket->write(data);
-    });
+    connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) { _udpSocket->write(data); });
 }
 
 bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 {
     _linkConfiguration = linkConfiguration;
     qCDebug(PING_PROTOCOL_UDPLINK) << linkConfiguration;
-    if(!linkConfiguration.isValid()) {
+    if (!linkConfiguration.isValid()) {
         qCDebug(PING_PROTOCOL_UDPLINK) << LinkConfiguration::errorToString(linkConfiguration.error());
         return false;
     }
@@ -43,13 +39,14 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     // Give the socket a second to connect to the other side otherwise error out
     int socketAttemps = 0;
-    while(!_udpSocket->waitForConnected(100) && socketAttemps < 10 ) {
+    while (!_udpSocket->waitForConnected(100) && socketAttemps < 10) {
         // Increases socketAttemps here to avoid empty loop optimization
         socketAttemps++;
     }
-    if(_udpSocket->state() != QUdpSocket::ConnectedState) {
+    if (_udpSocket->state() != QUdpSocket::ConnectedState) {
         qCWarning(PING_PROTOCOL_UDPLINK) << "Socket is not in connected state.";
-        QString errorMessage = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
+        QString errorMessage
+            = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
         qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
         return false;
     }
@@ -63,7 +60,4 @@ bool UDPLink::finishConnection()
     return true;
 }
 
-UDPLink::~UDPLink()
-{
-    finishConnection();
-}
+UDPLink::~UDPLink() { finishConnection(); }

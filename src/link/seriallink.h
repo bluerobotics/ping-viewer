@@ -8,8 +8,7 @@
  * @brief Serial Link connection class
  *
  */
-class SerialLink : public AbstractLink
-{
+class SerialLink : public AbstractLink {
 public:
     /**
      * @brief Construct a new Serial Link object

@@ -11,8 +11,7 @@
  * @brief Top class for all links
  *
  */
-class Link : public QObject
-{
+class Link : public QObject {
     Q_OBJECT
 public:
     /**

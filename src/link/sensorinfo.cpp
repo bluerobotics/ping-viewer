@@ -6,7 +6,7 @@
 QDebug operator<<(QDebug out, const SensorFamily& other)
 {
     QString string;
-    switch(other) {
+    switch (other) {
     case SensorFamily::UNKNOWN:
         string = "UNKNOWN";
         break;
@@ -20,10 +20,7 @@ QDebug operator<<(QDebug out, const SensorFamily& other)
     return out << string;
 }
 
-QDataStream& operator<<(QDataStream& out, const SensorFamily& other)
-{
-    return out << static_cast<int>(other);
-}
+QDataStream& operator<<(QDataStream& out, const SensorFamily& other) { return out << static_cast<int>(other); }
 
 QDataStream& operator>>(QDataStream& in, SensorFamily& other)
 {
@@ -36,7 +33,7 @@ QDataStream& operator>>(QDataStream& in, SensorFamily& other)
 QDebug operator<<(QDebug out, const SensorInfo& other)
 {
     QString string;
-    switch(other.family) {
+    switch (other.family) {
     case SensorFamily::UNKNOWN:
         string = "UNKNOWN";
         break;

@@ -1,14 +1,13 @@
 #pragma once
 
-#include <QTimer>
 #include "simulationlink.h"
+#include <QTimer>
 
 /**
  * @brief Link that simulates Ping sensor behaviour
  *
  */
-class Ping360SimulationLink : public SimulationLink
-{
+class Ping360SimulationLink : public SimulationLink {
 public:
     /**
      * @brief Construct a new Ping1D Simulation Link object

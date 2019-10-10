@@ -1,7 +1,7 @@
 #include <QtMath>
 
-#include "ping360simulationlink.h"
 #include "ping-message-ping360.h"
+#include "ping360simulationlink.h"
 
 Ping360SimulationLink::Ping360SimulationLink(QObject* parent)
     : SimulationLink(parent)
@@ -22,7 +22,7 @@ void Ping360SimulationLink::randomUpdate()
     static ping360_device_data deviceData(numberOfSamples);
     deviceData.set_mode(0);
     deviceData.set_gain_setting(1);
-    deviceData.set_angle(counter%angularResolution);
+    deviceData.set_angle(counter % angularResolution);
     deviceData.set_transmit_duration(1000);
     deviceData.set_sample_period(80);
     deviceData.set_transmit_frequency(700);
@@ -32,11 +32,12 @@ void Ping360SimulationLink::randomUpdate()
     for (int i = 0; i < numberOfSamples; i++) {
         float point;
         if (i < stop1) {
-            point = 0.1 * (qrand()%256);
+            point = 0.1 * (qrand() % 256);
         } else if (i < stop2) {
-            point = 255 * ((-4.0 / qPow((stop2-stop1), 2.0)) * qPow((i - stop1 - ((stop2-stop1) / 2.0)), 2.0)  + 1.0);
+            point
+                = 255 * ((-4.0 / qPow((stop2 - stop1), 2.0)) * qPow((i - stop1 - ((stop2 - stop1) / 2.0)), 2.0) + 1.0);
         } else {
-            point = 0.45 * (qrand()%256);
+            point = 0.45 * (qrand() % 256);
         }
         deviceData.set_data_at(i, point);
     }

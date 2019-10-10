@@ -12,8 +12,7 @@ Q_DECLARE_LOGGING_CATEGORY(PING_PROCESSLOG)
  * @brief Play sensor logs
  *
  */
-class ProcessLog : public QObject
-{
+class ProcessLog : public QObject {
     Q_OBJECT
 public:
     /**
@@ -21,7 +20,7 @@ public:
      *
      * @param parent
      */
-    ProcessLog(QObject *parent = nullptr);
+    ProcessLog(QObject* parent = nullptr);
 
     /**
      * @brief Destroy the Log Thread object
@@ -35,7 +34,7 @@ public:
      * @param time
      * @param data
      */
-    void append(QTime time, QByteArray data) { _log.append(Pack{time, data}); };
+    void append(QTime time, QByteArray data) { _log.append(Pack {time, data}); };
 
     /**
      * @brief Return log elapsed time
@@ -75,13 +74,21 @@ public:
      *
      * @param index
      */
-    void setPackageIndex(int index) { if(_logIndex < _log.size()) _logIndex = index; }
+    void setPackageIndex(int index)
+    {
+        if (_logIndex < _log.size())
+            _logIndex = index;
+    }
 
     /**
      * @brief Start playing log
      *
      */
-    void start() { _play = true; _stop = false; };
+    void start()
+    {
+        _play = true;
+        _stop = false;
+    };
 
     /**
      * @brief Run the main process
