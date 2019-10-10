@@ -10,7 +10,7 @@ const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
     {NoArgs, "Link configuration does not have arguments."},
     {InvalidArgsNumber, "Link configuration have a invalid number of arguments"},
     {ArgsAreEmpty, "Link configuration arguments are empty."},
-    {InvalidUrl, "Url not formatted properly."}
+    {InvalidUrl, "Url not formatted properly."},
 };
 
 const QString LinkConfiguration::createFullConfString() const
