@@ -1,5 +1,5 @@
-#include "logger.h"
 #include "flasher.h"
+#include "logger.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -26,7 +26,7 @@ Flasher::Flasher(QObject* parent)
 
 bool Flasher::setBaudRate(int baudRate)
 {
-    if(!_validBaudRates.contains(baudRate)) {
+    if (!_validBaudRates.contains(baudRate)) {
         qCCritical(FLASH) << "Invalid baud rate:" << baudRate;
         qCCritical(FLASH) << "Valid baud rates are:" << _validBaudRates;
         return false;
@@ -39,7 +39,7 @@ bool Flasher::setBaudRate(int baudRate)
 bool Flasher::setFirmwarePath(const QString& firmwareFilePath)
 {
     QFileInfo fileInfo(firmwareFilePath);
-    if(!fileInfo.exists()) {
+    if (!fileInfo.exists()) {
         qCCritical(FLASH) << "Firmware file does not exist:" << firmwareFilePath;
         return false;
     }
@@ -50,7 +50,7 @@ bool Flasher::setFirmwarePath(const QString& firmwareFilePath)
 
 bool Flasher::setLink(const LinkConfiguration& link)
 {
-    if(!link.checkType(LinkType::Serial)) {
+    if (!link.checkType(LinkType::Serial)) {
         qCCritical(FLASH) << "Link configuration is not valid:" << link;
         return false;
     }
@@ -58,10 +58,7 @@ bool Flasher::setLink(const LinkConfiguration& link)
     return true;
 };
 
-void Flasher::setVerify(bool verify)
-{
-    _verify = verify;
-};
+void Flasher::setVerify(bool verify) { _verify = verify; };
 
 QString Flasher::stm32flashPath()
 {
@@ -80,14 +77,14 @@ QString Flasher::stm32flashPath()
 #endif
 
     const QString localPathString = absoluteBinPath + "/" + binaryName;
-    if(QFile::exists(localPathString)) {
+    if (QFile::exists(localPathString)) {
         qCDebug(FLASH) << "Found program in:" << localPathString;
         return localPathString;
     }
 
     // Check if program is installed
     QString absoluteSystemBinPath = QStandardPaths::findExecutable(binaryName);
-    if(!absoluteSystemBinPath.isEmpty()) {
+    if (!absoluteSystemBinPath.isEmpty()) {
         qCDebug(FLASH) << "Found program in:" << absoluteSystemBinPath;
     }
     return absoluteSystemBinPath;
@@ -95,7 +92,7 @@ QString Flasher::stm32flashPath()
 
 void Flasher::flash()
 {
-    if(!QFile::exists(stm32flashPath())) {
+    if (!QFile::exists(stm32flashPath())) {
         QString output = QStringLiteral("stm32flash is not available! Flash procedure will abort.");
         qCCritical(FLASH) << "Searching in: " << stm32flashPath();
         qCCritical(FLASH) << output;
@@ -111,20 +108,16 @@ void Flasher::flash()
     auto verifyArgument = _verify ? QStringLiteral("-v") : QString();
 
     QFileInfo firmwareFileInfo(_firmwareFilePath);
-    if(!firmwareFileInfo.exists()) {
+    if (!firmwareFileInfo.exists()) {
         auto errorMsg = QStringLiteral("Firmware file does not exist: %1").arg(_firmwareFilePath);
         qCCritical(FLASH) << errorMsg;
         setState(Error, errorMsg);
         return;
     }
 
-    static QString cmd = QStringLiteral("\"%0\" -w \"%1\" %2 -g 0x0 -b %3 %4").arg(
-                             stm32flashPath(),
-                             firmwareFileInfo.absoluteFilePath(),
-                             _verify ? "-v" : "",
-                             baudRate,
-                             portLocation
-                         );
+    static QString cmd
+        = QStringLiteral("\"%0\" -w \"%1\" %2 -g 0x0 -b %3 %4")
+              .arg(stm32flashPath(), firmwareFileInfo.absoluteFilePath(), _verify ? "-v" : "", baudRate, portLocation);
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
     _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
@@ -144,9 +137,8 @@ void Flasher::flash()
             "unexpected",
         };
         QString output(_firmwareProcess->readAllStandardOutput());
-        for(const auto errorString: errorStrings)
-        {
-            if(output.contains(errorString, Qt::CaseInsensitive)) {
+        for (const auto errorString : errorStrings) {
+            if (output.contains(errorString, Qt::CaseInsensitive)) {
                 qCCritical(FLASH) << output;
                 setState(Error, output);
                 // Break is necessary to avoid messages with multiple keys like:
@@ -165,22 +157,22 @@ void Flasher::flash()
     });
 
     connect(_firmwareProcess.data(), qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
-    [](int exitCode, QProcess::ExitStatus exitStatus) {
-        if(exitCode == 0) {
-            return;
-        }
+        [](int exitCode, QProcess::ExitStatus exitStatus) {
+            if (exitCode == 0) {
+                return;
+            }
 
-        // It's not necessary to use setMessage here, since this signal is a result of the process
-        // and not from stm32flash
-        static QString message;
-        if(exitStatus == QProcess::NormalExit) {
-            message = QStringLiteral("Process exited normally with exit code: %1").arg(exitCode);
-            qCWarning(FLASH) << message;
-        } else {
-            message = QStringLiteral("Process crashed with exit code: %1").arg(exitCode);
-            qCCritical(FLASH) << message;
-        }
-    });
+            // It's not necessary to use setMessage here, since this signal is a result of the process
+            // and not from stm32flash
+            static QString message;
+            if (exitStatus == QProcess::NormalExit) {
+                message = QStringLiteral("Process exited normally with exit code: %1").arg(exitCode);
+                qCWarning(FLASH) << message;
+            } else {
+                message = QStringLiteral("Process crashed with exit code: %1").arg(exitCode);
+                qCCritical(FLASH) << message;
+            }
+        });
 }
 
 void Flasher::firmwareUpdatePercentage(const QString& output)
@@ -188,9 +180,9 @@ void Flasher::firmwareUpdatePercentage(const QString& output)
     // Track values like: (12.23%)
     QRegularExpression regex("\\d{1,3}[.]\\d\\d");
     QRegularExpressionMatch match = regex.match(output);
-    if(match.hasMatch()) {
+    if (match.hasMatch()) {
         QStringList percs = match.capturedTexts();
-        for(const auto& perc : percs) {
+        for (const auto& perc : percs) {
             float _fw_update_perc = perc.toFloat();
             qCDebug(FLASH) << _fw_update_perc;
             if (_fw_update_perc > 99.99) {
@@ -207,7 +199,7 @@ void Flasher::firmwareUpdatePercentage(const QString& output)
 
 void Flasher::setState(Flasher::States state, QString message)
 {
-    if(_state != state) {
+    if (_state != state) {
         _state = state;
         emit stateChanged(state);
     }
@@ -218,7 +210,7 @@ void Flasher::setState(Flasher::States state, QString message)
 void Flasher::setMessage(const QString& message)
 {
     auto msg = message.trimmed();
-    if(msg != _message) {
+    if (msg != _message) {
         _message = msg;
         emit messageChanged();
     }

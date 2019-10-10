@@ -5,15 +5,13 @@
 #include <QLoggingCategory>
 #include <QProcess>
 
-
 Q_DECLARE_LOGGING_CATEGORY(FLASH)
 
 /**
  * @brief Manage the project Flasher
  *
  */
-class Flasher : public QObject
-{
+class Flasher : public QObject {
     Q_OBJECT
 public:
     /**
