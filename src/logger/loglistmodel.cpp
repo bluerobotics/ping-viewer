@@ -3,7 +3,7 @@
 LogListModel::LogListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    for(const auto& key : _roleNames.keys()) {
+    for (const auto& key : _roleNames.keys()) {
         _roles.append(key);
         _vectors.insert(key, {});
     }
@@ -11,7 +11,7 @@ LogListModel::LogListModel(QObject* parent)
 
 void LogListModel::start()
 {
-    //This crashs with msvc if moved to constructor, no workaround was found until now.
+    // This crashs with msvc if moved to constructor, no workaround was found until now.
 
     _filter.setSourceModel(this);
     _filter.setFilterRole(Roles::Visibility);
@@ -28,7 +28,7 @@ QVariant LogListModel::data(const QModelIndex& index, int role) const
 {
     const int indexRow = index.row();
     QVector<QVariant> vectorRole = _vectors[role];
-    if(indexRow < 0 || vectorRole.size() <= indexRow) {
+    if (indexRow < 0 || vectorRole.size() <= indexRow) {
         return {"No valid data"};
     }
     return _vectors[role][indexRow];
@@ -53,15 +53,15 @@ void LogListModel::doAppend(const QString& time, const QString& text, const QCol
 
 Q_INVOKABLE void LogListModel::filter(int categories)
 {
-    if(_categories == categories) {
+    if (_categories == categories) {
         return;
     }
 
     _categories = categories;
     int i = 0;
-    for(auto& rowCategory : _vectors[LogListModel::Category]) {
+    for (auto& rowCategory : _vectors[LogListModel::Category]) {
         bool visibility = rowCategory.toInt() & categories;
-        if(visibility != _vectors[LogListModel::Visibility][i]) {
+        if (visibility != _vectors[LogListModel::Visibility][i]) {
             _vectors[LogListModel::Visibility][i] = visibility;
             auto thisIndex = index(i);
             emit dataChanged(thisIndex, thisIndex, _roles);
@@ -70,7 +70,4 @@ Q_INVOKABLE void LogListModel::filter(int categories)
     }
 }
 
-QHash<int, QByteArray> LogListModel::roleNames() const
-{
-    return _roleNames;
-}
+QHash<int, QByteArray> LogListModel::roleNames() const { return _roleNames; }

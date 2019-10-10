@@ -1,13 +1,13 @@
-#include "filemanager.h"
 #include "logger.h"
+#include "filemanager.h"
 
-#include <iostream>
+#include <QColor>
 #include <QDebug>
+#include <QQmlEngine>
 #include <QString>
 #include <QTime>
 #include <QtConcurrent>
-#include <QColor>
-#include <QQmlEngine>
+#include <iostream>
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
 
@@ -19,7 +19,7 @@ Logger::Logger()
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
-    if(!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    if (!_file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         qCWarning(logger) << "A file with the gui log will not be available !";
     }
 
@@ -60,7 +60,7 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
     // Check if category is not registered and add it in Logger
     Logger::self()->registerCategory(context.category);
 
-    static const QString msgTypes[] = { "Debug", "Warning", "Critical", "Fatal", "Info" };
+    static const QString msgTypes[] = {"Debug", "Warning", "Critical", "Fatal", "Info"};
     const QString file = QString(context.file).split('/').last();
     QString fileInfo;
     if (!file.isEmpty()) {
@@ -88,10 +88,7 @@ void Logger::registerCategory(const char* category)
     emit registeredCategoryChanged();
 }
 
-uint Logger::getCategoryIndex(QString category)
-{
-    return _categoryIndexer[category];
-}
+uint Logger::getCategoryIndex(QString category) { return _categoryIndexer[category]; }
 
 Logger* Logger::self()
 {
