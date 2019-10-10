@@ -2,8 +2,8 @@
 
 #include <math.h>
 
-#include <QColor>
 #include <QAbstractListModel>
+#include <QColor>
 
 #include <QSortFilterProxyModel>
 
@@ -11,8 +11,7 @@
  * @brief Model for qml log interface
  *
  */
-class LogListModel : public QAbstractListModel
-{
+class LogListModel : public QAbstractListModel {
     Q_OBJECT
 public:
     /**
@@ -131,7 +130,7 @@ private:
 
     int _categories = 0;
     QVector<int> _roles;
-    QHash<int, QByteArray> _roleNames{
+    QHash<int, QByteArray> _roleNames {
         {{LogListModel::Category}, {"category"}},
         {{LogListModel::Display}, {"display"}},
         {{LogListModel::Foreground}, {"foreground"}},

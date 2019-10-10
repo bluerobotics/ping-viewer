@@ -19,16 +19,15 @@ Q_DECLARE_LOGGING_CATEGORY(logger)
  * @brief This is a macro to register our categories
  *
  */
-#define PING_LOGGING_CATEGORY(name, ...) \
-    static PingLoggingCategory pingCategory ## name (__VA_ARGS__); \
+#define PING_LOGGING_CATEGORY(name, ...)                                                                               \
+    static PingLoggingCategory pingCategory##name(__VA_ARGS__);                                                        \
     Q_LOGGING_CATEGORY(name, __VA_ARGS__)
 
 /**
  * @brief Manage the project logger
  *
  */
-class Logger : public QObject
-{
+class Logger : public QObject {
     Q_OBJECT
 public:
     /**
@@ -38,7 +37,7 @@ public:
      * @param context
      * @param msg
      */
-    static void handleMessage(QtMsgType type, const QMessageLogContext& context, const QString &msg);
+    static void handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg);
 
     /**
      * @brief Get the log model
@@ -134,7 +133,7 @@ private:
 
     QMap<QString, uint> _categoryIndexer;
     // Debug, Warning, Critical, Fatal, Info
-    QVector<QColor> _colors{QColor("gray"), QColor("orange"), QColor("red"), QColor("red"), QColor("LimeGreen")};
+    QVector<QColor> _colors {QColor("gray"), QColor("orange"), QColor("red"), QColor("red"), QColor("LimeGreen")};
     QFile _file;
     QTextStream _fileStream;
     QStringList _registeredCategories;
@@ -145,8 +144,7 @@ private:
  * @brief Register categories
  *
  */
-class PingLoggingCategory
-{
+class PingLoggingCategory {
 public:
     /**
      * @brief Register a new category in Logger
