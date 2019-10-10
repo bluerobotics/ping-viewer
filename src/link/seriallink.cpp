@@ -20,7 +20,7 @@
 PING_LOGGING_CATEGORY(PING_PROTOCOL_SERIALLINK, "ping.protocol.seriallink")
 
 SerialLink::SerialLink(QObject* parent)
-    : AbstractLink(parent)
+    : AbstractLink("SerialLink", parent)
 {
     setType(LinkType::Serial);
 
