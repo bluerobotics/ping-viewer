@@ -76,6 +76,7 @@ before_install:
 - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     brew update > /dev/null;
     brew install ccache;
+    export PATH="/usr/local/opt/ccache/libexec:$PATH";
   fi
 
 install:
