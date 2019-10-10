@@ -72,10 +72,7 @@ matrix:
 before_install:
 # This is necessary to solve https://github.com/travis-ci/travis-ci/issues/9649
 - eval "${MATRIX_EVAL}"
-# Install ccache for non test builds
-- if [[ "${TRAVIS_OS_NAME}" == "linux" && "$PINGTEST" != "true" ]]; then
-    sudo apt install ccache;
-  fi
+# Install ccache for macosx
 - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     brew update > /dev/null;
     brew install ccache;
