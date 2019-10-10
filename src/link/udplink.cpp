@@ -8,7 +8,7 @@
 PING_LOGGING_CATEGORY(PING_PROTOCOL_UDPLINK, "ping.protocol.udplink")
 
 UDPLink::UDPLink(QObject* parent)
-    : AbstractLink(parent)
+    : AbstractLink("UDPLink", parent)
     , _udpSocket(new QUdpSocket(parent))
 {
     setType(LinkType::Udp);
