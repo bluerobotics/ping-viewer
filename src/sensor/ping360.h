@@ -10,22 +10,20 @@
 #include <QTimer>
 
 #include "parser.h"
-#include "pingparserext.h"
 #include "ping-message-common.h"
 #include "ping-message-ping360.h"
-#include "protocoldetector.h"
+#include "pingparserext.h"
 #include "pingsensor.h"
+#include "protocoldetector.h"
 
 /**
  * @brief Define Ping360 sensor
  * Ping 360 Sonar
  *
  */
-class Ping360 : public PingSensor
-{
+class Ping360 : public PingSensor {
     Q_OBJECT
 public:
-
     Ping360();
     ~Ping360();
 
@@ -35,7 +33,8 @@ public:
      * @param connType connection type
      * @param connString arguments for the new connection
      */
-    Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
+    Q_INVOKABLE void connectLink(
+        AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
 
     /**
      * @brief Reset device settings
@@ -57,11 +56,11 @@ public:
     Q_INVOKABLE void deltaStep(int delta, bool transmit = true)
     {
         // Force delta to be positive and inside our polar space
-        while(delta < 0) {
+        while (delta < 0) {
             delta += _angularResolutionGrad;
         }
 
-        int nextPoint = (_angle+delta)%_angularResolutionGrad;
+        int nextPoint = (_angle + delta) % _angularResolutionGrad;
 
         transducer_message.set_mode(1);
         transducer_message.set_gain_setting(_gain_setting);
@@ -113,7 +112,7 @@ public:
      */
     void set_sample_period(uint16_t sample_period)
     {
-        if(sample_period != _sample_period) {
+        if (sample_period != _sample_period) {
             _sample_period = sample_period;
             emit samplePeriodChanged();
         }
@@ -124,10 +123,7 @@ public:
      *
      * @return int
      */
-    int sample_period()
-    {
-        return _sample_period;
-    }
+    int sample_period() { return _sample_period; }
     Q_PROPERTY(int sample_period READ sample_period NOTIFY samplePeriodChanged)
 
     /**
@@ -146,18 +142,16 @@ public:
      *
      * @return int
      */
-    int transmit_frequency()
-    {
-        return _transmit_frequency;
-    }
-    Q_PROPERTY(int transmit_frequency READ transmit_frequency WRITE set_transmit_frequency NOTIFY transmitFrequencyChanged)
+    int transmit_frequency() { return _transmit_frequency; }
+    Q_PROPERTY(
+        int transmit_frequency READ transmit_frequency WRITE set_transmit_frequency NOTIFY transmitFrequencyChanged)
 
     /**
      * @brief Angle of sensor head in gradians (400)
      *
      * @return uint16_t
      */
-    uint16_t angle() { return (_angle + _angle_offset)%_angularResolutionGrad; }
+    uint16_t angle() { return (_angle + _angle_offset) % _angularResolutionGrad; }
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
@@ -180,13 +174,13 @@ public:
      */
     void set_range(uint newRange)
     {
-        if(newRange != range()) {
+        if (newRange != range()) {
             _num_points = _firmwareMaxNumberOfPoints;
             _sample_period = calculateSamplePeriod(newRange);
 
             // reduce _sample period until we are within operational parameters
             // maximize the number of points
-            while(_sample_period < _firmwareMinSamplePeriod) {
+            while (_sample_period < _firmwareMinSamplePeriod) {
                 _num_points--;
                 _sample_period = calculateSamplePeriod(newRange);
             }
@@ -269,7 +263,7 @@ public:
      */
     void set_angle_offset(int angle_offset)
     {
-        if(angle_offset != _angle_offset) {
+        if (angle_offset != _angle_offset) {
             _angle_offset = angle_offset;
             emit angleOffsetChanged();
         }
@@ -290,7 +284,7 @@ public:
      */
     void set_angular_speed(int angular_speed)
     {
-        if(angular_speed != _angular_speed) {
+        if (angular_speed != _angular_speed) {
             _angular_speed = angular_speed;
             emit angularSpeedChanged();
         }
@@ -311,7 +305,7 @@ public:
      */
     void set_reverse_direction(bool reverse_direction)
     {
-        if(reverse_direction != _reverse_direction) {
+        if (reverse_direction != _reverse_direction) {
             _reverse_direction = reverse_direction;
             emit reverseDirectionChanged();
         }
@@ -332,7 +326,7 @@ public:
      */
     void set_number_of_points(int num_points)
     {
-        if(num_points != _num_points) {
+        if (num_points != _num_points) {
             _num_points = num_points;
             emit numberOfPointsChanged();
             // Range uses number of points to calculate it, emit signal to update interface
@@ -346,7 +340,7 @@ public:
      *
      * @return int
      */
-    int sectorSize() { return round(_sectorSize * 360/400.0); }
+    int sectorSize() { return round(_sectorSize * 360 / 400.0); }
 
     /**
      * @brief Set sector size in degrees
@@ -355,11 +349,11 @@ public:
      */
     void setSectorSize(int sectorSize)
     {
-        int sectorSizeGrad = round(sectorSize * 400/360.0);
+        int sectorSizeGrad = round(sectorSize * 400 / 360.0);
 
-        if(_sectorSize != sectorSizeGrad) {
+        if (_sectorSize != sectorSizeGrad) {
             // Reset reverse direction when back to full scan
-            if(sectorSizeGrad == 400) {
+            if (sectorSizeGrad == 400) {
                 _reverse_direction = false;
             }
             _sectorSize = sectorSizeGrad;
@@ -386,10 +380,7 @@ public:
      *
      * @return float
      */
-    float profileFrequency()
-    {
-        return messageFrequencies[Ping360Id::DEVICE_DATA].frequency;
-    }
+    float profileFrequency() { return messageFrequencies[Ping360Id::DEVICE_DATA].frequency; }
 
     Q_PROPERTY(float profileFrequency READ profileFrequency NOTIFY messageFrequencyChanged)
 
@@ -399,10 +390,7 @@ public:
      * The maximum transmit duration is equal to 64 * the sample period in microseconds
      * @return the maximum transmit duration allowed in microseconds
      */
-    int transmitDurationMin()
-    {
-        return _firmwareMinTransmitDuration;
-    }
+    int transmitDurationMin() { return _firmwareMinTransmitDuration; }
     Q_PROPERTY(int transmitDurationMin READ transmitDurationMin CONSTANT)
 
     /**
@@ -429,7 +417,7 @@ public:
      */
     bool autoTransmitDuration() { return _autoTransmitDuration; }
     Q_PROPERTY(bool autoTransmitDuration READ autoTransmitDuration WRITE setAutoTransmitDuration NOTIFY
-               autoTransmitDurationChanged)
+            autoTransmitDurationChanged)
 
     /**
      * @brief adjust the transmit duration according to automatic mode, and current configuration
@@ -439,19 +427,20 @@ public:
         if (_autoTransmitDuration) {
             /*
              * Per firmware engineer:
-             * 1. Starting point is TxPulse in usec = ((one-way range in metres) * 8000) / (Velocity of sound in metres per second)
+             * 1. Starting point is TxPulse in usec = ((one-way range in metres) * 8000) / (Velocity of sound in metres
+             * per second)
              * 2. Then check that TxPulse is wide enough for currently selected sample interval in usec, i.e.,
              *    if TxPulse < (2.5 * sample interval) then TxPulse = (2.5 * sample interval)
              * 3. Perform limit checking
              */
 
             // 1
-            int autoDuration = round(8000*range()/_speed_of_sound);
+            int autoDuration = round(8000 * range() / _speed_of_sound);
             // 2 (transmit duration is microseconds, samplePeriod() is nanoseconds)
-            autoDuration = std::max(static_cast<int>(2.5*samplePeriod()/1000), autoDuration);
+            autoDuration = std::max(static_cast<int>(2.5 * samplePeriod() / 1000), autoDuration);
             // 3
-            _transmit_duration = std::max(static_cast<int>(_firmwareMinTransmitDuration),
-                                          std::min(transmitDurationMax(), autoDuration));
+            _transmit_duration = std::max(
+                static_cast<int>(_firmwareMinTransmitDuration), std::min(transmitDurationMax(), autoDuration));
             emit transmitDurationChanged();
         } else if (_transmit_duration > transmitDurationMax()) {
             _transmit_duration = transmitDurationMax();
@@ -467,8 +456,8 @@ public:
      * @param baud baud rate value
      * @param verify this variable is true when all
      */
-    Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
-                                    bool verify = true) final override;
+    Q_INVOKABLE void firmwareUpdate(
+        QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600, bool verify = true) final override;
 
     /**
      * @brief A list of all availables baudrates to communicate with the sensor
@@ -500,7 +489,7 @@ public:
     Q_INVOKABLE void startConfiguration()
     {
         _configuring = true;
-        if(_timeoutProfileMessage.isActive()) {
+        if (_timeoutProfileMessage.isActive()) {
             _timeoutProfileMessage.stop();
         }
         _resetBaudRateDetection = true;
@@ -517,7 +506,7 @@ signals:
     /**
      * @brief emitted when property changes
      */
-///@{
+    ///@{
     void angleChanged();
     void angleOffsetChanged();
     void angularSpeedChanged();
@@ -535,14 +524,14 @@ signals:
     void transmitDurationChanged();
     void transmitDurationMaxChanged();
     void transmitFrequencyChanged();
-///@}
+    ///@}
 
 private:
     Q_DISABLE_COPY(Ping360)
     /**
      * @brief Sensor variables
      */
-///@{
+    ///@{
 
     // firmware constants
     static const uint16_t _firmwareMaxNumberOfPoints;
@@ -571,7 +560,7 @@ private:
     uint16_t _sample_period = _firmwareDefaultSamplePeriod;
     uint16_t _transmit_frequency = _viewerDefaultTransmitFrequency;
     QVector<double> _data;
-///@}
+    ///@}
 
     // Number of messages to check for best baud rate
     // using Auto Baud Rate detection
@@ -594,7 +583,7 @@ private:
 
     int _angularResolutionGrad = 400;
     // The motor takes 4s to run a full circle
-    float _motorSpeedGradMs = 4000/_angularResolutionGrad;
+    float _motorSpeedGradMs = 4000 / _angularResolutionGrad;
     // Right now the max value is 1200 for ping360
     // We are saving 2k of the memory for future proof modifications
     int _maxNumberOfPoints = 2048;
@@ -630,10 +619,7 @@ private:
          *
          * @param number of messages
          */
-        void updateNumberOfMessages(int number = 1)
-        {
-            numberOfMessages += number;
-        }
+        void updateNumberOfMessages(int number = 1) { numberOfMessages += number; }
 
         /**
          * @brief Update frequency of structure with the elapsed time between calls
@@ -642,11 +628,11 @@ private:
          */
         float updateFrequencyFromMilliseconds(float milliseconds)
         {
-            if(qFuzzyIsNull(milliseconds) || std::isinf(milliseconds) || std::isnan(milliseconds)) {
+            if (qFuzzyIsNull(milliseconds) || std::isinf(milliseconds) || std::isnan(milliseconds)) {
                 return 0;
             }
             // Update frequency
-            frequency = static_cast<float>(numberOfMessages)/(milliseconds*0.001f);
+            frequency = static_cast<float>(numberOfMessages) / (milliseconds * 0.001f);
 
             // Clear number of messages to the next call
             numberOfMessages = 0;
@@ -657,7 +643,7 @@ private:
 
     /* Used to improve execution time in frequently function calls
      * avoiding message unnecessary constructions and desconstruction
-    */
+     */
     ping360_transducer transducer_message;
 
     QHash<uint16_t, MessageFrequencyHelper> messageFrequencies;

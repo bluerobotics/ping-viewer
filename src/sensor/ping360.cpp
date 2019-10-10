@@ -1,8 +1,8 @@
 #include "ping360.h"
 
 #include <algorithm>
-#include <limits>
 #include <functional>
+#include <limits>
 
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -43,10 +43,10 @@ const uint16_t Ping360::_viewerDefaultTransmitFrequency = 750;
 const uint16_t Ping360::_viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
 
 // Physical properties of the sensor
-const float Ping360::_angularSpeedGradPerMs = 400.0f/2400.0f;
+const float Ping360::_angularSpeedGradPerMs = 400.0f / 2400.0f;
 
 Ping360::Ping360()
-    :PingSensor(PingDeviceType::PING360)
+    : PingSensor(PingDeviceType::PING360)
 {
     // QVector crashs when constructed in initialization list
     _data = QVector<double>(_maxNumberOfPoints, 0);
@@ -68,8 +68,7 @@ Ping360::Ping360()
 
         static int timeoutedTime = 0;
         timeoutedTime += _timeoutProfileMessage.interval();
-        if(timeoutedTime > _sensorRestartTimeoutMs)
-        {
+        if (timeoutedTime > _sensorRestartTimeoutMs) {
             timeoutedTime = 0;
             _timeoutProfileMessage.setInterval(_sensorTimeout);
         }
@@ -85,8 +84,7 @@ Ping360::Ping360()
     _messageFrequencyTimer.start();
 
     connect(&_messageFrequencyTimer, &QTimer::timeout, this, [this] {
-        for(auto& message : messageFrequencies)
-        {
+        for (auto& message : messageFrequencies) {
             message.updateFrequencyFromMilliseconds(_messageFrequencyTimer.interval());
         }
         // Since we don't have a huge number of messages and this variable is pretty simple,
@@ -98,22 +96,24 @@ Ping360::Ping360()
 void Ping360::startPreConfigurationProcess()
 {
     // Stop all configuration/message timers if link is not writable
-    if(!link()->isWritable()) {
-        qCDebug(PING_PROTOCOL_PING360) << "Not possible to start the preconfiguration process with a non-writable channel.";
+    if (!link()->isWritable()) {
+        qCDebug(PING_PROTOCOL_PING360)
+            << "Not possible to start the preconfiguration process with a non-writable channel.";
         stopConfiguration();
         return;
     }
 
     // Baud rate configuration is only done in serial channels
-    if(link()->type() != LinkType::Serial) {
+    if (link()->type() != LinkType::Serial) {
         _configuring = false;
-        if(_baudrateConfigurationTimer.isActive()) {
+        if (_baudrateConfigurationTimer.isActive()) {
             _baudrateConfigurationTimer.stop();
         }
     }
 
     // Fetch sensor configuration to update class variables
-    // TODO: Ping base class should abstract the request message to allow version compatibility between protocol versions
+    // TODO: Ping base class should abstract the request message to allow version compatibility between protocol
+    // versions
     common_general_request msg;
     msg.set_requested_id(CommonId::DEVICE_INFORMATION);
     msg.updateChecksum();
@@ -127,16 +127,16 @@ void Ping360::checkBaudrateProcess()
 
     static int count = _ABRTotalNumberOfMessages;
 
-    if(_resetBaudRateDetection) {
+    if (_resetBaudRateDetection) {
         count = _ABRTotalNumberOfMessages;
     }
 
     // We are starting to check the new baud rate
-    if(count == _ABRTotalNumberOfMessages) {
+    if (count == _ABRTotalNumberOfMessages) {
         detectBaudrates();
     }
 
-    if(count--) {
+    if (count--) {
         _baudrateConfigurationTimer.start();
     } else {
         count = _ABRTotalNumberOfMessages;
@@ -145,45 +145,44 @@ void Ping360::checkBaudrateProcess()
 
 void Ping360::loadLastSensorConfigurationSettings()
 {
-    //TODO
+    // TODO
 }
 
 void Ping360::updateSensorConfigurationSettings()
 {
-    //TODO
+    // TODO
 }
 
 void Ping360::connectLink(LinkType connType, const QStringList& connString)
 {
-    Sensor::connectLink(LinkConfiguration{connType, connString});
+    Sensor::connectLink(LinkConfiguration {connType, connString});
 }
 
 void Ping360::requestNextProfile()
 {
     // Calculate the next delta step
     int steps = _angular_speed;
-    if(_reverse_direction) {
+    if (_reverse_direction) {
         steps *= -1;
     }
 
     // Check if steps is in sector
     auto isInside = [this](int iSteps) -> bool {
-        int relativeAngle = (iSteps + angle() + _angularResolutionGrad)%_angularResolutionGrad;
-        if(relativeAngle >= _angularResolutionGrad/2)
-        {
+        int relativeAngle = (iSteps + angle() + _angularResolutionGrad) % _angularResolutionGrad;
+        if (relativeAngle >= _angularResolutionGrad / 2) {
             relativeAngle -= _angularResolutionGrad;
         }
-        return std::clamp(relativeAngle, -_sectorSize/2, _sectorSize/2) == relativeAngle;
+        return std::clamp(relativeAngle, -_sectorSize / 2, _sectorSize / 2) == relativeAngle;
     };
 
     // Move the other direction to be in sector
-    if(!isInside(steps)) {
+    if (!isInside(steps)) {
         _reverse_direction = !_reverse_direction;
         steps *= -1;
     }
 
     // If we are not inside yet, we are not in section, go to zero
-    if(!isInside(steps)) {
+    if (!isInside(steps)) {
         _reverse_direction = !_reverse_direction;
         steps = -angle();
     }
@@ -199,13 +198,13 @@ void Ping360::handleMessage(const ping_message& msg)
 
     case CommonId::DEVICE_INFORMATION: {
         // Stop all configuration/message timers if link is not writable
-        if(!link()->isWritable()) {
+        if (!link()->isWritable()) {
             stopConfiguration();
             return;
         }
 
         // Baud rate configuration is only done in serial channels
-        if(_configuring && link()->type() == LinkType::Serial) {
+        if (_configuring && link()->type() == LinkType::Serial) {
             _baudrateConfigurationTimer.start();
             checkBaudrateProcess();
         } else {
@@ -228,9 +227,9 @@ void Ping360::handleMessage(const ping_message& msg)
         requestNextProfile();
 
         // Restart timer, if the channel allows it
-        if(link()->isWritable()) {
+        if (link()->isWritable()) {
             // Use 200ms for network delay
-            const int profileRunningTimeout = _angular_speed/_angularSpeedGradPerMs + 200;
+            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 200;
             _timeoutProfileMessage.start(profileRunningTimeout);
         }
 
@@ -246,12 +245,12 @@ void Ping360::handleMessage(const ping_message& msg)
         emit angleChanged();
 
         // Only emit data changed when inside sector range
-        if(_data.size()) {
+        if (_data.size()) {
             // Update total number of pings
             _ping_number++;
 
-            if (_sectorSize == 400
-                    || (angle() >= _angularResolutionGrad - _sectorSize/2) || (angle() <= _sectorSize/2)) {
+            if (_sectorSize == 400 || (angle() >= _angularResolutionGrad - _sectorSize / 2)
+                || (angle() <= _sectorSize / 2)) {
                 emit dataChanged();
             }
         }
@@ -259,7 +258,7 @@ void Ping360::handleMessage(const ping_message& msg)
         // This properties are changed internally only when the link is not writable
         // Such information is normally sync between our application and the sensor
         // So with normal links such attribution is not necessary
-        if(!link()->isWritable()) {
+        if (!link()->isWritable()) {
             set_gain_setting(deviceData.gain_setting());
             set_transmit_duration(deviceData.transmit_duration());
             set_sample_period(deviceData.sample_period());
@@ -316,7 +315,7 @@ void Ping360::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int b
     Q_UNUSED(sendPingGotoBootloader)
     Q_UNUSED(baud)
     Q_UNUSED(verify)
-    //TODO
+    // TODO
 }
 
 void Ping360::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
@@ -325,58 +324,55 @@ void Ping360::flash(const QString& fileUrl, bool sendPingGotoBootloader, int bau
     Q_UNUSED(sendPingGotoBootloader)
     Q_UNUSED(baud)
     Q_UNUSED(verify)
-    //TODO
+    // TODO
 }
 
 void Ping360::setLastSensorConfiguration()
 {
-    //TODO
+    // TODO
 }
 
 void Ping360::printSensorInformation() const
 {
     qCDebug(PING_PROTOCOL_PING360) << "Ping360 Status:";
-    //TODO
+    // TODO
 }
 
 void Ping360::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
 {
     Q_UNUSED(jsonDocument)
-    //TODO
+    // TODO
 }
 
 void Ping360::resetSensorLocalVariables()
 {
-    //TODO
+    // TODO
 }
 
 const QList<int>& Ping360::validBaudRates()
 {
     static QList<int> validBaudRates;
-    if(validBaudRates.isEmpty()) {
-        for(const auto& variant : _validBaudRates) {
+    if (validBaudRates.isEmpty()) {
+        for (const auto& variant : _validBaudRates) {
             validBaudRates.append(variant.toInt());
         }
     }
     return validBaudRates;
 }
 
-const QVariantList& Ping360::validBaudRatesAsVariantList() const
-{
-    return _validBaudRates;
-}
+const QVariantList& Ping360::validBaudRatesAsVariantList() const { return _validBaudRates; }
 
 void Ping360::setBaudRate(int baudRate)
 {
     // It's only possible to change baudrates in serial connections
-    if(link()->type() != LinkType::Serial) {
+    if (link()->type() != LinkType::Serial) {
         return;
     }
 
     // Since ping360 uses automatic baudrate detection
     // it's necessary to start the connection to force baud rate changes
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
-    if(!serialLink) {
+    if (!serialLink) {
         qCWarning(PING_PROTOCOL_PING360) << "Link is serial type, but cast was not possible!";
         return;
     }
@@ -405,7 +401,7 @@ void Ping360::detectBaudrates()
     static int lastParserErrorCount = 0;
     static int lastParserMsgsCount = 0;
 
-    if(_resetBaudRateDetection) {
+    if (_resetBaudRateDetection) {
         _resetBaudRateDetection = false;
         index = 0;
         baudRateToError.clear();
@@ -416,12 +412,12 @@ void Ping360::detectBaudrates()
     // Check error margin
     int lastCounter = -1;
 
-    if(!_configuring) {
+    if (!_configuring) {
         return;
     }
 
     // We have already something to calculate
-    if(index != 0) {
+    if (index != 0) {
         // Get previous baud rate and error margin
         lastCounter =
             // Number of messages that failed to parse
@@ -435,20 +431,20 @@ void Ping360::detectBaudrates()
     lastParserMsgsCount = parsedMsgs();
 
     // We are in the end of the list or someone is the winner!
-    if(index == validBaudRates().size() - 1 || lastCounter == 0) {
+    if (index == validBaudRates().size() - 1 || lastCounter == 0) {
         _configuring = false;
 
         // The actual baud rate is the winner, don't need to set a new one
-        if(lastCounter == 0) {
+        if (lastCounter == 0) {
             qCDebug(PING_PROTOCOL_PING360) << "Baud rate procedure done.";
             return;
         }
 
         // We are not in the end of the list, so there is a valid baud rate that is faster
         // than the lowest speed
-        if(index != validBaudRates().size()) {
+        if (index != validBaudRates().size()) {
             index = 0;
-            while(baudRateToError[validBaudRates()[index]] != 0) {
+            while (baudRateToError[validBaudRates()[index]] != 0) {
                 index++;
             }
         } else {
@@ -469,25 +465,24 @@ void Ping360::detectBaudrates()
 void Ping360::stopConfiguration()
 {
     _configuring = false;
-    if(_timeoutProfileMessage.isActive()) {
+    if (_timeoutProfileMessage.isActive()) {
         _timeoutProfileMessage.stop();
     }
-    if(_baudrateConfigurationTimer.isActive()) {
+    if (_baudrateConfigurationTimer.isActive()) {
         _baudrateConfigurationTimer.stop();
     }
 }
 
 uint16_t Ping360::calculateSamplePeriod(float distance)
 {
-    float calculatedSamplePeriod = 2.0f*distance/(_num_points*_speed_of_sound*_samplePeriodTickDuration);
-    if(qFuzzyIsNull(calculatedSamplePeriod) || calculatedSamplePeriod < 0
-            || calculatedSamplePeriod > std::numeric_limits<uint16_t>::max()) {
-        qCWarning(PING_PROTOCOL_PING360) << "Invalid calculation of sample period. Going to use firmware default values.";
+    float calculatedSamplePeriod = 2.0f * distance / (_num_points * _speed_of_sound * _samplePeriodTickDuration);
+    if (qFuzzyIsNull(calculatedSamplePeriod) || calculatedSamplePeriod < 0
+        || calculatedSamplePeriod > std::numeric_limits<uint16_t>::max()) {
+        qCWarning(PING_PROTOCOL_PING360)
+            << "Invalid calculation of sample period. Going to use firmware default values.";
         qCDebug(PING_PROTOCOL_PING360) << "calculatedSamplePeriod: " << calculatedSamplePeriod
-                                       << "distance:" << distance
-                                       << "_num_points" << _num_points
-                                       << "_speed_of_sound" << _speed_of_sound
-                                       << "_samplePeriodTickDuration" << _samplePeriodTickDuration;
+                                       << "distance:" << distance << "_num_points" << _num_points << "_speed_of_sound"
+                                       << _speed_of_sound << "_samplePeriodTickDuration" << _samplePeriodTickDuration;
 
         return _firmwareDefaultSamplePeriod;
     }
@@ -510,7 +505,4 @@ void Ping360::resetSettings()
     // Signals will be update in the next profile, it's possible that old profiles contain older configurations
 }
 
-Ping360::~Ping360()
-{
-    updateSensorConfigurationSettings();
-}
+Ping360::~Ping360() { updateSensorConfigurationSettings(); }

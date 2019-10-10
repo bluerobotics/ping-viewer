@@ -1,13 +1,12 @@
 #pragma once
 
-#include <QObject>
 #include "ping-message.h"
+#include <QObject>
 
 /**
  * This class digests data and notifies owner when something interesting happens
  */
-class Parser : public QObject
-{
+class Parser : public QObject {
     Q_OBJECT
 public:
     Parser() = default;

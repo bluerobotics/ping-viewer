@@ -8,10 +8,7 @@ Ping360EthernetFinder::Ping360EthernetFinder()
     connect(&_broadcastSocket, &QUdpSocket::readyRead, this, &Ping360EthernetFinder::processBroadcastResponses);
 }
 
-void Ping360EthernetFinder::start()
-{
-    _broadcastTimer.start(1000);
-}
+void Ping360EthernetFinder::start() { _broadcastTimer.start(1000); }
 
 void Ping360EthernetFinder::doBroadcast()
 {
@@ -24,7 +21,7 @@ void Ping360EthernetFinder::doBroadcast()
 
 void Ping360EthernetFinder::processBroadcastResponses()
 {
-    while(_broadcastSocket.hasPendingDatagrams()) {
+    while (_broadcastSocket.hasPendingDatagrams()) {
         QHostAddress sender;
         QByteArray datagram;
         datagram.resize(_broadcastSocket.pendingDatagramSize());
@@ -32,9 +29,10 @@ void Ping360EthernetFinder::processBroadcastResponses()
         // Make sure we have an IPV4 address, and not something like "::ffff:192.168.1.1"
         sender = QHostAddress(sender.toIPv4Address());
         // Basic validation to check we didn't get some lost packet from wherever
-        if(datagram.contains("PING360")) {
-            emit availableLinkFound({{LinkType::Udp, {sender.toString(), "12345"}, "Ping360 Port", PingDeviceType::PING360}},
-            QStringLiteral("Ping360 Ethernet Protocol Detector"));
+        if (datagram.contains("PING360")) {
+            emit availableLinkFound(
+                {{LinkType::Udp, {sender.toString(), "12345"}, "Ping360 Port", PingDeviceType::PING360}},
+                QStringLiteral("Ping360 Ethernet Protocol Detector"));
         }
     }
 }

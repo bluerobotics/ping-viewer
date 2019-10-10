@@ -6,22 +6,20 @@
 #include <QSharedPointer>
 #include <QTimer>
 
-#include <ping-message.h>
+#include "pingsensor.h"
+#include "protocoldetector.h"
 #include <ping-message-common.h>
 #include <ping-message-ping1d.h>
-#include "protocoldetector.h"
-#include "pingsensor.h"
+#include <ping-message.h>
 
 /**
  * @brief Define ping sensor
  * 1D Sonar
  *
  */
-class Ping : public PingSensor
-{
+class Ping : public PingSensor {
     Q_OBJECT
 public:
-
     Ping();
     ~Ping();
 
@@ -31,7 +29,8 @@ public:
      * @param connType connection type
      * @param connString arguments for the new connection
      */
-    Q_INVOKABLE void connectLink(AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
+    Q_INVOKABLE void connectLink(
+        AbstractLinkNamespace::LinkType connType, const QStringList& connString) final override;
 
     /**
      * @brief Reset device settings
@@ -203,9 +202,7 @@ public:
      * @brief These are ids that the sensor can continuously output.
      * The sensor only supports continuous profile output
      */
-    enum ContinuousId : uint16_t {
-        PROFILE = Ping1dId::PROFILE
-    };
+    enum ContinuousId : uint16_t { PROFILE = Ping1dId::PROFILE };
 
     /**
      * @brief Do continuous start
@@ -306,7 +303,7 @@ public:
      *
      * @return float
      */
-    float pingFrequency() { return _ping_interval ? static_cast<int>(1000/_ping_interval) : 0; };
+    float pingFrequency() { return _ping_interval ? static_cast<int>(1000 / _ping_interval) : 0; };
 
     /**
      * @brief Set ping frequency
@@ -332,8 +329,8 @@ public:
      * @param baud baud rate value
      * @param verify this variable is true when all
      */
-    Q_INVOKABLE void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
-                                    bool verify = true) final override;
+    Q_INVOKABLE void firmwareUpdate(
+        QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600, bool verify = true) final override;
 
     /**
      * @brief request a profile message from the device
@@ -344,7 +341,7 @@ signals:
     /**
      * @brief emitted when property changes
      */
-///@{
+    ///@{
     void distanceUpdate();
     void pingNumberUpdate();
     void confidenceUpdate();
@@ -362,14 +359,14 @@ signals:
     void boardVoltageUpdate();
     void pcbTemperatureUpdate();
     void processorTemperatureUpdate();
-///@}
+    ///@}
 
 private:
     Q_DISABLE_COPY(Ping)
     /**
      * @brief Sensor variables
      */
-///@{
+    ///@{
     // The firmware defaults at boot
     static const bool _firmwareDefaultAutoMode;
     static const int _firmwareDefaultGainSetting;
@@ -390,13 +387,13 @@ private:
     bool _ping_enable;
     uint16_t _pcb_temperature;
     uint16_t _processor_temperature;
-///@}
+    ///@}
 
     static const uint16_t _num_points = 200;
 
     // TODO: maybe use vector or uint8_t[] here
     // QVector is only required if points need to be exposed to qml
-    //QVector<int> _points;
+    // QVector<int> _points;
     QVector<double> _points;
 
     bool _mode_auto = 0;
@@ -469,8 +466,7 @@ private:
         void set(QVariant variantValue)
         {
             int testValue = variantValue.toInt();
-            value = testValue < minValue || testValue > maxValue ?
-                    defaultValue : testValue;
+            value = testValue < minValue || testValue > maxValue ? defaultValue : testValue;
         }
     };
 
@@ -485,42 +481,22 @@ private:
      *
      */
     QMap<QString, settingsConfiguration> _pingConfiguration {
-        {   {"1_pingInterval"}, {
-                66, 20, 1000,
-                std::bind(&Ping::ping_interval, this),
-                [this](long long int value) {set_ping_interval(value);}
-            }
-        },
-        {   {"1_speedOfSound"}, {
-                1500000, 50000, 10000000,
-                std::bind(&Ping::speed_of_sound, this),
-                [this](long long int value) {set_speed_of_sound(value);}
-            }
-        },
-        {   {"2_automaticMode"}, {
-                true, false, true,
-                std::bind(&Ping::mode_auto, this),
-                [this](long long int value) {set_mode_auto(value);}
-            }
-        },
-        {   {"3_gainIndex"}, {
-                0, 0, 6,
-                std::bind(&Ping::gain_setting, this),
-                [this](long long int value) {set_gain_setting(value);}
-            }
-        },
-        {   {"3_lengthDistance"}, {
-                5000, 500, 70000,
-                std::bind(&Ping::length_mm, this),
-                [this](long long int value) {set_length_mm(value);}
-            }
-        },
-        {   {"3_startDistance"}, {
-                0, 0, 70000,
-                std::bind(&Ping::start_mm, this),
-                [this](long long int value) {set_start_mm(value);}
-            }
-        },
+        {{"1_pingInterval"},
+            {66, 20, 1000, std::bind(&Ping::ping_interval, this),
+                [this](long long int value) { set_ping_interval(value); }}},
+        {{"1_speedOfSound"},
+            {1500000, 50000, 10000000, std::bind(&Ping::speed_of_sound, this),
+                [this](long long int value) { set_speed_of_sound(value); }}},
+        {{"2_automaticMode"},
+            {true, false, true, std::bind(&Ping::mode_auto, this),
+                [this](long long int value) { set_mode_auto(value); }}},
+        {{"3_gainIndex"},
+            {0, 0, 6, std::bind(&Ping::gain_setting, this), [this](long long int value) { set_gain_setting(value); }}},
+        {{"3_lengthDistance"},
+            {5000, 500, 70000, std::bind(&Ping::length_mm, this),
+                [this](long long int value) { set_length_mm(value); }}},
+        {{"3_startDistance"},
+            {0, 0, 70000, std::bind(&Ping::start_mm, this), [this](long long int value) { set_start_mm(value); }}},
     };
 
     struct messageStatus {

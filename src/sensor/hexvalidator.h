@@ -7,8 +7,7 @@
  *    http://easyonlineconverter.com/converters/checksum_converter.html
  *
  */
-class HexValidator
-{
+class HexValidator {
 public:
     /**
      * @brief Construct a new Hex Validator object

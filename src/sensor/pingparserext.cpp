@@ -1,13 +1,10 @@
 #include "pingparserext.h"
 
-void PingParserExt::clearBuffer()
-{
-    _parser.reset();
-}
+void PingParserExt::clearBuffer() { _parser.reset(); }
 
 void PingParserExt::parseBuffer(const QByteArray& data)
 {
-    for(int i = 0; i < data.length(); i++) {
+    for (int i = 0; i < data.length(); i++) {
         PingParser::ParseState state = _parser.parseByte(data.at(i));
         if (state == PingParser::ParseState::NEW_MESSAGE) {
             parsed++;

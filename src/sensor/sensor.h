@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QPointer>
 #include <QQmlComponent>
 #include <QQuickItem>
-#include <QPointer>
 
 #include "flasher.h"
 #include "link.h"
@@ -16,8 +16,7 @@
  * @brief Manage sensor connection
  *
  */
-class Sensor : public QObject
-{
+class Sensor : public QObject {
     Q_OBJECT
 public:
     /**
@@ -77,7 +76,6 @@ public:
      */
     bool connected() const { return _connected; };
     Q_PROPERTY(bool connected READ connected NOTIFY connectionUpdate)
-
 
     /**
      * @brief Return the list of firmwares available to download

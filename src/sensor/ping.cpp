@@ -32,8 +32,8 @@ const uint16_t Ping::_firmwareDefaultPingInterval = 250;
 const uint32_t Ping::_firmwareDefaultSpeedOfSound = 1500;
 
 Ping::Ping()
-    :PingSensor(PingDeviceType::PING1D)
-    ,_points(_num_points, 0)
+    : PingSensor(PingDeviceType::PING1D)
+    , _points(_num_points, 0)
 {
     setName("Ping1D");
     setControlPanel({"qrc:/Ping1DControlPanel.qml"});
@@ -42,15 +42,13 @@ Ping::Ping()
 
     _periodicRequestTimer.setInterval(1000);
     connect(&_periodicRequestTimer, &QTimer::timeout, this, [this] {
-        if(!link()->isWritable())
-        {
+        if (!link()->isWritable()) {
             qCWarning(PING_PROTOCOL_PING) << "Can't write in this type of link.";
             _periodicRequestTimer.stop();
             return;
         }
 
-        if(!link()->isOpen())
-        {
+        if (!link()->isOpen()) {
             qCCritical(PING_PROTOCOL_PING) << "Can't write, port is not open!";
             _periodicRequestTimer.stop();
             return;
@@ -58,8 +56,7 @@ Ping::Ping()
 
         // Update lost messages count
         _lostMessages = 0;
-        for(const auto& requestedId : requestedIds)
-        {
+        for (const auto& requestedId : requestedIds) {
             _lostMessages += requestedId.waiting;
         }
         emit lostMessagesUpdate();
@@ -70,7 +67,7 @@ Ping::Ping()
         request(Ping1dId::MODE_AUTO);
     });
 
-    //connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
+    // connectLink(LinkType::Serial, {"/dev/ttyUSB2", "115200"});
 
     connect(this, &Sensor::connectionOpen, this, &Ping::startPreConfigurationProcess);
 
@@ -80,11 +77,10 @@ Ping::Ping()
     connect(this, &Ping::firmwareVersionMinorUpdate, this, [this] {
         // Wait for firmware information to be available before looking for new versions
         static bool once = false;
-        if(!once)
-        {
+        if (!once) {
             once = true;
-            NetworkTool::self()->checkNewFirmware("ping1d", std::bind(&Ping::checkNewFirmwareInGitHubPayload, this,
-                                                  std::placeholders::_1));
+            NetworkTool::self()->checkNewFirmware(
+                "ping1d", std::bind(&Ping::checkNewFirmwareInGitHubPayload, this, std::placeholders::_1));
         }
     });
 
@@ -97,7 +93,7 @@ Ping::Ping()
 void Ping::startPreConfigurationProcess()
 {
     qCDebug(PING_PROTOCOL_PING) << "Start pre configuration task and requests.";
-    if(!link()->isWritable()) {
+    if (!link()->isWritable()) {
         qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
         return;
     }
@@ -122,20 +118,21 @@ void Ping::startPreConfigurationProcess()
 void Ping::loadLastPingConfigurationSettings()
 {
     // Set default values
-    for(const auto& key : _pingConfiguration.keys()) {
+    for (const auto& key : _pingConfiguration.keys()) {
         _pingConfiguration[key].value = _pingConfiguration[key].defaultValue;
     }
 
     // Load settings for device using device id
-    QVariant pingConfigurationVariant = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString(_commonVariables.srcId)});
-    if(pingConfigurationVariant.type() != QVariant::Map) {
+    QVariant pingConfigurationVariant
+        = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString(_commonVariables.srcId)});
+    if (pingConfigurationVariant.type() != QVariant::Map) {
         qCWarning(PING_PROTOCOL_PING) << "No valid PingConfiguration in settings." << pingConfigurationVariant.type();
         return;
     }
 
     // Get the value of each configuration and set it on device
     auto map = pingConfigurationVariant.toMap();
-    for(const auto& key : _pingConfiguration.keys()) {
+    for (const auto& key : _pingConfiguration.keys()) {
         _pingConfiguration[key].set(map[key]);
     }
 }
@@ -143,17 +140,17 @@ void Ping::loadLastPingConfigurationSettings()
 void Ping::updatePingConfigurationSettings()
 {
     // Save all sensor configurations
-    for(const auto& key : _pingConfiguration.keys()) {
+    for (const auto& key : _pingConfiguration.keys()) {
         auto& dataStruct = _pingConfiguration[key];
         dataStruct.set(dataStruct.getClassValue());
-        SettingsManager::self()->setMapValue({"Ping", "PingConfiguration", QString(_commonVariables.srcId), key},
-                                             dataStruct.value);
+        SettingsManager::self()->setMapValue(
+            {"Ping", "PingConfiguration", QString(_commonVariables.srcId), key}, dataStruct.value);
     }
 }
 
 void Ping::connectLink(LinkType connType, const QStringList& connString)
 {
-    Sensor::connectLink(LinkConfiguration{connType, connString});
+    Sensor::connectLink(LinkConfiguration {connType, connString});
     startPreConfigurationProcess();
 }
 
@@ -162,7 +159,7 @@ void Ping::handleMessage(const ping_message& msg)
     qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id();
 
     auto& requestedId = requestedIds[msg.message_id()];
-    if(requestedId.waiting) {
+    if (requestedId.waiting) {
         requestedId.waiting--;
         requestedId.ack++;
     }
@@ -176,8 +173,7 @@ void Ping::handleMessage(const ping_message& msg)
         _commonVariables.srcId = m.source_device_id();
 
         emit srcIdUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::DISTANCE: {
         ping1d_distance m(msg);
@@ -197,8 +193,7 @@ void Ping::handleMessage(const ping_message& msg)
         emit scanStartUpdate();
         emit scanLengthUpdate();
         emit gainSettingUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::DISTANCE_SIMPLE: {
         ping1d_distance_simple m(msg);
@@ -207,8 +202,7 @@ void Ping::handleMessage(const ping_message& msg)
 
         emit distanceUpdate();
         emit confidenceUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::PROFILE: {
         ping1d_profile m(msg);
@@ -219,8 +213,8 @@ void Ping::handleMessage(const ping_message& msg)
         _scan_start = m.scan_start();
         _scan_length = m.scan_length();
         _gain_setting = m.gain_setting();
-//        _num_points = m.profile_data_length(); // const for now
-//        memcpy(_points.data(), m.data(), _num_points); // careful with constant
+        //        _num_points = m.profile_data_length(); // const for now
+        //        memcpy(_points.data(), m.data(), _num_points); // careful with constant
 
         // This is necessary to convert <uint8_t> to <int>
         // QProperty only supports vector<int>, otherwise, we could use memcpy, like the two lines above
@@ -237,31 +231,27 @@ void Ping::handleMessage(const ping_message& msg)
         emit scanLengthUpdate();
         emit gainSettingUpdate();
         emit pointsUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::MODE_AUTO: {
         ping1d_mode_auto m(msg);
-        if(_mode_auto != static_cast<bool>(m.mode_auto())) {
+        if (_mode_auto != static_cast<bool>(m.mode_auto())) {
             _mode_auto = m.mode_auto();
             emit modeAutoUpdate();
         }
-    }
-    break;
+    } break;
 
-    case  Ping1dId::PING_ENABLE: {
+    case Ping1dId::PING_ENABLE: {
         ping1d_ping_enable m(msg);
         _ping_enable = m.ping_enabled();
         emit pingEnableUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::PING_INTERVAL: {
         ping1d_ping_interval m(msg);
         _ping_interval = m.ping_interval();
         emit pingIntervalUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::RANGE: {
         ping1d_range m(msg);
@@ -269,29 +259,25 @@ void Ping::handleMessage(const ping_message& msg)
         _scan_length = m.scan_length();
         emit scanLengthUpdate();
         emit scanStartUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::GENERAL_INFO: {
         ping1d_general_info m(msg);
         _gain_setting = m.gain_setting();
         emit gainSettingUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::GAIN_SETTING: {
         ping1d_gain_setting m(msg);
         _gain_setting = m.gain_setting();
         emit gainSettingUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::SPEED_OF_SOUND: {
         ping1d_speed_of_sound m(msg);
         _speed_of_sound = m.speed_of_sound();
         emit speedOfSoundUpdate();
-    }
-    break;
+    } break;
 
     case Ping1dId::PROCESSOR_TEMPERATURE: {
         ping1d_processor_temperature m(msg);
@@ -324,7 +310,7 @@ void Ping::handleMessage(const ping_message& msg)
 
 void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
-    if(fileUrl.contains("http")) {
+    if (fileUrl.contains("http")) {
         NetworkManager::self()->download(fileUrl, [this, sendPingGotoBootloader, baud, verify](const QString& path) {
             qCDebug(FLASH) << "Downloaded firmware:" << path;
             flash(path, sendPingGotoBootloader, baud, verify);
@@ -338,7 +324,7 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
 {
     flasher()->setState(Flasher::Idle);
     flasher()->setState(Flasher::StartingFlash);
-    if(!HexValidator::isValidFile(fileUrl)) {
+    if (!HexValidator::isValidFile(fileUrl)) {
         auto errorMsg = QStringLiteral("File does not contain a valid Intel Hex format: %1").arg(fileUrl);
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
         flasher()->setState(Flasher::Error, errorMsg);
@@ -353,7 +339,7 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
         return;
     }
 
-    if(!link()->isOpen()) {
+    if (!link()->isOpen()) {
         auto errorMsg = QStringLiteral("Link is not open to do the flash procedure.");
         qCWarning(PING_PROTOCOL_PING) << errorMsg;
         flasher()->setState(Flasher::Error, errorMsg);
@@ -402,24 +388,22 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
     QThread::msleep(500);
     // Clear last configuration src ID to detect device as a new one
     connect(&_flasher, &Flasher::stateChanged, this, [this] {
-        if(flasher()->state() == Flasher::States::FlashFinished)
-        {
+        if (flasher()->state() == Flasher::States::FlashFinished) {
             QThread::msleep(500);
             // Clear last configuration src ID to detect device as a new one
             resetSensorLocalVariables();
             Sensor::connectLink(*link()->configuration());
         }
-
     });
 }
 
 void Ping::setLastPingConfiguration()
 {
-    if(_lastPingConfigurationSrcId == _commonVariables.srcId) {
+    if (_lastPingConfigurationSrcId == _commonVariables.srcId) {
         return;
     }
     _lastPingConfigurationSrcId = _commonVariables.srcId;
-    if(!link()->isWritable()) {
+    if (!link()->isWritable()) {
         qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
         return;
     }
@@ -429,37 +413,34 @@ void Ping::setLastPingConfiguration()
 
     // Print last configuration
     QString output = QStringLiteral("\nPingConfiguration {\n");
-    for(const auto& key : _pingConfiguration.keys()) {
+    for (const auto& key : _pingConfiguration.keys()) {
         output += QString("\t%1: %2\n").arg(key).arg(_pingConfiguration[key].value);
     }
     output += QStringLiteral("}");
     qCDebug(PING_PROTOCOL_PING).noquote() << output;
 
-
     // Set loaded configuration in device
-    static QString debugMessage =
-        QStringLiteral("Device configuration does not match. Waiting for (%1), got (%2) for %3");
+    static QString debugMessage
+        = QStringLiteral("Device configuration does not match. Waiting for (%1), got (%2) for %3");
     static auto lastPingConfigurationTimer = new QTimer();
     connect(lastPingConfigurationTimer, &QTimer::timeout, this, [this] {
         bool stopLastPingConfigurationTimer = true;
-        for(const auto& key : _pingConfiguration.keys())
-        {
+        for (const auto& key : _pingConfiguration.keys()) {
             auto& dataStruct = _pingConfiguration[key];
-            if(dataStruct.value != dataStruct.getClassValue()) {
-                qCDebug(PING_PROTOCOL_PING) <<
-                                            debugMessage.arg(dataStruct.value).arg(dataStruct.getClassValue()).arg(key);
+            if (dataStruct.value != dataStruct.getClassValue()) {
+                qCDebug(PING_PROTOCOL_PING)
+                    << debugMessage.arg(dataStruct.value).arg(dataStruct.getClassValue()).arg(key);
                 dataStruct.setClassValue(dataStruct.value);
                 stopLastPingConfigurationTimer = false;
             }
-            if(key.contains("automaticMode") && dataStruct.value) {
+            if (key.contains("automaticMode") && dataStruct.value) {
                 qCDebug(PING_PROTOCOL_PING) << "Device was running with last configuration in auto mode.";
                 // If it's running in automatic mode
                 // no further configuration is necessary
                 break;
             }
         }
-        if(stopLastPingConfigurationTimer)
-        {
+        if (stopLastPingConfigurationTimer) {
             qCDebug(PING_PROTOCOL_PING) << "Last configuration done, timer will stop now.";
             lastPingConfigurationTimer->stop();
             do_continuous_start(ContinuousId::PROFILE);
@@ -518,7 +499,7 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
     float lastVersionAvailable = 0.0;
 
     auto filesPayload = jsonDocument.array();
-    for(const QJsonValue& filePayload : filesPayload) {
+    for (const QJsonValue& filePayload : filesPayload) {
         qCDebug(PING_PROTOCOL_PING) << filePayload["name"].toString();
 
         // Get version from Ping_V(major).(patch)_115kb.hex where (major).(patch) is <version>
@@ -526,19 +507,20 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
         auto filePayloadVersion = versionRegex.match(filePayload["name"].toString()).captured("version").toFloat();
         _firmwares[filePayload["name"].toString()] = filePayload["download_url"].toString();
 
-        if(filePayloadVersion > lastVersionAvailable) {
+        if (filePayloadVersion > lastVersionAvailable) {
             lastVersionAvailable = filePayloadVersion;
         }
     }
     emit firmwaresAvailableUpdate();
 
-    auto sensorVersion = QString("%1.%2").arg(_commonVariables.firmware_version_major).arg(
-                             _commonVariables.firmware_version_minor).toFloat();
-    static QString firmwareUpdateSteps{"https://github.com/bluerobotics/ping-viewer/wiki/firmware-update"};
-    if(lastVersionAvailable > sensorVersion) {
-        QString newVersionText =
-            QStringLiteral("Firmware update for Ping available: %1<br>").arg(lastVersionAvailable) +
-            QStringLiteral("<a href=\"%1\">Check firmware update steps here!</a>").arg(firmwareUpdateSteps);
+    auto sensorVersion = QString("%1.%2")
+                             .arg(_commonVariables.firmware_version_major)
+                             .arg(_commonVariables.firmware_version_minor)
+                             .toFloat();
+    static QString firmwareUpdateSteps {"https://github.com/bluerobotics/ping-viewer/wiki/firmware-update"};
+    if (lastVersionAvailable > sensorVersion) {
+        QString newVersionText = QStringLiteral("Firmware update for Ping available: %1<br>").arg(lastVersionAvailable)
+            + QStringLiteral("<a href=\"%1\">Check firmware update steps here!</a>").arg(firmwareUpdateSteps);
         NotificationManager::self()->create(newVersionText, "green", StyleManager::infoIcon());
     }
 }
@@ -567,10 +549,7 @@ void Ping::resetSensorLocalVariables()
     _lastPingConfigurationSrcId = -1;
 }
 
-Ping::~Ping()
-{
-    updatePingConfigurationSettings();
-}
+Ping::~Ping() { updatePingConfigurationSettings(); }
 
 QDebug operator<<(QDebug d, const Ping::messageStatus& other)
 {

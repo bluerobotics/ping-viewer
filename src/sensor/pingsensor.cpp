@@ -1,23 +1,22 @@
-#include "logger.h"
 #include "pingsensor.h"
+#include "logger.h"
 #include "ping-message-common.h"
 #include "ping-message-ping1d.h"
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PINGSENSOR, "ping.protocol.pingsensor")
 
 PingSensor::PingSensor(PingDeviceType pingDeviceType)
-    : Sensor( {SensorFamily::PING, {static_cast<int>(pingDeviceType)}} )
+    : Sensor({SensorFamily::PING, {static_cast<int>(pingDeviceType)}})
 {
     _parser = new PingParserExt();
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate,
-            Qt::DirectConnection);
+        Qt::DirectConnection);
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsUpdate);
 }
 
-
 void PingSensor::request(int id) const
 {
-    if(!link()->isWritable()) {
+    if (!link()->isWritable()) {
         qCWarning(PING_PROTOCOL_PINGSENSOR) << "Can't write in this type of link.";
         return;
     }
@@ -32,7 +31,7 @@ void PingSensor::request(int id) const
 
 void PingSensor::writeMessage(const ping_message& msg) const
 {
-    if(link() && link()->isOpen() && link()->isWritable()) {
+    if (link() && link()->isOpen() && link()->isWritable()) {
         link()->write(reinterpret_cast<const char*>(msg.msgData), msg.msgDataLength());
     }
 }
@@ -41,12 +40,12 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
 {
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "Handling Message:" << msg.message_id();
 
-    if(_commonVariables.dstId != msg.destination_device_id()) {
+    if (_commonVariables.dstId != msg.destination_device_id()) {
         _commonVariables.dstId = msg.destination_device_id();
         emit dstIdUpdate();
     }
 
-    if(_commonVariables.srcId != msg.source_device_id()) {
+    if (_commonVariables.srcId != msg.source_device_id()) {
         _commonVariables.srcId = msg.source_device_id();
         emit srcIdUpdate();
     }
@@ -54,13 +53,13 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
     switch (msg.message_id()) {
 
     case CommonId::ACK: {
-        common_ack ackMessage{msg};
+        common_ack ackMessage {msg};
         qCDebug(PING_PROTOCOL_PINGSENSOR) << "ACK message:" << ackMessage.acked_id();
         break;
     }
 
     case CommonId::NACK: {
-        common_nack nackMessage{msg};
+        common_nack nackMessage {msg};
         qCCritical(PING_PROTOCOL_PINGSENSOR) << "Sensor NACK!";
         _commonVariables.nack_msg = QString("%1: %2").arg(nackMessage.nack_message()).arg(nackMessage.nacked_id());
         qCDebug(PING_PROTOCOL_PINGSENSOR) << "NACK message:" << _commonVariables.nack_msg;
@@ -106,7 +105,7 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
         break;
     }
 
-    //Will be deprecated in future firmware versions of Ping1D
+    // Will be deprecated in future firmware versions of Ping1D
     case Ping1dId::FIRMWARE_VERSION: {
         ping1d_firmware_version m(msg);
 
