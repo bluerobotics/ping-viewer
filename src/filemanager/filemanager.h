@@ -88,7 +88,7 @@ private:
     enum FileType {
         TXT,
         PICTURE,
-        BINARY
+        BINARY,
     };
 
     /**
@@ -98,7 +98,7 @@ private:
     const QMap<FileType, QString> fileTypeExtension {
         {TXT, ".txt"}
         , {PICTURE, ".png"}
-        , {BINARY, ".bin"}
+        , {BINARY, ".bin"},
     };
 
     /**
@@ -134,7 +134,7 @@ private:
         {GuiLogs, &_guiLogDir},
         {Pictures, &_picturesDir},
         {PingDocuments, &_docDir},
-        {SensorLog, &_sensorLogDir}
+        {SensorLog, &_sensorLogDir},
     };
 
     /**
