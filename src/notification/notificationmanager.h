@@ -2,8 +2,8 @@
 
 #include <QLoggingCategory>
 
-#include "stylemanager.h"
 #include "notificationmodel.h"
+#include "stylemanager.h"
 
 class QJSEngine;
 class QQmlEngine;
@@ -14,8 +14,7 @@ Q_DECLARE_LOGGING_CATEGORY(NOTIFICATIONMANAGER)
  * @brief Manage the project NotificationManager
  *
  */
-class NotificationManager : public QObject
-{
+class NotificationManager : public QObject {
     Q_OBJECT
 public:
     /**

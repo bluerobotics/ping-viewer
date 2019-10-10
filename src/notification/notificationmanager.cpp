@@ -1,5 +1,5 @@
-#include "logger.h"
 #include "notificationmanager.h"
+#include "logger.h"
 #include "stylemanager.h"
 
 #include <QDebug>

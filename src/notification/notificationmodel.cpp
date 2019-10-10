@@ -7,7 +7,7 @@ NotificationModel::NotificationModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     // Add all roles in _roles
-    for(const auto key : _roleNames.keys()) {
+    for (const auto key : _roleNames.keys()) {
         _roles.append(key);
     }
 }
@@ -36,8 +36,8 @@ bool NotificationModel::insertRows(int row, int count, const QModelIndex& parent
     }
 
     // Add all request rows
-    while(count-- > 0) {
-        for(auto* vector : _rows) {
+    while (count-- > 0) {
+        for (auto* vector : _rows) {
             vector->insert(row, "");
         }
     }
@@ -52,9 +52,9 @@ QVariant NotificationModel::data(const QModelIndex& index, int role) const
     const int indexRow = index.row();
 
     // Check if we have what is requested
-    if(_rows.contains(role)) {
+    if (_rows.contains(role)) {
         QVector<QVariant>* row = _rows[role];
-        if(indexRow >= 0 && indexRow < row->size()) {
+        if (indexRow >= 0 && indexRow < row->size()) {
             return row->at(indexRow);
         }
     }
@@ -64,12 +64,12 @@ QVariant NotificationModel::data(const QModelIndex& index, int role) const
 
 void NotificationModel::remove(int index)
 {
-    if(index < 0 && index > _size) {
+    if (index < 0 && index > _size) {
         return;
     }
 
     beginRemoveRows(QModelIndex(), index, index);
-    for(auto* vector : _rows) {
+    for (auto* vector : _rows) {
         vector->remove(index);
     }
     _size = _rowText.size();
@@ -78,8 +78,8 @@ void NotificationModel::remove(int index)
 
 void NotificationModel::removeAll()
 {
-    while(_rowText.size()) {
-        remove(_rowText.size()-1);
+    while (_rowText.size()) {
+        remove(_rowText.size() - 1);
     }
 }
 
@@ -88,27 +88,24 @@ bool NotificationModel::setData(const QModelIndex& index, const QVariant& value,
     const int indexRow = index.row();
 
     // Check if we can receive
-    if(!_rows.contains(role)) {
+    if (!_rows.contains(role)) {
         return false;
     }
     // Add the new data if possible
     QVector<QVariant>* row = _rows[role];
-    if(indexRow >= 0 && indexRow < row->size()) {
+    if (indexRow >= 0 && indexRow < row->size()) {
         row->replace(indexRow, value);
-    } else if(indexRow == row->size()) {
+    } else if (indexRow == row->size()) {
         row->append(value);
     } else {
         return false;
     }
 
-    if(NotificationModel::Icon == role) {
+    if (NotificationModel::Icon == role) {
         _size = _rowText.size();
         emit dataChanged(index, index, _roles);
     }
     return true;
 }
 
-QHash<int, QByteArray> NotificationModel::roleNames() const
-{
-    return _roleNames;
-}
+QHash<int, QByteArray> NotificationModel::roleNames() const { return _roleNames; }

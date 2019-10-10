@@ -1,14 +1,13 @@
 #pragma once
 
-#include <QColor>
 #include <QAbstractListModel>
+#include <QColor>
 
 /**
  * @brief Notification model
  *
  */
-class NotificationModel : public QAbstractListModel
-{
+class NotificationModel : public QAbstractListModel {
     Q_OBJECT
 public:
     /**
@@ -59,7 +58,7 @@ public:
      * @param parent
      * @return int
      */
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override
     {
         Q_UNUSED(parent)
         return _size;
@@ -74,7 +73,7 @@ public:
      * @return true If everything goes fine
      * @return false It was not able to insert a new row
      */
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
     /**
      * @brief Add a new notification in the model
@@ -84,12 +83,8 @@ public:
      * @param color
      * @param severity
      */
-    Q_INVOKABLE void add(
-        QVariant text = QStringLiteral("This is a empty notification."),
-        QVariant icon = {},
-        QVariant color = QColor("DarkGray"),
-        QVariant severity = {}
-    );
+    Q_INVOKABLE void add(QVariant text = QStringLiteral("This is a empty notification."), QVariant icon = {},
+        QVariant color = QColor("DarkGray"), QVariant severity = {});
 
     /**
      * @brief Remove index in model
@@ -109,7 +104,7 @@ private:
     QVector<int> _roles;
     int _size = 0;
 
-    QHash<int, QByteArray> _roleNames{
+    QHash<int, QByteArray> _roleNames {
         {{NotificationModel::Color}, {"foreground"}},
         {{NotificationModel::Icon}, {"icon"}},
         {{NotificationModel::Severity}, {"severity"}},
