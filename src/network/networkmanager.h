@@ -13,8 +13,7 @@ Q_DECLARE_LOGGING_CATEGORY(NETWORKMANAGER)
  * @brief Manage the project NetworkManager
  *
  */
-class NetworkManager : public QObject
-{
+class NetworkManager : public QObject {
     Q_OBJECT
 public:
     /**
