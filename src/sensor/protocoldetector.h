@@ -13,8 +13,7 @@ class QSerialPortInfo;
  *  TODO: Use this as a abstract class to support multiple protocols
  *
  */
-class ProtocolDetector : public QObject
-{
+class ProtocolDetector : public QObject {
     Q_OBJECT
 public:
     /**
@@ -30,7 +29,7 @@ public:
      */
     void appendConfiguration(const LinkConfiguration& linkConfig)
     {
-        if(_linkConfigs.contains(linkConfig)) {
+        if (_linkConfigs.contains(linkConfig)) {
             return;
         }
         _linkConfigs.prepend(linkConfig);
@@ -41,10 +40,7 @@ public:
      *
      * @return QVector<LinkConfiguration>
      */
-    QVector<LinkConfiguration> availableLinks()
-    {
-        return _availableLinks;
-    };
+    QVector<LinkConfiguration> availableLinks() { return _availableLinks; };
 
     /**
      * @brief Check if something is detected in this configuration
@@ -60,10 +56,7 @@ public:
      *
      * @return const QStringList&
      */
-    static const QStringList& invalidSerialPortNames()
-    {
-        return _invalidSerialPortNames;
-    };
+    static const QStringList& invalidSerialPortNames() { return _invalidSerialPortNames; };
 
     /**
      * @brief Check if serial port is valid
@@ -124,8 +117,8 @@ private slots:
 
 private:
     Q_DISABLE_COPY(ProtocolDetector)
-    bool _active { false };
-    bool _detected { false };
+    bool _active {false};
+    bool _detected {false};
     QVector<LinkConfiguration> _availableLinks;
     QVector<LinkConfiguration> _linkConfigs;
     static const QStringList _invalidSerialPortNames;

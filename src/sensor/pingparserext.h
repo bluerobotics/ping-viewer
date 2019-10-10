@@ -7,13 +7,15 @@
  * @brief The PingParserExt class wraps the PingParser class from the ping-protocol submodule
  * and Extends it with signalling in order to subclass our Parser class
  */
-class PingParserExt : public Parser
-{
+class PingParserExt : public Parser {
 public:
     /**
      * @brief Any messages parsed must be shorter than the buffer length
      */
-    PingParserExt() : _parser(10240) {}
+    PingParserExt()
+        : _parser(10240)
+    {
+    }
 
     /**
      * @brief clear parse state

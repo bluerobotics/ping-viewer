@@ -27,23 +27,23 @@ bool HexValidator::check(const QByteArray& bytes)
     };
 
     // Check if start with :
-    if(bytes[0] != ':') {
+    if (bytes[0] != ':') {
         return error("No valid start key.");
     }
 
     // Check if it has an odd number of elements
-    if(bytes.size()%2 == 0) {
+    if (bytes.size() % 2 == 0) {
         return error("Number of elements is not odd: %d", bytes.size());
     }
 
     // Get all values as normal bytes
     bool valid = false;
     QList<uint8_t> uintBytes;
-    int numberOfBytesInLine = (bytes.size() - 1)/2; // Remove (:) character
-    for(int i = 0; i < numberOfBytesInLine; i++) {
-        uint8_t value = QString(bytes.mid(1 + i*2, 2)).toUInt(&valid, 16);
+    int numberOfBytesInLine = (bytes.size() - 1) / 2; // Remove (:) character
+    for (int i = 0; i < numberOfBytesInLine; i++) {
+        uint8_t value = QString(bytes.mid(1 + i * 2, 2)).toUInt(&valid, 16);
         uintBytes.append(value);
-        if(!valid) {
+        if (!valid) {
             return error("No valid hexadecimal value.");
         }
     }
@@ -51,23 +51,23 @@ bool HexValidator::check(const QByteArray& bytes)
     // Check if byteCount has the correct size
     int byteCount = uintBytes[0];
     // (:) 1, (Byte Count) 2, (Address) 4, (Record type) 2, (Checksum) 2
-    int calcSize = (bytes.size() - 1 - 2 - 4 - 2 - 2)/2;
-    if(byteCount != calcSize) {
-        return error("No valid byteCount: (%d) does not match with line size (%d).", byteCount,  calcSize);
+    int calcSize = (bytes.size() - 1 - 2 - 4 - 2 - 2) / 2;
+    if (byteCount != calcSize) {
+        return error("No valid byteCount: (%d) does not match with line size (%d).", byteCount, calcSize);
     }
 
     // Calculate checksum and compare it
     uint8_t calculatedCheckSum = 0;
     // Checksum is the last value
-    for(int i = 0; i < uintBytes.size() - 1; i++) {
+    for (int i = 0; i < uintBytes.size() - 1; i++) {
         calculatedCheckSum += uintBytes[i];
     }
     // Do the two's complement
     calculatedCheckSum = ~calculatedCheckSum + 1;
 
     uint8_t checkSum = uintBytes.last();
-    if(calculatedCheckSum != checkSum) {
-        return error("No valid checksum: Calculated CS (%d) does not match (%d).", calculatedCheckSum,  checkSum);
+    if (calculatedCheckSum != checkSum) {
+        return error("No valid checksum: Calculated CS (%d) does not match (%d).", calculatedCheckSum, checkSum);
     }
 
     return true;
@@ -76,15 +76,15 @@ bool HexValidator::check(const QByteArray& bytes)
 bool HexValidator::isValidFile(const QString& fileUrl)
 {
     QFile file(fileUrl);
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qCWarning(HEX_VALIDATOR) << "Not possible to open the file:" << fileUrl;
         return false;
     }
 
-    while(!file.atEnd()) {
+    while (!file.atEnd()) {
         // Read each line and remove \n
         QByteArray line = file.readLine().replace('\n', QByteArray());
-        if(!check(line)) {
+        if (!check(line)) {
             return false;
         }
     }

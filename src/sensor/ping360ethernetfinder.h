@@ -21,8 +21,7 @@
     When such a message is received, we emit a availableLinkFound() with the
     found device.
  */
-class Ping360EthernetFinder : public QObject
-{
+class Ping360EthernetFinder : public QObject {
     Q_OBJECT
 public:
     /**

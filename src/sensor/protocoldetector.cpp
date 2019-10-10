@@ -1,4 +1,3 @@
-#include <QtConcurrent>
 #include <QDebug>
 #include <QFuture>
 #include <QLoggingCategory>
@@ -6,19 +5,22 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QUdpSocket>
+#include <QtConcurrent>
 
 #include "logger.h"
-#include <ping-message.h>
+#include "protocoldetector.h"
 #include <ping-message-common.h>
 #include <ping-message-ping1d.h>
-#include "protocoldetector.h"
+#include <ping-message.h>
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PROTOCOLDETECTOR, "ping.protocol.protocoldetector")
 
-const QStringList ProtocolDetector::_invalidSerialPortNames(
-{
+const QStringList ProtocolDetector::_invalidSerialPortNames({
 #ifdef Q_OS_OSX
-    "cu.", "SPPDev", "iPhone", "Bluetooth",
+    "cu.",
+    "SPPDev",
+    "iPhone",
+    "Bluetooth",
 #endif
 });
 
@@ -31,14 +33,12 @@ ProtocolDetector::ProtocolDetector()
     common_general_request deviceInformationMessage;
     deviceInformationMessage.set_requested_id(CommonId::DEVICE_INFORMATION);
     deviceInformationMessage.updateChecksum();
-    _deviceInformationMessageByteArray = QByteArray(reinterpret_cast<const char*>(deviceInformationMessage.msgData),
-                                         deviceInformationMessage.msgDataLength());
+    _deviceInformationMessageByteArray = QByteArray(
+        reinterpret_cast<const char*>(deviceInformationMessage.msgData), deviceInformationMessage.msgDataLength());
 
-    _linkConfigs.append({
-        {LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 Ping1D Port"},
+    _linkConfigs.append({{LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 Ping1D Port"},
         {LinkType::Udp, {"192.168.2.2", "9092"}, "BlueRov2 Ping360 Port"},
-        {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}
-    });
+        {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}});
 
     /** Encapsulate doScan to avoid direct call.
      * This protect us to freeze the main loop calling doScan directly
@@ -56,8 +56,8 @@ void ProtocolDetector::doScan()
     // Scan until something is connected
     while (_active) {
         auto linksConf = updateLinkConfigurations(_linkConfigs);
-        for(LinkConfiguration& tryLinkConf : linksConf) {
-            if(!_active) {
+        for (LinkConfiguration& tryLinkConf : linksConf) {
+            if (!_active) {
                 break;
             }
             linkConf = tryLinkConf;
@@ -76,17 +76,17 @@ bool ProtocolDetector::checkLink(LinkConfiguration& linkConf)
 {
     _detected = false;
     _parser.clearBuffer();
-    if(linkConf.type() == LinkType::Udp) {
+    if (linkConf.type() == LinkType::Udp) {
         checkUdp(linkConf);
-    } else if(linkConf.type() == LinkType::Serial) {
+    } else if (linkConf.type() == LinkType::Serial) {
         checkSerial(linkConf);
     } else {
         qDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Couldn't handle configuration:" << linkConf;
     }
 
-    if(_detected) {
+    if (_detected) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Ping detected on:" << linkConf;
-        if(!_availableLinks.contains(linkConf)) {
+        if (!_availableLinks.contains(linkConf)) {
             _availableLinks.append(linkConf);
         }
         emit connectionDetected(linkConf);
@@ -98,16 +98,16 @@ QVector<LinkConfiguration> ProtocolDetector::updateLinkConfigurations(QVector<Li
 {
     QVector<LinkConfiguration> tempConfigs;
     auto portsInfo = QSerialPortInfo::availablePorts();
-    for(const auto& portInfo : portsInfo) {
+    for (const auto& portInfo : portsInfo) {
         // Do not run with invalid ports
-        if(!isValidPort(portInfo)) {
+        if (!isValidPort(portInfo)) {
             continue;
         }
 
         // Add valid port and baudrate
         // Ping360 can't handle 9600 requests with 115200 request in a sort time priod
         // TODO: Fix Ping360 is not possible, we should drop 9600 checks if 115200 returns fine
-        for(auto baud : {115200, 9600}) {
+        for (auto baud : {115200, 9600}) {
             auto config = {portInfo.portName(), QString::number(baud)};
             tempConfigs.append({LinkType::Serial, config, QString("Detector serial link")});
         }
@@ -121,7 +121,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
     int baudrate = linkConf.serialBaudrate();
 
     // Check if port can be opened
-    if(!canOpenPort(portInfo, 500)) {
+    if (!canOpenPort(portInfo, 500)) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Couldn't open port" << portInfo.portName();
         return false;
     }
@@ -130,7 +130,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Probing Serial" << port.portName() << baudrate;
 
-    if(!port.open(QIODevice::ReadWrite)) {
+    if (!port.open(QIODevice::ReadWrite)) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to open";
         return false;
     }
@@ -144,7 +144,6 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
     port.write("UUU");
     port.flush();
     QThread::msleep(11);
-
 
     // Probe
     port.write(_deviceInformationMessageByteArray);
@@ -179,11 +178,11 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     // Give the socket half second to connect to the other side otherwise error out
     int socketAttemps = 0;
-    while(!socket.waitForConnected(100) && socketAttemps < 5 ) {
+    while (!socket.waitForConnected(100) && socketAttemps < 5) {
         // Increases socketAttemps here to avoid empty loop optimization
         socketAttemps++;
     }
-    if(socket.state() != QUdpSocket::ConnectedState) {
+    if (socket.state() != QUdpSocket::ConnectedState) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in connected state.";
         QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
@@ -201,7 +200,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
         /**
          * The connection state should be checked while looking for new packages
          */
-        if(socket.state() != QUdpSocket::ConnectedState) {
+        if (socket.state() != QUdpSocket::ConnectedState) {
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in connected state.";
             QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
@@ -214,7 +213,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     // Close calls `disconnectFromHost`, this function waits until the socket is totally disconnected,
     // avoiding any future connection problems
-    if(socket.state() == QUdpSocket::UnconnectedState || socket.waitForDisconnected(1000)) {
+    if (socket.state() == QUdpSocket::UnconnectedState || socket.waitForDisconnected(1000)) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "UDP socket disconnected.";
     }
 
@@ -225,20 +224,21 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& 
 {
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << buffer;
     for (const auto& byte : buffer) {
-        if(_parser.parseByte(byte) == Parser::NEW_MESSAGE) {
+        if (_parser.parseByte(byte) == Parser::NEW_MESSAGE) {
             // Print information from detected devices
             common_device_information device_information(_parser.rxMessage());
-            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Detect new device:"
-                                                    << "\ndevice_type:" << device_information.device_type()
-                                                    << "\ndevice_revision:" << device_information.device_revision()
-                                                    << "\nfirmware_version_major:" << device_information.firmware_version_major()
-                                                    << "\nfirmware_version_minor:" << device_information.firmware_version_minor()
-                                                    << "\nfirmware_version_patch:" << device_information.firmware_version_patch();
+            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR)
+                << "Detect new device:"
+                << "\ndevice_type:" << device_information.device_type()
+                << "\ndevice_revision:" << device_information.device_revision()
+                << "\nfirmware_version_major:" << device_information.firmware_version_major()
+                << "\nfirmware_version_minor:" << device_information.firmware_version_minor()
+                << "\nfirmware_version_patch:" << device_information.firmware_version_patch();
 
-            //TODO: Ping1D with firmware 3.26 or older
+            // TODO: Ping1D with firmware 3.26 or older
             // We should remove this code in future releases but allowing undetected devices to be flashed
             PingDeviceType type = static_cast<PingDeviceType>(device_information.device_type());
-            if(type == PingDeviceType::PING360) {
+            if (type == PingDeviceType::PING360) {
                 linkConf.setDeviceType(PingDeviceType::PING360);
             } else {
                 linkConf.setDeviceType(PingDeviceType::PING1D);
@@ -255,7 +255,7 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
     auto checkPort = [](const QSerialPortInfo& portInfo) {
         QSerialPort serialPort(portInfo);
         bool ok = serialPort.open(QIODevice::ReadWrite);
-        if(!ok) {
+        if (!ok) {
             qCWarning(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to open serial port:" << serialPort.error();
         }
         // Close will check if is open
@@ -266,14 +266,15 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
     QFuture<bool> future = QtConcurrent::run(checkPort, port);
     // Wait for msTimeout
     float waitForTenthOfTimeout = 0;
-    while(waitForTenthOfTimeout < 10 && !future.isFinished()) {
-        QThread::msleep(msTimeout/10.0f);
-        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Waiting port to open.. " << waitForTenthOfTimeout << port.portName();
+    while (waitForTenthOfTimeout < 10 && !future.isFinished()) {
+        QThread::msleep(msTimeout / 10.0f);
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR)
+            << "Waiting port to open.. " << waitForTenthOfTimeout << port.portName();
         waitForTenthOfTimeout += 1;
     }
 
     bool ok = false;
-    if(future.isFinished()) {
+    if (future.isFinished()) {
         ok = future.result();
     }
     return ok;
@@ -281,8 +282,8 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
 
 bool ProtocolDetector::isValidPort(const QSerialPortInfo& serialPortInfo) const
 {
-    for(const auto& name : _invalidSerialPortNames) {
-        if(serialPortInfo.portName().contains(name, Qt::CaseInsensitive)) {
+    for (const auto& name : _invalidSerialPortNames) {
+        if (serialPortInfo.portName().contains(name, Qt::CaseInsensitive)) {
             return false;
         }
     }

@@ -6,8 +6,7 @@
  * @brief Abstract ping sensors
  *
  */
-class PingSensor : public Sensor
-{
+class PingSensor : public Sensor {
     Q_OBJECT
 public:
     /**
@@ -51,7 +50,7 @@ public:
     uint8_t dstId() const { return _commonVariables.dstId; }
     Q_PROPERTY(int dstId READ dstId NOTIFY dstIdUpdate)
 
-    //TODO: move functions from snake case to camel case
+    // TODO: move functions from snake case to camel case
     /**
      * @brief Return firmware major version
      *
@@ -148,11 +147,12 @@ public:
      * @param baud baud rate value
      * @param verify this variable is true when all
      */
-    Q_INVOKABLE virtual void firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600,
-                                            bool verify = true) = 0;
+    Q_INVOKABLE virtual void firmwareUpdate(
+        QString fileUrl, bool sendPingGotoBootloader = true, int baud = 57600, bool verify = true)
+        = 0;
 
 signals:
-    //TODO: Move from Update to Changed
+    // TODO: Move from Update to Changed
     void asciiTextUpdate();
     void deviceRevisionUpdate();
     void deviceTypeUpdate();
@@ -200,29 +200,26 @@ protected:
     // Common variables between all ping devices
     struct CommonVariables {
         QString ascii_text;
-        uint8_t device_revision{0};
-        uint8_t device_type{0};
-        uint8_t dstId{0};
-        uint8_t firmware_version_major{0};
-        uint8_t firmware_version_minor{0};
-        uint8_t firmware_version_patch{0};
+        uint8_t device_revision {0};
+        uint8_t device_type {0};
+        uint8_t dstId {0};
+        uint8_t firmware_version_major {0};
+        uint8_t firmware_version_minor {0};
+        uint8_t firmware_version_patch {0};
         QString nack_msg;
-        uint8_t protocol_version_major{0};
-        uint8_t protocol_version_minor{0};
-        uint8_t protocol_version_patch{0};
-        uint8_t srcId{0};
+        uint8_t protocol_version_major {0};
+        uint8_t protocol_version_minor {0};
+        uint8_t protocol_version_patch {0};
+        uint8_t srcId {0};
 
         /**
          * @brief Reset variables to default values
          *
          */
-        inline void reset()
-        {
-            *this = {};
-        }
+        inline void reset() { *this = {}; }
     } _commonVariables;
 
-    int _lostMessages{0};
+    int _lostMessages {0};
 
 private:
     Q_DISABLE_COPY(PingSensor)
