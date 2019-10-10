@@ -19,14 +19,14 @@ FileManager::FileManager()
 
     // Check for folders and create if necessary
     auto rootDir = QDir();
-    for(auto f : {&_fmDir, &_guiLogDir, &_picturesDir, &_sensorLogDir, &_gradientsDir}) {
+    for (auto f : {&_fmDir, &_guiLogDir, &_picturesDir, &_sensorLogDir, &_gradientsDir}) {
         qCDebug(FILEMANAGER) << "Folder: " << f->dir;
-        if(!f->dir.exists()) {
+        if (!f->dir.exists()) {
             qCDebug(FILEMANAGER) << "Create folder" << f->dir.path();
             f->ok = rootDir.mkpath(f->dir.path());
             qCDebug(FILEMANAGER) << (f->ok ? "Done." : ("Error while creating folder" + f->dir.path()));
             // Something is wrong, continue with the others
-            if(!f->ok) {
+            if (!f->ok) {
                 continue;
             }
         }
@@ -39,11 +39,11 @@ FileManager::FileManager()
 QFileInfoList FileManager::getFilesFrom(Folder folderType)
 {
     FolderStruct* folder = folderMap[folderType];
-    if(!folder) {
+    if (!folder) {
         qCWarning(FILEMANAGER) << "Folder pointer does not exist.";
         return {};
     }
-    if(!folder->ok) {
+    if (!folder->ok) {
         return {};
     }
     folder->dir.setSorting(QDir::Name);
@@ -54,7 +54,7 @@ QFileInfoList FileManager::getFilesFrom(Folder folderType)
 QUrl FileManager::getPathFrom(FileManager::Folder folderType)
 {
     FolderStruct* folder = folderMap[folderType];
-    if(!folder) {
+    if (!folder) {
         qCWarning(FILEMANAGER) << "Folder pointer does not exist!";
         return {};
     }
@@ -72,14 +72,12 @@ QObject* FileManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* script
 QString FileManager::createFileName(FileManager::Folder folderType)
 {
     FolderStruct* folder = folderMap[folderType];
-    if(!folder) {
+    if (!folder) {
         qCWarning(FILEMANAGER) << "Folder pointer does not exist!";
         return {};
     }
     QString path = folder->dir.path();
-    QString result = path + "/" \
-                     + QDateTime::currentDateTime().toString(_fileName) \
-                     + folder->extension;
+    QString result = path + "/" + QDateTime::currentDateTime().toString(_fileName) + folder->extension;
     qCDebug(FILEMANAGER) << "Creating file name:" << result;
     return result;
 }

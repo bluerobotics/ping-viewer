@@ -16,8 +16,7 @@ class QQmlEngine;
  * @brief Manage folder creation, structure and filenames
  *
  */
-class FileManager : public QObject
-{
+class FileManager : public QObject {
     Q_OBJECT
 public:
     /**
@@ -96,9 +95,9 @@ private:
      *
      */
     const QMap<FileType, QString> fileTypeExtension {
-        {TXT, ".txt"}
-        , {PICTURE, ".png"}
-        , {BINARY, ".bin"},
+        {TXT, ".txt"},
+        {PICTURE, ".png"},
+        {BINARY, ".bin"},
     };
 
     /**
@@ -112,7 +111,8 @@ private:
      */
     struct FolderStruct {
         FolderStruct(QDir _dir, QString _extension = QString())
-            : dir(_dir), extension(_extension) {};
+            : dir(_dir)
+            , extension(_extension) {};
         QDir dir;
         QString extension;
         bool ok = false;
@@ -128,7 +128,7 @@ private:
     /**
      * @brief Manage all folders access
      */
-    QMap<Folder, FolderStruct*> folderMap{
+    QMap<Folder, FolderStruct*> folderMap {
         {Documents, &_fmDir},
         {Gradients, &_gradientsDir},
         {GuiLogs, &_guiLogDir},
