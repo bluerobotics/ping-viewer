@@ -16,8 +16,10 @@ matrix:
             - sourceline: 'ppa:cs50/ppa'
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
             - sourceline: 'ppa:beineri/opt-qt-5.12.2-xenial'
+            - sourceline: 'deb http://apt.llvm.org/stretch/ llvm-toolchain-stretch-9 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
-            - astyle
+            - clang-format-9
             - doxygen
             - g++-7
             - git
@@ -107,8 +109,11 @@ script:
 # Check code style
 # Check doxygen comments
 # Run unittests with fake xserver
-- echo $PINGTEST
+## Note: the only way to remove the default travis clang-format is via rm
 - if [ "$PINGTEST" == "true" ]; then
+    sudo rm $(which clang-format);
+    sudo update-alternatives --install /usr/bin/clang-format clang-format $(which clang-format-9) 60;
+    clang-format --version;
     ./tools/runtests.sh || travis_terminate 1;
   fi
 
