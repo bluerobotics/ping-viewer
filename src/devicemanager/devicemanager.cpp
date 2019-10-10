@@ -6,10 +6,10 @@
 
 PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 
-DeviceManager::DeviceManager() :
-    _detector(new ProtocolDetector())
+DeviceManager::DeviceManager()
+    : _detector(new ProtocolDetector())
 {
-    for(const auto& key : _roleNames.keys()) {
+    for (const auto& key : _roleNames.keys()) {
         _roles.append(key);
         _sensors.insert(key, {});
     }
@@ -20,17 +20,15 @@ DeviceManager::DeviceManager() :
     // Also we should remove or set Connected to false if device is disconnected
     connect(_detector, &ProtocolDetector::availableLinksChanged, this, &DeviceManager::updateAvailableConnections);
     connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this,
-            &DeviceManager::updateAvailableConnections);
+        &DeviceManager::updateAvailableConnections);
 }
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName, const QString& detectorName)
 {
-    for(int i{0}; i < _sensors[Connection].size(); i++) {
+    for (int i {0}; i < _sensors[Connection].size(); i++) {
         auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
-        if(*vectorLinkConf == linkConf) {
-            qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:"
-                                   << _sensors[Name][i]
-                                   << linkConf
+        if (*vectorLinkConf == linkConf) {
+            qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:" << _sensors[Name][i] << linkConf
                                    << linkConf.argsAsConst();
             _sensors[Available][i] = true;
             const auto indexRow = index(i);
@@ -44,7 +42,8 @@ void DeviceManager::append(const LinkConfiguration& linkConf, const QString& dev
     const int line = rowCount();
     beginInsertRows(QModelIndex(), line, line);
     _sensors[Available].append(true);
-    _sensors[Connection].append(QVariant::fromValue(QSharedPointer<LinkConfiguration>(new LinkConfiguration(linkConf))));
+    _sensors[Connection].append(
+        QVariant::fromValue(QSharedPointer<LinkConfiguration>(new LinkConfiguration(linkConf))));
     _sensors[Connected].append(false);
     _sensors[DetectorName].append(detectorName);
     _sensors[Name].append(deviceName);
@@ -77,16 +76,16 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
 
     // Find configuration in vector with valid index
     int objIndex = -1;
-    for(int i{0}; i < _sensors[Connection].size(); i++) {
+    for (int i {0}; i < _sensors[Connection].size(); i++) {
         auto sensorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
-        if(*sensorLinkConf == *linkConf) {
+        if (*sensorLinkConf == *linkConf) {
             objIndex = i;
             break;
         }
     }
 
     // index is -1 when connection configuration does not exist in list
-    if(objIndex < 0) {
+    if (objIndex < 0) {
         qCWarning(DEVICEMANAGER) << "Connection configuration does not exist in list.";
         return;
     }
@@ -96,7 +95,7 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
 
     // We could use a single Ping instance, but since we are going to support multiple devices
     // this pointer will hold everything for us
-    if(linkConf->deviceType() == PingDeviceType::PING1D) {
+    if (linkConf->deviceType() == PingDeviceType::PING1D) {
         _primarySensor.reset(new Ping());
     } else {
         _primarySensor.reset(new Ping360());
@@ -108,9 +107,9 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
 }
 
 void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,
-                                        PingEnumNamespace::PingDeviceType deviceType)
+    PingEnumNamespace::PingDeviceType deviceType)
 {
-    auto linkConfiguration = LinkConfiguration{connType, connString};
+    auto linkConfiguration = LinkConfiguration {connType, connString};
     linkConfiguration.setDeviceType(deviceType);
 
     // Append configuration as device of type "None"
@@ -122,7 +121,7 @@ void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType
 void DeviceManager::playLogFile(AbstractLinkNamespace::LinkType connType, const QStringList& connString)
 {
     // Update link configuration with sensor information that is included in the log file
-    auto linkConfiguration = LinkConfiguration{connType, connString};
+    auto linkConfiguration = LinkConfiguration {connType, connString};
     linkConfiguration.setDeviceType(FileLink::staticLogSensorStruct(linkConfiguration).sensor.type.ping);
 
     // Append configuration as device of type "None"
@@ -131,17 +130,16 @@ void DeviceManager::playLogFile(AbstractLinkNamespace::LinkType connType, const 
     connectLink(&linkConfiguration);
 }
 
-void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations,
-        const QString& detector)
+void DeviceManager::updateAvailableConnections(
+    const QVector<LinkConfiguration>& availableLinkConfigurations, const QString& detector)
 {
     qCDebug(DEVICEMANAGER) << "Available devices:" << availableLinkConfigurations;
     // Make all connections unavailable by default
-    for(int i{0}; i < _sensors[Available].size(); i++) {
+    for (int i {0}; i < _sensors[Available].size(); i++) {
         auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
-        //TODO: rework this check, check linkconfiguration capabilities or add new ones for this case
-        if(linkConf->type() == AbstractLinkNamespace::Ping1DSimulation
-                || linkConf->type() == AbstractLinkNamespace::Ping360Simulation
-                || _sensors[DetectorName][i] != detector) {
+        // TODO: rework this check, check linkconfiguration capabilities or add new ones for this case
+        if (linkConf->type() == AbstractLinkNamespace::Ping1DSimulation
+            || linkConf->type() == AbstractLinkNamespace::Ping360Simulation || _sensors[DetectorName][i] != detector) {
             continue;
         }
         _sensors[Available][i] = false;
@@ -149,7 +147,7 @@ void DeviceManager::updateAvailableConnections(const QVector<LinkConfiguration>&
         emit dataChanged(indexRow, indexRow, _roles);
     }
 
-    for(const auto& link : availableLinkConfigurations) {
+    for (const auto& link : availableLinkConfigurations) {
         append(link, PingHelper::nameFromDeviceType(link.deviceType()), detector);
     }
 }
