@@ -3,7 +3,7 @@
 #include "tcplink.h"
 
 TCPLink::TCPLink(QObject* parent)
-    : AbstractLink(parent)
+    : AbstractLink("TCPLink", parent)
 {
 }
 
