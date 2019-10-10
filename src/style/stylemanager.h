@@ -16,8 +16,7 @@ Q_DECLARE_LOGGING_CATEGORY(STYLEMANAGER)
  * @brief Manage the project StyleManager
  *
  */
-class StyleManager : public QObject
-{
+class StyleManager : public QObject {
     Q_OBJECT
 public:
     /**
@@ -50,7 +49,8 @@ public:
      */
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
-#define CREATE_ICON(NAME) Q_INVOKABLE static QString NAME##Icon() { return iconNameHelper(#NAME); };
+#define CREATE_ICON(NAME)                                                                                              \
+    Q_INVOKABLE static QString NAME##Icon() { return iconNameHelper(#NAME); };
     // This list can be generated with: `for f in *; do echo "CREATE_ICON(${f%".svg"})"; done;`
     CREATE_ICON(arrow)
     CREATE_ICON(bell)
@@ -80,11 +80,7 @@ public:
      *  QQuickMaterialStyle is private, we can't access the Theme enum directly
      *
      */
-    enum Theme {
-        Light,
-        Dark,
-        System
-    };
+    enum Theme { Light, Dark, System };
     Q_ENUM(Theme)
 
     P_PROPERTY(int, theme, Theme::Dark)

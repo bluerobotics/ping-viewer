@@ -1,6 +1,6 @@
+#include "stylemanager.h"
 #include "logger.h"
 #include "settingsmanager.h"
-#include "stylemanager.h"
 
 #include <QDebug>
 #include <QGuiApplication>
@@ -26,13 +26,13 @@ StyleManager::StyleManager()
 QSize StyleManager::displaySize() const
 {
     // Check if we have engine access
-    if(!_engine) {
+    if (!_engine) {
         qCDebug(STYLEMANAGER) << "Need to set engine.";
         return {};
     }
     // We only have one window
     auto window = _engine->rootObjects().first();
-    if(!window) {
+    if (!window) {
         qCDebug(STYLEMANAGER) << "Window pointer is not available.";
         return {};
     }
