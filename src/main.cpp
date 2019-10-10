@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
 
     // Normal register
-    qmlRegisterType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink");
+    qmlRegisterUncreatableType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink",
+            "Link abstraction class can't be created.");
     qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
     qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
