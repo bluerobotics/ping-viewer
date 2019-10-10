@@ -21,8 +21,7 @@ Q_DECLARE_METATYPE(LinkConfiguration*)
  * @brief Manage the project DeviceManager
  *
  */
-class DeviceManager : public QAbstractListModel
-{
+class DeviceManager : public QAbstractListModel {
     Q_OBJECT
 public:
     /**
@@ -70,7 +69,7 @@ public:
      * @param deviceType
      */
     Q_INVOKABLE void connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,
-                                         PingEnumNamespace::PingDeviceType deviceType);
+        PingEnumNamespace::PingDeviceType deviceType);
 
     /**
      * @brief Play a log file
@@ -87,8 +86,8 @@ public:
      * @param deviceName
      * @param detectorName
      */
-    void append(const LinkConfiguration& linkConf, const QString& deviceName = "None",
-                const QString& detectorName = "None");
+    void append(
+        const LinkConfiguration& linkConf, const QString& deviceName = "None", const QString& detectorName = "None");
 
     /**
      * @brief Returns the data stored under the given role for the item referred to by the index
@@ -102,12 +101,12 @@ public:
         const int indexRow = index.row();
         QVector<QVariant> vectorRole = _sensors[role];
 
-        if(indexRow < 0 || vectorRole.size() <= indexRow) {
+        if (indexRow < 0 || vectorRole.size() <= indexRow) {
             return {};
         }
 
         // Return a QVariant<pointer>
-        if(role == Connection) {
+        if (role == Connection) {
             return QVariant::fromValue(vectorRole[indexRow].value<QSharedPointer<LinkConfiguration>>().get());
         }
 
@@ -119,10 +118,7 @@ public:
      *
      * @return QHash<int, QByteArray>
      */
-    QHash<int, QByteArray> roleNames() const override
-    {
-        return _roleNames;
-    }
+    QHash<int, QByteArray> roleNames() const override { return _roleNames; }
 
     /**
      * @brief Returns the number of rows under the given parent
@@ -143,10 +139,7 @@ public:
      *
      * @return QVariant
      */
-    QVariant primarySensor() const
-    {
-        return QVariant::fromValue(_primarySensor.get());
-    }
+    QVariant primarySensor() const { return QVariant::fromValue(_primarySensor.get()); }
     Q_PROPERTY(QVariant primarySensor READ primarySensor NOTIFY primarySensorChanged)
 
 signals:
@@ -169,8 +162,8 @@ private:
      * @param availableLinkConfigurations
      * @param detectorName
      */
-    void updateAvailableConnections(const QVector<LinkConfiguration>& availableLinkConfigurations,
-                                    const QString& detectorName);
+    void updateAvailableConnections(
+        const QVector<LinkConfiguration>& availableLinkConfigurations, const QString& detectorName);
 
     // Role and names
     enum Roles {
