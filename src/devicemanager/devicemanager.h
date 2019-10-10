@@ -181,11 +181,11 @@ private:
         DetectorName,
     };
     QHash<int, QByteArray> _roleNames {
-        {{Available}, {"available"}},
-        {{Connected}, {"connected"}},
-        {{Connection}, {"connection"}},
-        {{Name}, {"name"}},
-        {{DetectorName}, {"detectorName"}},
+        {Available, "available"},
+        {Connected, "connected"},
+        {Connection, "connection"},
+        {Name, "name"},
+        {DetectorName, "detectorName"},
     };
 
     QSharedPointer<Sensor> _primarySensor;
