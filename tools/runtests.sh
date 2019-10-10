@@ -12,9 +12,9 @@ echob() {
 }
 
 echob "Running style script:"
-${scriptpath}/astyle.sh
+${scriptpath}/clang-format.sh
 if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
-    echob "Style error ! Run astyle in tools. ($ ./tools/astyle.sh)"
+    echob "Style error ! Run clang-format in tools. ($ ./tools/clang-format.sh)"
     git diff | cat
     exit 1
 fi
