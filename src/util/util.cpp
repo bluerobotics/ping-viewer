@@ -10,7 +10,7 @@ QStringList Util::serialPortList()
 {
     static QSerialPortInfo serialPortInfo;
     static QStringList portNameList;
-    const QList<QSerialPortInfo> serialPortInfoList{serialPortInfo.availablePorts()};
+    const QList<QSerialPortInfo> serialPortInfoList {serialPortInfo.availablePorts()};
     portNameList.clear();
     for (const auto& serialPortInfo : serialPortInfoList) {
         if (!serialPortInfo.portName().startsWith(QStringLiteral("cu."), Qt::CaseInsensitive)) {
@@ -20,10 +20,8 @@ QStringList Util::serialPortList()
     return portNameList;
 }
 
-void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& points,
-                  const float initPos, const float finalPos,
-                  const float minPoint, const float maxPoint,
-                  const float multiplier)
+void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& points, const float initPos,
+    const float finalPos, const float minPoint, const float maxPoint, const float multiplier)
 {
     static const int numberOfPoints = 300;
 
@@ -33,38 +31,38 @@ void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& poin
         return;
     }
 
-    if(initPos > finalPos) {
+    if (initPos > finalPos) {
         qCDebug(util) << "InitPos need to be lower than finalPos.";
         return;
     }
 
     // Points per Meter
-    const float distPoints = numberOfPoints/(maxPoint - minPoint);
+    const float distPoints = numberOfPoints / (maxPoint - minPoint);
 
-    QXYSeries *xySeries = static_cast<QXYSeries *>(series);
+    QXYSeries* xySeries = static_cast<QXYSeries*>(series);
 
     // Use replace instead of clear + append, it's optimized for performance
     QVector<QPointF> realPoints;
     realPoints.reserve(numberOfPoints);
 
     // Start
-    const int lastStartPoint = int(distPoints*(initPos-minPoint));
-    #pragma omp for
-    for(int i = 0; i < lastStartPoint; i++) {
+    const int lastStartPoint = int(distPoints * (initPos - minPoint));
+#pragma omp for
+    for (int i = 0; i < lastStartPoint; i++) {
         realPoints << QPointF(i, 0);
     }
 
     // Data
-    const int lastDataPoint = int((finalPos - initPos)*distPoints);
-    const float dataIndexScale = points.length()/((finalPos - initPos)*distPoints);
-    #pragma omp for
-    for(int i = 0; i < lastDataPoint; i++) {
-        realPoints << QPointF(i + lastStartPoint, multiplier * points[static_cast<int>(i*dataIndexScale)]);
+    const int lastDataPoint = int((finalPos - initPos) * distPoints);
+    const float dataIndexScale = points.length() / ((finalPos - initPos) * distPoints);
+#pragma omp for
+    for (int i = 0; i < lastDataPoint; i++) {
+        realPoints << QPointF(i + lastStartPoint, multiplier * points[static_cast<int>(i * dataIndexScale)]);
     }
 
-    // Final
-    #pragma omp for
-    for(int i = realPoints.length(); i < numberOfPoints; i++) {
+// Final
+#pragma omp for
+    for (int i = realPoints.length(); i < numberOfPoints; i++) {
         realPoints << QPointF(i, 0);
     }
 
@@ -76,7 +74,7 @@ void Util::restartApplication()
 {
     QCoreApplication::quit();
     const QStringList arguments = QCoreApplication::arguments();
-    if(arguments.isEmpty()) {
+    if (arguments.isEmpty()) {
         qCWarning(util) << "CoreApplication argument is empty, the application will not restart.";
         return;
     }
@@ -97,7 +95,4 @@ Util* Util::self()
     return self;
 }
 
-Util::~Util()
-{
-
-}
+Util::~Util() {}
