@@ -8,8 +8,7 @@
  * @brief UDP connection class
  *
  */
-class UDPLink : public AbstractLink
-{
+class UDPLink : public AbstractLink {
 public:
     /**
      * @brief Construct a new UDPLink object

@@ -11,8 +11,7 @@
  *  This should be used in all connection types
  *
  */
-class AbstractLink : public QObject
-{
+class AbstractLink : public QObject {
     Q_OBJECT
 public:
     /**
@@ -69,7 +68,7 @@ public:
      *
      * @return bool
      */
-    Q_INVOKABLE virtual bool finishConnection() { return true;};
+    Q_INVOKABLE virtual bool finishConnection() { return true; };
 
     /**
      * @brief Check if connection is auto connected
@@ -133,7 +132,11 @@ public:
      *
      * @param autoc
      */
-    virtual void setAutoConnect(bool autoc = true) { _autoConnect = autoc; emit autoConnectChanged(); }
+    virtual void setAutoConnect(bool autoc = true)
+    {
+        _autoConnect = autoc;
+        emit autoConnectChanged();
+    }
 
     /**
      * @brief Set the configuration object
@@ -142,14 +145,22 @@ public:
      * @return true
      * @return false
      */
-    virtual bool setConfiguration(const LinkConfiguration& linkConfiguration) { Q_UNUSED(linkConfiguration) return true; }
+    virtual bool setConfiguration(const LinkConfiguration& linkConfiguration)
+    {
+        Q_UNUSED(linkConfiguration)
+        return true;
+    }
 
     /**
      * @brief Set the link name
      *
      * @param name
      */
-    void setName(const QString& name) { _name = name; emit nameChanged(_name); };
+    void setName(const QString& name)
+    {
+        _name = name;
+        emit nameChanged(_name);
+    };
 
     /**
      * @brief Set package index
@@ -163,7 +174,11 @@ public:
      *
      * @param type
      */
-    virtual void setType(LinkType type) { _type = type; emit linkChanged(_type); };
+    virtual void setType(LinkType type)
+    {
+        _type = type;
+        emit linkChanged(_type);
+    };
 
     /**
      * @brief Start communication
@@ -175,7 +190,7 @@ public:
      * @brief Start connection
      *
      */
-    Q_INVOKABLE virtual bool startConnection() { return true;};
+    Q_INVOKABLE virtual bool startConnection() { return true; };
 
     /**
      * @brief Return total time
@@ -213,7 +228,7 @@ public:
      */
     void write(const char* data, int size)
     {
-        if(size > 0) {
+        if (size > 0) {
             emit sendData(QByteArray(data, size));
         };
     }
@@ -223,20 +238,14 @@ public:
      *
      * @return float
      */
-    float downSpeed()
-    {
-        return _bitRateDownSpeed.speed;
-    }
+    float downSpeed() { return _bitRateDownSpeed.speed; }
 
     /**
      * @brief Upload speed of link in bits
      *
      * @return float
      */
-    float upSpeed()
-    {
-        return _bitRateUpSpeed.speed;
-    }
+    float upSpeed() { return _bitRateUpSpeed.speed; }
 
     Q_PROPERTY(qint64 byteSize READ byteSize NOTIFY byteSizeChanged)
     Q_PROPERTY(LinkConfiguration* configuration READ configuration NOTIFY configurationChanged)

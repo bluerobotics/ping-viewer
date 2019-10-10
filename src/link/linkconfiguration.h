@@ -12,8 +12,7 @@
  * @brief Link configuration class
  *
  */
-class LinkConfiguration : public QObject
-{
+class LinkConfiguration : public QObject {
     Q_OBJECT
 
 public:
@@ -25,7 +24,7 @@ public:
         QStringList args;
         QString name;
         LinkType type = LinkType::None;
-        //TODO: We should somehow make this class or this structure more abstract
+        // TODO: We should somehow make this class or this structure more abstract
         // and remove any protocol or device specific information
         // right now this is necessary, since link configuration is our default
         // link information structure
@@ -55,12 +54,9 @@ public:
      * @param name
      * @param deviceType
      */
-    LinkConfiguration(
-        LinkType linkType = LinkType::None,
-        QStringList args = QStringList(),
-        QString name = QString(),
-        PingDeviceType deviceType = PingDeviceType::UNKNOWN
-    ) : _linkConf{args, name, linkType, deviceType} {};
+    LinkConfiguration(LinkType linkType = LinkType::None, QStringList args = QStringList(), QString name = QString(),
+        PingDeviceType deviceType = PingDeviceType::UNKNOWN)
+        : _linkConf {args, name, linkType, deviceType} {};
 
     /**
      * @brief Construct a new Link Configuration object
@@ -68,7 +64,7 @@ public:
      * @param confLinkStructure
      */
     LinkConfiguration(LinkConf& confLinkStructure)
-        : _linkConf{confLinkStructure} {};
+        : _linkConf {confLinkStructure} {};
 
     /**
      * @brief Construct a new Link Configuration object
@@ -77,7 +73,7 @@ public:
      */
     LinkConfiguration(const LinkConfiguration& other)
         : QObject(nullptr)
-        , _linkConf{other.configurationStruct()} {};
+        , _linkConf {other.configurationStruct()} {};
 
     /**
      * @brief Destroy the Link Configuration object
@@ -249,7 +245,7 @@ public:
      */
     Q_INVOKABLE QString typeToString() const
     {
-        switch(_linkConf.type) {
+        switch (_linkConf.type) {
         case LinkType::None:
             return QStringLiteral("None");
         case LinkType::File:
@@ -262,7 +258,7 @@ public:
             return QStringLiteral("Ping1D Simulation");
         case LinkType::Ping360Simulation:
             return QStringLiteral("Ping360 Simulation");
-        default :
+        default:
             return QStringLiteral("Unknown");
         }
     };
@@ -287,7 +283,7 @@ public:
      * @param other
      * @return LinkConfiguration&
      */
-    LinkConfiguration& operator = (const LinkConfiguration& other)
+    LinkConfiguration& operator=(const LinkConfiguration& other)
     {
         this->_linkConf = other.configurationStruct();
         return *this;
@@ -305,8 +301,8 @@ private:
 
 bool operator==(const LinkConfiguration& first, const LinkConfiguration& second);
 QDebug operator<<(QDebug d, const LinkConfiguration& other);
-QDataStream& operator<<(QDataStream &out, const LinkConfiguration linkConfiguration);
-QDataStream& operator>>(QDataStream &in, LinkConfiguration &linkConfiguration);
+QDataStream& operator<<(QDataStream& out, const LinkConfiguration linkConfiguration);
+QDataStream& operator>>(QDataStream& in, LinkConfiguration& linkConfiguration);
 
 Q_DECLARE_METATYPE(LinkConfiguration)
 
@@ -333,7 +329,6 @@ struct LinkConfigurationRegisterStruct {
     }
 };
 
-namespace
-{
+namespace {
 LinkConfigurationRegisterStruct _linkConfigurationRegisterStruct;
 }

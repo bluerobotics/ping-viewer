@@ -7,8 +7,7 @@
  * @brief Simulation connection class
  *
  */
-class SimulationLink : public AbstractLink
-{
+class SimulationLink : public AbstractLink {
 public:
     /**
      * @brief Construct a new Simulation Link object

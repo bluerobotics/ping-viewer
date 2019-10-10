@@ -2,8 +2,7 @@
 
 #include <QObject>
 
-namespace AbstractLinkNamespace
-{
+namespace AbstractLinkNamespace {
 Q_NAMESPACE
 enum LinkType {
     None = 0,

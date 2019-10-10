@@ -16,8 +16,7 @@
  * @brief File connection class
  *
  */
-class FileLink : public AbstractLink
-{
+class FileLink : public AbstractLink {
     Q_OBJECT
 public:
     /**
@@ -91,7 +90,11 @@ public:
      * @brief Pause log
      *
      */
-    void pause() final { if(_processLog) _processLog->pause(); };
+    void pause() final
+    {
+        if (_processLog)
+            _processLog->pause();
+    };
 
     /**
      * @brief Set the configuration object
@@ -107,13 +110,21 @@ public:
      *
      * @param index
      */
-    void setPackageIndex(int index) final override { if(_processLog) _processLog->setPackageIndex(index); }
+    void setPackageIndex(int index) final override
+    {
+        if (_processLog)
+            _processLog->setPackageIndex(index);
+    }
 
     /**
      * @brief Start log
      *
      */
-    void start() final { if(_processLog) _processLog->start(); };
+    void start() final
+    {
+        if (_processLog)
+            _processLog->start();
+    };
 
     /**
      * @brief Start connection

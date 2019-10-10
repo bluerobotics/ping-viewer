@@ -6,8 +6,7 @@
  * @brief TCP connection class
  *
  */
-class TCPLink : public AbstractLink
-{
+class TCPLink : public AbstractLink {
 public:
     /**
      * @brief Construct a new TCPLink object

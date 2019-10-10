@@ -11,12 +11,10 @@ AbstractLink::AbstractLink(const QString& name, QObject* parent)
     , _name(name)
     , _type(LinkType::None)
 {
-    connect(this, &AbstractLink::newData, this, [&](const QByteArray& data) {
-        _bitRateDownSpeed.numberOfBytes += data.size();
-    });
-    connect(this, &AbstractLink::sendData, this, [&](const QByteArray& data) {
-        _bitRateUpSpeed.numberOfBytes += data.size();
-    });
+    connect(this, &AbstractLink::newData, this,
+        [&](const QByteArray& data) { _bitRateDownSpeed.numberOfBytes += data.size(); });
+    connect(this, &AbstractLink::sendData, this,
+        [&](const QByteArray& data) { _bitRateUpSpeed.numberOfBytes += data.size(); });
     connect(&_oneSecondTimer, &QTimer::timeout, this, [&]() {
         _bitRateDownSpeed.update();
         _bitRateUpSpeed.update();

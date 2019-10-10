@@ -63,9 +63,7 @@ struct LogSensorStruct {
     bool isValid()
     {
         // The only values that should be checked are the ones that does not change between versions
-        return header == _validHeader
-               && (version > 0 && version <= _actualVersion)
-               ;
+        return header == _validHeader && (version > 0 && version <= _actualVersion);
     }
 
     /**
@@ -75,7 +73,7 @@ struct LogSensorStruct {
      */
     void setSensorInfo(SensorInfo sensorInfo)
     {
-        if(!initialized) {
+        if (!initialized) {
             init();
         }
 
