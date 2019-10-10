@@ -10,6 +10,7 @@ script:
   - git remote set-url origin https://${GITHUB_TOKEN}@github.com/bluerobotics/ping-viewer
   - mkdocs build
   - htmlproofer --empty-alt-ignore --file-ignore "./ping-viewer/404.html" --url-ignore "https://fonts.gstatic.com" || travis_terminate 1
-  - if [ ${TRAVIS_PULL_REQUEST} == "false" ]; then
+  - if [ ${TRAVIS_PULL_REQUEST} == false ] && [ ${TRAVIS_BRANCH} == "docs" ]; then
+      echo "Doing deployment..";
       mkdocs gh-deploy --force;
     fi
