@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QQuickPaintedItem>
 #include <QImage>
+#include <QQuickPaintedItem>
 
 #include "logger.h"
 #include "ringvector.h"
@@ -14,8 +14,7 @@ Q_DECLARE_LOGGING_CATEGORY(waterfall)
  * @brief Polar widget
  *
  */
-class PolarPlot : public Waterfall
-{
+class PolarPlot : public Waterfall {
     Q_OBJECT
 
 public:
@@ -24,7 +23,7 @@ public:
      *
      * @param parent
      */
-    PolarPlot(QQuickItem *parent = nullptr);
+    PolarPlot(QQuickItem* parent = nullptr);
 
     /**
      * @brief This is used by the qml paint event
@@ -32,14 +31,14 @@ public:
      *
      * @param painter
      */
-    void paint(QPainter *painter) final override;
+    void paint(QPainter* painter) final override;
 
     /**
      * @brief Set the polar Image
      *
      * @param image
      */
-    void setImage(const QImage &image);
+    void setImage(const QImage& image);
 
     /**
      * @brief Draw a list of points in the waterfall
@@ -51,8 +50,8 @@ public:
      * @param angleGrad
      * @param sectorSize
      */
-    Q_INVOKABLE void draw(const QVector<double>& points, float angle, float initPoint, float length, float angleGrad,
-                          float sectorSize);
+    Q_INVOKABLE void draw(
+        const QVector<double>& points, float angle, float initPoint, float length, float angleGrad, float sectorSize);
 
     /**
      * @brief Clear waterfall and restart all parameters
@@ -65,7 +64,7 @@ public:
      *
      * @return QImage
      */
-    QImage image() {return _image;}
+    QImage image() { return _image; }
     Q_PROPERTY(QImage image READ image WRITE setImage NOTIFY imageChanged)
 
     /**
@@ -73,7 +72,7 @@ public:
      *
      * @return float
      */
-    float mouseSampleAngle() {return _mouseSampleAngle;}
+    float mouseSampleAngle() { return _mouseSampleAngle; }
     Q_PROPERTY(float mouseSampleAngle READ mouseSampleAngle NOTIFY mouseSampleAngleChanged)
 
     /**
@@ -81,7 +80,7 @@ public:
      *
      * @return float
      */
-    float mouseSampleDistance() {return _mouseSampleDistance;}
+    float mouseSampleDistance() { return _mouseSampleDistance; }
     Q_PROPERTY(float mouseSampleDistance READ mouseSampleDistance NOTIFY mouseSampleDistanceChanged)
 
     /**
@@ -89,10 +88,7 @@ public:
      *
      * @return float
      */
-    float maxDistance()
-    {
-        return _maxDistance;
-    }
+    float maxDistance() { return _maxDistance; }
     Q_PROPERTY(float maxDistance READ maxDistance NOTIFY maxDistanceChanged)
 
 signals:
@@ -125,7 +121,7 @@ private:
     float _maxDistance;
     float _mouseSampleAngle;
     float _mouseSampleDistance;
-    QPainter *_painter;
+    QPainter* _painter;
     QPainterPath _polarBackgroundMask;
     float _sectorSizeDegrees;
     static uint16_t _angularResolution;

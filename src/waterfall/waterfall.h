@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QQuickPaintedItem>
 #include <QImage>
+#include <QQuickPaintedItem>
 
 #include "logger.h"
 #include "ringvector.h"
@@ -13,8 +13,7 @@ Q_DECLARE_LOGGING_CATEGORY(waterfall)
  * @brief Waterfall widget
  *
  */
-class Waterfall : public QQuickPaintedItem
-{
+class Waterfall : public QQuickPaintedItem {
     Q_OBJECT
 public:
     /**
@@ -22,7 +21,7 @@ public:
      *
      * @param parent
      */
-    Waterfall(QQuickItem *parent = nullptr);
+    Waterfall(QQuickItem* parent = nullptr);
 
     /**
      * @brief This is used by the qml pain event
@@ -30,7 +29,7 @@ public:
      *
      * @param painter
      */
-    virtual void paint(QPainter *painter) = 0;
+    virtual void paint(QPainter* painter) = 0;
 
     /**
      * @brief Change the theme used in the waterfall
@@ -60,21 +59,21 @@ public:
      *
      * @param event
      */
-    void hoverMoveEvent(QHoverEvent *event);
+    void hoverMoveEvent(QHoverEvent* event);
 
     /**
      * @brief Function that executes when the mouse leaves the waterfall area
      *
      * @param event
      */
-    void hoverLeaveEvent(QHoverEvent *event);
+    void hoverLeaveEvent(QHoverEvent* event);
 
     /**
      * @brief Function that executes when the mouse enters the waterfall area
      *
      * @param event
      */
-    void hoverEnterEvent(QHoverEvent *event);
+    void hoverEnterEvent(QHoverEvent* event);
 
     /**
      * @brief Clear waterfall and restart all parameters
@@ -87,7 +86,7 @@ public:
      *
      * @return QPoint
      */
-    QPoint mousePos() {return _mousePos;}
+    QPoint mousePos() { return _mousePos; }
     Q_PROPERTY(QPoint mousePos READ mousePos NOTIFY mousePosChanged)
 
     /**
@@ -95,7 +94,7 @@ public:
      *
      * @return bool
      */
-    bool containsMouse() {return _containsMouse;}
+    bool containsMouse() { return _containsMouse; }
     Q_PROPERTY(bool containsMouse READ containsMouse NOTIFY containsMouseChanged)
 
     /**
@@ -104,7 +103,7 @@ public:
      *
      * @return const QString
      */
-    const QString theme() {return _theme;}
+    const QString theme() { return _theme; }
     Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)
 
     /**
@@ -112,7 +111,7 @@ public:
      *
      * @return const QStringList
      */
-    const QStringList themes() {return _themes;}
+    const QStringList themes() { return _themes; }
     Q_PROPERTY(QStringList themes READ themes NOTIFY themesChanged)
 
     /**
@@ -121,14 +120,18 @@ public:
      * @return true
      * @return false
      */
-    bool smooth() {return _smooth;}
+    bool smooth() { return _smooth; }
 
     /**
      * @brief Set the smooth state
      *
      * @param smooth
      */
-    void setSmooth(bool smooth) {_smooth = smooth; emit smoothChanged();}
+    void setSmooth(bool smooth)
+    {
+        _smooth = smooth;
+        emit smoothChanged();
+    }
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
     /**
@@ -136,7 +139,11 @@ public:
      *
      * @param antialiasing
      */
-    void setAliasing(bool antialiasing) {setAntialiasing(antialiasing); emit antialiasingChanged();}
+    void setAliasing(bool antialiasing)
+    {
+        setAntialiasing(antialiasing);
+        emit antialiasingChanged();
+    }
     Q_PROPERTY(bool antialiasing READ antialiasing WRITE setAliasing NOTIFY antialiasingChanged)
 
 signals:
