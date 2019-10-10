@@ -18,9 +18,10 @@ public:
     /**
      * @brief Construct a new Abstract Link object
      *
+     * @param name
      * @param parent
      */
-    AbstractLink(QObject* parent = nullptr);
+    AbstractLink(const QString& name, QObject* parent = nullptr);
 
     /**
      * @brief Destroy the Abstract Link object
