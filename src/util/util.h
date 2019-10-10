@@ -14,8 +14,7 @@ class QQuickView;
  * @brief Singleton helper for qml interface
  *
  */
-class Util : public QObject
-{
+class Util : public QObject {
     Q_OBJECT
 
 public:
@@ -30,11 +29,8 @@ public:
      * @param maxPoint
      * @param multiplier
      */
-    Q_INVOKABLE void update(QtCharts::QAbstractSeries * series, const QVector<double>& points,
-                            const float initPos, const float finalPos,
-                            const float minPoint, const float maxPoint,
-                            const float multiplier = 1
-                           );
+    Q_INVOKABLE void update(QtCharts::QAbstractSeries* series, const QVector<double>& points, const float initPos,
+        const float finalPos, const float minPoint, const float maxPoint, const float multiplier = 1);
 
     /**
      * @brief Return a list of the available serial ports
