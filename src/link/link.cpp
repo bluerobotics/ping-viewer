@@ -19,7 +19,7 @@ Link::Link(LinkType linkType, QString name, QObject* parent)
 {
     switch(linkType) {
     case LinkType::None :
-        _abstractLink.reset(new AbstractLink());
+        _abstractLink.reset(new AbstractLink("AbstractLink"));
         break;
     case LinkType::File :
         _abstractLink.reset(new FileLink());
