@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QQuickPaintedItem>
 #include <QImage>
+#include <QQuickPaintedItem>
 
 #include "logger.h"
 #include "ringvector.h"
@@ -14,8 +14,7 @@ Q_DECLARE_LOGGING_CATEGORY(waterfall)
  * @brief Waterfall widget
  *
  */
-class WaterfallPlot : public Waterfall
-{
+class WaterfallPlot : public Waterfall {
     Q_OBJECT
 
 public:
@@ -24,7 +23,7 @@ public:
      *
      * @param parent
      */
-    WaterfallPlot(QQuickItem *parent = nullptr);
+    WaterfallPlot(QQuickItem* parent = nullptr);
 
     /**
      * @brief This is used by the qml pain event
@@ -32,14 +31,14 @@ public:
      *
      * @param painter
      */
-    void paint(QPainter *painter) final override;
+    void paint(QPainter* painter) final override;
 
     /**
      * @brief Set the waterfall Image
      *
      * @param image
      */
-    void setImage(const QImage &image);
+    void setImage(const QImage& image);
 
     /**
      * @brief Set the waterfall max depth in meters
@@ -58,7 +57,7 @@ public:
      * @param distance
      */
     Q_INVOKABLE void draw(const QVector<double>& points, float confidence = 0, float initPoint = 0, float length = 50,
-                          float distance = 0);
+        float distance = 0);
 
     /**
      * @brief Clear waterfall and restart all parameters
@@ -71,7 +70,7 @@ public:
      *
      * @return QImage
      */
-    QImage image() {return _image;}
+    QImage image() { return _image; }
     Q_PROPERTY(QImage image READ image WRITE setImage NOTIFY imageChanged)
 
     /**
@@ -79,7 +78,7 @@ public:
      *
      * @return float
      */
-    float mouseDepth() {return _mouseDepth;}
+    float mouseDepth() { return _mouseDepth; }
     Q_PROPERTY(float mouseDepth READ mouseDepth NOTIFY mouseDepthChanged)
 
     /**
@@ -87,7 +86,7 @@ public:
      *
      * @return float
      */
-    float mouseColumnConfidence() {return _mouseColumnConfidence;}
+    float mouseColumnConfidence() { return _mouseColumnConfidence; }
     Q_PROPERTY(float mouseColumnConfidence READ mouseColumnConfidence NOTIFY mouseColumnConfidenceChanged)
 
     /**
@@ -95,21 +94,21 @@ public:
      *
      * @return float
      */
-    float mouseColumnDepth() {return _mouseColumnDepth;}
+    float mouseColumnDepth() { return _mouseColumnDepth; }
     Q_PROPERTY(float mouseColumnDepth READ mouseColumnDepth NOTIFY mouseColumnDepthChanged)
 
     /**
      * @brief Return max depth in waterfall at the moment in meters
      *
      */
-    Q_INVOKABLE float getMaxDepthToDraw() {return _maxDepthToDraw;}
+    Q_INVOKABLE float getMaxDepthToDraw() { return _maxDepthToDraw; }
     Q_PROPERTY(float maxDepthToDraw READ getMaxDepthToDraw NOTIFY maxDepthToDrawChanged)
 
     /**
      * @brief Return min depth in waterfall at the moment in meters
      *
      */
-    Q_INVOKABLE float getMinDepthToDraw() {return _minDepthToDraw;}
+    Q_INVOKABLE float getMinDepthToDraw() { return _minDepthToDraw; }
     Q_PROPERTY(float minDepthToDraw READ getMinDepthToDraw NOTIFY minDepthToDrawChanged)
 
 signals:
@@ -146,7 +145,7 @@ private:
     float _mouseColumnConfidence;
     float _mouseColumnDepth;
     float _mouseDepth;
-    QPainter *_painter;
+    QPainter* _painter;
     QTimer* _updateTimer;
     float _waterfallDepth;
 

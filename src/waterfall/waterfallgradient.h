@@ -11,10 +11,10 @@ Q_DECLARE_LOGGING_CATEGORY(waterfallGradient)
  * @brief Manage gradients for waterfall
  *
  */
-class WaterfallGradient : public QLinearGradient
-{
+class WaterfallGradient : public QLinearGradient {
     QString _name;
     bool _isOk = false;
+
 public:
     /**
      * @brief Construct a new Waterfall Gradient object
@@ -29,7 +29,7 @@ public:
      *
      * @param file
      */
-    WaterfallGradient(QFile &file);
+    WaterfallGradient(QFile& file);
 
     /**
      * @brief Check if gradient is valid
@@ -51,7 +51,7 @@ public:
      *
      * @param name
      */
-    void setName(const QString& name) ;
+    void setName(const QString& name);
 
     /**
      * @brief Return gradient name
@@ -100,7 +100,8 @@ public:
 
     /**
      * @brief Get value from color interpolation
-     *  It'll return 1 if color is equal to color2 or 0 if color is color1, otherwise will be done a linear interpolation
+     *  It'll return 1 if color is equal to color2 or 0 if color is color1, otherwise will be done a linear
+     * interpolation
      *
      * @param color
      * @param color1
