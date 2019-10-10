@@ -7,8 +7,7 @@
  * @brief This is something to handle a json like structure
  *
  */
-class VariantTree
-{
+class VariantTree {
 public:
     /**
      * @brief Get variant reference from path

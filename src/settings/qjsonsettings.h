@@ -13,8 +13,7 @@ class QIODevice;
  * @brief Abstract class to deal with generic settings
  *
  */
-class QJsonSettings : public QAbstractListModel
-{
+class QJsonSettings : public QAbstractListModel {
     Q_OBJECT
 public:
     /**
@@ -22,7 +21,7 @@ public:
      *
      * @param parent
      */
-    explicit QJsonSettings(QObject *parent = nullptr);
+    explicit QJsonSettings(QObject* parent = nullptr);
 
     /**
      * @brief Construct a new QJsonSettings object
@@ -30,7 +29,7 @@ public:
      * @param fileName
      * @param parent
      */
-    QJsonSettings(const QString& fileName, QObject *parent = nullptr);
+    QJsonSettings(const QString& fileName, QObject* parent = nullptr);
 
     /**
      * @brief Construct a new QJsonSettings object
@@ -38,7 +37,7 @@ public:
      * @param device
      * @param parent
      */
-    QJsonSettings(QIODevice * device, QObject *parent = nullptr);
+    QJsonSettings(QIODevice* device, QObject* parent = nullptr);
 
     /**
      * @brief Construct a new QJsonSettings object
@@ -46,7 +45,7 @@ public:
      * @param json
      * @param parent
      */
-    QJsonSettings(const QByteArray& json, QObject *parent = nullptr);
+    QJsonSettings(const QByteArray& json, QObject* parent = nullptr);
 
     /**
      * @brief Destroy the QJsonSettings object
@@ -68,7 +67,7 @@ public:
      * @param device
      * @return success
      */
-    bool load(QIODevice * device);
+    bool load(QIODevice* device);
 
     /**
      * @brief Load json from QByteArray
@@ -84,7 +83,7 @@ public:
      * @param parent
      * @return int
      */
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
     /**
      * @brief Get data from index and role
@@ -93,7 +92,7 @@ public:
      * @param role
      * @return QVariant
      */
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
     /**
      * @brief Get role names
@@ -121,12 +120,11 @@ public:
 private:
     Q_DISABLE_COPY(QJsonSettings)
     QJsonDocument _jsonDocument;
-    QString _mainKey{QStringLiteral("settings")};
+    QString _mainKey {QStringLiteral("settings")};
     QHash<int, QByteArray> _roles {
         {{0}, {"name"}},
         {{1}, {"type"}},
         {{2}, {"description"}},
     };
     QJsonValue _rootValue;
-
 };

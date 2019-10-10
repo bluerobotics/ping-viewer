@@ -1,5 +1,5 @@
-#include "logger.h"
 #include "settingsmanager.h"
+#include "logger.h"
 
 #include <QQmlEngine>
 
@@ -10,14 +10,14 @@ SettingsManager::SettingsManager()
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
-    //TODO: reset settings if new version
-    if(_settings.contains("reset")) {
+    // TODO: reset settings if new version
+    if (_settings.contains("reset")) {
         bool reset = _settings.value("reset").toBool();
-        if(reset) {
+        if (reset) {
             _settings.clear();
         }
     }
-    if(_settings.contains("settingsTree")) {
+    if (_settings.contains("settingsTree")) {
         _tree.setMap(_settings.value("settingsTree").toMap());
     }
     qRegisterMetaType<QJsonSettings*>("const QJsonSettings*");
@@ -26,19 +26,18 @@ SettingsManager::SettingsManager()
 QVariant SettingsManager::value(QString& settingName)
 {
     // Check if settings for that exist and get it, otherwise return default (0);
-    if(_settings.contains(settingName)) {
+    if (_settings.contains(settingName)) {
         return _settings.value(settingName).toInt();
     }
 
-    qCWarning(SETTINGSMANAGER) << \
-                               QStringLiteral("Settings for %2 does not exist.").arg(settingName);
+    qCWarning(SETTINGSMANAGER) << QStringLiteral("Settings for %2 does not exist.").arg(settingName);
     return 0;
 }
 
 void SettingsManager::set(QString& settingName, QVariant& value)
 {
     // Check if our map of models does have anything about it
-    if(!_settings.contains(settingName)) {
+    if (!_settings.contains(settingName)) {
         qCDebug(SETTINGSMANAGER) << QStringLiteral("New value in %1:").arg(settingName) << value;
     } else {
         qCDebug(SETTINGSMANAGER) << QStringLiteral("In %1:").arg(settingName) << value;
@@ -61,6 +60,4 @@ SettingsManager* SettingsManager::self()
     return self;
 }
 
-SettingsManager::~SettingsManager()
-{
-}
+SettingsManager::~SettingsManager() {}

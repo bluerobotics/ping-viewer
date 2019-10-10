@@ -18,21 +18,16 @@ Q_DECLARE_LOGGING_CATEGORY(SETTINGSMANAGER)
  * @brief Manage the project SettingsManager
  *
  */
-class SettingsManager : public QObject
-{
+class SettingsManager : public QObject {
     Q_OBJECT
 public:
-
     /**
      * @brief Get value from path
      *
      * @param path
      * @return Q_INVOKABLE getMapValue
      */
-    Q_INVOKABLE QVariant getMapValue(QStringList path)
-    {
-        return _tree.get(path);
-    }
+    Q_INVOKABLE QVariant getMapValue(QStringList path) { return _tree.get(path); }
 
     /**
      * @brief Get variable value
@@ -110,7 +105,7 @@ private:
     AUTO_PROPERTY(bool, reset, false)
     AUTO_PROPERTY(bool, darkTheme, false)
     AUTO_PROPERTY(bool, enableSensorAdvancedConfiguration, false)
-    //AUTO_PROPERTY_MODEL(QString, adistanceUnits, QStringList, MODEL({"Metric", "Imperial"})) // Example
+    // AUTO_PROPERTY_MODEL(QString, adistanceUnits, QStringList, MODEL({"Metric", "Imperial"})) // Example
     AUTO_PROPERTY_JSONMODEL(distanceUnits, QByteArrayLiteral(R"({
             "settings": [
                 {
@@ -125,5 +120,4 @@ private:
                 }
             ]
         })"))
-
 };
