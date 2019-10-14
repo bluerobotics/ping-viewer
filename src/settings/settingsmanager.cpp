@@ -23,7 +23,7 @@ SettingsManager::SettingsManager()
     qRegisterMetaType<QJsonSettings*>("const QJsonSettings*");
 }
 
-QVariant SettingsManager::value(QString& settingName)
+QVariant SettingsManager::value(const QString& settingName) const
 {
     // Check if settings for that exist and get it, otherwise return default (0);
     if (_settings.contains(settingName)) {
@@ -34,7 +34,7 @@ QVariant SettingsManager::value(QString& settingName)
     return 0;
 }
 
-void SettingsManager::set(QString& settingName, QVariant& value)
+void SettingsManager::set(const QString& settingName, const QVariant& value)
 {
     // Check if our map of models does have anything about it
     if (!_settings.contains(settingName)) {
