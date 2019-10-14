@@ -27,7 +27,7 @@ public:
      * @param path
      * @return Q_INVOKABLE getMapValue
      */
-    Q_INVOKABLE QVariant getMapValue(QStringList path) { return _tree.get(path); }
+    Q_INVOKABLE QVariant getMapValue(const QStringList& path) { return _tree.get(path); }
 
     /**
      * @brief Get variable value
@@ -35,7 +35,7 @@ public:
      * @param settingName
      * @return QVariant
      */
-    Q_INVOKABLE QVariant value(QString& settingName);
+    Q_INVOKABLE QVariant value(const QString& settingName) const;
 
     /**
      * @brief Set variable value
@@ -43,7 +43,7 @@ public:
      * @param settingName
      * @param value
      */
-    Q_INVOKABLE void set(QString& settingName, QVariant& value);
+    Q_INVOKABLE void set(const QString& settingName, const QVariant& value);
 
     /**
      * @brief Set map value from path
@@ -51,7 +51,7 @@ public:
      * @param path
      * @param value
      */
-    Q_INVOKABLE void setMapValue(QStringList path, QVariant value)
+    Q_INVOKABLE void setMapValue(const QStringList& path, const QVariant& value)
     {
         _tree.get(path) = value;
         _settings.setValue("settingsTree", _tree.map());
