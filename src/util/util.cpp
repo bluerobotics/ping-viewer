@@ -28,7 +28,7 @@ void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& poin
     static const int numberOfPoints = 300;
 
     // Check inputs
-    if (!series && points.isEmpty()) {
+    if (!series || points.isEmpty()) {
         qCDebug(util) << "Serie or vector not valid.";
         return;
     }
