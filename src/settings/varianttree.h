@@ -23,7 +23,7 @@ public:
      * @param path
      * @return QVariantMap*
      */
-    QVariantMap* getMap(QStringList path);
+    QVariantMap* getMap(const QStringList& path);
 
     /**
      * @brief Get a copy of map
