@@ -37,7 +37,7 @@ public:
      *
      * @return QStringList serialPortList
      */
-    Q_INVOKABLE QStringList serialPortList();
+    static Q_INVOKABLE QStringList serialPortList();
 
     /**
      * @brief Check if the application is running under macos
