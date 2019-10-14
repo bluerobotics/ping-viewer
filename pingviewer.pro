@@ -24,12 +24,11 @@ RESOURCES += \
 
 # Warning as error
 *-g++ | *-clang {
-    QMAKE_CXXFLAGS += -Werror -Ofast
+    QMAKE_CXXFLAGS += -Werror
 }
 *msvc {
     QMAKE_CXXFLAGS += /WX \
         /wd4305 \ # Remove truncated warnings, msvc does not provide some non double values
-        /Ox \ # Enable speed optimizations
 
     # Necessary for register changes in serial layer for timer latency
     QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'"
@@ -48,6 +47,15 @@ CONFIG(debug, debug|release) {
     }
 } else {
     message("Release Build !")
+
+    # Enable fast flags
+    *-g++ | *-clang {
+        QMAKE_CXXFLAGS += -Ofast
+    }
+
+    *msvc {
+        QMAKE_CXXFLAGS += /Ox \ # Enable speed optimizations
+    }
 }
 
 # Enable ccache where we can
