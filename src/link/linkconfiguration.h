@@ -54,8 +54,8 @@ public:
      * @param name
      * @param deviceType
      */
-    LinkConfiguration(LinkType linkType = LinkType::None, QStringList args = QStringList(), QString name = QString(),
-        PingDeviceType deviceType = PingDeviceType::UNKNOWN)
+    LinkConfiguration(LinkType linkType = LinkType::None, const QStringList& args = QStringList(),
+        const QString& name = QString(), PingDeviceType deviceType = PingDeviceType::UNKNOWN)
         : _linkConf {args, name, linkType, deviceType} {};
 
     /**
@@ -208,7 +208,7 @@ public:
      *
      * @param name
      */
-    void setName(QString name) { _linkConf.name = name; };
+    void setName(const QString& name) { _linkConf.name = name; };
 
     /**
      * @brief Return serialport system path
@@ -229,7 +229,7 @@ public:
      *
      * @param type
      */
-    void setType(LinkType type) { _linkConf.type = type; };
+    void setType(const LinkType& type) { _linkConf.type = type; };
 
     /**
      * @brief Return link configuration type
