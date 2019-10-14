@@ -8,10 +8,8 @@ PING_LOGGING_CATEGORY(util, "ping.util");
 
 QStringList Util::serialPortList()
 {
-    static QSerialPortInfo serialPortInfo;
-    static QStringList portNameList;
-    const QList<QSerialPortInfo> serialPortInfoList {serialPortInfo.availablePorts()};
-    portNameList.clear();
+    QStringList portNameList;
+    const QList<QSerialPortInfo> serialPortInfoList {QSerialPortInfo::availablePorts()};
     for (const auto& serialPortInfo : serialPortInfoList) {
         if (!serialPortInfo.portName().startsWith(QStringLiteral("cu."), Qt::CaseInsensitive)) {
             portNameList.append(serialPortInfo.portName());
