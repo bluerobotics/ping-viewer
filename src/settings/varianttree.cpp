@@ -11,7 +11,7 @@ QVariant& VariantTree::get(QStringList path)
     return a;
 }
 
-QVariantMap* VariantTree::getMap(QStringList path)
+QVariantMap* VariantTree::getMap(const QStringList& path)
 {
     QVariantMap* finalMap = &_map;
     for (auto& key : path) {
