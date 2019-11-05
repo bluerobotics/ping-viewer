@@ -116,30 +116,39 @@ Item {
         return x < min ? min : (x > max ? max : x)
     }
 
-    function checkPosition() {
+    property var _POSITION: Object.freeze({"X":1, "Y":2,})
+    function checkPosition(positionType) {
         // Check if parent is visible and correct initialized
         if(!root.parent.visible || root.parent.width === 0 || root.parent.height === 0) {
             return
         }
 
         // Calculate the maximum available position
-        var maxWidth = parent.width - root.width - margin
-        var maxHeight = parent.height - root.height - margin
-
         // Check if the window can contain the item
-        if(maxWidth < 0 || maxHeight < 0) {
-            return
-        }
+        // Test if value is arealdy in use
+        if(positionType === _POSITION.X) {
+            let maxSize = parent.width - root.width - margin
+            if(maxSize <= 0 || margin >= maxSize) {return}
 
-        x = clamp(x, margin, maxWidth)
-        y = clamp(y, margin, maxHeight)
+            let newValue = clamp(x, margin, maxSize)
+            if(newValue !== x) {x = newValue}
+        } else if(positionType === _POSITION.Y) {
+            let maxSize = parent.height - root.height - margin
+            if(maxSize <= 0 || margin >= maxSize) {return}
+
+            let newValue = clamp(y, margin, maxSize)
+            if(newValue !== y) {y = newValue}
+        }
     }
 
     // Component is used when the application is started for the first time in a computer
     // since X and Y is not emited
-    Component.onCompleted: checkPosition()
+    Component.onCompleted: {
+        checkPosition(_POSITION.X)
+        checkPosition(_POSITION.Y)
+    }
     // X and Y signals are necessary, since onCompleted is emitted before the application is
     // correct initialized
-    onXChanged: checkPosition()
-    onYChanged: checkPosition()
+    onXChanged: checkPosition(_POSITION.X)
+    onYChanged: checkPosition(_POSITION.Y)
 }
