@@ -2,7 +2,6 @@
 
 #include <QFile>
 #include <QLoggingCategory>
-#include <QSettings>
 #include <QStringListModel>
 
 #include "loglistmodel.h"
