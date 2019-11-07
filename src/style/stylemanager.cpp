@@ -11,6 +11,8 @@ PING_LOGGING_CATEGORY(STYLEMANAGER, "ping.stylemanager")
 
 StyleManager::StyleManager()
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     auto darkChanged = [this] {
         theme(isDark() ? Theme::Dark : Theme::Light);
         primaryColor(isDark() ? _light : _dark);
@@ -49,6 +51,6 @@ QObject* StyleManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scrip
 
 StyleManager* StyleManager::self()
 {
-    static StyleManager* self = new StyleManager();
-    return self;
+    static StyleManager self;
+    return &self;
 }
