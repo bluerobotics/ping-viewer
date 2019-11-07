@@ -92,8 +92,8 @@ uint Logger::getCategoryIndex(QString category) { return _categoryIndexer[catego
 
 Logger* Logger::self()
 {
-    static Logger* self = new Logger();
-    return self;
+    static Logger self;
+    return &self;
 }
 
 void Logger::test()
