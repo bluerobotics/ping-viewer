@@ -17,6 +17,8 @@ QString NetworkTool::_gitUserRepoFirmware = "bluerobotics/ping-firmware";
 
 NetworkTool::NetworkTool()
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     //*github.com/user/repo* results in user/repo
     const static QRegularExpression regex(R"(github.com\/([^.]*))");
     QRegularExpressionMatch regexMatch = regex.match(QStringLiteral(GIT_URL));
@@ -187,8 +189,8 @@ QObject* NetworkTool::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* script
 
 NetworkTool* NetworkTool::self()
 {
-    static NetworkTool* self = new NetworkTool();
-    return self;
+    static NetworkTool self;
+    return &self;
 }
 
 // Start update check
