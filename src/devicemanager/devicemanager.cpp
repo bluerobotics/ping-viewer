@@ -1,3 +1,5 @@
+#include <QQmlEngine>
+
 #include "devicemanager.h"
 #include "filelink.h"
 #include "logger.h"
@@ -9,6 +11,8 @@ PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 DeviceManager::DeviceManager()
     : _detector(new ProtocolDetector())
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     for (const auto& key : _roleNames.keys()) {
         _roles.append(key);
         _sensors.insert(key, {});
@@ -162,8 +166,8 @@ QObject* DeviceManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scri
 
 DeviceManager* DeviceManager::self()
 {
-    static DeviceManager* self = new DeviceManager();
-    return self;
+    static DeviceManager self;
+    return &self;
 }
 
 DeviceManager::~DeviceManager()
