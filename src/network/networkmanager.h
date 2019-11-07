@@ -54,5 +54,5 @@ private:
      * @brief Construct a new Network Manager object
      *
      */
-    NetworkManager() = default;
+    NetworkManager();
 };

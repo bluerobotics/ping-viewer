@@ -5,9 +5,12 @@
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QQmlEngine>
 #include <QTemporaryFile>
 
 PING_LOGGING_CATEGORY(NETWORKMANAGER, "ping.networkmanager")
+
+NetworkManager::NetworkManager() { QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership); }
 
 void NetworkManager::requestJson(const QUrl& url, std::function<void(QJsonDocument&)> function)
 {
@@ -79,6 +82,6 @@ QObject* NetworkManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scr
 
 NetworkManager* NetworkManager::self()
 {
-    static NetworkManager* self = new NetworkManager();
-    return self;
+    static NetworkManager self;
+    return &self;
 }
