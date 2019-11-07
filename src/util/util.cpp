@@ -1,3 +1,4 @@
+#include <QQmlEngine>
 #include <QSerialPortInfo>
 #include <QtCharts/QXYSeries>
 
@@ -5,6 +6,8 @@
 #include "util.h"
 
 PING_LOGGING_CATEGORY(util, "ping.util");
+
+Util::Util() { QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership); }
 
 QStringList Util::serialPortList()
 {
@@ -89,8 +92,8 @@ QObject* Util::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
 
 Util* Util::self()
 {
-    static Util* self = new Util();
-    return self;
+    static Util self;
+    return &self;
 }
 
 Util::~Util() {}

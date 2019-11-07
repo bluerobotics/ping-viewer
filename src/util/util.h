@@ -78,5 +78,5 @@ private:
      * @brief Construct a new Util object
      *
      */
-    Util() = default;
+    Util();
 };
