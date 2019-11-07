@@ -8,6 +8,8 @@ PING_LOGGING_CATEGORY(NOTIFICATIONMANAGER, "ping.notificationmanager")
 
 NotificationManager::NotificationManager()
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
     connect(&_model, &NotificationModel::dataChanged, this, &NotificationManager::modelUpdate);
 }
 
@@ -27,6 +29,6 @@ QObject* NotificationManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine
 
 NotificationManager* NotificationManager::self()
 {
-    static NotificationManager* self = new NotificationManager();
-    return self;
+    static NotificationManager self;
+    return &self;
 }
