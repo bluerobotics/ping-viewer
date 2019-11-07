@@ -56,8 +56,8 @@ QObject* SettingsManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* sc
 
 SettingsManager* SettingsManager::self()
 {
-    static SettingsManager* self = new SettingsManager();
-    return self;
+    static SettingsManager self;
+    return &self;
 }
 
 SettingsManager::~SettingsManager() {}
