@@ -84,8 +84,8 @@ QString FileManager::createFileName(FileManager::Folder folderType)
 
 FileManager* FileManager::self()
 {
-    static FileManager* self = new FileManager();
-    return self;
+    static FileManager self;
+    return &self;
 }
 
 FileManager::~FileManager() = default;
