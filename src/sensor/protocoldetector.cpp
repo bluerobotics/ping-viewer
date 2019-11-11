@@ -22,6 +22,10 @@ const QStringList ProtocolDetector::_invalidSerialPortNames({
     "iPhone",
     "Bluetooth",
 #endif
+
+#ifdef Q_OS_LINUX
+    "ttyS",
+#endif
 });
 
 ProtocolDetector::ProtocolDetector()
