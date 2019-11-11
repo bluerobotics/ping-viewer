@@ -1,4 +1,5 @@
 #include "settingsmanager.h"
+#include "linkconfiguration.h"
 #include "logger.h"
 
 #include <QQmlEngine>
@@ -17,10 +18,45 @@ SettingsManager::SettingsManager()
             _settings.clear();
         }
     }
+
     if (_settings.contains("settingsTree")) {
         _tree.setMap(_settings.value("settingsTree").toMap());
     }
+
     qRegisterMetaType<QJsonSettings*>("const QJsonSettings*");
+    loadLinkConfigurations();
+}
+
+void SettingsManager::loadLinkConfigurations()
+{
+    if (!_settings.contains("lastLinkConfigurations")) {
+        qCDebug(SETTINGSMANAGER) << QStringLiteral("No last linkconfigurations found in settings.");
+        return;
+    }
+
+    const auto variantLastLinkConfigurations = _settings.value("lastLinkConfigurations").value<QVariantList>();
+    for (const auto variant : variantLastLinkConfigurations) {
+        _lastLinkConfigurations.append(variant.value<LinkConfiguration>());
+    }
+}
+
+void SettingsManager::saveLinkConfigurations()
+{
+    // Remove duplicated before saving it
+    _lastLinkConfigurations.erase(
+        std::unique(_lastLinkConfigurations.begin(), _lastLinkConfigurations.end(),
+            [](const auto first, const auto second) {
+                return (first.argsAsConst() == second.argsAsConst() && first.type() == second.type());
+            }),
+        _lastLinkConfigurations.end());
+
+    // Move to QVariantList before saving
+    // This is necessary since QList<QDataStream operator> does not work as expected
+    QVariantList variants;
+    for (const auto linkConfiguration : _lastLinkConfigurations) {
+        variants.append(QVariant::fromValue(linkConfiguration));
+    }
+    set("lastLinkConfigurations", variants);
 }
 
 QVariant SettingsManager::value(const QString& settingName) const
@@ -60,4 +96,8 @@ SettingsManager* SettingsManager::self()
     return &self;
 }
 
-SettingsManager::~SettingsManager() {}
+SettingsManager::~SettingsManager()
+{
+    saveLinkConfigurations();
+    _settings.sync();
+}

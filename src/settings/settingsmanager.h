@@ -81,6 +81,19 @@ public:
      */
     static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
+    /**
+     * @brief Return a pointer to the link configuration vector
+     *
+     * @return QVector<LinkConfiguration>*
+     */
+    QVector<LinkConfiguration>* lastLinkConfigurations() { return &_lastLinkConfigurations; }
+
+    /**
+     * @brief Save link configuration settings
+     *
+     */
+    void saveLinkConfigurations();
+
 private:
     Q_DISABLE_COPY(SettingsManager)
     /**
@@ -89,6 +102,13 @@ private:
      */
     SettingsManager();
 
+    /**
+     * @brief Load link configurations from settings
+     *
+     */
+    void loadLinkConfigurations();
+
+    QVector<LinkConfiguration> _lastLinkConfigurations;
     QSettings _settings;
     VariantTree _tree;
 
@@ -99,7 +119,6 @@ private:
     // Everything after this line should be AUTO_PROPERTY
     AUTO_PROPERTY(bool, debugMode, false)
     AUTO_PROPERTY(uint, enabledCategories, 0)
-    AUTO_PROPERTY(LinkConfiguration, lastLinkConfiguration, {})
     AUTO_PROPERTY(bool, logScrollLock, true)
     AUTO_PROPERTY(bool, replayMenu, false)
     AUTO_PROPERTY(bool, reset, false)
