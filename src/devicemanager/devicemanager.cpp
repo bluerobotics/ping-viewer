@@ -5,6 +5,7 @@
 #include "logger.h"
 #include "ping.h"
 #include "ping360.h"
+#include "settingsmanager.h"
 
 PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 
@@ -113,6 +114,12 @@ void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType
 {
     auto linkConfiguration = LinkConfiguration {connType, connString};
     linkConfiguration.setDeviceType(deviceType);
+
+    // Do not add simulation links in lastLinkConfigurations
+    if (linkConfiguration.type() != AbstractLinkNamespace::Ping1DSimulation
+        && linkConfiguration.type() != AbstractLinkNamespace::Ping360Simulation) {
+        SettingsManager::self()->lastLinkConfigurations()->append(linkConfiguration);
+    }
 
     // Append configuration as device of type "None"
     // This will create and populate all necessary roles before connecting
