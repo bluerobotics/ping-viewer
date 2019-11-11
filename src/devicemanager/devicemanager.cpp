@@ -11,8 +11,6 @@ PING_LOGGING_CATEGORY(DEVICEMANAGER, "ping.devicemanager");
 DeviceManager::DeviceManager()
     : _detector(new ProtocolDetector())
 {
-    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-
     for (const auto& key : _roleNames.keys()) {
         _roles.append(key);
         _sensors.insert(key, {});
@@ -166,8 +164,10 @@ QObject* DeviceManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scri
 
 DeviceManager* DeviceManager::self()
 {
-    static DeviceManager self;
-    return &self;
+    // The QML engine will kill it for us since this object is created inside the QML engine
+    // and has as childrens QML elements
+    static DeviceManager* self = new DeviceManager();
+    return self;
 }
 
 DeviceManager::~DeviceManager()
