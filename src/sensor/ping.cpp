@@ -83,11 +83,6 @@ Ping::Ping()
                 "ping1d", std::bind(&Ping::checkNewFirmwareInGitHubPayload, this, std::placeholders::_1));
         }
     });
-
-    // TODO: @Patrick move it to devicemanager
-    // Load last successful connection
-    auto config = SettingsManager::self()->lastLinkConfiguration();
-    qCDebug(PING_PROTOCOL_PING) << "Loading last configuration connection from settings:" << config;
 }
 
 void Ping::startPreConfigurationProcess()
@@ -97,8 +92,6 @@ void Ping::startPreConfigurationProcess()
         qCDebug(PING_PROTOCOL_PING) << "It's only possible to set last configuration when link is writable.";
         return;
     }
-
-    SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 
     // Request device information
     request(Ping1dId::PING_ENABLE);
@@ -110,9 +103,6 @@ void Ping::startPreConfigurationProcess()
 
     // Start periodic request timer
     _periodicRequestTimer.start();
-
-    // Save configuration
-    SettingsManager::self()->lastLinkConfiguration(*link()->configuration());
 }
 
 void Ping::loadLastPingConfigurationSettings()
