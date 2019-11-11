@@ -256,7 +256,8 @@ bool ProtocolDetector::canOpenPort(QSerialPortInfo& port, int msTimeout)
         QSerialPort serialPort(portInfo);
         bool ok = serialPort.open(QIODevice::ReadWrite);
         if (!ok) {
-            qCWarning(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to open serial port:" << serialPort.error();
+            qCWarning(PING_PROTOCOL_PROTOCOLDETECTOR)
+                << "Fail to open serial port:" << portInfo.portName() << "reason:" << serialPort.error();
         }
         // Close will check if is open
         serialPort.close();
