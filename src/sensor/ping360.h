@@ -6,7 +6,6 @@
 
 #include <QElapsedTimer>
 #include <QProcess>
-#include <QSharedPointer>
 #include <QTimer>
 
 #include "parser.h"
