@@ -24,6 +24,7 @@ matrix:
             - g++-7
             - git
             - build-essential
+            - pulseaudio
             - qt512base
             - qt512charts-no-lgpl qt512graphicaleffects qt512multimedia qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
             - libgl1-mesa-dev
