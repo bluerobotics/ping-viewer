@@ -15,6 +15,7 @@ test {
         $$PWD/main.cpp
 }
 
+include($$PWD/commandline/commandline.pri)
 include($$PWD/devicemanager/devicemanager.pri)
 include($$PWD/filemanager/filemanager.pri)
 include($$PWD/flash/flash.pri)
