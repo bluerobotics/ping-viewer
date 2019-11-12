@@ -96,6 +96,11 @@ case $i in
     qtconfig="debug"
     shift ;;
 
+    --ping360speedtest)
+    qtdefines="PING360_SPEED_TEST"
+    qtconfig="debug"
+    shift ;;
+
     --debug)
     debug=true
     qtconfig="debug"
