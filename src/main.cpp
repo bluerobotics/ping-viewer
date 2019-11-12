@@ -11,6 +11,7 @@
 #endif
 
 #include "abstractlink.h"
+#include "commandlineparser.h"
 #include "devicemanager.h"
 #include "filemanager.h"
 #include "flasher.h"
@@ -85,6 +86,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication app(argc, argv);
+
+    CommandLineParser parser(app);
 
     QQmlApplicationEngine engine;
 
