@@ -16,7 +16,18 @@ PingPopup {
     }
 
     Component.onCompleted: {
-        open()
+        if(!DeviceManager.primarySensor) {
+            open()
+        }
+    }
+
+    Connections{
+        target: DeviceManager
+        onPrimarySensorChanged: {
+            if(DeviceManager.primarySensor) {
+                close()
+            }
+        }
     }
 
     ColumnLayout {
@@ -171,9 +182,6 @@ PingPopup {
                         hoverEnabled: true
                         onClicked: {
                             DeviceManager.connectLink(connection)
-                            // We should check if Sensor device is created and if it's really connected and
-                            // communicating with the device
-                            root.close()
                         }
                     }
 
