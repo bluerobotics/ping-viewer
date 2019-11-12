@@ -30,6 +30,7 @@ Item {
 
         NoControlPanel {
             id: noControlPanel
+            visible: false
         }
 
         PingItem {
