@@ -59,7 +59,14 @@ public:
      *
      * @param linkConf
      */
-    Q_INVOKABLE void connectLink(LinkConfiguration* linkConf);
+    Q_INVOKABLE void connectLink(const LinkConfiguration* linkConf);
+
+    /**
+     * @brief Connect with link directly without protocol checks
+     *
+     * @param linkConfiguration
+     */
+    void connectLinkDirectly(const LinkConfiguration& linkConfiguration);
 
     /**
      * @brief Used to connect with link directly if it was not detected by the protocol detector
