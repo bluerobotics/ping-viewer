@@ -72,7 +72,7 @@ void DeviceManager::stopDetecting()
     _detectorThread.quit();
 }
 
-void DeviceManager::connectLink(LinkConfiguration* linkConf)
+void DeviceManager::connectLink(const LinkConfiguration* linkConf)
 {
     // Stop detector if we are going to connect with something
     stopDetecting();
@@ -109,11 +109,12 @@ void DeviceManager::connectLink(LinkConfiguration* linkConf)
     _sensors[Connected][objIndex] = true;
 }
 
-void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,
-    PingEnumNamespace::PingDeviceType deviceType)
+void DeviceManager::connectLinkDirectly(const LinkConfiguration& linkConfiguration)
 {
-    auto linkConfiguration = LinkConfiguration {connType, connString};
-    linkConfiguration.setDeviceType(deviceType);
+    if (linkConfiguration.deviceType() == PingEnumNamespace::PingDeviceType::UNKNOWN) {
+        qCWarning(DEVICEMANAGER) << "Link configuration does not provide valid sensor type:" << linkConfiguration;
+        return;
+    }
 
     // Do not add simulation links in lastLinkConfigurations
     if (linkConfiguration.type() != AbstractLinkNamespace::Ping1DSimulation
@@ -121,10 +122,17 @@ void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType
         SettingsManager::self()->lastLinkConfigurations()->append(linkConfiguration);
     }
 
-    // Append configuration as device of type "None"
-    // This will create and populate all necessary roles before connecting
     append(linkConfiguration);
     connectLink(&linkConfiguration);
+}
+
+void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,
+    PingEnumNamespace::PingDeviceType deviceType)
+{
+    auto linkConfiguration = LinkConfiguration {connType, connString};
+    linkConfiguration.setDeviceType(deviceType);
+
+    connectLinkDirectly(linkConfiguration);
 }
 
 void DeviceManager::playLogFile(AbstractLinkNamespace::LinkType connType, const QStringList& connString)
