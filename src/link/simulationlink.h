@@ -24,7 +24,7 @@ public:
      * @return true
      * @return false
      */
-    bool isWritable() final { return false; };
+    bool isWritable() override { return false; };
 
 protected:
     /**
