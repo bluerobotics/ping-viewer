@@ -144,6 +144,8 @@ void Test::settingsManager()
     scalar = settingsManager->distanceUnits()[QString("distanceScalar")].toDouble();
     QVERIFY2(qFuzzyCompare(scalar, 3.280839895),
              qPrintable(QString("Distance scalar in meters is wrong: %1").arg(scalar)));
+    // Back to default value
+    settingsManager->distanceUnitsIndex(0);
 }
 
 void Test::waterfallGradient()
