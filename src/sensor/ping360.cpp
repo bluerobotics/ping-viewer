@@ -41,6 +41,8 @@ const uint16_t Ping360::_firmwareDefaultNumberOfSamples = 1024;
 // The default transmit frequency to operate with
 const uint16_t Ping360::_viewerDefaultTransmitFrequency = 750;
 const uint16_t Ping360::_viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
+const uint16_t Ping360::_viewerDefaultSamplePeriod = 88;
+const uint16_t Ping360::_viewerDefaultTransmitDuration = 11;
 
 // Physical properties of the sensor
 const float Ping360::_angularSpeedGradPerMs = 400.0f / 2400.0f;
@@ -485,7 +487,7 @@ uint16_t Ping360::calculateSamplePeriod(float distance)
                                        << "distance:" << distance << "_num_points" << _num_points << "_speed_of_sound"
                                        << _speed_of_sound << "_samplePeriodTickDuration" << _samplePeriodTickDuration;
 
-        return _firmwareDefaultSamplePeriod;
+        return _viewerDefaultSamplePeriod;
     }
 
     return static_cast<uint16_t>(calculatedSamplePeriod);

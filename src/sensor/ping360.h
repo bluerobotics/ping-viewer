@@ -549,6 +549,8 @@ private:
     // The default transmit frequency to operate with
     static const uint16_t _viewerDefaultTransmitFrequency;
     static const uint16_t _viewerDefaultNumberOfSamples;
+    static const uint16_t _viewerDefaultSamplePeriod;
+    static const uint16_t _viewerDefaultTransmitDuration;
 
     // Physical properties of the sensor
     static const float _angularSpeedGradPerMs;
