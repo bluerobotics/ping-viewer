@@ -63,12 +63,12 @@ public:
         int nextPoint = (_angle + delta) % _angularResolutionGrad;
 
         transducer_message.set_mode(1);
-        transducer_message.set_gain_setting(_gain_setting);
+        transducer_message.set_gain_setting(_sensorSettings.gain_setting);
         transducer_message.set_angle(nextPoint);
-        transducer_message.set_transmit_duration(_transmit_duration);
-        transducer_message.set_sample_period(_sample_period);
-        transducer_message.set_transmit_frequency(_transmit_frequency);
-        transducer_message.set_number_of_samples(_num_points);
+        transducer_message.set_transmit_duration(_sensorSettings.transmit_duration);
+        transducer_message.set_sample_period(_sensorSettings.sample_period);
+        transducer_message.set_transmit_frequency(_sensorSettings.transmit_frequency);
+        transducer_message.set_number_of_samples(_sensorSettings.num_points);
         transducer_message.set_transmit(transmit);
 
         transducer_message.updateChecksum();
@@ -90,8 +90,8 @@ public:
      */
     void set_transmit_duration(int transmit_duration)
     {
-        if (_transmit_duration != transmit_duration) {
-            _transmit_duration = transmit_duration;
+        if (_sensorSettings.transmit_duration != transmit_duration) {
+            _sensorSettings.transmit_duration = transmit_duration;
             emit transmitDurationChanged();
         }
     }
@@ -101,7 +101,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t transmit_duration() { return _transmit_duration; }
+    uint16_t transmit_duration() { return _sensorSettings.transmit_duration; }
     Q_PROPERTY(int transmit_duration READ transmit_duration WRITE set_transmit_duration NOTIFY transmitDurationChanged)
 
     /**
@@ -112,8 +112,8 @@ public:
      */
     void set_sample_period(uint16_t sample_period)
     {
-        if (sample_period != _sample_period) {
-            _sample_period = sample_period;
+        if (_sensorSettings.sample_period != sample_period) {
+            _sensorSettings.sample_period = sample_period;
             emit samplePeriodChanged();
         }
     }
@@ -123,7 +123,7 @@ public:
      *
      * @return int
      */
-    int sample_period() { return _sample_period; }
+    int sample_period() { return _sensorSettings.sample_period; }
     Q_PROPERTY(int sample_period READ sample_period NOTIFY samplePeriodChanged)
 
     /**
@@ -133,7 +133,7 @@ public:
      */
     void set_transmit_frequency(int transmit_frequency)
     {
-        _transmit_frequency = transmit_frequency;
+        _sensorSettings.transmit_frequency = transmit_frequency;
         emit transmitFrequencyChanged();
     }
 
@@ -142,7 +142,7 @@ public:
      *
      * @return int
      */
-    int transmit_frequency() { return _transmit_frequency; }
+    int transmit_frequency() { return _sensorSettings.transmit_frequency; }
     Q_PROPERTY(
         int transmit_frequency READ transmit_frequency WRITE set_transmit_frequency NOTIFY transmitFrequencyChanged)
 
@@ -155,17 +155,17 @@ public:
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
-     * @brief The sonar communicates the _sample_period in units of 25nsec ticks
+     * @brief The sonar communicates the sample_period in units of 25nsec ticks
      * @return inter-sample period in seconds
      */
-    double samplePeriod() { return _sample_period * _samplePeriodTickDuration; }
+    double samplePeriod() { return _sensorSettings.sample_period * _samplePeriodTickDuration; }
 
     /**
      * @brief return one-way range in meters
      *
      * @return uint32_t
      */
-    double range() { return samplePeriod() * _num_points * _speed_of_sound / 2; }
+    double range() { return samplePeriod() * _sensorSettings.num_points * _speed_of_sound / 2; }
 
     /**
      * @brief Set sensor window analysis size
@@ -175,14 +175,14 @@ public:
     void set_range(uint newRange)
     {
         if (newRange != range()) {
-            _num_points = _firmwareMaxNumberOfPoints;
-            _sample_period = calculateSamplePeriod(newRange);
+            _sensorSettings.num_points = _firmwareMaxNumberOfPoints;
+            _sensorSettings.sample_period = calculateSamplePeriod(newRange);
 
             // reduce _sample period until we are within operational parameters
             // maximize the number of points
-            while (_sample_period < _firmwareMinSamplePeriod) {
-                _num_points--;
-                _sample_period = calculateSamplePeriod(newRange);
+            while (_sensorSettings.sample_period < _firmwareMinSamplePeriod) {
+                _sensorSettings.num_points--;
+                _sensorSettings.sample_period = calculateSamplePeriod(newRange);
             }
 
             emit numberOfPointsChanged();
@@ -200,7 +200,7 @@ public:
      *
      * @return uint32_t
      */
-    uint32_t gain_setting() { return _gain_setting; }
+    uint32_t gain_setting() { return _sensorSettings.gain_setting; }
 
     /**
      * @brief Set sensor gain index
@@ -209,7 +209,7 @@ public:
      */
     void set_gain_setting(int gain_setting)
     {
-        _gain_setting = gain_setting;
+        _sensorSettings.gain_setting = gain_setting;
         emit gainSettingChanged();
     }
     Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingChanged)
@@ -241,7 +241,7 @@ public:
             // we adjust _speed_of_sound, without affecting the current range setting
             double desiredRange = round(range());
             _speed_of_sound = speed_of_sound;
-            _sample_period = calculateSamplePeriod(desiredRange);
+            _sensorSettings.sample_period = calculateSamplePeriod(desiredRange);
             emit speedOfSoundChanged();
             emit samplePeriodChanged();
             emit rangeChanged();
@@ -317,7 +317,7 @@ public:
      *
      * @return int
      */
-    int number_of_points() { return _num_points; }
+    int number_of_points() { return _sensorSettings.num_points; }
 
     /**
      * @brief Set the number of points
@@ -326,8 +326,8 @@ public:
      */
     void set_number_of_points(int num_points)
     {
-        if (num_points != _num_points) {
-            _num_points = num_points;
+        if (_sensorSettings.num_points != num_points) {
+            _sensorSettings.num_points = num_points;
             emit numberOfPointsChanged();
             // Range uses number of points to calculate it, emit signal to update interface
             emit rangeChanged();
@@ -439,11 +439,11 @@ public:
             // 2 (transmit duration is microseconds, samplePeriod() is nanoseconds)
             autoDuration = std::max(static_cast<int>(2.5 * samplePeriod() / 1000), autoDuration);
             // 3
-            _transmit_duration = std::max(
+            _sensorSettings.transmit_duration = std::max(
                 static_cast<int>(_firmwareMinTransmitDuration), std::min(transmitDurationMax(), autoDuration));
             emit transmitDurationChanged();
-        } else if (_transmit_duration > transmitDurationMax()) {
-            _transmit_duration = transmitDurationMax();
+        } else if (_sensorSettings.transmit_duration > transmitDurationMax()) {
+            _sensorSettings.transmit_duration = transmitDurationMax();
             emit transmitDurationChanged();
         }
     }
@@ -555,12 +555,49 @@ private:
     // Physical properties of the sensor
     static const float _angularSpeedGradPerMs;
 
+    /** Tracks the interface settings for the sensor
+     * This structure matches the basic configuration for Ping360
+     * The `valid` field helps to invalidate the sensor configuration
+     * forcing our class to set and send the profile request with our new settings.
+     *
+     * Why is this necessary ?
+     * Ping360 works with an ping-pong strategy, this is a result of the half-duplex
+     * communication nature.
+     * We should track and reset the sensor settings, since profile messages can be in
+     * the buffer or in the way to be decoded while we set the new settings.
+     * This can result in two behaviours:
+     *     - A new profile message is sent while a second one is being processed
+     *          resulting in two different profiles requests making the sensor
+     *          to go further and back in position for each message.
+     *     - The new settings can be overwritten by the incoming profile message,
+     *          resulting in the the normal behaviour with the old settings.
+     */
+    struct Ping360Settings {
+        uint16_t transmit_duration = _firmwareDefaultTransmitDuration;
+        uint32_t gain_setting = _firmwareDefaultGainSetting;
+        uint16_t num_points = _viewerDefaultNumberOfSamples;
+        uint16_t sample_period = _viewerDefaultSamplePeriod;
+        uint16_t transmit_frequency = _viewerDefaultTransmitFrequency;
+        bool valid = true;
+
+        /**
+         * @brief Check if input is valid, if so update valid variable
+         *
+         * @param other
+         * @return true
+         * @return false
+         */
+        bool checkValidation(const Ping360Settings& other)
+        {
+            valid = other.transmit_duration == transmit_duration && other.gain_setting == gain_setting
+                && other.num_points == num_points && other.sample_period == sample_period
+                && other.transmit_frequency == transmit_frequency;
+            return valid;
+        }
+    } _sensorSettings;
+
+    // This variables are not user configuration settings
     uint16_t _angle = 200;
-    uint16_t _transmit_duration = _firmwareDefaultTransmitDuration;
-    uint32_t _gain_setting = _firmwareDefaultGainSetting;
-    uint16_t _num_points = _viewerDefaultNumberOfSamples;
-    uint16_t _sample_period = _firmwareDefaultSamplePeriod;
-    uint16_t _transmit_frequency = _viewerDefaultTransmitFrequency;
     QVector<double> _data;
     ///@}
 
