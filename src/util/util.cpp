@@ -24,7 +24,8 @@ QStringList Util::serialPortList()
 void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& points, const float initPos,
     const float finalPos, const float minPoint, const float maxPoint, const float multiplier)
 {
-    static const int numberOfPoints = 300;
+    // This value should be updated in Charts.qml to make it compatible
+    static const int numberOfPoints = 2000;
 
     // Check inputs
     if (!series || points.isEmpty()) {
