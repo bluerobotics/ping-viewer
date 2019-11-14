@@ -60,7 +60,7 @@ Item {
             labelFormat: "%.1f"
             tickCount: 3
             min: 0
-            max: 300
+            max: 2000
         }
 
         ValueAxis {
