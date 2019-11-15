@@ -5,17 +5,30 @@
 #include <QVariant>
 
 /**
- *@brief call the correct method for Qvariants that have bool values
+ * @brief call the correct method for QVariant that have bool values
+ *
+ * @tparam bool
+ * @param variant
+ * @return true
+ * @return false
  */
 template <bool> bool qVariantValueOf(const QVariant& variant) { return variant.toBool(); }
 
 /**
- *@brief call the correct method for Qvariants that have int values
+ * @brief call the correct method for QVariant that have int values
+ *
+ * @tparam int
+ * @param variant
+ * @return int
  */
 template <int> int qVariantValueOf(const QVariant& variant) { return variant.toInt(); }
 
 /**
- *@brief call the correct method for Qvariants that have T values
+ * *@brief call the correct method for QVariant that have T values
+ *
+ * @tparam T
+ * @param variant
+ * @return T
  */
 template <typename T> T qVariantValueOf(const QVariant& variant) { return variant.value<T>(); }
 
