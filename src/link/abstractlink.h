@@ -147,7 +147,8 @@ public:
      */
     virtual bool setConfiguration(const LinkConfiguration& linkConfiguration)
     {
-        Q_UNUSED(linkConfiguration)
+        _linkConfiguration = linkConfiguration;
+        emit configurationChanged();
         return true;
     }
 
