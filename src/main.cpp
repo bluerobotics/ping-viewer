@@ -21,7 +21,6 @@
 #include "ping360.h"
 #include "polarplot.h"
 #include "settingsmanager.h"
-#include "sliderruler.h"
 #include "stylemanager.h"
 #include "util.h"
 #include "waterfallplot.h"
@@ -65,7 +64,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<Ping360>("Ping360", 1, 0, "Ping360");
     qmlRegisterType<PolarPlot>("PolarPlot", 1, 0, "PolarPlot");
-    qmlRegisterType<SliderRuler>("SliderRuler", 1, 0, "SliderRuler");
     qmlRegisterType<WaterfallPlot>("WaterfallPlot", 1, 0, "WaterfallPlot");
 
     qmlRegisterUncreatableMetaObject(
