@@ -155,7 +155,7 @@ private:                                                                        
 /**
  * @brief Create a model property for qml connections with QJsonSettings
  * The output will be something like:
- * #define AUTO_PROPERTY_JSONMODEL(myName, myJson) \
+ * \#define AUTO_PROPERTY_JSONMODEL(myName, myJson) \
  *    Q_PROPERTY(int myNameIndex READ myNameIndex WRITE myNameIndex NOTIFY myNameIndexChanged ) \
  *    Q_PROPERTY(const QJsonSettings* myNameModel READ myNameModel ) \
  *    Q_PROPERTY(QJsonObject myName READ myName NOTIFY myNameIndexChanged ) \
