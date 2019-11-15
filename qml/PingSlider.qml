@@ -4,8 +4,6 @@ import QtQuick.Controls.Styles 1.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
 
-import SliderRuler 1.0
-
 RowLayout {
     id: root
 
@@ -13,6 +11,7 @@ RowLayout {
     property double value: 0
     property double from: 0
     property double to: 0
+    property double ticksNumber: 6
     property alias control: sliderControl
     property var valueText: null
 
@@ -39,17 +38,39 @@ RowLayout {
         from: root.from
         to: root.to
         enabled: visible
-        background: SliderRuler {
-            id: ticks
-            anchors.fill: parent
-            color: Material.accent
-            from: parent.from
-            to: parent.to
-        }
 
-        handle.x: ticks ? ticks.beginLine.x + sliderControl.visualPosition
-                          * (ticks.endLine.x - ticks.beginLine.x) - handle.width / 2
-                        : sliderControl.leftPadding + sliderControl.visualPosition * (sliderControl.availableWidth - handle.width)
+        background:
+            Rectangle {
+            x: sliderControl.leftPadding
+            y: sliderControl.topPadding + sliderControl.availableHeight/2 - height/2
+            implicitWidth: sliderControl.availableWidth
+            implicitHeight: 1
+            width: sliderControl.availableWidth
+            height: implicitHeight
+            color: Material.accent
+
+            Repeater {
+                id: internalTicks
+                model: ticksNumber + 1
+
+                delegate: Rectangle {
+                    id: tick
+                    width: 1
+                    height: parent.implicitHeight*6
+                    x: index*(sliderControl.availableWidth - sliderControl.handle.width)/root.ticksNumber + sliderControl.handle.width/2
+                    y: parent.implicitHeight
+                    color: Material.accent
+
+                    Text {
+                        anchors.top: tick.bottom
+                        id: textDelegate
+                        text: ((index/root.ticksNumber)*(sliderControl.to - sliderControl.from) + sliderControl.from).toFixed(0)
+                        color: Material.accent
+                        x: -width/2
+                    }
+                }
+            }
+        }
     }
 
     Label {
