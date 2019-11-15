@@ -286,6 +286,7 @@ public:
     LinkConfiguration& operator=(const LinkConfiguration& other)
     {
         this->_linkConf = other.configurationStruct();
+        emit configurationChanged();
         return *this;
     }
 
