@@ -13,7 +13,7 @@ RowLayout {
     property double to: 0
     property double ticksNumber: 6
     property alias control: sliderControl
-    property var valueText: null
+    property var valueText: undefined
 
     onValueChanged: {
         spinBox.value = value
@@ -75,15 +75,15 @@ RowLayout {
 
     Label {
         Layout.preferredWidth: 80
-        text: valueText !== null ? valueText : ""
-        visible: valueText !== null
+        text: valueText !== undefined ? valueText : ""
+        visible: valueText !== undefined
     }
 
     SpinBox {
         id: spinBox
         Layout.minimumWidth: 150
         Layout.maximumWidth: 150
-        visible: valueText === null
+        visible: valueText === undefined
         from: root.from
         to: root.to
         stepSize: sliderControl.stepSize
