@@ -35,6 +35,7 @@ template <typename T> T qVariantValueOf(const QVariant& variant) { return varian
 /**
  * @brief Defines a simple propriety
  * The output will be something like:
+ * \code{.cpp}
  * AUTO_PROPERTY(myType, myName, defaultValue):
  *    Q_PROPERTY(myType myName READ myName WRITE myName NOTIFY myNameChanged)
  *public:
@@ -64,6 +65,7 @@ template <typename T> T qVariantValueOf(const QVariant& variant) { return varian
  *private:
  *    // Define internal variable
  *    myType _myName;
+ * \endcode
  */
 #define AUTO_PROPERTY(TYPE, NAME, DEFAULT_VALUE)                                                                       \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME##Changed)                                                    \
@@ -99,6 +101,7 @@ private:                                                                        
 /**
  * @brief Create a model property for qml connections
  * The output will be something like:
+ * \code{.cpp}
  * AUTO_PROPERTY_MODEL(myType, myName, myModelType, {model_var_1, model_var_2}):
  *    Q_PROPERTY(myType myName READ myName WRITE myName NOTIFY myNameChanged)
  *    Q_PROPERTY(const myModelType* myNameModel READ myNameModel)
@@ -125,6 +128,7 @@ private:                                                                        
  *    // Define internal variable and its model
  *    myType _myName;
  *    const myModelType* _myNameModel{new myModelType({model_var_1, model_var_2})};
+ * \endcode
  */
 #define AUTO_PROPERTY_MODEL(TYPE, NAME, MODEL_TYPE, MODEL_LIST)                                                        \
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME NOTIFY NAME##Changed)                                                    \
@@ -155,6 +159,7 @@ private:                                                                        
 /**
  * @brief Create a model property for qml connections with QJsonSettings
  * The output will be something like:
+ * \code{.cpp}
  * \#define AUTO_PROPERTY_JSONMODEL(myName, myJson) \
  *    Q_PROPERTY(int myNameIndex READ myNameIndex WRITE myNameIndex NOTIFY myNameIndexChanged ) \
  *    Q_PROPERTY(const QJsonSettings* myNameModel READ myNameModel ) \
@@ -171,9 +176,10 @@ private:                                                                        
  *    const QJsonSettings* myNameModel() { return _myNameModel; }\
  *    QJsonObject myName() { return _myNameModel->object(myNameIndex()); } \
  *    Q_SIGNAL void myNameIndexChanged();\
-private: \
-    int _myNameIndex; \
-    const QJsonSettings* _myNameModel{new QJsonSettings(myJson)};
+ *private: \
+ *    int _myNameIndex; \
+ *    const QJsonSettings* _myNameModel{new QJsonSettings(myJson)};
+ *\endcode
  */
 #define AUTO_PROPERTY_JSONMODEL(NAME, JSON)                                                                            \
     Q_PROPERTY(int NAME##Index READ NAME##Index WRITE NAME##Index NOTIFY NAME##Index##Changed)                         \
