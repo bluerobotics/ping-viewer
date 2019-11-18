@@ -10,14 +10,55 @@ RowLayout {
     property var text
     property double value: 0
     property double from: 0
-    property double to: 0
-    property double ticksNumber: 6
+    property double to: model ? model.length - 1 : 0
+    property double ticksNumber: model ? to : 6
     property alias control: sliderControl
-    property var valueText: undefined
+    property var model: undefined
+    property var modelValue: undefined
+    property alias modelIndex: root.value
 
-    onValueChanged: {
-        spinBox.value = value
-        sliderControl.value = value
+    onModelValueChanged: {
+        if(model == undefined || model[value] == Math.round(modelValue)) {
+            return
+        }
+
+        var closeItem = {
+            index: 0,
+            distance: Number.MAX_SAFE_INTEGER
+        }
+
+        for(var i in model) {
+            if(typeof(closeItem.value) != 'number') {
+                if(model[i] == Math.round(modelValue)) {
+                    closeItem.index = i
+                    break
+                }
+            } else {
+                if(Math.abs(model[i] - modelValue) < closeItem.distance) {
+                    closeItem.index = i
+                    closeItem.distance = Math.abs(model[i] - modelValue)
+                }
+            }
+        }
+
+        root.value = closeItem.index
+    }
+
+    Binding {
+        target: spinBox
+        property: "value"
+        value: root.value
+    }
+
+    Binding {
+        target: sliderControl
+        property: "value"
+        value: root.value
+    }
+
+    Binding on modelValue {
+        when: root.value !== undefined && model !== undefined
+        value: model[root.value]
     }
 
     Label {
@@ -62,9 +103,9 @@ RowLayout {
                     color: Material.accent
 
                     Text {
+                        id: tickText
                         anchors.top: tick.bottom
-                        id: textDelegate
-                        text: ((index/root.ticksNumber)*(sliderControl.to - sliderControl.from) + sliderControl.from).toFixed(0)
+                        text: root.model ? root.model[index] : ((index/root.ticksNumber)*(sliderControl.to - sliderControl.from) + sliderControl.from).toFixed(0)
                         color: Material.accent
                         x: -width/2
                     }
@@ -75,15 +116,15 @@ RowLayout {
 
     Label {
         Layout.preferredWidth: 80
-        text: valueText !== undefined ? valueText : ""
-        visible: valueText !== undefined
+        text: root.model !== undefined ? root.model[root.value] : ""
+        visible: !spinBox.visible
     }
 
     SpinBox {
         id: spinBox
         Layout.minimumWidth: 150
         Layout.maximumWidth: 150
-        visible: valueText === undefined
+        visible: model === undefined
         from: root.from
         to: root.to
         stepSize: sliderControl.stepSize
