@@ -18,31 +18,59 @@ PingGroupBox {
     ColumnLayout {
         Layout.fillWidth: true
 
-        PingComboSlider {
+        PingSlider {
+            id: rangeSlider
             Layout.fillWidth: true
             text: "Range (m)"
             model: [1, 2, 5, 10, 15, 20, 30, 40, 50, 60]
-            onOptionChanged: ping.range = value
-            startingValue: Math.round(ping.range)
-        }
+            modelValue: ping.range
 
-        PingComboSlider {
-            text: "Receiver Gain"
-            Layout.fillWidth: true
-            startingIndex: ping.gain_setting
-            model: ["Low", "Medium", "High"]
-            onOptionChanged: {
-                ping.gain_setting = key
+            Binding {
+                target: ping
+                property: "range"
+                value: rangeSlider.modelValue
+            }
+
+            Binding {
+                target: rangeSlider
+                property: "modelValue"
+                value: ping.range
             }
         }
 
-        PingComboSlider {
+        PingSlider {
+            id: gainSlider
+            text: "Receiver Gain"
+            Layout.fillWidth: true
+            model: ["Low", "Medium", "High"]
+
+            Binding {
+                target: ping
+                property: "gain_setting"
+                value: gainSlider.modelIndex
+            }
+            Binding {
+                target: gainSlider
+                property: "modelIndex"
+                value: ping.gain_setting
+            }
+        }
+
+        PingSlider {
+            id: sectorSlider
             Layout.fillWidth: true
             text: "Sector Angle (degrees)"
-            startingIndex: 5
             model: [60, 90, 120, 180, 360]
-            onOptionChanged: {
-                ping.sectorSize = value
+
+            Binding {
+                target: ping
+                property: "sectorSize"
+                value: sectorSlider.modelValue
+            }
+            Binding {
+                target: sectorSlider
+                property: "modelValue"
+                value: ping.sectorSize
             }
         }
 
