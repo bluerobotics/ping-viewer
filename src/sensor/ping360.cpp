@@ -97,6 +97,9 @@ Ping360::Ping360()
 
 void Ping360::startPreConfigurationProcess()
 {
+    // Force the default settings
+    resetSettings();
+
     // Stop all configuration/message timers if link is not writable
     if (!link()->isWritable()) {
         qCDebug(PING_PROTOCOL_PING360)
