@@ -32,11 +32,11 @@ The user can create his own gradients for the waterfall, for this, it's necessar
 3. Filenames with underscores will be replaced with spaces.
 4. Lines that do not start with # will not be processed.
 5. Color values need to follow:
-    1. #RGB (each of R, G, and B is a single hex digit)
-    2. #RRGGBB
-    3. #AARRGGBB
-    4. #RRRGGGBBB
-    5. #RRRRGGGGBBBB
+    1. `#RGB` (each of R, G, and B is a single hex digit)
+    2. `#RRGGBB`
+    3. `#AARRGGBB`
+    4. `#RRRGGGBBB`
+    5. `#RRRRGGGGBBBB`
 
     There is a very good tool to help with gradient colours [here](http://www.perbang.dk/rgbgradient/).
 6. First value will represent 0.0
