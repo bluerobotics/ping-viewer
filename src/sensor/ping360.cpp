@@ -234,6 +234,7 @@ void Ping360::handleMessage(const ping_message& msg)
         }
 
         _data.resize(deviceData.data_length());
+#pragma omp for
         for (int i = 0; i < deviceData.data_length(); i++) {
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
