@@ -32,7 +32,6 @@
         <file alias="PolarGrid.qml">qml/PolarGrid.qml</file>
         <file alias="ValueReadout.qml">qml/ValueReadout.qml</file>
         <file alias="PingTextField.qml">qml/PingTextField.qml</file>
-        <file alias="PingComboSlider.qml">qml/PingComboSlider.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="arrow.svg">qml/icons/arrow.svg</file>
