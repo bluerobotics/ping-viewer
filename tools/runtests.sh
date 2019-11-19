@@ -41,3 +41,10 @@ if grep "\[Warning\]" $last_log; then
     echob "Please fix the warning messages!"
     exit 1
 fi
+
+echob "Test CMake build:"
+build_folder="$projectpath/build_cmake"
+mkdir ${build_folder}
+cd $build_folder
+cmake ..
+make
