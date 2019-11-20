@@ -67,4 +67,8 @@
     <qresource prefix="/sounds">
         <file alias="camera-shutter.wav">qml/sounds/camera-shutter.wav</file>
     </qresource>
+    <qresource prefix="/opengl">
+        <file alias="polarplot/fragment.glsl">qml/opengl/polarplot/fragment.glsl</file>
+        <file alias="polarplot/vertex.glsl">qml/opengl/polarplot/vertex.glsl</file>
+    </qresource>
 </RCC>
