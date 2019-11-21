@@ -108,22 +108,12 @@ private:
      */
     void updateMouseColumnData();
 
-    /**
-     * @brief Update mask variable to remove unnecessary pixels
-     *  outside the main area.
-     *  For this plot, the mask is a full circle.
-     *
-     */
-    void updateMask();
-
-    QImage _backgroundImage;
     QVector<float> _distances;
     QImage _image;
     float _maxDistance;
     float _mouseSampleAngle;
     float _mouseSampleDistance;
     QPainter* _painter;
-    QPainterPath _polarBackgroundMask;
     float _sectorSizeDegrees;
     static uint16_t _angularResolution;
     QTimer _updateTimer;
