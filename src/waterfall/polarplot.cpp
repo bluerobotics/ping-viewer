@@ -140,6 +140,8 @@ void PolarPlot::draw(
     if (!_updateTimer.isActive()) {
         _updateTimer.start(50);
     }
+
+    emit imageChanged();
 }
 
 void PolarPlot::updateMouseColumnData()
