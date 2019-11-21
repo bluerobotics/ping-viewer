@@ -21,15 +21,14 @@ PolarPlot::PolarPlot(QQuickItem* parent)
     , _maxDistance(0)
     , _painter(nullptr)
     , _sectorSizeDegrees(0)
-    , _updateTimer(new QTimer(this))
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
 
-    connect(_updateTimer, &QTimer::timeout, this, [&] { update(); });
-    _updateTimer->setSingleShot(true);
-    _updateTimer->start(50);
+    connect(&_updateTimer, &QTimer::timeout, this, [&] { update(); });
+    _updateTimer.setSingleShot(true);
+    _updateTimer.start(50);
 
     connect(this, &Waterfall::mousePosChanged, this, &PolarPlot::updateMouseColumnData);
     connect(this, &Waterfall::themeChanged, this, &PolarPlot::clear);
@@ -138,8 +137,8 @@ void PolarPlot::draw(
     }
 
     // Fix max update in 20Hz at max
-    if (!_updateTimer->isActive()) {
-        _updateTimer->start(50);
+    if (!_updateTimer.isActive()) {
+        _updateTimer.start(50);
     }
 }
 
