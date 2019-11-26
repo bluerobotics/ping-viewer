@@ -16,6 +16,8 @@ WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors)
     if (!_isOk) {
         qCWarning(waterfallGradient) << "Invalid color or name";
     }
+
+    qRegisterMetaType<WaterfallGradient*>("WaterfallGradient*");
 }
 
 WaterfallGradient::WaterfallGradient(QFile& file)
