@@ -1,6 +1,7 @@
 add_library(
     waterfall
 STATIC
+    gradientscale.cpp
     polarplot.cpp
     waterfall.cpp
     waterfallgradient.cpp
