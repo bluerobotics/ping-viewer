@@ -14,6 +14,7 @@
 #include "devicemanager.h"
 #include "filemanager.h"
 #include "flasher.h"
+#include "gradientscale.h"
 #include "linkconfiguration.h"
 #include "logger.h"
 #include "notificationmanager.h"
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink",
             "Link abstraction class can't be created.");
     qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
+    qmlRegisterType<GradientScale>("GradientScale", 1, 0, "GradientScale");
     qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<Ping360>("Ping360", 1, 0, "Ping360");
