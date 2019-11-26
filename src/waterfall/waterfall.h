@@ -146,6 +146,14 @@ public:
     }
     Q_PROPERTY(bool antialiasing READ antialiasing WRITE setAliasing NOTIFY antialiasingChanged)
 
+    /**
+     * @brief Get the WaterfallGradient object pointer
+     *
+     * @return WaterfallGradient*
+     */
+    WaterfallGradient* waterfallGradient() { return &_gradient; };
+    Q_PROPERTY(WaterfallGradient* waterfallGradient READ waterfallGradient NOTIFY themeChanged)
+
 signals:
     void antialiasingChanged();
 
