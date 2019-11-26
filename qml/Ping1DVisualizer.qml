@@ -4,6 +4,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
+
+import GradientScale 1.0
 import WaterfallPlot 1.0
 
 import DeviceManager 1.0
@@ -113,6 +115,14 @@ Item {
                 start_mm: waterfall.minDepthToDraw
                 end_mm: waterfall.maxDepthToDraw
                 visible: start_mm != end_mm
+            }
+
+            GradientScale {
+                width: 100
+                height: 10
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                waterfallGradient: waterfall.waterfallGradient
             }
         }
 
