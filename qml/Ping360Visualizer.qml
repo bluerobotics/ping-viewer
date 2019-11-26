@@ -5,6 +5,8 @@ import QtQuick.Controls 1.4 as QC1
 import QtQuick.Layouts 1.3
 import QtQuick.Shapes 1.12
 import Qt.labs.settings 1.0
+
+import GradientScale 1.0
 import WaterfallPlot 1.0
 import PolarPlot 1.0
 
@@ -178,6 +180,14 @@ Item {
                 anchors.fill: waterfall
                 angle: ping.sectorSize
                 maxDistance: waterfall.maxDistance
+            }
+
+            GradientScale {
+                width: 100
+                height: 10
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                waterfallGradient: waterfall.waterfallGradient
             }
         }
 
