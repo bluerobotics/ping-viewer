@@ -194,7 +194,10 @@ void Ping360::requestNextProfile()
 
 void Ping360::handleMessage(const ping_message& msg)
 {
-    qCDebug(PING_PROTOCOL_PING360) << "Handling Message:" << msg.message_id();
+    qCDebug(PING_PROTOCOL_PING360) << QStringLiteral("Handling Message: %1 [%2]")
+                                          .arg(PingHelper::nameFromMessageId(
+                                              static_cast<PingEnumNamespace::PingMessageId>(msg.message_id())))
+                                          .arg(msg.message_id());
 
     switch (msg.message_id()) {
 
