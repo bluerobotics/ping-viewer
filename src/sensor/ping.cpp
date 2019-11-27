@@ -146,7 +146,10 @@ void Ping::connectLink(LinkType connType, const QStringList& connString)
 
 void Ping::handleMessage(const ping_message& msg)
 {
-    qCDebug(PING_PROTOCOL_PING) << "Handling Message:" << msg.message_id();
+    qCDebug(PING_PROTOCOL_PING) << QStringLiteral("Handling Message: %1 [%2]")
+                                       .arg(PingHelper::nameFromMessageId(
+                                           static_cast<PingEnumNamespace::PingMessageId>(msg.message_id())))
+                                       .arg(msg.message_id());
 
     auto& requestedId = requestedIds[msg.message_id()];
     if (requestedId.waiting) {
