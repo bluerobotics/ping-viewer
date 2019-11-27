@@ -38,7 +38,10 @@ void PingSensor::writeMessage(const ping_message& msg) const
 
 void PingSensor::handleMessagePrivate(const ping_message& msg)
 {
-    qCDebug(PING_PROTOCOL_PINGSENSOR) << "Handling Message:" << msg.message_id();
+    qCDebug(PING_PROTOCOL_PINGSENSOR) << QStringLiteral("Handling Message: %1 [%2]")
+                                             .arg(PingHelper::nameFromMessageId(
+                                                 static_cast<PingEnumNamespace::PingMessageId>(msg.message_id())))
+                                             .arg(msg.message_id());
 
     if (_commonVariables.dstId != msg.destination_device_id()) {
         _commonVariables.dstId = msg.destination_device_id();
