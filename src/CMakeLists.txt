@@ -1,4 +1,5 @@
 set(INCLUDE_DIRS
+    commandline
     devicemanager
     filemanager
     flash
