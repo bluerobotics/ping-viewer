@@ -5,24 +5,41 @@
 
 Ping360SimulationLink::Ping360SimulationLink(QObject* parent)
     : SimulationLink(parent)
+    , _counter(0)
+    , _globalAverageTimeMs(0)
 {
-    connect(&_randomUpdateTimer, &QTimer::timeout, this, &Ping360SimulationLink::randomUpdate);
-    _randomUpdateTimer.start(50);
+    _elapsedTimer.start();
+    connect(this, &AbstractLink::sendData, this, &Ping360SimulationLink::handleData, Qt::QueuedConnection);
+}
+
+void Ping360SimulationLink::handleData(const QByteArray& byteArray)
+{
+    ping_message message(reinterpret_cast<const uint8_t*>(byteArray.data()), byteArray.size());
+    if (message.message_id() == CommonId::GENERAL_REQUEST) {
+        auto generalRequest = *static_cast<const common_general_request*>(&message);
+        if (generalRequest.requested_id() == CommonId::DEVICE_INFORMATION) {
+            common_device_information deviceInformation;
+            deviceInformation.updateChecksum();
+            emit newData(QByteArray(
+                reinterpret_cast<const char*>(deviceInformation.msgData), deviceInformation.msgDataLength()));
+        }
+    } else if (message.message_id() == Ping360Id::TRANSDUCER) {
+        randomUpdate();
+    }
 }
 
 void Ping360SimulationLink::randomUpdate()
 {
-    static uint counter = 1;
     static const float numberOfSamples = 1200;
     static const int angularResolution = 400;
 
-    const float stop1 = numberOfSamples / 2.0 - 10 * qSin(counter / 10.0);
-    const float stop2 = 3 * numberOfSamples / 5.0 + 6 * qCos(counter / 5.5);
+    const float stop1 = numberOfSamples / 2.0 - 10 * qSin(_counter / 10.0);
+    const float stop2 = 3 * numberOfSamples / 5.0 + 6 * qCos(_counter / 5.5);
 
     static ping360_device_data deviceData(numberOfSamples);
     deviceData.set_mode(0);
     deviceData.set_gain_setting(1);
-    deviceData.set_angle(counter % angularResolution);
+    deviceData.set_angle(_counter % angularResolution);
     deviceData.set_transmit_duration(1000);
     deviceData.set_sample_period(80);
     deviceData.set_transmit_frequency(700);
@@ -45,5 +62,5 @@ void Ping360SimulationLink::randomUpdate()
     deviceData.updateChecksum();
     emit newData(QByteArray(reinterpret_cast<const char*>(deviceData.msgData), deviceData.msgDataLength()));
 
-    counter++;
+    _counter++;
 }

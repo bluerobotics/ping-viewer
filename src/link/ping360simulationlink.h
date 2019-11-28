@@ -22,6 +22,21 @@ public:
      */
     void randomUpdate();
 
+    /**
+     * @brief Handle incoming data from the sensor class
+     *
+     * @param byteArray
+     */
+    void handleData(const QByteArray& byteArray);
+
+    /**
+     * @brief Check if connection is writable
+     *
+     * @return true
+     * @return false
+     */
+    bool isWritable() override final { return true; };
+
 private:
-    QTimer _randomUpdateTimer;
+    int _counter;
 };
