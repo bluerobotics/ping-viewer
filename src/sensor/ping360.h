@@ -548,6 +548,7 @@ private:
     // The default transmit frequency to operate with
     static const uint16_t _viewerDefaultTransmitFrequency;
     static const uint16_t _viewerDefaultNumberOfSamples;
+    static const float _viewerDefaultRange;
     static const uint16_t _viewerDefaultSamplePeriod;
     static const uint16_t _viewerDefaultTransmitDuration;
 
