@@ -34,3 +34,15 @@ The sensor log files (.bin) contain all of the raw binary communications receive
 #### Waterfall Gradients
 
 [Custom gradients](display-settings.md#custom-gradients) (.txt) should be placed in this folder.
+
+#### Settings
+
+Ping Viewer uses the native settings environment of each operating system, you can reset the settings with the [reset settings button](https://docs.bluerobotics.com/ping-viewer/application-information/#header-buttons) or by manually removing the settings in your computer, they are located under:
+
+
+
+* Mac: Under the file `~/Library/Preferences/com.blue-robotics-inc.Ping\ Viewer.plist`
+* Linux: Under the file `"~/.config/Blue Robotics Inc/Ping Viewer.conf"`
+* Windows: Open the **Registry Editor** and follow the path: `Computer\HKEY_CURRENT_USER\Software\Blue Robotics Inc.\Ping Viewer`
+
+![Windows settings](/ping-viewer/images/settings/windows-registry.png)
