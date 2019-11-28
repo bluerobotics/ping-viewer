@@ -17,11 +17,14 @@ RowLayout {
     property var modelValue: undefined
     property alias modelIndex: root.value
 
+    // Do the necessary logic if a model is used
     onModelValueChanged: {
         if(model == undefined || model[value] == Math.round(modelValue)) {
             return
         }
 
+        // Get something that is closer to an item in our model
+        // E.g: New value is 0.99, select the value in the model that is closer [1]
         var closeItem = {
             index: 0,
             distance: Number.MAX_SAFE_INTEGER
@@ -41,6 +44,7 @@ RowLayout {
             }
         }
 
+        // Update the new value
         root.value = closeItem.index
     }
 
