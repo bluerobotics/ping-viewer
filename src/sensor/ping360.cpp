@@ -41,6 +41,7 @@ const uint16_t Ping360::_firmwareDefaultNumberOfSamples = 1024;
 // The default transmit frequency to operate with
 const uint16_t Ping360::_viewerDefaultTransmitFrequency = 750;
 const uint16_t Ping360::_viewerDefaultNumberOfSamples = _firmwareMaxNumberOfPoints;
+const float Ping360::_viewerDefaultRange = 2;
 const uint16_t Ping360::_viewerDefaultSamplePeriod = 88;
 const uint16_t Ping360::_viewerDefaultTransmitDuration = 11;
 
@@ -506,6 +507,7 @@ void Ping360::resetSettings()
     set_sample_period(_viewerDefaultSamplePeriod);
     set_transmit_frequency(_viewerDefaultTransmitFrequency);
     set_number_of_points(_viewerDefaultNumberOfSamples);
+    set_range(_viewerDefaultRange);
     // Signals will be update in the next profile, it's possible that old profiles contain older configurations
     // Turn sensor settings invalid and let the interface handle the sync
     _sensorSettings.valid = false;
