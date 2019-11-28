@@ -1,3 +1,5 @@
+#include <QCoreApplication>
+#include <QElapsedTimer>
 #include <QtMath>
 
 #include "ping-message-ping360.h"
@@ -7,6 +9,7 @@ Ping360SimulationLink::Ping360SimulationLink(QObject* parent)
     : SimulationLink(parent)
     , _counter(0)
     , _globalAverageTimeMs(0)
+    , _spins(0)
 {
     _elapsedTimer.start();
     connect(this, &AbstractLink::sendData, this, &Ping360SimulationLink::handleData, Qt::QueuedConnection);
@@ -62,5 +65,30 @@ void Ping360SimulationLink::randomUpdate()
     deviceData.updateChecksum();
     emit newData(QByteArray(reinterpret_cast<const char*>(deviceData.msgData), deviceData.msgDataLength()));
 
+    // Calculate the global average time between requests
     _counter++;
+    float elapsedTime = _elapsedTimer.elapsed();
+    float weight = (_counter - 1) / static_cast<float>(_counter);
+    _globalAverageTimeMs = _globalAverageTimeMs * weight + elapsedTime * (1 - weight);
+
+    _elapsedTimer.restart();
+
+    // This should be done after _counter increase to not interate before a full first spin
+    if (_counter % angularResolution == 0) {
+        _spins++;
+    }
+
+#if defined(PING360_SPEED_TEST)
+    if (_spins > simulationTest.spins) {
+        // Since we are forcing the application to close, qDebug may not work
+        printf("%s: Average elapsed request elapsed time %f [Valid: %f]\n", __PRETTY_FUNCTION__, _globalAverageTimeMs,
+            simulationTest.maxAverageRequestTimeMs);
+
+        if (_globalAverageTimeMs > simulationTest.maxAverageRequestTimeMs) {
+            QCoreApplication::exit(-1);
+        } else {
+            QCoreApplication::exit(0);
+        }
+    }
+#endif
 }
