@@ -58,6 +58,10 @@ RowLayout {
                         Layout.fillWidth: true
                     }
 
+                    Label {
+                        text: "Baudrate:"
+                        visible: baudComboBox.visible
+                    }
                     PingComboBox {
                         id: baudComboBox
                         // This should use the same values in Flasher::_validBaudRates
