@@ -29,7 +29,7 @@ Item {
             "RX speed (Bytes/s): " + ping.link.downSpeed,
             "Lost messages (#): " + ping.lost_messages,
             "Ascii text:\n" + ping.ascii_text,
-            "Error message:\n" + ping.err_msg,
+            "Error message:\n" + ping.nack_message,
         ] : []
 
         delegate: Text {
