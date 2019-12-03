@@ -49,7 +49,6 @@ QDebug operator<<(QDebug out, const LogSensorStruct& other)
     out << "\t Hash:" << other.pingViewerBuildInfo.hash << "\n";
     out << "\t Date:" << other.pingViewerBuildInfo.date << "\n";
     out << "\t Tag:" << other.pingViewerBuildInfo.tag << "\n";
-    // TODO: Send a PR for Qt moving name to a static function
     out << "\t OS:" << other.pingViewerBuildInfo.osName << other.pingViewerBuildInfo.osVersion << "\n";
 
     // Sensor
