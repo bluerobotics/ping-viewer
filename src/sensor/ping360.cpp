@@ -18,12 +18,13 @@
 
 #include "hexvalidator.h"
 #include "link/seriallink.h"
+#include "mavlinkmanager.h"
 #include "networkmanager.h"
 #include "networktool.h"
 #include "notificationmanager.h"
 #include "settingsmanager.h"
 
-#include <mavlink.h>
+#include <mavlink_msg_attitude.h>
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
@@ -97,7 +98,11 @@ Ping360::Ping360()
         emit messageFrequencyChanged();
     });
 
-    //connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [] {}
+    connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [](auto message) {
+        mavlink_attitude_t attitude;
+        mavlink_msg_attitude_decode(&message, &attitude);
+        qDebug() << attitude.roll << attitude.pitch << attitude.yaw;
+    });
 }
 
 void Ping360::startPreConfigurationProcess()

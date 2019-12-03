@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 #endif
 
     //MavlinkManager::self()->connect({LinkType::Udp, {"0.0.0.0", "14550"}});
-    MavlinkManager::self()->connect({LinkType::Udp, {"0.0.0.0", "14550"}});
+    MavlinkManager::self()->connect({LinkType::Udp, {"0.0.0.0", "14666"}});
 
     return app.exec();
 }

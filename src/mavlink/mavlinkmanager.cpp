@@ -2,6 +2,8 @@
 
 #include "logger.h"
 
+#include <mavlink_msg_attitude.h>
+
 #include <QDebug>
 #include <QQmlEngine>
 
@@ -34,7 +36,7 @@ void MavlinkManager::connect(const LinkConfiguration& conf)
     auto timer = new QTimer();
     QObject::connect(timer, &QTimer::timeout, this, [this](){
         mavlink_message_t message;
-        mavlink_msg_heartbeat_pack(1, 200, &message, MAV_TYPE_GCS, MAV_AUTOPILOT_INVALID, MAV_MODE_FLAG_SAFETY_ARMED, 0, MAV_STATE_ACTIVE);
+        mavlink_msg_heartbeat_pack(-1, 0, &message, MAV_TYPE_GCS, MAV_AUTOPILOT_INVALID, MAV_MODE_FLAG_SAFETY_ARMED, 0, MAV_STATE_ACTIVE);
         unsigned char buf[2048];
         auto len = mavlink_msg_to_send_buffer(buf, &message);
         //qDebug() << buf;
@@ -43,17 +45,17 @@ void MavlinkManager::connect(const LinkConfiguration& conf)
     timer->start(4000);
 }
 
-void MavlinkManager::parseData(const QByteArray& data)
+void MavlinkManager::parseData(const QByteArray data)
 {
-    mavlink_message_t message;
+    static mavlink_message_t message;
     mavlink_status_t status;
-    qDebug() << data;
+    //qDebug() << "length:" << data.length();
     for(const auto& byte : data) {
         if(mavlink_parse_char(0, byte, &message, &status)) {
-            qDebug() << message.msgid;
+            qDebug() << "ID:" << message.msgid;
             emit mavlinkMessage(message);
         }
-        qDebug() << status.parse_state;
+        //qDebug() << status.parse_state;
     }
 }
 

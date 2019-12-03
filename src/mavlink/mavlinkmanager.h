@@ -1,6 +1,7 @@
 #pragma once
 #include <QLoggingCategory>
 
+#define MAVLINK_MESSAGE_CRCS {{30, 39, 28, 28, 0, 0, 0}}
 #include <mavlink.h>
 
 #include "link.h"
@@ -29,7 +30,7 @@ public:
      *
      * @param data
      */
-    void parseData(const QByteArray& data);
+    void parseData(const QByteArray data);
 
     /**
      * @brief Return MavlinkManager pointer
