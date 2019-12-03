@@ -57,7 +57,7 @@ ProtocolDetector::ProtocolDetector()
      * doScan should only be called by connection from others threads
      * or calling scan directly (that is a signal emission).
      */
-    connect(this, &ProtocolDetector::scan, this, &ProtocolDetector::doScan);
+    //connect(this, &ProtocolDetector::scan, this, &ProtocolDetector::doScan);
 };
 
 void ProtocolDetector::doScan()

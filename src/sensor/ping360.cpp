@@ -23,6 +23,8 @@
 #include "notificationmanager.h"
 #include "settingsmanager.h"
 
+#include <mavlink.h>
+
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
 // firmware constants
@@ -94,6 +96,8 @@ Ping360::Ping360()
         // we can use a single signal to update someone about the frequency update
         emit messageFrequencyChanged();
     });
+
+    //connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [] {}
 }
 
 void Ping360::startPreConfigurationProcess()
