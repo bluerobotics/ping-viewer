@@ -98,10 +98,12 @@ Ping360::Ping360()
         emit messageFrequencyChanged();
     });
 
-    connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [](auto message) {
+    connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [this](auto message) {
         mavlink_attitude_t attitude;
         mavlink_msg_attitude_decode(&message, &attitude);
         qDebug() << attitude.roll << attitude.pitch << attitude.yaw;
+        _heading = attitude.yaw;
+        emit headingChanged();
     });
 }
 

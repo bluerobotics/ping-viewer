@@ -418,6 +418,9 @@ public:
     Q_PROPERTY(bool autoTransmitDuration READ autoTransmitDuration WRITE setAutoTransmitDuration NOTIFY
             autoTransmitDurationChanged)
 
+    float heading() { return _heading; }
+    Q_PROPERTY(float heading READ heading NOTIFY headingChanged)
+
     /**
      * @brief adjust the transmit duration according to automatic mode, and current configuration
      */
@@ -512,6 +515,7 @@ signals:
     void autoTransmitDurationChanged();
     void dataChanged();
     void gainSettingChanged();
+    void headingChanged();
     void messageFrequencyChanged();
     void numberOfPointsChanged();
     void pingNumberChanged();
@@ -633,6 +637,9 @@ private:
 
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
+
+    // Sensor heading in radians
+    float _heading = 0;
 
     QTimer _messageFrequencyTimer;
     QTimer _timeoutProfileMessage;
