@@ -72,7 +72,7 @@ void DeviceManager::stopDetecting()
     _detectorThread.quit();
 }
 
-void DeviceManager::connectLink(const LinkConfiguration* linkConf)
+void DeviceManager::connectLink(LinkConfiguration* linkConf)
 {
     // Stop detector if we are going to connect with something
     stopDetecting();
@@ -123,7 +123,8 @@ void DeviceManager::connectLinkDirectly(const LinkConfiguration& linkConfigurati
     }
 
     append(linkConfiguration);
-    connectLink(&linkConfiguration);
+    std::remove_const<LinkConfiguration>::type removeConstlinkConfiguration = linkConfiguration;
+    connectLink(&removeConstlinkConfiguration);
 }
 
 void DeviceManager::connectLinkDirectly(AbstractLinkNamespace::LinkType connType, const QStringList& connString,

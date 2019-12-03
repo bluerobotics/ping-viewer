@@ -59,7 +59,7 @@ public:
      *
      * @param linkConf
      */
-    Q_INVOKABLE void connectLink(const LinkConfiguration* linkConf);
+    Q_INVOKABLE void connectLink(LinkConfiguration* linkConf);
 
     /**
      * @brief Connect with link directly without protocol checks
