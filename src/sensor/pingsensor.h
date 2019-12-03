@@ -100,13 +100,12 @@ public:
     Q_PROPERTY(QString ascii_text READ asciiText NOTIFY asciiTextChanged)
 
     /**
-     * @brief Return last err_msg message
-     * TODO: change function name
+     * @brief Return last nack message
      *
      * @return QString
      */
-    QString errMsg() const { return _commonVariables.nack_msg; }
-    Q_PROPERTY(QString err_msg READ errMsg NOTIFY nackMsgChanged)
+    QString nackMessage() const { return _commonVariables.nack_msg; }
+    Q_PROPERTY(QString nack_message READ nackMessage NOTIFY nackMsgChanged)
 
     /**
      * @brief Return number of parser errors
