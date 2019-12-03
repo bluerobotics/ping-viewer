@@ -54,12 +54,13 @@ public:
      */
     Q_INVOKABLE void deltaStep(int delta, bool transmit = true)
     {
-        // Force delta to be positive and inside our polar space
-        while (delta < 0) {
-            delta += _angularResolutionGrad;
+        // Force nextPoint to be positive and inside our polar space
+        int nextPoint = _angle + delta;
+        while (nextPoint < 0) {
+            nextPoint += _angularResolutionGrad;
         }
-
-        int nextPoint = (_angle + delta) % _angularResolutionGrad;
+        nextPoint %= _angularResolutionGrad;
+        qDebug() << "NEXT POINTS:" << nextPoint << _heading << delta;
 
         transducer_message.set_mode(1);
         transducer_message.set_gain_setting(_sensorSettings.gain_setting);
@@ -150,7 +151,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t angle() { return (_angle + _angle_offset) % _angularResolutionGrad; }
+    uint16_t angle() { return (_angle + angle_offset() + static_cast<int>(_heading)) % _angularResolutionGrad; }
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
@@ -418,6 +419,9 @@ public:
     Q_PROPERTY(bool autoTransmitDuration READ autoTransmitDuration WRITE setAutoTransmitDuration NOTIFY
             autoTransmitDurationChanged)
 
+    float heading() { return _heading; }
+    Q_PROPERTY(float heading READ heading NOTIFY headingChanged)
+
     /**
      * @brief adjust the transmit duration according to automatic mode, and current configuration
      */
@@ -512,6 +516,7 @@ signals:
     void autoTransmitDurationChanged();
     void dataChanged();
     void gainSettingChanged();
+    void headingChanged();
     void messageFrequencyChanged();
     void numberOfPointsChanged();
     void pingNumberChanged();
@@ -633,6 +638,9 @@ private:
 
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
+
+    // Sensor heading in radians
+    float _heading = 0;
 
     QTimer _messageFrequencyTimer;
     QTimer _timeoutProfileMessage;

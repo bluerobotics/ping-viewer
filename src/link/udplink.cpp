@@ -1,6 +1,8 @@
 #include <QDebug>
 #include <QLoggingCategory>
 #include <QNetworkDatagram>
+#include <QNetworkInterface>
+#include <QNetworkProxy>
 
 #include "logger.h"
 #include "udplink.h"
@@ -34,7 +36,20 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     // Check protocol detector comments and documentation about correct connect procedure
 
-    // Connect with server
+    auto allAdresses = QNetworkInterface::allAddresses();
+    _udpSocket->setProxy(QNetworkProxy::NoProxy);
+    /*
+    if(std::any_of(allAdresses.constBegin(), allAdresses.constEnd(), [this](auto val) {
+        return _hostAddress == val.toString();
+    }) || _hostAddress == QHostAddress(QHostAddress::AnyIPv4).toString()) {
+        qDebug() << "YESSSSSSSS";
+        if(_udpSocket->bind(QHostAddress::AnyIPv4, _port, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
+            _udpSocket->joinMulticastGroup(QHostAddress("224.0.0.1"));
+        }
+    } else {
+        // Connect with server
+        _udpSocket->connectToHost(_hostAddress, _port);
+    }*/
     _udpSocket->connectToHost(_hostAddress, _port);
 
     // Give the socket a second to connect to the other side otherwise error out

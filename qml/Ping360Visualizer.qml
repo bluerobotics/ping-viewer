@@ -28,14 +28,15 @@ Item {
       */
 
     Timer {
-        interval: 50
+        interval: 5
         running: true
         repeat: true
         onTriggered: {
             shapeSpinner.angle = (ping.angle + 0.25)*180/200
+            /*
             if(chart.visible) {
                 chart.draw(ping.data, ping.range, 0)
-            }
+            }*/
         }
     }
 
@@ -93,6 +94,50 @@ Item {
                 vertexShader: "qrc:/opengl/polarplot/vertex.glsl"
                 fragmentShader: "qrc:/opengl/polarplot/fragment.glsl"
 
+                Text {
+                    id: northText
+                    text: "N"
+                    color: "red"
+                    font.pixelSize: 20
+                    font.bold: true
+                    visible: northArrow.visible
+                    y: -height
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    transform: Rotation {
+                        origin.x: northText.width/2
+                        origin.y: northText.height/2
+                        axis { x:0; y:0; z:1 }
+                        angle: ping.heading*180/200
+                    }
+                }
+
+                Canvas {
+                    id: northArrow
+                    width: 12
+                    height: 20
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onWidthChanged: requestPaint()
+                    visible: ping.sectorSize > 180
+                    clip: false
+                    onPaint: {
+                        var ctx = getContext("2d")
+
+                        ctx.fillStyle = "red"
+                        ctx.strokeStyle = "black"
+
+                        ctx.beginPath()
+                        ctx.moveTo(width/2, 0)
+                        ctx.lineTo(width, height)
+                        ctx.lineTo(0, height)
+                        ctx.lineTo(width/2, 0)
+                        ctx.stroke()
+
+                        ctx.fill()
+                    }
+                }
+
                 // Spinner that shows the head angle
                 Shape {
                     id: shapeSpinner
@@ -134,8 +179,8 @@ Item {
                 transform: Rotation {
                     origin.x: shader.width/2
                     origin.y: shader.height/2
-                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: 0 }
-                    angle: 180
+                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: ping.sectorSize > 180}
+                    angle: -ping.heading*180/200
                 }
             }
 

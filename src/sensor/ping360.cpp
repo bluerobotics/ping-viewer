@@ -18,10 +18,13 @@
 
 #include "hexvalidator.h"
 #include "link/seriallink.h"
+#include "mavlinkmanager.h"
 #include "networkmanager.h"
 #include "networktool.h"
 #include "notificationmanager.h"
 #include "settingsmanager.h"
+
+#include <mavlink_msg_attitude.h>
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_PING360, "ping.protocol.ping360")
 
@@ -93,6 +96,14 @@ Ping360::Ping360()
         // Since we don't have a huge number of messages and this variable is pretty simple,
         // we can use a single signal to update someone about the frequency update
         emit messageFrequencyChanged();
+    });
+
+    connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [this](auto message) {
+        mavlink_attitude_t attitude;
+        mavlink_msg_attitude_decode(&message, &attitude);
+        qDebug() << attitude.roll << attitude.pitch << attitude.yaw;
+        _heading = attitude.yaw*200/3.1415;
+        emit headingChanged();
     });
 }
 

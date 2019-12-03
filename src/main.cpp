@@ -18,6 +18,7 @@
 #include "gradientscale.h"
 #include "linkconfiguration.h"
 #include "logger.h"
+#include "mavlinkmanager.h"
 #include "notificationmanager.h"
 #include "ping.h"
 #include "ping360.h"
@@ -130,6 +131,9 @@ int main(int argc, char *argv[])
     // Start KCrash
     KCrash::initialize();
 #endif
+
+    //MavlinkManager::self()->connect({LinkType::Udp, {"0.0.0.0", "14550"}});
+    MavlinkManager::self()->connect({LinkType::Udp, {"192.168.2.2", "14666"}});
 
     return app.exec();
 }
