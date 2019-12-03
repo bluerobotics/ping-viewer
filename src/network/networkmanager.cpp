@@ -37,9 +37,10 @@ void NetworkManager::requestJson(const QUrl& url, std::function<void(QJsonDocume
 void NetworkManager::download(const QUrl& url, std::function<void(QString)> function)
 {
     // Create manager and request
-    // TODO: move it to smart pointer
     QNetworkRequest request(url);
     request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+
+    // downloadManager will be deleted by `downloadManager->deleteLater();`
     auto downloadManager = new QNetworkAccessManager;
     auto reply = downloadManager->get(request);
     connect(reply, &QNetworkReply::downloadProgress, self(), [url](qint64 received, qint64 total) {
