@@ -134,8 +134,8 @@ Item {
                 transform: Rotation {
                     origin.x: shader.width/2
                     origin.y: shader.height/2
-                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: 0 }
-                    angle: 180
+                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: 1 }
+                    angle: 180 + ping.heading*180/Math.PI
                 }
             }
 
