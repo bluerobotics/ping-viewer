@@ -102,7 +102,7 @@ Ping360::Ping360()
         mavlink_attitude_t attitude;
         mavlink_msg_attitude_decode(&message, &attitude);
         qDebug() << attitude.roll << attitude.pitch << attitude.yaw;
-        _heading = attitude.yaw;
+        _heading = attitude.yaw*200/3.1415;
         emit headingChanged();
     });
 }
