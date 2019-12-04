@@ -93,6 +93,29 @@ Item {
                 vertexShader: "qrc:/opengl/polarplot/vertex.glsl"
                 fragmentShader: "qrc:/opengl/polarplot/fragment.glsl"
 
+                Canvas {
+                    width: 12
+                    height: 20
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onWidthChanged: requestPaint()
+                    visible: ping.sectorSize > 180
+                    onPaint: {
+                        var ctx = getContext("2d")
+
+                        ctx.fillStyle = "red"
+                        ctx.strokeStyle = "black"
+
+                        ctx.beginPath()
+                        ctx.moveTo(width/2, 0)
+                        ctx.lineTo(width, height)
+                        ctx.lineTo(0, height)
+                        ctx.lineTo(width/2, 0)
+                        ctx.stroke()
+                        ctx.fill()
+                    }
+                }
+
                 // Spinner that shows the head angle
                 Shape {
                     id: shapeSpinner
@@ -134,7 +157,7 @@ Item {
                 transform: Rotation {
                     origin.x: shader.width/2
                     origin.y: shader.height/2
-                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: 1}
+                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: ping.sectorSize > 180}
                     angle: -ping.heading*180/200
                 }
             }
