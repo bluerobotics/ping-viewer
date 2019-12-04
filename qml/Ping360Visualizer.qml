@@ -93,13 +93,33 @@ Item {
                 vertexShader: "qrc:/opengl/polarplot/vertex.glsl"
                 fragmentShader: "qrc:/opengl/polarplot/fragment.glsl"
 
+                Text {
+                    id: northText
+                    text: "N"
+                    color: "red"
+                    font.pixelSize: 20
+                    font.bold: true
+                    visible: northArrow.visible
+                    y: -height
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    transform: Rotation {
+                        origin.x: northText.width/2
+                        origin.y: northText.height/2
+                        axis { x:0; y:0; z:1 }
+                        angle: ping.heading*180/200
+                    }
+                }
+
                 Canvas {
+                    id: northArrow
                     width: 12
                     height: 20
                     anchors.top: parent.top
                     anchors.horizontalCenter: parent.horizontalCenter
                     onWidthChanged: requestPaint()
                     visible: ping.sectorSize > 180
+                    clip: false
                     onPaint: {
                         var ctx = getContext("2d")
 
@@ -112,6 +132,7 @@ Item {
                         ctx.lineTo(0, height)
                         ctx.lineTo(width/2, 0)
                         ctx.stroke()
+
                         ctx.fill()
                     }
                 }
