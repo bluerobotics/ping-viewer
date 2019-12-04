@@ -135,7 +135,7 @@ Item {
                     origin.x: shader.width/2
                     origin.y: shader.height/2
                     axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: 1}
-                    angle: ping.heading*180/200
+                    angle: -ping.heading*180/200
                 }
             }
 

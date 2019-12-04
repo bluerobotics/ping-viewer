@@ -254,7 +254,7 @@ public:
      *  TODO: Maybe this should be in the viewer configuration and not in the sensor class
      * @return int
      */
-    int angle_offset() { return _angle_offset - _heading; }
+    int angle_offset() { return _angle_offset; }
 
     /**
      * @brief Set angle offset from sample position
