@@ -151,7 +151,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t angle() { return (_angle + angle_offset()) % _angularResolutionGrad; }
+    uint16_t angle() { return (_angle + angle_offset() + static_cast<int>(_heading)) % _angularResolutionGrad; }
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**

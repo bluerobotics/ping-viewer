@@ -28,14 +28,15 @@ Item {
       */
 
     Timer {
-        interval: 50
+        interval: 5
         running: true
         repeat: true
         onTriggered: {
             shapeSpinner.angle = (ping.angle + 0.25)*180/200
+            /*
             if(chart.visible) {
                 chart.draw(ping.data, ping.range, 0)
-            }
+            }*/
         }
     }
 
