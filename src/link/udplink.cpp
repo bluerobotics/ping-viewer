@@ -1,8 +1,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 #include <QNetworkDatagram>
-#include <QNetworkInterface>
-#include <QNetworkProxy>
 
 #include "logger.h"
 #include "udplink.h"
@@ -15,7 +13,20 @@ UDPLink::UDPLink(QObject* parent)
 {
     setType(LinkType::Udp);
 
-    connect(_udpSocket, &QIODevice::readyRead, this, [this]() { emit newData(_udpSocket->readAll()); });
+    connect(_udpSocket, &QIODevice::readyRead, this, [this] { emit newData(_udpSocket->readAll()); });
+    connect(_udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this,
+        [this](QAbstractSocket::SocketError /*socketError*/){ printErrorMessage(); });
+
+    // QUdpSocket fail to emit state signal
+    // Here we use a timer to check if we are in a connect state, if not we try again
+    connect(&_stateTimer, &QTimer::timeout, this, [this]{
+        if(_udpSocket->state() == QAbstractSocket::UnconnectedState) {
+            printErrorMessage();
+            qDebug(PING_PROTOCOL_UDPLINK) << "Trying to connect with host again.";
+            _udpSocket->connectToHost(_hostAddress, _port);
+        }
+    });
+    _stateTimer.start(1000);
 
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) { _udpSocket->write(data); });
 }
@@ -36,20 +47,7 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     // Check protocol detector comments and documentation about correct connect procedure
 
-    auto allAdresses = QNetworkInterface::allAddresses();
-    _udpSocket->setProxy(QNetworkProxy::NoProxy);
-    /*
-    if(std::any_of(allAdresses.constBegin(), allAdresses.constEnd(), [this](auto val) {
-        return _hostAddress == val.toString();
-    }) || _hostAddress == QHostAddress(QHostAddress::AnyIPv4).toString()) {
-        qDebug() << "YESSSSSSSS";
-        if(_udpSocket->bind(QHostAddress::AnyIPv4, _port, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
-            _udpSocket->joinMulticastGroup(QHostAddress("224.0.0.1"));
-        }
-    } else {
-        // Connect with server
-        _udpSocket->connectToHost(_hostAddress, _port);
-    }*/
+    // Connect with server
     _udpSocket->connectToHost(_hostAddress, _port);
 
     // Give the socket a second to connect to the other side otherwise error out
@@ -58,15 +56,21 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
         // Increases socketAttemps here to avoid empty loop optimization
         socketAttemps++;
     }
+
     if (_udpSocket->state() != QUdpSocket::ConnectedState) {
-        qCWarning(PING_PROTOCOL_UDPLINK) << "Socket is not in connected state.";
-        QString errorMessage
-            = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
-        qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
+        printErrorMessage();
         return false;
     }
 
     return true;
+}
+
+void UDPLink::printErrorMessage()
+{
+    qCWarning(PING_PROTOCOL_UDPLINK) << "An error has occurred with:" << _linkConfiguration;
+    QString errorMessage
+        = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
+    qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
 }
 
 bool UDPLink::finishConnection()
