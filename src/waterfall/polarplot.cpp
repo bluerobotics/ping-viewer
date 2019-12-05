@@ -73,6 +73,9 @@ void PolarPlot::draw(
     }
 
     // TODO: Need a better way to deal with dynamic steps, maybe doing `draw(data, angle++)` with `angleGrad` loop
+    while (angle < 0) {
+        angle += maxGradian;
+    }
     _distances[static_cast<int>(angle) % _angularResolution] = initPoint + length;
 
     float maxDistance = 0;
