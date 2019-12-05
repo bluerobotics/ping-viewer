@@ -4,3 +4,6 @@
 [submodule "lib/ping-cpp"]
 	path = lib/ping-cpp/ping-cpp
 	url = https://github.com/bluerobotics/ping-cpp
+[submodule "lib/mavlink/c_library_v2"]
+	path = lib/mavlink/c_library_v2
+	url = https://github.com/mavlink/c_library_v2
