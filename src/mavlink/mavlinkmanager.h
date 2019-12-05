@@ -64,5 +64,12 @@ private:
      */
     MavlinkManager();
 
+    /**
+     * @brief Send a heartbeat message
+     *
+     */
+    void sendHeartbeatMessage();
+
     QSharedPointer<Link> _linkIn;
+    QTimer _heartbeatTimer;
 };
