@@ -71,6 +71,12 @@ public:
     QUdpSocket* udpSocket() { return _udpSocket; };
 
 private:
+    /**
+     * @brief Function used internally to print debug information about the link
+     *
+     */
+    void printErrorMessage();
+
     QString _hostAddress;
     QUdpSocket* _udpSocket;
     uint _port;

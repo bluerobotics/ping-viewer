@@ -43,15 +43,20 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
         // Increases socketAttemps here to avoid empty loop optimization
         socketAttemps++;
     }
+
     if (_udpSocket->state() != QUdpSocket::ConnectedState) {
-        qCWarning(PING_PROTOCOL_UDPLINK) << "Socket is not in connected state.";
-        QString errorMessage
-            = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
-        qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
+        printErrorMessage();
         return false;
     }
 
     return true;
+}
+
+void UDPLink::printErrorMessage()
+{
+    qCWarning(PING_PROTOCOL_UDPLINK) << "An error has occurred with:" << _linkConfiguration;
+    QString errorMessage = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
+    qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
 }
 
 bool UDPLink::finishConnection()
