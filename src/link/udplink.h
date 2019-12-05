@@ -78,6 +78,7 @@ private:
     void printErrorMessage();
 
     QString _hostAddress;
+    QTimer _stateTimer;
     QUdpSocket* _udpSocket;
     uint _port;
 };

@@ -13,7 +13,20 @@ UDPLink::UDPLink(QObject* parent)
 {
     setType(LinkType::Udp);
 
-    connect(_udpSocket, &QIODevice::readyRead, this, [this]() { emit newData(_udpSocket->readAll()); });
+    connect(_udpSocket, &QIODevice::readyRead, this, [this] { emit newData(_udpSocket->readAll()); });
+    connect(_udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this,
+        [this](QAbstractSocket::SocketError /*socketError*/) { printErrorMessage(); });
+
+    // QUdpSocket fail to emit state signal
+    // Here we use a timer to check if we are in a connect state, if not we try again
+    connect(&_stateTimer, &QTimer::timeout, this, [this] {
+        if (_udpSocket->state() == QAbstractSocket::UnconnectedState) {
+            printErrorMessage();
+            qDebug(PING_PROTOCOL_UDPLINK) << "Trying to reconnect with host again.";
+            _udpSocket->connectToHost(_hostAddress, _port);
+        }
+    });
+    _stateTimer.start(1000);
 
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) { _udpSocket->write(data); });
 }
