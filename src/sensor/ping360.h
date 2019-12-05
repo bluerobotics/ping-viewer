@@ -150,7 +150,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t angle() { return (_angle + _angle_offset) % _angularResolutionGrad; }
+    uint16_t angle() { return (_angle + angle_offset() + static_cast<int>(_heading)) % _angularResolutionGrad; }
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
@@ -419,6 +419,14 @@ public:
             autoTransmitDurationChanged)
 
     /**
+     * @brief Sensor origin orientation in gradians (400)
+     *
+     * @return float
+     */
+    float heading() { return _heading; }
+    Q_PROPERTY(float heading READ heading NOTIFY headingChanged)
+
+    /**
      * @brief adjust the transmit duration according to automatic mode, and current configuration
      */
     void adjustTransmitDuration()
@@ -512,6 +520,7 @@ signals:
     void autoTransmitDurationChanged();
     void dataChanged();
     void gainSettingChanged();
+    void headingChanged();
     void messageFrequencyChanged();
     void numberOfPointsChanged();
     void pingNumberChanged();
@@ -633,6 +642,9 @@ private:
 
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
+
+    // Sensor heading in radians
+    float _heading = 0;
 
     QTimer _messageFrequencyTimer;
     QTimer _timeoutProfileMessage;
