@@ -54,12 +54,12 @@ public:
      */
     Q_INVOKABLE void deltaStep(int delta, bool transmit = true)
     {
-        // Force delta to be positive and inside our polar space
-        while (delta < 0) {
-            delta += _angularResolutionGrad;
+        // Force nextPoint to be positive and inside our polar space
+        int nextPoint = _angle + delta;
+        while (nextPoint < 0) {
+            nextPoint += _angularResolutionGrad;
         }
-
-        int nextPoint = (_angle + delta) % _angularResolutionGrad;
+        nextPoint %= _angularResolutionGrad;
 
         transducer_message.set_mode(1);
         transducer_message.set_gain_setting(_sensorSettings.gain_setting);
