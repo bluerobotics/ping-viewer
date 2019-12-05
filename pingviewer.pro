@@ -35,6 +35,7 @@ RESOURCES += \
 }
 
 include(lib/maddy/maddy.pri)
+include(lib/mavlink/mavlink.pri)
 include(lib/ping-cpp/ping-cpp.pri)
 
 CONFIG(debug, debug|release) {
