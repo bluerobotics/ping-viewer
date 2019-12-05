@@ -15,12 +15,12 @@ UDPLink::UDPLink(QObject* parent)
 
     connect(_udpSocket, &QIODevice::readyRead, this, [this] { emit newData(_udpSocket->readAll()); });
     connect(_udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this,
-        [this](QAbstractSocket::SocketError /*socketError*/){ printErrorMessage(); });
+        [this](QAbstractSocket::SocketError /*socketError*/) { printErrorMessage(); });
 
     // QUdpSocket fail to emit state signal
     // Here we use a timer to check if we are in a connect state, if not we try again
-    connect(&_stateTimer, &QTimer::timeout, this, [this]{
-        if(_udpSocket->state() == QAbstractSocket::UnconnectedState) {
+    connect(&_stateTimer, &QTimer::timeout, this, [this] {
+        if (_udpSocket->state() == QAbstractSocket::UnconnectedState) {
             printErrorMessage();
             qDebug(PING_PROTOCOL_UDPLINK) << "Trying to connect with host again.";
             _udpSocket->connectToHost(_hostAddress, _port);
@@ -68,8 +68,7 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 void UDPLink::printErrorMessage()
 {
     qCWarning(PING_PROTOCOL_UDPLINK) << "An error has occurred with:" << _linkConfiguration;
-    QString errorMessage
-        = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
+    QString errorMessage = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
     qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
 }
 

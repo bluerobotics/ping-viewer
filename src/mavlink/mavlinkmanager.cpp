@@ -13,7 +13,7 @@ MavlinkManager::MavlinkManager() { QQmlEngine::setObjectOwnership(this, QQmlEngi
 
 void MavlinkManager::connect(const LinkConfiguration& conf)
 {
-    if(_linkIn) {
+    if (_linkIn) {
         auto link = _linkIn->self();
         if (link->isOpen()) {
             link->finishConnection();
@@ -34,12 +34,14 @@ void MavlinkManager::connect(const LinkConfiguration& conf)
     QObject::connect(_linkIn->self(), &AbstractLink::newData, this, &MavlinkManager::parseData);
 
     auto timer = new QTimer();
-    QObject::connect(timer, &QTimer::timeout, this, [this](){
+    QObject::connect(timer, &QTimer::timeout, this, [this]() {
         mavlink_message_t message;
-        mavlink_msg_heartbeat_pack(-1, 0, &message, MAV_TYPE_GCS, MAV_AUTOPILOT_INVALID, MAV_MODE_FLAG_SAFETY_ARMED, 0, MAV_STATE_ACTIVE);
+        mavlink_msg_heartbeat_pack(
+            -1, 0, &message, MAV_TYPE_GCS, MAV_AUTOPILOT_INVALID, MAV_MODE_FLAG_SAFETY_ARMED, 0, MAV_STATE_ACTIVE);
         unsigned char buf[2048];
         auto len = mavlink_msg_to_send_buffer(buf, &message);
-        //qDebug() << buf;
+        // qDebug() << buf;
+        qDebug() << "heartbeat!";
         _linkIn->self()->write(reinterpret_cast<const char*>(buf), len);
     });
     timer->start(4000);
@@ -49,13 +51,13 @@ void MavlinkManager::parseData(const QByteArray data)
 {
     static mavlink_message_t message;
     mavlink_status_t status;
-    //qDebug() << "length:" << data.length();
-    for(const auto& byte : data) {
-        if(mavlink_parse_char(0, byte, &message, &status)) {
+    // qDebug() << "length:" << data.length();
+    for (const auto& byte : data) {
+        if (mavlink_parse_char(0, byte, &message, &status)) {
             qDebug() << "ID:" << message.msgid;
             emit mavlinkMessage(message);
         }
-        //qDebug() << status.parse_state;
+        // qDebug() << status.parse_state;
     }
 }
 
