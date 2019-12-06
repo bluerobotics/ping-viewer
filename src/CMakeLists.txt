@@ -5,6 +5,7 @@ set(INCLUDE_DIRS
     flash
     link
     logger
+    mavlink
     network
     notification
     sensor
