@@ -59,7 +59,7 @@ Ping::Ping()
         for (const auto& requestedId : requestedIds) {
             _lostMessages += requestedId.waiting;
         }
-        emit lostMessagesUpdate();
+        emit lostMessagesChanged();
 
         request(Ping1dId::PCB_TEMPERATURE);
         request(Ping1dId::PROCESSOR_TEMPERATURE);
@@ -72,9 +72,9 @@ Ping::Ping()
     connect(this, &Sensor::connectionOpen, this, &Ping::startPreConfigurationProcess);
 
     // Wait for device id to load the correct settings
-    connect(this, &Ping::srcIdUpdate, this, &Ping::setLastPingConfiguration);
+    connect(this, &Ping::srcIdChanged, this, &Ping::setLastPingConfiguration);
 
-    connect(this, &Ping::firmwareVersionMinorUpdate, this, [this] {
+    connect(this, &Ping::firmwareVersionMinorChanged, this, [this] {
         // Wait for firmware information to be available before looking for new versions
         static bool once = false;
         if (!once) {
@@ -165,7 +165,7 @@ void Ping::handleMessage(const ping_message& msg)
         ping1d_device_id m(msg);
         _commonVariables.srcId = m.source_device_id();
 
-        emit srcIdUpdate();
+        emit srcIdChanged();
     } break;
 
     case Ping1dId::DISTANCE: {
@@ -178,14 +178,14 @@ void Ping::handleMessage(const ping_message& msg)
         _scan_length = m.scan_length();
         _gain_setting = m.gain_setting();
 
-        // TODO: change to distMsgUpdate() or similar
-        emit distanceUpdate();
-        emit pingNumberUpdate();
-        emit confidenceUpdate();
-        emit transmitDurationUpdate();
-        emit scanStartUpdate();
-        emit scanLengthUpdate();
-        emit gainSettingUpdate();
+        // TODO: change to distMsgChanged() or similar
+        emit distanceChanged();
+        emit pingNumberChanged();
+        emit confidenceChanged();
+        emit transmitDurationChanged();
+        emit scanStartChanged();
+        emit scanLengthChanged();
+        emit gainSettingChanged();
     } break;
 
     case Ping1dId::DISTANCE_SIMPLE: {
@@ -193,8 +193,8 @@ void Ping::handleMessage(const ping_message& msg)
         _distance = m.distance();
         _confidence = m.confidence();
 
-        emit distanceUpdate();
-        emit confidenceUpdate();
+        emit distanceChanged();
+        emit confidenceChanged();
     } break;
 
     case Ping1dId::PROFILE: {
@@ -216,81 +216,81 @@ void Ping::handleMessage(const ping_message& msg)
             _points.replace(i, m.profile_data()[i] / 255.0);
         }
 
-        // TODO: change to distMsgUpdate() or similar
-        emit distanceUpdate();
-        emit pingNumberUpdate();
-        emit confidenceUpdate();
-        emit transmitDurationUpdate();
-        emit scanStartUpdate();
-        emit scanLengthUpdate();
-        emit gainSettingUpdate();
-        emit pointsUpdate();
+        // TODO: change to distMsgChanged() or similar
+        emit distanceChanged();
+        emit pingNumberChanged();
+        emit confidenceChanged();
+        emit transmitDurationChanged();
+        emit scanStartChanged();
+        emit scanLengthChanged();
+        emit gainSettingChanged();
+        emit pointsChanged();
     } break;
 
     case Ping1dId::MODE_AUTO: {
         ping1d_mode_auto m(msg);
         if (_mode_auto != static_cast<bool>(m.mode_auto())) {
             _mode_auto = m.mode_auto();
-            emit modeAutoUpdate();
+            emit modeAutoChanged();
         }
     } break;
 
     case Ping1dId::PING_ENABLE: {
         ping1d_ping_enable m(msg);
         _ping_enable = m.ping_enabled();
-        emit pingEnableUpdate();
+        emit pingEnableChanged();
     } break;
 
     case Ping1dId::PING_INTERVAL: {
         ping1d_ping_interval m(msg);
         _ping_interval = m.ping_interval();
-        emit pingIntervalUpdate();
+        emit pingIntervalChanged();
     } break;
 
     case Ping1dId::RANGE: {
         ping1d_range m(msg);
         _scan_start = m.scan_start();
         _scan_length = m.scan_length();
-        emit scanLengthUpdate();
-        emit scanStartUpdate();
+        emit scanLengthChanged();
+        emit scanStartChanged();
     } break;
 
     case Ping1dId::GENERAL_INFO: {
         ping1d_general_info m(msg);
         _gain_setting = m.gain_setting();
-        emit gainSettingUpdate();
+        emit gainSettingChanged();
     } break;
 
     case Ping1dId::GAIN_SETTING: {
         ping1d_gain_setting m(msg);
         _gain_setting = m.gain_setting();
-        emit gainSettingUpdate();
+        emit gainSettingChanged();
     } break;
 
     case Ping1dId::SPEED_OF_SOUND: {
         ping1d_speed_of_sound m(msg);
         _speed_of_sound = m.speed_of_sound();
-        emit speedOfSoundUpdate();
+        emit speedOfSoundChanged();
     } break;
 
     case Ping1dId::PROCESSOR_TEMPERATURE: {
         ping1d_processor_temperature m(msg);
         _processor_temperature = m.processor_temperature();
-        emit processorTemperatureUpdate();
+        emit processorTemperatureChanged();
         break;
     }
 
     case Ping1dId::PCB_TEMPERATURE: {
         ping1d_pcb_temperature m(msg);
         _pcb_temperature = m.pcb_temperature();
-        emit pcbTemperatureUpdate();
+        emit pcbTemperatureChanged();
         break;
     }
 
     case Ping1dId::VOLTAGE_5: {
         ping1d_voltage_5 m(msg);
         _board_voltage = m.voltage_5(); // millivolts
-        emit boardVoltageUpdate();
+        emit boardVoltageChanged();
         break;
     }
 
@@ -299,7 +299,7 @@ void Ping::handleMessage(const ping_message& msg)
         break;
     }
 
-    emit parsedMsgsUpdate();
+    emit parsedMsgsChanged();
 }
 
 void Ping::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
@@ -505,7 +505,7 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
             lastVersionAvailable = filePayloadVersion;
         }
     }
-    emit firmwaresAvailableUpdate();
+    emit firmwaresAvailableChanged();
 
     auto sensorVersion = QString("%1.%2")
                              .arg(_commonVariables.firmware_version_major)

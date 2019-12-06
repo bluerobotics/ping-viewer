@@ -65,7 +65,7 @@ public:
         request(Ping1dId::PING_ENABLE);
     }
 
-    Q_PROPERTY(bool pingEnable READ pingEnable WRITE pingEnable NOTIFY pingEnableUpdate)
+    Q_PROPERTY(bool pingEnable READ pingEnable WRITE pingEnable NOTIFY pingEnableChanged)
 
     /**
      * @brief Return distance in mm
@@ -73,7 +73,7 @@ public:
      * @return uint32_t
      */
     uint32_t distance() { return _distance; }
-    Q_PROPERTY(int distance READ distance NOTIFY distanceUpdate)
+    Q_PROPERTY(int distance READ distance NOTIFY distanceChanged)
 
     /**
      * @brief Return number of pings emitted
@@ -81,7 +81,7 @@ public:
      * @return uint32_t
      */
     uint32_t ping_number() { return _ping_number; }
-    Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberUpdate)
+    Q_PROPERTY(int ping_number READ ping_number NOTIFY pingNumberChanged)
 
     /**
      * @brief Return depth confidence
@@ -89,7 +89,7 @@ public:
      * @return uint8_t
      */
     uint8_t confidence() { return _confidence; }
-    Q_PROPERTY(int confidence READ confidence NOTIFY confidenceUpdate)
+    Q_PROPERTY(int confidence READ confidence NOTIFY confidenceChanged)
 
     /**
      * @brief Return pulse emission in ms
@@ -97,7 +97,7 @@ public:
      * @return uint16_t
      */
     uint16_t transmit_duration() { return _transmit_duration; }
-    Q_PROPERTY(int transmit_duration READ transmit_duration NOTIFY transmitDurationUpdate)
+    Q_PROPERTY(int transmit_duration READ transmit_duration NOTIFY transmitDurationChanged)
 
     /**
      * @brief Return start distance of sonar points in mm
@@ -120,7 +120,7 @@ public:
         writeMessage(m);
         request(Ping1dId::RANGE);
     }
-    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartUpdate)
+    Q_PROPERTY(int start_mm READ start_mm WRITE set_start_mm NOTIFY scanStartChanged)
 
     /**
      * @brief return points length in mm
@@ -143,7 +143,7 @@ public:
         writeMessage(m);
         request(Ping1dId::RANGE);
     }
-    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthUpdate)
+    Q_PROPERTY(int length_mm READ length_mm WRITE set_length_mm NOTIFY scanLengthChanged)
 
     /**
      * @brief Return gain setting
@@ -165,7 +165,7 @@ public:
         writeMessage(m);
         request(Ping1dId::GAIN_SETTING);
     }
-    Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingUpdate)
+    Q_PROPERTY(int gain_setting READ gain_setting WRITE set_gain_setting NOTIFY gainSettingChanged)
 
     /**
      * @brief Return last array of points
@@ -173,7 +173,7 @@ public:
      * @return QVector<double>
      */
     QVector<double> points() { return _points; }
-    Q_PROPERTY(QVector<double> points READ points NOTIFY pointsUpdate)
+    Q_PROPERTY(QVector<double> points READ points NOTIFY pointsChanged)
 
     /**
      * @brief Get auto mode status
@@ -196,7 +196,7 @@ public:
         writeMessage(m);
         request(Ping1dId::MODE_AUTO);
     }
-    Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoUpdate)
+    Q_PROPERTY(bool mode_auto READ mode_auto WRITE set_mode_auto NOTIFY modeAutoChanged)
 
     /**
      * @brief These are ids that the sensor can continuously output.
@@ -250,7 +250,7 @@ public:
         writeMessage(m);
         request(Ping1dId::PING_INTERVAL);
     }
-    Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalUpdate)
+    Q_PROPERTY(int ping_interval READ ping_interval WRITE set_ping_interval NOTIFY pingIntervalChanged)
 
     /**
      * @brief Get the speed of sound (mm/s) used for calculating the distance from time-of-flight
@@ -272,7 +272,7 @@ public:
         writeMessage(m);
         request(Ping1dId::SPEED_OF_SOUND);
     }
-    Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundUpdate)
+    Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundChanged)
 
     /**
      * @brief Get the processor temperature (centi-degrees C)
@@ -280,7 +280,7 @@ public:
      * @return uint16_t
      */
     uint16_t processor_temperature() const { return _processor_temperature; }
-    Q_PROPERTY(int processor_temperature READ processor_temperature NOTIFY processorTemperatureUpdate)
+    Q_PROPERTY(int processor_temperature READ processor_temperature NOTIFY processorTemperatureChanged)
 
     /**
      * @brief Get the pcb temperature (centi-degrees C)
@@ -288,7 +288,7 @@ public:
      * @return uint16_t
      */
     uint16_t pcb_temperature() const { return _pcb_temperature; }
-    Q_PROPERTY(int pcb_temperature READ pcb_temperature NOTIFY pcbTemperatureUpdate)
+    Q_PROPERTY(int pcb_temperature READ pcb_temperature NOTIFY pcbTemperatureChanged)
 
     /**
      * @brief Get the board voltage (milliVolts)
@@ -296,7 +296,7 @@ public:
      * @return uint16_t
      */
     uint16_t board_voltage() const { return _board_voltage; }
-    Q_PROPERTY(int board_voltage READ board_voltage NOTIFY boardVoltageUpdate)
+    Q_PROPERTY(int board_voltage READ board_voltage NOTIFY boardVoltageChanged)
 
     /**
      * @brief Return ping frequency
@@ -311,7 +311,7 @@ public:
      * @param pingFrequency
      */
     void setPingFrequency(float pingFrequency);
-    Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingIntervalUpdate)
+    Q_PROPERTY(float pingFrequency READ pingFrequency WRITE setPingFrequency NOTIFY pingIntervalChanged)
 
     /**
      * @brief Return the max frequency that the sensor can work
@@ -342,23 +342,23 @@ signals:
      * @brief emitted when property changes
      */
     ///@{
-    void distanceUpdate();
-    void pingNumberUpdate();
-    void confidenceUpdate();
-    void transmitDurationUpdate();
-    void scanStartUpdate();
-    void scanLengthUpdate();
-    void gainSettingUpdate();
-    void pointsUpdate();
+    void distanceChanged();
+    void pingNumberChanged();
+    void confidenceChanged();
+    void transmitDurationChanged();
+    void scanStartChanged();
+    void scanLengthChanged();
+    void gainSettingChanged();
+    void pointsChanged();
 
-    void modeAutoUpdate();
-    void pingEnableUpdate();
-    void pingIntervalUpdate();
-    void speedOfSoundUpdate();
+    void modeAutoChanged();
+    void pingEnableChanged();
+    void pingIntervalChanged();
+    void speedOfSoundChanged();
 
-    void boardVoltageUpdate();
-    void pcbTemperatureUpdate();
-    void processorTemperatureUpdate();
+    void boardVoltageChanged();
+    void pcbTemperatureChanged();
+    void processorTemperatureChanged();
     ///@}
 
 private:
