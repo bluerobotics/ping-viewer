@@ -11,7 +11,7 @@ PingSensor::PingSensor(PingDeviceType pingDeviceType)
     _parser = new PingParserExt();
     connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::newMessage, this, &PingSensor::handleMessagePrivate,
         Qt::DirectConnection);
-    connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsUpdate);
+    connect(dynamic_cast<PingParserExt*>(_parser), &PingParserExt::parseError, this, &PingSensor::parserErrorsChanged);
 }
 
 void PingSensor::request(int id) const
@@ -45,12 +45,12 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
 
     if (_commonVariables.dstId != msg.destination_device_id()) {
         _commonVariables.dstId = msg.destination_device_id();
-        emit dstIdUpdate();
+        emit dstIdChanged();
     }
 
     if (_commonVariables.srcId != msg.source_device_id()) {
         _commonVariables.srcId = msg.source_device_id();
-        emit srcIdUpdate();
+        emit srcIdChanged();
     }
 
     switch (msg.message_id()) {
@@ -66,7 +66,7 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
         qCCritical(PING_PROTOCOL_PINGSENSOR) << "Sensor NACK!";
         _commonVariables.nack_msg = QString("%1: %2").arg(nackMessage.nack_message()).arg(nackMessage.nacked_id());
         qCDebug(PING_PROTOCOL_PINGSENSOR) << "NACK message:" << _commonVariables.nack_msg;
-        emit nackMsgUpdate();
+        emit nackMsgChanged();
         break;
     }
 
@@ -74,7 +74,7 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
     case CommonId::ASCII_TEXT: {
         _commonVariables.ascii_text = common_ascii_text(msg).ascii_message();
         qCInfo(PING_PROTOCOL_PINGSENSOR) << "Sensor status:" << _commonVariables.ascii_text;
-        emit asciiTextUpdate();
+        emit asciiTextChanged();
         break;
     }
 
@@ -87,11 +87,11 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
         _commonVariables.firmware_version_minor = m.firmware_version_minor();
         _commonVariables.firmware_version_patch = m.firmware_version_patch();
 
-        emit deviceTypeUpdate();
-        emit deviceRevisionUpdate();
-        emit firmwareVersionMajorUpdate();
-        emit firmwareVersionMinorUpdate();
-        emit firmwareVersionPatchUpdate();
+        emit deviceTypeChanged();
+        emit deviceRevisionChanged();
+        emit firmwareVersionMajorChanged();
+        emit firmwareVersionMinorChanged();
+        emit firmwareVersionPatchChanged();
         break;
     }
 
@@ -102,9 +102,9 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
         _commonVariables.protocol_version_minor = m.version_minor();
         _commonVariables.protocol_version_patch = m.version_patch();
 
-        emit protocolVersionMajorUpdate();
-        emit protocolVersionMinorUpdate();
-        emit protocolVersionPatchUpdate();
+        emit protocolVersionMajorChanged();
+        emit protocolVersionMinorChanged();
+        emit protocolVersionPatchChanged();
         break;
     }
 
@@ -118,9 +118,9 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
         _commonVariables.firmware_version_major = m.firmware_version_major();
         _commonVariables.firmware_version_minor = m.firmware_version_minor();
 
-        emit deviceTypeUpdate();
-        emit firmwareVersionMajorUpdate();
-        emit firmwareVersionMinorUpdate();
+        emit deviceTypeChanged();
+        emit firmwareVersionMajorChanged();
+        emit firmwareVersionMinorChanged();
         break;
     }
 
