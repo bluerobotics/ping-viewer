@@ -10,7 +10,7 @@ NotificationManager::NotificationManager()
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
-    connect(&_model, &NotificationModel::dataChanged, this, &NotificationManager::modelUpdate);
+    connect(&_model, &NotificationModel::dataChanged, this, &NotificationManager::modelChanged);
 }
 
 void NotificationManager::create(const QString& text, QColor color, QString icon)

@@ -39,7 +39,7 @@ public:
      * @return NotificationModel*
      */
     NotificationModel* model() { return &_model; };
-    Q_PROPERTY(NotificationModel* model READ model NOTIFY modelUpdate)
+    Q_PROPERTY(NotificationModel* model READ model NOTIFY modelChanged)
 
     /**
      * @brief Create a new notification
@@ -51,7 +51,7 @@ public:
     void create(const QString& text, QColor color, QString icon = StyleManager::chatIcon());
 
 signals:
-    void modelUpdate();
+    void modelChanged();
 
 private:
     Q_DISABLE_COPY(NotificationManager)
