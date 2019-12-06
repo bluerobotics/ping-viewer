@@ -23,11 +23,11 @@ Sensor::Sensor(SensorInfo sensorInfo)
 {
     connect(this, &Sensor::connectionOpen, this, [this] {
         _connected = true;
-        emit this->connectionChanged();
+        emit connectionChanged();
     });
     connect(this, &Sensor::connectionClose, this, [this] {
         _connected = false;
-        emit this->connectionChanged();
+        emit connectionChanged();
     });
 }
 
