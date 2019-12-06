@@ -48,6 +48,9 @@ find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
 include_directories(
     lib/ping-cpp/ping-cpp/src/message/
     lib/maddy/maddy/include/
+    lib/mavlink/c_library_v2/
+    lib/mavlink/c_library_v2/minimal
+    lib/mavlink/c_library_v2/common
 )
 
 add_subdirectory(src)

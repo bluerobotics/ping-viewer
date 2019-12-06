@@ -20,5 +20,7 @@ PRIVATE
     Qt5::SerialPort
     Qt5::Widgets # because of stylemanager
     Qt5::Concurrent
+
+    mavlink
     network
 )
