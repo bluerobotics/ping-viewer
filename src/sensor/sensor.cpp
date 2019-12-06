@@ -23,11 +23,11 @@ Sensor::Sensor(SensorInfo sensorInfo)
 {
     connect(this, &Sensor::connectionOpen, this, [this] {
         _connected = true;
-        emit this->connectionUpdate();
+        emit this->connectionChanged();
     });
     connect(this, &Sensor::connectionClose, this, [this] {
         _connected = false;
-        emit this->connectionUpdate();
+        emit this->connectionChanged();
     });
 }
 
@@ -55,7 +55,7 @@ void Sensor::connectLink(const LinkConfiguration conConf, const LinkConfiguratio
         return;
     }
 
-    emit linkUpdate();
+    emit linkChanged();
 
     if (_parser) {
         connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer, Qt::DirectConnection);
@@ -115,7 +115,7 @@ void Sensor::connectLinkLog(const LinkConfiguration& logConf)
     }
 
     connect(link(), &AbstractLink::newData, linkLog(), &AbstractLink::sendData);
-    emit linkLogUpdate();
+    emit linkLogChanged();
 }
 
 void Sensor::setControlPanel(const QUrl& url)
@@ -224,7 +224,7 @@ void Sensor::setName(const QString& name)
     }
 
     _name = name;
-    emit nameUpdate();
+    emit nameChanged();
 }
 
 Sensor::~Sensor() = default;
