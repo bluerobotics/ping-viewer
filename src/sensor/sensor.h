@@ -34,7 +34,7 @@ public:
      * @return AbstractLink*
      */
     AbstractLink* link() const { return _linkIn.data() ? _linkIn->self() : nullptr; };
-    Q_PROPERTY(AbstractLink* link READ link NOTIFY linkUpdate)
+    Q_PROPERTY(AbstractLink* link READ link NOTIFY linkChanged)
 
     /**
      * @brief Return log link
@@ -42,7 +42,7 @@ public:
      * @return AbstractLink*
      */
     AbstractLink* linkLog() const { return _linkOut.data() ? _linkOut->self() : nullptr; };
-    Q_PROPERTY(AbstractLink* linkLog READ linkLog NOTIFY linkLogUpdate)
+    Q_PROPERTY(AbstractLink* linkLog READ linkLog NOTIFY linkLogChanged)
 
     /**
      * @brief Return sensor name
@@ -50,7 +50,7 @@ public:
      * @return QString
      */
     QString name() const { return _name; };
-    Q_PROPERTY(QString name READ name NOTIFY nameUpdate)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 
     /**
      * @brief Add new connection and log
@@ -75,7 +75,7 @@ public:
      * @return bool
      */
     bool connected() const { return _connected; };
-    Q_PROPERTY(bool connected READ connected NOTIFY connectionUpdate)
+    Q_PROPERTY(bool connected READ connected NOTIFY connectionChanged)
 
     /**
      * @brief Return the list of firmwares available to download
@@ -83,7 +83,7 @@ public:
      * @return QMap<QString, QVariant>
      */
     QMap<QString, QVariant> firmwaresAvailable() const { return _firmwares; };
-    Q_PROPERTY(QMap<QString, QVariant> firmwaresAvailable READ firmwaresAvailable NOTIFY firmwaresAvailableUpdate)
+    Q_PROPERTY(QMap<QString, QVariant> firmwaresAvailable READ firmwaresAvailable NOTIFY firmwaresAvailableChanged)
 
     /**
      * @brief Return flasher class used by this sensor
@@ -200,13 +200,13 @@ signals:
     // In
     void connectionClose();
     void connectionOpen();
-    void connectionUpdate();
-    void firmwaresAvailableUpdate();
-    void linkUpdate();
-    void nameUpdate();
+    void connectionChanged();
+    void firmwaresAvailableChanged();
+    void linkChanged();
+    void nameChanged();
 
     // Out
-    void linkLogUpdate();
+    void linkLogChanged();
 
 private:
     Q_DISABLE_COPY(Sensor)
