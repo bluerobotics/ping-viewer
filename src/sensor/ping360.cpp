@@ -316,7 +316,7 @@ void Ping360::handleMessage(const ping_message& msg)
     // Update frequency for each
     messageFrequencies[msg.message_id()].updateNumberOfMessages();
 
-    emit parsedMsgsUpdate();
+    emit parsedMsgsChanged();
 }
 
 void Ping360::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
@@ -389,7 +389,7 @@ void Ping360::setBaudRate(int baudRate)
 
     qCDebug(PING_PROTOCOL_PING360) << "Moving to baud rate:" << baudRate;
     serialLink->setBaudRate(baudRate);
-    emit linkUpdate();
+    emit linkChanged();
 }
 
 void Ping360::setBaudRateAndRequestProfile(int baudRate)
