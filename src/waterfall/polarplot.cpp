@@ -90,6 +90,8 @@ void PolarPlot::draw(
         emit maxDistanceChanged();
     }
 
+    // The sensor can provide less than 1200 points, the scale factor will scale the samples if necessary
+    float scale = static_cast<float>(points.length()) / _image.height();
     for (int angleRange = -angleGrad / 2.0f; angleRange <= angleGrad / 2.0f; angleRange++) {
         // We know that the max and min angle range for ping360 is [0-400)
         int newAngle = static_cast<int>(angle + angleRange + maxGradian) % maxGradian;
@@ -99,8 +101,8 @@ void PolarPlot::draw(
             continue;
         }
 
-        for (int index = 0; index < points.length(); index++) {
-            _image.setPixelColor(static_cast<int>(newAngle), index, valueToRGB(points[index]));
+        for (int index = 0; index < _image.height(); index++) {
+            _image.setPixelColor(static_cast<int>(newAngle), index, valueToRGB(points[index * scale]));
         }
     }
 
