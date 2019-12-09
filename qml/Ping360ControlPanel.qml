@@ -30,12 +30,6 @@ PingGroupBox {
                 property: "range"
                 value: rangeSlider.modelValue
             }
-
-            Binding {
-                target: rangeSlider
-                property: "modelValue"
-                value: ping.range
-            }
         }
 
         PingSlider {
