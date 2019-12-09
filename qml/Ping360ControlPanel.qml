@@ -98,8 +98,6 @@ PingGroupBox {
 
                 RotationAnimator on rotation {
                     id: arrowRotation
-                    from: startAngle
-                    to: startAngle
                     duration: 200
                     direction: RotationAnimation.Shortest
                     running: false
