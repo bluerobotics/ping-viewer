@@ -171,26 +171,28 @@ public:
      *
      * @param newRange
      */
-    void set_range(uint newRange)
+    void set_range(double newRange)
     {
-        if (newRange != range()) {
-            _sensorSettings.num_points = _firmwareMaxNumberOfPoints;
-            _sensorSettings.sample_period = calculateSamplePeriod(newRange);
-
-            // reduce _sample period until we are within operational parameters
-            // maximize the number of points
-            while (_sensorSettings.sample_period < _firmwareMinSamplePeriod) {
-                _sensorSettings.num_points--;
-                _sensorSettings.sample_period = calculateSamplePeriod(newRange);
-            }
-
-            emit numberOfPointsChanged();
-            emit samplePeriodChanged();
-            emit rangeChanged();
-            emit transmitDurationMaxChanged();
-
-            adjustTransmitDuration();
+        if (qFuzzyCompare(newRange, range())) {
+            return;
         }
+
+        _sensorSettings.num_points = _firmwareMaxNumberOfPoints;
+        _sensorSettings.sample_period = calculateSamplePeriod(newRange);
+
+        // reduce _sample period until we are within operational parameters
+        // maximize the number of points
+        while (_sensorSettings.sample_period < _firmwareMinSamplePeriod) {
+            _sensorSettings.num_points--;
+            _sensorSettings.sample_period = calculateSamplePeriod(newRange);
+        }
+
+        emit numberOfPointsChanged();
+        emit samplePeriodChanged();
+        emit rangeChanged();
+        emit transmitDurationMaxChanged();
+
+        adjustTransmitDuration();
     }
     Q_PROPERTY(double range READ range WRITE set_range NOTIFY rangeChanged)
 
