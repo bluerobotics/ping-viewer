@@ -46,11 +46,14 @@ find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
 
 # global include directories
 include_directories(
+    lib/fmt/fmt/include/
     lib/ping-cpp/ping-cpp/src/message/
     lib/maddy/maddy/include/
     lib/mavlink/c_library_v2/
     lib/mavlink/c_library_v2/minimal
     lib/mavlink/c_library_v2/common
 )
+
+add_subdirectory(lib/fmt/fmt)
 
 add_subdirectory(src)

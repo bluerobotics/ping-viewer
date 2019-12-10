@@ -35,6 +35,6 @@ target_link_libraries(
     Qt5::QuickControls2
     Qt5::Charts
     Qt5::Widgets # QApplication
-
     ${INCLUDE_DIRS}
+    fmt::fmt
 )
