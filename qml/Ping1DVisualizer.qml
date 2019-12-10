@@ -24,16 +24,16 @@ Item {
     Connections {
         target: ping
 
-        onPointsUpdate: {
+        onPointsChanged: {
             // Move from mm to m
             root.draw(ping.points, ping.confidence, ping.start_mm*1e-3, ping.length_mm * 1e-3, ping.distance*1e-3)
         }
 
-        onDistanceUpdate: {
+        onDistanceChanged: {
             root.setDepth(ping.distance/1e3)
         }
 
-        onConfidenceUpdate: {
+        onConfidenceChanged: {
             root.setConfidence(ping.confidence)
         }
     }
