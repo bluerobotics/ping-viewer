@@ -117,7 +117,6 @@ ColumnLayout {
                         duration: 200
                         direction: RotationAnimation.Shortest
                         running: false
-                        easing.type: animationType
                     }
                 }
             }
