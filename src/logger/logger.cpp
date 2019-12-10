@@ -1,6 +1,9 @@
 #include "logger.h"
 #include "filemanager.h"
 
+#include <fmt/color.h>
+#include <fmt/core.h>
+
 #include <QColor>
 #include <QDebug>
 #include <QQmlEngine>
@@ -10,8 +13,6 @@
 #include <iostream>
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
-
-static QtMessageHandler originalHandler = nullptr;
 
 Logger::Logger()
     : _file(FileManager::self()->createFileName(FileManager::Folder::GuiLogs))
@@ -30,7 +31,7 @@ Logger::Logger()
 void Logger::installHandler()
 {
     self()->logModel()->start();
-    originalHandler = qInstallMessageHandler(handleMessage); // This function returns the previous message handler
+    qInstallMessageHandler(handleMessage);
 
     if (qEnvironmentVariableIsEmpty("QT_MESSAGE_PATTERN")) {
         qSetMessagePattern(QStringLiteral("%{time [hh:mm:ss.zzz]} %{message}"));
@@ -70,9 +71,26 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
     const QString logMsg = QString("%1[%2]: %3%4").arg(context.category, msgTypes[type], fileInfo, msg);
 
     Logger::self()->logMessage(logMsg, type, context);
-    if (originalHandler) {
-        originalHandler(type, context, logMsg);
+
+    fmt::text_style style;
+    switch (type) {
+    case QtDebugMsg:
+        style = fg(fmt::terminal_color::bright_green);
+        break;
+    case QtInfoMsg:
+        style = fmt::emphasis::bold | fg(fmt::color::white);
+        break;
+    case QtWarningMsg:
+        style = fmt::emphasis::bold | fg(fmt::color::yellow);
+        break;
+    case QtCriticalMsg:
+        style = fmt::emphasis::bold | fg(fmt::color::red);
+        break;
+    case QtFatalMsg:
+        style = fmt::emphasis::bold | fg(fmt::color::yellow) | bg(fmt::color::red);
+        break;
     }
+    fmt::print(style, "{}\n", qFormatLogMessage(type, context, logMsg).toStdString());
 }
 
 void Logger::registerCategory(const char* category)
