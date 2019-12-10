@@ -61,7 +61,7 @@ Waterfall::Waterfall(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
     setGradients();
-    setTheme("Thermal 5");
+    setTheme("Thermal blue");
 }
 
 void Waterfall::setGradients()
