@@ -34,6 +34,7 @@ RESOURCES += \
     QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'"
 }
 
+include(lib/fmt/fmt.pri)
 include(lib/maddy/maddy.pri)
 include(lib/mavlink/mavlink.pri)
 include(lib/ping-cpp/ping-cpp.pri)

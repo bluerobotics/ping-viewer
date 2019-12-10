@@ -7,3 +7,6 @@
 [submodule "lib/mavlink/c_library_v2"]
 	path = lib/mavlink/c_library_v2
 	url = https://github.com/mavlink/c_library_v2
+[submodule "lib/fmt/fmt"]
+	path = lib/fmt/fmt
+	url = https://github.com/fmtlib/fmt
