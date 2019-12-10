@@ -17,7 +17,7 @@ Item {
 
     Connections {
         target: ping
-        onLinkUpdate: {
+        onLinkChanged: {
             // Connection update
             // Update interface to make sure
             switch(ping.link.configuration.type()) {
