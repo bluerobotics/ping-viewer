@@ -8,7 +8,7 @@ varying vec2 coord;
 
 void main() {
     vec2 sizeOverRadius = vec2(2.0, 2.0);
-    float sampleOffset = 0;
+    float sampleOffset = 0.0;
     float polarFactor = 1.0;
 
     //Move position to the center
