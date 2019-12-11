@@ -178,7 +178,6 @@ void Ping::handleMessage(const ping_message& msg)
         _scan_length = m.scan_length();
         _gain_setting = m.gain_setting();
 
-        // TODO: change to distMsgChanged() or similar
         emit distanceChanged();
         emit pingNumberChanged();
         emit confidenceChanged();
@@ -216,7 +215,6 @@ void Ping::handleMessage(const ping_message& msg)
             _points.replace(i, m.profile_data()[i] / 255.0);
         }
 
-        // TODO: change to distMsgChanged() or similar
         emit distanceChanged();
         emit pingNumberChanged();
         emit confidenceChanged();
