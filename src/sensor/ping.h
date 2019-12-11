@@ -391,9 +391,13 @@ private:
 
     static const uint16_t _num_points = 200;
 
-    // TODO: maybe use vector or uint8_t[] here
-    // QVector is only required if points need to be exposed to qml
-    // QVector<int> _points;
+    /**
+     * @brief The points received by the sensor
+     *  Such points are shared between the sensor and the interface in a normalized format [1-0]
+     *  Where the maximum value is the max power and 0 the lowest power
+     *  QVector<double> is used to share such points with the QML interface and the viewer widgets
+     *
+     */
     QVector<double> _points;
 
     bool _mode_auto = 0;
