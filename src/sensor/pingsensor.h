@@ -151,7 +151,6 @@ public:
         = 0;
 
 signals:
-    // TODO: Move from Update to Changed
     void asciiTextChanged();
     void deviceRevisionChanged();
     void deviceTypeChanged();
