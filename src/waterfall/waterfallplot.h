@@ -111,7 +111,28 @@ public:
     Q_INVOKABLE float getMinDepthToDraw() { return _minDepthToDraw; }
     Q_PROPERTY(float minDepthToDraw READ getMinDepthToDraw NOTIFY minDepthToDrawChanged)
 
+    /**
+     * @brief Return the necessary horizontal ratio value to perform the correct waterfall draw
+     *
+     * @return double
+     */
+    Q_INVOKABLE double drawHorizontalRatio() { return static_cast<double>(_currentDrawIndex + 1) / _image.width(); }
+    Q_PROPERTY(double drawHorizontalRatio READ drawHorizontalRatio NOTIFY drawHorizontalRatioChanged)
+
+    /**
+     * @brief Return the necessary vertical ratio value to perform the correct waterfall draw
+     *
+     * @return double
+     */
+    Q_INVOKABLE double drawVerticalRatio()
+    {
+        return (_maxDepthToDraw - _minDepthToDraw) * _minPixelsPerMeter / _image.height();
+    }
+    Q_PROPERTY(double drawVerticalRatio READ drawVerticalRatio NOTIFY drawVerticalRatioChanged)
+
 signals:
+    void drawHorizontalRatioChanged();
+    void drawVerticalRatioChanged();
     void imageChanged();
     void maxDepthToDrawChanged();
     void minDepthToDrawChanged();
