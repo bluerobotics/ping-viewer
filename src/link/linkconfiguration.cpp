@@ -66,8 +66,7 @@ LinkConfiguration::Error LinkConfiguration::error() const
 
     // Simulation does not need args
     // TODO: rework this check, check linkconfiguration capabilities or add new ones for this case
-    if ((_linkConf.type == LinkType::Ping1DSimulation || _linkConf.type == LinkType::Ping360Simulation)
-        && !_linkConf.args.length()) {
+    if (isSimulation() && !_linkConf.args.length()) {
         return NoErrors;
     }
 

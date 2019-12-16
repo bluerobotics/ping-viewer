@@ -246,6 +246,17 @@ public:
     Q_INVOKABLE AbstractLinkNamespace::LinkType type() const { return _linkConf.type; };
 
     /**
+     * @brief Check if it's a simulation
+     *
+     * @return bool
+     */
+    Q_INVOKABLE bool isSimulation() const
+    {
+        return _linkConf.type == AbstractLinkNamespace::Ping1DSimulation
+            || _linkConf.type == AbstractLinkNamespace::Ping360Simulation;
+    };
+
+    /**
      * @brief Return the type in a human readable format
      *  TODO: move this function to somewhere else
      * @return QString
