@@ -186,8 +186,6 @@ bool SerialLink::setLowLatency()
 #endif
 
 #ifdef Q_OS_WIN
-// TODO: On windows the change of latency timer works in the second attempt sometimes.
-// This needs further investigation and improvement.
 bool SerialLink::setLowLatency()
 {
     auto handle = _port.handle();
