@@ -143,7 +143,6 @@ public:
 
     /**
      * @brief Returns a pointer of LogSensorStruct
-     *  TODO: This function and everything related to the log file handle should be done by a new class
      *
      * @return LogSensorStruct*
      */
@@ -151,7 +150,6 @@ public:
 
     /**
      * @brief Return a LogSensorStruct from LinkConfiguration
-     *  TODO: This function and everything related to the log file handle should be done by a new class
      *
      * @param linkConfiguration
      * @return LogSensorStruct
