@@ -11,7 +11,6 @@ SettingsManager::SettingsManager()
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
-    // TODO: reset settings if new version
     if (_settings.contains("reset")) {
         bool reset = _settings.value("reset").toBool();
         if (reset) {
