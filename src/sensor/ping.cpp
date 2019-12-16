@@ -358,26 +358,30 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
     }
 
     qCDebug(PING_PROTOCOL_PING) << "Finish connection.";
-    // TODO: Move thread delay to something more.. correct.
-    QThread::msleep(1000);
-    link()->finishConnection();
 
-    QSerialPortInfo pInfo(serialLink->port()->portName());
-    QString portLocation = pInfo.systemLocation();
+    auto flashSensor = [=] {
+        flasher()->setBaudRate(baud);
+        flasher()->setFirmwarePath(fileUrl);
+        flasher()->setLink(link()->configuration()[0]);
+        flasher()->setVerify(verify);
+        flasher()->flash();
+    };
 
-    qCDebug(PING_PROTOCOL_PING) << "Save sensor configuration.";
-    updatePingConfigurationSettings();
+    auto finishConnection = [=] {
+        link()->finishConnection();
 
-    qCDebug(PING_PROTOCOL_PING) << "Start flash.";
-    QThread::msleep(1000);
+        QSerialPortInfo pInfo(serialLink->port()->portName());
+        QString portLocation = pInfo.systemLocation();
 
-    flasher()->setBaudRate(baud);
-    flasher()->setFirmwarePath(fileUrl);
-    flasher()->setLink(link()->configuration()[0]);
-    flasher()->setVerify(verify);
-    flasher()->flash();
+        qCDebug(PING_PROTOCOL_PING) << "Save sensor configuration.";
+        updatePingConfigurationSettings();
 
-    QThread::msleep(500);
+        qCDebug(PING_PROTOCOL_PING) << "Start flash.";
+
+        QTimer::singleShot(1000, flashSensor);
+    };
+    QTimer::singleShot(1000, finishConnection);
+
     // Clear last configuration src ID to detect device as a new one
     connect(&_flasher, &Flasher::stateChanged, this, [this] {
         if (flasher()->state() == Flasher::States::FlashFinished) {
