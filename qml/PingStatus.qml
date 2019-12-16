@@ -13,24 +13,34 @@ Item {
     property var ping: DeviceManager.primarySensor
     property var sensorModel: ping ? ping.sensorStatusModel(root) : null
 
+    // Limit the frequency update of the model from the sensor properties
+    Timer {
+        interval: 200; running: true; repeat: true
+        onTriggered: {
+            if(!ping) {
+                return
+            }
+
+            baseModel.model =  [
+                "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
+                "SRC: " + ping.srcId + " DST: " + ping.dstId,
+                "Device type: " + ping.device_type,
+                "Device Revision: " + ping.device_revision,
+                "Connection: " + ping.link.configuration.string,
+                "RX Packets (#): " + ping.parsed_msgs,
+                "RX Errors (#): " + ping.parser_errors,
+                "TX speed (Bytes/s): " + ping.link.upSpeed,
+                "RX speed (Bytes/s): " + ping.link.downSpeed,
+                "Lost messages (#): " + ping.lost_messages,
+                "Ascii text:\n" + ping.ascii_text,
+                "Error message:\n" + ping.nack_message,
+            ]
+        }
+    }
+
     DelegateModel {
         id: baseModel
         property var title: "Base data:"
-
-        model: ping ? [
-            "FW: " + ping.firmware_version_major + "." + ping.firmware_version_minor,
-            "SRC: " + ping.srcId + " DST: " + ping.dstId,
-            "Device type: " + ping.device_type,
-            "Device Revision: " + ping.device_revision,
-            "Connection: " + ping.link.configuration.string,
-            "RX Packets (#): " + ping.parsed_msgs,
-            "RX Errors (#): " + ping.parser_errors,
-            "TX speed (Bytes/s): " + ping.link.upSpeed,
-            "RX speed (Bytes/s): " + ping.link.downSpeed,
-            "Lost messages (#): " + ping.lost_messages,
-            "Ascii text:\n" + ping.ascii_text,
-            "Error message:\n" + ping.nack_message,
-        ] : []
 
         delegate: Text {
             text: modelData
