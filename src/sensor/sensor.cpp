@@ -162,7 +162,7 @@ bool Sensor::createQQuickItem(QObject* parent, const QUrl& resource, QSharedPoin
     QQmlComponent component(engine, resource, parent);
     pointerQuickItem.reset(qobject_cast<QQuickItem*>(component.create()));
     if (pointerQuickItem.isNull()) {
-        qCCritical(PING_PROTOCOL_SENSOR) << "Failed to load QML component.";
+        qCCritical(PING_PROTOCOL_SENSOR) << "Failed to load QML component:" << resource;
         qCDebug(PING_PROTOCOL_SENSOR) << "Component status:" << component.status();
         if (component.isError()) {
             qCDebug(PING_PROTOCOL_SENSOR) << "Error list:" << component.errors();
