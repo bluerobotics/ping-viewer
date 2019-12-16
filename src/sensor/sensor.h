@@ -11,7 +11,6 @@
 #include "protocoldetector.h"
 #include "sensorinfo.h"
 
-// TODO: rename to Device?
 /**
  * @brief Manage sensor connection
  *
