@@ -159,7 +159,6 @@ QDataStream& operator<<(QDataStream& out, const LinkConfiguration linkConfigurat
     out << linkConfiguration.configurationStructPtr()->name;
     out << QVariant(linkConfiguration.configurationStructPtr()->args);
     out << QVariant(linkConfiguration.configurationStructPtr()->type);
-    // TODO: We need to register PingDeviceType
     out << QVariant(static_cast<int>(linkConfiguration.configurationStructPtr()->deviceType));
     return out;
 }
