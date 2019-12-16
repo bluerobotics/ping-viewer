@@ -355,7 +355,12 @@ void Ping360::setLastSensorConfiguration()
 void Ping360::printSensorInformation() const
 {
     qCDebug(PING_PROTOCOL_PING360) << "Ping360 Status:";
-    // TODO
+    qCDebug(PING_PROTOCOL_PING360) << "\t- gain_setting:" << _sensorSettings.gain_setting;
+    qCDebug(PING_PROTOCOL_PING360) << "\t- sample_period:" << _sensorSettings.sample_period;
+    qCDebug(PING_PROTOCOL_PING360) << "\t- transmit_duration:" << _sensorSettings.transmit_duration;
+    qCDebug(PING_PROTOCOL_PING360) << "\t- ping_number:" << _ping_number;
+    qCDebug(PING_PROTOCOL_PING360) << "\t- num_points:" << _sensorSettings.num_points;
+    qCDebug(PING_PROTOCOL_PING360) << "\t- transmit_frequency:" << _sensorSettings.transmit_frequency;
 }
 
 void Ping360::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
