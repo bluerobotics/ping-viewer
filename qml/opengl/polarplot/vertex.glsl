@@ -1,8 +1,6 @@
-uniform highp mat4 qt_Matrix;
-attribute highp vec4 qt_Vertex;
-attribute highp vec2 qt_MultiTexCoord0;
-varying highp vec2 coord;
+attribute vec4 vertices;
+varying vec2 coords;
 void main() {
-    coord = qt_MultiTexCoord0;
-    gl_Position = qt_Matrix * qt_Vertex;
+    gl_Position = vertices;
+    coords = vertices.xy;
 }

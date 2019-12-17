@@ -27,6 +27,8 @@
 #include "util.h"
 #include "waterfallplot.h"
 
+#include "qquickopengl.h"
+
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
