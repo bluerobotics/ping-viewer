@@ -1,31 +1,89 @@
 #include "qquickopengl.h"
 
-#include <QOpenGLShaderProgram>
 #include <QQuickWindow>
-#include <QSGSimpleRectNode>
-#include <QtGui/QOpenGLContext>
 
 #include <math.h>
 
 #include <QDebug>
 #include <QTimer>
 
-QQuickOpenGL::QQuickOpenGL(QQuickItem* parent)
+
+class Shader : public QSGMaterialShader
+{
+public:
+    Shader()
+    {
+        setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/opengl/waterfallplot/fragment.glsl"));
+        setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/opengl/waterfallplot/vertex.glsl"));
+    }
+
+    /**
+     * @brief Return attribute names
+     *  The last element should be zero, from documentation
+     *
+     * @return char const* const*
+     */
+    char const *const *attributeNames() const
+    {
+        static char const *const names[] = {"qt_Vertex", 0 };
+        return names;
+    }
+
+    void initialize()
+    {
+        QSGMaterialShader::initialize();
+        m_id_matrix = program()->uniformLocation("qt_Matrix");
+        m_id_opacity = program()->uniformLocation("qt_Opacity");
+        m_id_shift = program()->uniformLocation("shift");
+
+        auto timer = new QTimer();
+        QObject::connect(timer, &QTimer::timeout, [&] { shift += 0.01; } );
+        timer->start(10);
+    }
+
+    void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+    {
+        qDebug() << newMaterial << oldMaterial;
+        Q_ASSERT(program()->isLinked());
+        if (state.isMatrixDirty())
+            program()->setUniformValue(m_id_matrix, state.combinedMatrix());
+        if (state.isOpacityDirty())
+            program()->setUniformValue(m_id_opacity, state.opacity());
+        qDebug() << "update";
+        program()->setUniformValue(m_id_shift, shift);
+    }
+
+private:
+    int m_id_matrix;
+    int m_id_opacity;
+    int m_id_shift;
+    float shift = 0;
+
+    QSGMaterial* material;
+};
+
+class Material : public QSGMaterial
+{
+public:
+    QSGMaterialType *type() const { static QSGMaterialType type; return &type; }
+    QSGMaterialShader *createShader() const { return new Shader; }
+};
+
+QQuickOpenGL::QQuickOpenGL(QQuickItem *parent)
     : QQuickItem(parent)
     , _shaderProgram(nullptr)
     , _shift(0)
     , _window(nullptr)
 {
     // We are going to fill our own content with OpenGL
-    setFlag(QQuickItem::ItemHasContents);
+    QQuickItem::setFlag(QQuickItem::ItemHasContents);
 
     connect(this, &QQuickItem::windowChanged, this, &QQuickOpenGL::handleWindowChanged);
-    auto timer = new QTimer(this);
-    // connect(timer, &QTimer::timeout, this, [this]{ if (_window) _window->update(); });
-    connect(this, &QQuickOpenGL::shiftChanged, this, [this] {
-        if (_window)
-            _window->update();
-    });
+    connect(this, &QQuickOpenGL::shiftChanged, this, [this]{ if (_window) _window->update(); });
+
+    auto timer = new QTimer();
+    QObject::connect(timer, &QTimer::timeout, this, &QQuickOpenGL::shiftChanged);
+    timer->start(100);
 }
 
 void QQuickOpenGL::handleWindowChanged(QQuickWindow* window)
@@ -36,75 +94,17 @@ void QQuickOpenGL::handleWindowChanged(QQuickWindow* window)
 
     _window = window;
     window->setClearBeforeRendering(false);
-    // window->setPersistentOpenGLContext(true);
-
-    connect(window, &QQuickWindow::beforeRendering, this, &QQuickOpenGL::paint, Qt::DirectConnection);
 }
 
-void QQuickOpenGL::paint()
+
+QSGNode *QQuickOpenGL::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 {
-    qDebug() << _window;
-    qDebug() << parentItem();
-
-    // Check if we are rendering with OpenGL
-    QSGRendererInterface* rif = window()->rendererInterface();
-    Q_ASSERT(rif->graphicsApi() == QSGRendererInterface::OpenGL);
-    // QSGDefaultRenderContext *rc = static_cast<QSGDefaultRenderContext *>(d->context);
-    // QRhiCommandBuffer *cb = rc->currentFrameCommandBuffer();
-
-    initializeOpenGLFunctions();
-    if (!_shaderProgram) {
-
-        _shaderProgram.reset(new QOpenGLShaderProgram());
-        _shaderProgram->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
-            R"(
-            attribute vec4 vertices;
-            varying vec2 coords;
-            void main() {
-                gl_Position = vertices;
-                coords = vertices.xy;
-            }
-        )");
-
-        _shaderProgram->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment,
-            R"(
-            varying vec2 coords;
-            uniform float shift;
-
-            void main() {
-                gl_FragColor = vec4(1.0, 0.0, 0.5, 1.0);
-            }
-        )");
-
-        _shaderProgram->bindAttributeLocation("vertices", 0);
-        _shaderProgram->link();
+    QSGSimpleRectNode *n = static_cast<QSGSimpleRectNode *>(node);
+    if (!n) {
+        n = new QSGSimpleRectNode();
+        n->setColor(Qt::red);
+        n->setMaterial(new Material());
     }
-
-    float values[] = {1, 1, -1, 1, 1, -1, -1, -1};
-
-    //_window->beginExternalCommands();
-
-    // Bind with the actual OpenGL thread
-    _shaderProgram->bind();
-    _shaderProgram->enableAttributeArray(0);
-    _shaderProgram->setAttributeArray(0, GL_FLOAT, values, 2);
-    _shaderProgram->setUniformValue("shift", static_cast<float>((_shift % 100) / 100.0f));
-
-    // We need to fix the opengl origin with our actual item position
-    auto point = parentItem()->mapFromItem(this, {0, 0});
-    point += QPointF {0, static_cast<float>(parentItem()->height() - height())};
-    qDebug() << width() << height();
-    // glInitDisplayMode(GL_RGBA | GL_ALPHA);
-    glViewport(point.x(), point.y(), width(), height());
-    glDisable(GL_DEPTH_TEST);
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-    _shaderProgram->disableAttributeArray(0);
-    _shaderProgram->release();
-
-    _window->resetOpenGLState();
+    n->setRect(boundingRect());
+    return n;
 }
