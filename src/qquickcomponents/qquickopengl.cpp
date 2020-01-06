@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QTimer>
 
+#include <QSGSimpleRectNode>
 
 class Shader : public QSGMaterialShader
 {
@@ -32,7 +33,6 @@ public:
     void initialize()
     {
         QSGMaterialShader::initialize();
-        m_id_matrix = program()->uniformLocation("qt_Matrix");
         m_id_opacity = program()->uniformLocation("qt_Opacity");
         m_id_shift = program()->uniformLocation("shift");
 
@@ -59,7 +59,7 @@ private:
     int m_id_shift;
     float shift = 0;
 
-    QSGMaterial* material;
+    //QSGMaterial* material;
 };
 
 class Material : public QSGMaterial
