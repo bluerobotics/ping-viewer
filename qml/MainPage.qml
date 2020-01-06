@@ -264,8 +264,8 @@ Item {
 
     QQuickOpenGL {
         id: potato
-        width: 400
-        height: 300
+        width: 50
+        height: 50
         anchors.top: parent.top
         visible: true
         z: 10000000

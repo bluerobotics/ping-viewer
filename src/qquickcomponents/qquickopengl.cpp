@@ -34,30 +34,32 @@ public:
     {
         QSGMaterialShader::initialize();
         m_id_opacity = program()->uniformLocation("qt_Opacity");
+        /*
         m_id_shift = program()->uniformLocation("shift");
 
         auto timer = new QTimer();
         QObject::connect(timer, &QTimer::timeout, [&] { shift += 0.01; } );
         timer->start(10);
+        */
     }
 
     void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
     {
         qDebug() << newMaterial << oldMaterial;
         Q_ASSERT(program()->isLinked());
-        if (state.isMatrixDirty())
-            program()->setUniformValue(m_id_matrix, state.combinedMatrix());
         if (state.isOpacityDirty())
             program()->setUniformValue(m_id_opacity, state.opacity());
+        /*
         qDebug() << "update";
         program()->setUniformValue(m_id_shift, shift);
+        */
     }
 
 private:
     int m_id_matrix;
     int m_id_opacity;
     int m_id_shift;
-    float shift = 0;
+    //float shift = 0;
 };
 
 class Material : public QSGMaterial
@@ -100,7 +102,6 @@ QSGNode *QQuickOpenGL::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
     QSGSimpleRectNode *n = static_cast<QSGSimpleRectNode *>(node);
     if (!n) {
         n = new QSGSimpleRectNode();
-        n->setColor(Qt::red);
         n->setMaterial(new Material());
     }
     n->setRect(boundingRect());
