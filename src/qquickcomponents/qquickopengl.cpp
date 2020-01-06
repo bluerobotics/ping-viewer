@@ -58,8 +58,6 @@ private:
     int m_id_opacity;
     int m_id_shift;
     float shift = 0;
-
-    //QSGMaterial* material;
 };
 
 class Material : public QSGMaterial
