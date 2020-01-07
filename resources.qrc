@@ -69,6 +69,8 @@
     <qresource prefix="/opengl">
         <file alias="polarplot/fragment.glsl">qml/opengl/polarplot/fragment.glsl</file>
         <file alias="polarplot/vertex.glsl">qml/opengl/polarplot/vertex.glsl</file>
+        <file alias="qquickopengl/fragment.glsl">qml/opengl/qquickopengl/fragment.glsl</file>
+        <file alias="qquickopengl/vertex.glsl">qml/opengl/qquickopengl/vertex.glsl</file>
         <file alias="waterfallplot/fragment.glsl">qml/opengl/waterfallplot/fragment.glsl</file>
         <file alias="waterfallplot/vertex.glsl">qml/opengl/waterfallplot/vertex.glsl</file>
     </qresource>

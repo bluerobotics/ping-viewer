@@ -13,8 +13,8 @@ class Shader : public QSGMaterialShader
 public:
     Shader()
     {
-        setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/opengl/waterfallplot/fragment.glsl"));
-        setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/opengl/waterfallplot/vertex.glsl"));
+        setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/opengl/qquickopengl/fragment.glsl"));
+        setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/opengl/qquickopengl/vertex.glsl"));
     }
 
     /**
@@ -83,7 +83,7 @@ QQuickOpenGL::QQuickOpenGL(QQuickItem *parent)
 
     auto timer = new QTimer();
     QObject::connect(timer, &QTimer::timeout, this, &QQuickOpenGL::shiftChanged);
-    timer->start(100);
+    timer->start(1000/60);
 }
 
 void QQuickOpenGL::handleWindowChanged(QQuickWindow* window)
