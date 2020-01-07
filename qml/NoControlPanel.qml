@@ -14,7 +14,7 @@ PingGroupBox {
             text: "Device Manager"
             Layout.fillWidth: true
             onClicked: {
-                deviceManagerViewer.open()
+                //deviceManagerViewer.open()
                 root.parent.hideItem = true
             }
         }

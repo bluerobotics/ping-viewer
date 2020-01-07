@@ -65,7 +65,7 @@ Item {
 
                     onClickedChanged: {
                         if(clicked) {
-                            deviceManagerViewer.open()
+                            //deviceManagerViewer.open()
                             settingsMenu.hideItem = true
                         }
                     }
@@ -264,9 +264,14 @@ Item {
 
     QQuickOpenGL {
         id: potato
-        width: 50
-        height: 50
-        anchors.top: parent.top
+        //width: 200
+        //height: 200
+        anchors.centerIn: parent
+        //anchors.fill: parent
+        width: Math.min(parent.height, parent.width)
+        height: width
+        //width: 200
+        //height: 200
         visible: true
         z: 10000000
     }

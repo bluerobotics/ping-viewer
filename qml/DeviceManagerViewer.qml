@@ -17,7 +17,7 @@ PingPopup {
 
     Component.onCompleted: {
         if(!DeviceManager.primarySensor) {
-            open()
+            //open()
         }
     }
 
