@@ -35,18 +35,10 @@ public:
         QSGMaterialShader::initialize();
         m_id_matrix = program()->uniformLocation("qt_Matrix");
         m_id_opacity = program()->uniformLocation("qt_Opacity");
-        /*
-        m_id_shift = program()->uniformLocation("shift");
-
-        auto timer = new QTimer();
-        QObject::connect(timer, &QTimer::timeout, [&] { shift += 0.01; } );
-        timer->start(10);
-        */
     }
 
     void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
     {
-        qDebug() << newMaterial << oldMaterial;
         Q_ASSERT(program()->isLinked());
         if (state.isOpacityDirty()) {
             program()->setUniformValue(m_id_opacity, state.opacity());
@@ -54,26 +46,11 @@ public:
         if (state.isMatrixDirty()) {
             program()->setUniformValue(m_id_matrix, state.combinedMatrix());
         }
-
-        qDebug() << "MATRIX combined:" << state.combinedMatrix();
-        qDebug() << "MATRIX modelview:" << state.modelViewMatrix();
-        qDebug() << "MATRIX projection:" << state.projectionMatrix();
-        //qt_ModelViewProjectionMatrix
-        qDebug() << "RECT1:" << state.deviceRect();
-        qDebug() << "RECT:" << state.viewportRect();
-        qDebug() << "PIXEL:" << state.devicePixelRatio();
-
-        /*
-        qDebug() << "update";
-        program()->setUniformValue(m_id_shift, shift);
-        */
     }
 
 private:
     int m_id_matrix;
     int m_id_opacity;
-    int m_id_shift;
-    //float shift = 0;
 };
 
 class Material : public QSGMaterial
@@ -93,26 +70,17 @@ QQuickOpenGL::QQuickOpenGL(QQuickItem *parent)
     QQuickItem::setFlag(QQuickItem::ItemHasContents);
 
     connect(this, &QQuickItem::windowChanged, this, &QQuickOpenGL::handleWindowChanged);
+    /*
     connect(this, &QQuickOpenGL::shiftChanged, this, [this]{
         if (_window) {
             _window->update();
         }
-        //qDebug() << boundingRect();
     });
 
     auto timer = new QTimer();
     connect(timer, &QTimer::timeout, this, &QQuickOpenGL::shiftChanged);
     timer->start(1000/60);
-
-    connect(this, &QQuickItem::childrenRectChanged, this, [this](auto rect) {
-        /*
-        if(!node) {
-            return;
-        }
-        QSGGeometry::updateTexturedRectGeometry(node->geometry(), boundingRect(), QRectF(0, 0, 1, 1));
-        node->markDirty(QSGNode::DirtyGeometry);
-        */
-    });
+    */
 }
 
 void QQuickOpenGL::handleWindowChanged(QQuickWindow* window)

@@ -5,7 +5,7 @@
 
 #include <QOpenGLShaderProgram>
 
-class QQuickOpenGL : public QQuickItem/*, QSGMaterial, QSGMaterialShader*/
+class QQuickOpenGL : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(int shift READ shift WRITE setShift NOTIFY shiftChanged)
