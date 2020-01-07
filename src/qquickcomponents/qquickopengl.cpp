@@ -128,21 +128,20 @@ void QQuickOpenGL::handleWindowChanged(QQuickWindow* window)
 
 QSGNode *QQuickOpenGL::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 {
-    qDebug() << __PRETTY_FUNCTION__;
-    QSGSimpleRectNode *n = static_cast<QSGSimpleRectNode *>(node);
-    if (!n) {
-        n = new QSGSimpleRectNode();
-        n->setMaterial(new Material());
-        n->material()->setFlag(QSGMaterial::Blending);
-        n->setFlag(QSGNode::OwnsMaterial, true);
-        QSGGeometry *g = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4);
-        QSGGeometry::updateTexturedRectGeometry(g, boundingRect(), QRectF(0, 0, 1, 1));
-        n->setGeometry(g);
-        n->setFlag(QSGNode::OwnsGeometry, true);
+    QSGSimpleRectNode *simpleRectNode = static_cast<QSGSimpleRectNode *>(node);
+    if (!simpleRectNode) {
+        simpleRectNode = new QSGSimpleRectNode();
+        simpleRectNode->setMaterial(new Material());
+        simpleRectNode->material()->setFlag(QSGMaterial::Blending);
+        simpleRectNode->setFlag(QSGNode::OwnsMaterial, true);
+        QSGGeometry *geometry = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4);
+        QSGGeometry::updateTexturedRectGeometry(geometry, boundingRect(), QRectF(0, 0, 1, 1));
+        simpleRectNode->setGeometry(geometry);
+        simpleRectNode->setFlag(QSGNode::OwnsGeometry, true);
     } else {
-        QSGGeometry::updateTexturedRectGeometry(n->geometry(), boundingRect(), QRectF(0, 0, 1, 1));
-        n->markDirty(QSGNode::DirtyGeometry);
+        QSGGeometry::updateTexturedRectGeometry(simpleRectNode->geometry(), boundingRect(), QRectF(0, 0, 1, 1));
+        simpleRectNode->markDirty(QSGNode::DirtyGeometry);
     }
-    n->setRect(boundingRect());
-    return n;
+    simpleRectNode->setRect(boundingRect());
+    return simpleRectNode;
 }
