@@ -15,6 +15,8 @@ import PingEnumNamespace 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
+import QQuickOpenGL 1.0
+
 Item {
     id: root
     visible: true
@@ -258,6 +260,15 @@ Item {
         // TODO: Add a proper check in PingSensor
         sourceComponent: sensorVisualizer == null ?
             radialGradient : sensorVisualizer.toString().includes("Ping360") ? radialGradient : linearGradient
+    }
+
+    QQuickOpenGL {
+        id: potato
+        width: 400
+        height: 300
+        anchors.top: parent.top
+        visible: true
+        z: 10000000
     }
 
     PingStatus {

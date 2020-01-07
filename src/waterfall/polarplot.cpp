@@ -26,8 +26,8 @@ PolarPlot::PolarPlot(QQuickItem* parent)
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
 
-    setVertex(":/opengl/polarplot/vertex.glsl");
-    setFragment(":/opengl/polarplot/fragment.glsl");
+    //setVertex(":/opengl/polarplot/vertex.glsl");
+    //setFragment(":/opengl/polarplot/fragment.glsl");
 
     //connect(&_updateTimer, &QTimer::timeout, this, [&] { update(); });
     //_updateTimer.setSingleShot(true);

@@ -75,10 +75,13 @@ Item {
 
             PolarPlot {
                 id: waterfall
+                /*
                 height: Math.min(ping.sectorSize > 180 ? parent.height : parent.height*2, parent.width*scale)
                 width: height
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: ping.sectorSize > 180 ? parent.verticalCenter : parent.bottom
+                */
+                anchors.fill: parent
 
                 property var scale: ping.sectorSize >= 180 ? 1 : 0.8/Math.sin(ping.sectorSize*Math.PI/360)
                 //property variant src: waterfall

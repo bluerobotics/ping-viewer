@@ -22,6 +22,7 @@
 #include "ping.h"
 #include "ping360.h"
 #include "polarplot.h"
+#include "qquickopengl.h"
 #include "settingsmanager.h"
 #include "stylemanager.h"
 #include "util.h"
@@ -70,6 +71,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Ping>("Ping", 1, 0, "Ping");
     qmlRegisterType<Ping360>("Ping360", 1, 0, "Ping360");
     qmlRegisterType<PolarPlot>("PolarPlot", 1, 0, "PolarPlot");
+    qmlRegisterType<QQuickOpenGL>("QQuickOpenGL", 1, 0, "QQuickOpenGL");
     qmlRegisterType<WaterfallPlot>("WaterfallPlot", 1, 0, "WaterfallPlot");
 
     qmlRegisterUncreatableMetaObject(
