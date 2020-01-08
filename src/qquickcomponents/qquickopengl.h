@@ -30,7 +30,13 @@ public:
     void initialize();
 
     void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial);
-    virtual void update(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial);
+
+    virtual void update(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+    {
+        Q_UNUSED(state)
+        Q_UNUSED(newMaterial)
+        Q_UNUSED(oldMaterial)
+    }
 
 private:
     int _matrixId;

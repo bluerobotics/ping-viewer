@@ -83,13 +83,6 @@ void Shader::updateState(const RenderState &state, QSGMaterial *newMaterial, QSG
     update(state, newMaterial, oldMaterial);
 }
 
-void Shader::update(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
-{
-    Q_UNUSED(state)
-    Q_UNUSED(newMaterial)
-    Q_UNUSED(oldMaterial)
-}
-
 QQuickOpenGL::QQuickOpenGL(QQuickItem *parent)
     : QQuickItem(parent)
     , _shaderProgram(nullptr)
