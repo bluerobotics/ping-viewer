@@ -262,7 +262,6 @@ Item {
             radialGradient : sensorVisualizer.toString().includes("Ping360") ? radialGradient : linearGradient
     }
 
-    /*
     QQuickOpenGL {
         id: potato
         //width: 200
@@ -275,7 +274,7 @@ Item {
         //height: 200
         visible: true
         z: 10000000
-    }*/
+    }
 
     PingStatus {
         // We need to be over the mainvisualizer

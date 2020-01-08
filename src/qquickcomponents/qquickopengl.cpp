@@ -7,34 +7,25 @@
 #include <QDebug>
 #include <QTimer>
 
-#include <QSGSimpleRectNode>
-
-class Shader : public QSGMaterialShader
+/*
+struct MaterialState
 {
-public:
-    Shader()
+    QSGTexture *source;
+};
+
+class MaterialShader : public QSGSimpleMaterialShader<MaterialState>
+{
+    QSG_DECLARE_SIMPLE_SHADER(MaterialShader, MaterialState)
+
+    MaterialShader()
     {
         setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/opengl/qquickopengl/fragment.glsl"));
         setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/opengl/qquickopengl/vertex.glsl"));
     }
 
-    /**
-     * @brief Return attribute names
-     *  The last element should be zero, from documentation
-     *
-     * @return char const* const*
-     */
-    char const *const *attributeNames() const
+    QList<QByteArray> attributes() const
     {
-        static char const *const names[] = {"qt_Vertex", "qt_MultiTexCoord0", 0 };
-        return names;
-    }
-
-    void initialize()
-    {
-        QSGMaterialShader::initialize();
-        m_id_matrix = program()->uniformLocation("qt_Matrix");
-        m_id_opacity = program()->uniformLocation("qt_Opacity");
+        return QList<QByteArray>() << "qt_Vertex" << "qt_MultiTexCoord0";
     }
 
     void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
@@ -47,18 +38,57 @@ public:
             program()->setUniformValue(m_id_matrix, state.combinedMatrix());
         }
     }
-
-private:
-    int m_id_matrix;
-    int m_id_opacity;
-};
+}*/
 
 class Material : public QSGMaterial
 {
 public:
     QSGMaterialType *type() const { static QSGMaterialType type; return &type; }
     QSGMaterialShader *createShader() const { return new Shader; }
+    int toto() { return i++; }
+private:
+    int i;
 };
+
+char const *const *Shader::attributeNames() const
+{
+    static char const *const names[] = {"qt_Vertex", "qt_MultiTexCoord0", 0 };
+    return names;
+}
+
+void Shader::loadDefaultShader()
+{
+    setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/opengl/qquickopengl/fragment.glsl"));
+    setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/opengl/qquickopengl/vertex.glsl"));
+}
+
+void Shader::initialize()
+{
+    QSGMaterialShader::initialize();
+    _matrixId = program()->uniformLocation("qt_Matrix");
+    _opacityId = program()->uniformLocation("qt_Opacity");
+}
+
+void Shader::updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+{
+    Q_ASSERT(program()->isLinked());
+    if (state.isMatrixDirty()) {
+        program()->setUniformValue(_matrixId, state.combinedMatrix());
+    }
+    if (state.isOpacityDirty()) {
+        program()->setUniformValue(_opacityId, state.opacity());
+    }
+
+    // Let the child class to receive and do the necessary updates with the new state
+    update(state, newMaterial, oldMaterial);
+}
+
+void Shader::update(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+{
+    Q_UNUSED(state)
+    Q_UNUSED(newMaterial)
+    Q_UNUSED(oldMaterial)
+}
 
 QQuickOpenGL::QQuickOpenGL(QQuickItem *parent)
     : QQuickItem(parent)

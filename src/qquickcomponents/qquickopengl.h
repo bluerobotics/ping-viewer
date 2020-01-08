@@ -5,6 +5,38 @@
 
 #include <QOpenGLShaderProgram>
 
+#include <QSGSimpleRectNode>
+
+#include <QSGSimpleMaterialShader>
+
+class Shader : public QSGMaterialShader
+{
+public:
+    Shader()
+    {
+        loadDefaultShader();
+    }
+
+    /**
+     * @brief Return attribute names
+     *  The last element should be zero, from documentation
+     *
+     * @return char const* const*
+     */
+    char const *const *attributeNames() const;
+
+    void loadDefaultShader();
+
+    void initialize();
+
+    void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial);
+    virtual void update(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial);
+
+private:
+    int _matrixId;
+    int _opacityId;
+};
+
 class QQuickOpenGL : public QQuickItem
 {
     Q_OBJECT
