@@ -86,24 +86,11 @@ void Shader::updateState(const RenderState &state, QSGMaterial *newMaterial, QSG
 QQuickOpenGL::QQuickOpenGL(QQuickItem *parent)
     : QQuickItem(parent)
     , _shaderProgram(nullptr)
-    , _shift(0)
     , _window(nullptr)
 {
     // We are going to fill our own content with OpenGL
     QQuickItem::setFlag(QQuickItem::ItemHasContents);
-
     connect(this, &QQuickItem::windowChanged, this, &QQuickOpenGL::handleWindowChanged);
-    /*
-    connect(this, &QQuickOpenGL::shiftChanged, this, [this]{
-        if (_window) {
-            _window->update();
-        }
-    });
-
-    auto timer = new QTimer();
-    connect(timer, &QTimer::timeout, this, &QQuickOpenGL::shiftChanged);
-    timer->start(1000/60);
-    */
 }
 
 void QQuickOpenGL::handleWindowChanged(QQuickWindow* window)
@@ -121,18 +108,22 @@ QSGNode *QQuickOpenGL::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 {
     QSGSimpleRectNode *simpleRectNode = static_cast<QSGSimpleRectNode *>(node);
     if (!simpleRectNode) {
+        // We are going to deal with the material and the geometry
         simpleRectNode = new QSGSimpleRectNode();
         simpleRectNode->setMaterial(new Material());
         simpleRectNode->material()->setFlag(QSGMaterial::Blending);
         simpleRectNode->setFlag(QSGNode::OwnsMaterial, true);
+
         QSGGeometry *geometry = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4);
         QSGGeometry::updateTexturedRectGeometry(geometry, boundingRect(), QRectF(0, 0, 1, 1));
         simpleRectNode->setGeometry(geometry);
         simpleRectNode->setFlag(QSGNode::OwnsGeometry, true);
     } else {
+        // Update the geometry to make sure that we have the correct size
         QSGGeometry::updateTexturedRectGeometry(simpleRectNode->geometry(), boundingRect(), QRectF(0, 0, 1, 1));
         simpleRectNode->markDirty(QSGNode::DirtyGeometry);
     }
+
     simpleRectNode->setRect(boundingRect());
     return simpleRectNode;
 }
