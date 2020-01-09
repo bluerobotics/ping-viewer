@@ -14,7 +14,10 @@ Ping Viewer should run on any modern computer.
 
 - Reset the ping-viewer setting by clicking the gear icon in the [application information header](https://docs.bluerobotics.com/ping-viewer/application-information/#header-buttons)
 - Ensure that your usb cable is in good condition and supports data transfer. Try to use another usb cable or a cable known to work with another device like a phone.
-
+- Ensure that the usb-uart bridge is working with your computer. The list of communication ports should change when you plug/unplug your device.
+  - Windows: check the COM port list in the [windows device manager](https://en.wikipedia.org/wiki/Device_Manager)
+  - Mac/Linux: check the serial devices list when you enter the command `ls /dev/tty*` in the terminal
+- Ensure that the 5V, ground, RX and TX lines are connected correctly to the device. Try switching the RX and TX lines.
 - Ensure that you have the necessary permissions to access the usb device. Add your user to the correct group in order to gain access to the usb device.
 
    - Ubuntu: `sudo usermod -a -G dialout $USER`
