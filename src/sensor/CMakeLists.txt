@@ -12,7 +12,8 @@ STATIC
     parser.h # for the moc.
 )
 
-target_link_libraries(sensor
+target_link_libraries(
+    sensor
 PRIVATE
     Qt5::Core
     Qt5::Network

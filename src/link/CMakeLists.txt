@@ -17,7 +17,8 @@ STATIC
     abstractlinknamespace.h
 )
 
-target_link_libraries(link
+target_link_libraries(
+    link
 PRIVATE
     Qt5::Core
     Qt5::Network

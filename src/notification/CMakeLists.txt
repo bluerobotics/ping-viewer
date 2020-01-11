@@ -5,7 +5,8 @@ STATIC
     notificationmodel.cpp
 )
 
-target_link_libraries(notification
+target_link_libraries(
+    notification
 PRIVATE
     Qt5::Core
     Qt5::Widgets # because of stylemanager.h

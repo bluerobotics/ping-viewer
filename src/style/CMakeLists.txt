@@ -4,7 +4,8 @@ STATIC
     stylemanager.cpp
 )
 
-target_link_libraries(style
+target_link_libraries(
+    style
 PRIVATE
     Qt5::Core
     Qt5::Gui
