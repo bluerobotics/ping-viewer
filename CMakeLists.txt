@@ -11,12 +11,12 @@ set(AUTOMOC_MOC_OPTIONS -Muri=org.bluerobotics.pingviewer)
 
 set(CMAKE_AUTORCC ON)
 
-add_definitions(
-  -DQT_USE_QSTRINGBUILDER
-  -DQT_NO_CAST_TO_ASCII
-  -DQT_STRICT_ITERATORS
-  -DQT_NO_CAST_FROM_BYTEARRAY
-  -DQT_USE_FAST_OPERATOR_PLUS
+add_compile_definitions(
+  QT_USE_QSTRINGBUILDER
+  QT_NO_CAST_TO_ASCII
+  QT_STRICT_ITERATORS
+  QT_NO_CAST_FROM_BYTEARRAY
+  QT_USE_FAST_OPERATOR_PLUS
 )
 
 # Set the Git variables here.
@@ -26,10 +26,12 @@ if(TRUE)
   set(GIT_TAG "fake_git_tag")
   set(GIT_URL "fake_git_url")
 
-  add_definitions(-DGIT_VERSION="${GIT_VERSION}")
-  add_definitions(-DGIT_VERSION_DATE="${GIT_VERSION_DATE}")
-  add_definitions(-DGIT_TAG="${GIT_TAG}")
-  add_definitions(-DGIT_URL="${GIT_URL}")
+  add_compile_definitions(
+    GIT_VERSION="${GIT_VERSION}"
+    GIT_VERSION_DATE="${GIT_VERSION_DATE}"
+    GIT_TAG="${GIT_TAG}"
+    GIT_URL="${GIT_URL}"
+  )
 endif()
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
