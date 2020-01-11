@@ -29,6 +29,7 @@ add_executable(ping-viewer
 
 target_link_libraries(
     ping-viewer
+PRIVATE
     Qt5::Core
     Qt5::Qml
     Qt5::Quick
