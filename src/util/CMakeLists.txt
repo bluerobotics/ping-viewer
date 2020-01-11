@@ -4,7 +4,8 @@ STATIC
     util.cpp
 )
 
-target_link_libraries(util
+target_link_libraries(
+    util
 PRIVATE
     Qt5::Charts
     Qt5::Core

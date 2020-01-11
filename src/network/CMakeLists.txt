@@ -5,7 +5,8 @@ STATIC
     networktool.cpp
 )
 
-target_link_libraries(network
+target_link_libraries(
+    network
 PRIVATE
     Qt5::Core
     Qt5::Network

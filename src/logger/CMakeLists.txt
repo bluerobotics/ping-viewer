@@ -5,7 +5,8 @@ STATIC
     loglistmodel.cpp
 )
 
-target_link_libraries(logger
+target_link_libraries(
+    logger
 PRIVATE
     Qt5::Concurrent
     Qt5::Core

@@ -6,7 +6,8 @@ SHARED
     varianttree.cpp
 )
 
-target_link_libraries(settings
+target_link_libraries(
+    settings
 PRIVATE
     Qt5::Core
     Qt5::Qml

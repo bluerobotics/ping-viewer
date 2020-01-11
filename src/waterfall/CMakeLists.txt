@@ -10,8 +10,8 @@ STATIC
 
 target_link_libraries(
     waterfall
-    PRIVATE
+PRIVATE
     Qt5::Concurrent
     Qt5::Quick
     logger
-    )
+)
