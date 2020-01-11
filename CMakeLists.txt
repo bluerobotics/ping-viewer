@@ -11,6 +11,9 @@ set(AUTOMOC_MOC_OPTIONS -Muri=org.bluerobotics.pingviewer)
 
 set(CMAKE_AUTORCC ON)
 
+# Update submodules if necessary and load our GIT variables
+include("cmake/git.cmake")
+
 add_compile_definitions(
     QT_USE_QSTRINGBUILDER
     QT_NO_CAST_TO_ASCII
@@ -18,21 +21,6 @@ add_compile_definitions(
     QT_NO_CAST_FROM_BYTEARRAY
     QT_USE_FAST_OPERATOR_PLUS
 )
-
-# Set the Git variables here.
-if(TRUE)
-    set(GIT_VERSION "fake_version_fixme_later")
-    set(GIT_VERSION_DATE "fake_version_date_fixme_later")
-    set(GIT_TAG "fake_git_tag")
-    set(GIT_URL "fake_git_url")
-
-    add_compile_definitions(
-        GIT_VERSION="${GIT_VERSION}"
-        GIT_VERSION_DATE="${GIT_VERSION_DATE}"
-        GIT_TAG="${GIT_TAG}"
-        GIT_URL="${GIT_URL}"
-    )
-endif()
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
     Charts
