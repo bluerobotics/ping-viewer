@@ -631,16 +631,16 @@ private:
     bool _reverse_direction = false;
     uint32_t _speed_of_sound = 1500;
 
-    int _angularResolutionGrad = 400;
+    static constexpr int _angularResolutionGrad = 400;
     // The motor takes 4s to run a full circle
-    float _motorSpeedGradMs = 4000 / _angularResolutionGrad;
+    static constexpr float _motorSpeedGradMs = 4000 / _angularResolutionGrad;
     // Right now the max value is 1200 for ping360
     // We are saving 2k of the memory for future proof modifications
-    int _maxNumberOfPoints = 2048;
+    static constexpr int _maxNumberOfPoints = 2048;
     // The sensor can take 4s to answer, we are also using an extra 200ms for latency
-    int _sensorTimeout = 4200;
+    static constexpr int _sensorTimeout = 4200;
     // The sensor will reset the position after 30s without communication
-    int _sensorRestartTimeoutMs = 30000;
+    static constexpr int _sensorRestartTimeoutMs = 30000;
 
     // Sector size in gradians, default is full circle
     int _sectorSize = 400;
