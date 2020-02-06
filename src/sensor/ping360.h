@@ -150,7 +150,13 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t angle() { return (_angle + angle_offset() + static_cast<int>(_heading)) % _angularResolutionGrad; }
+    uint16_t angle()
+    {
+        // Only use heading correction if running in full scam mode (sector size == resolution)
+        const int angle
+            = _angle + angle_offset() + (_sectorSize == _angularResolutionGrad ? static_cast<int>(_heading) : 0);
+        return angle % _angularResolutionGrad;
+    }
     Q_PROPERTY(int angle READ angle NOTIFY angleChanged)
 
     /**
