@@ -141,8 +141,8 @@ bool operator==(const LinkConfiguration& first, const LinkConfiguration& second)
 {
     auto firstLinkconf = first.configurationStruct();
     auto secondLinkconf = second.configurationStruct();
-    return (firstLinkconf.name == secondLinkconf.name) && (firstLinkconf.type == secondLinkconf.type)
-        && (firstLinkconf.args == secondLinkconf.args) && (firstLinkconf.deviceType == secondLinkconf.deviceType);
+    return (firstLinkconf.type == secondLinkconf.type) && (firstLinkconf.args == secondLinkconf.args)
+        && (firstLinkconf.deviceType == secondLinkconf.deviceType);
 }
 
 QDebug operator<<(QDebug d, const LinkConfiguration& other)
