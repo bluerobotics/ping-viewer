@@ -3,6 +3,7 @@
 
 #include <limits>
 
+#include <QOpenGLShaderProgram>
 #include <QPainter>
 #include <QVector>
 #include <QtConcurrent>
@@ -14,7 +15,7 @@ PING_LOGGING_CATEGORY(polarplot, "ping.polarplot")
 uint16_t PolarPlot::_angularResolution = 400;
 
 PolarPlot::PolarPlot(QQuickItem* parent)
-    : Waterfall(parent)
+    : QQuickOpenGL(parent)
     , _distances(_angularResolution, 0)
     , _image(400, 1200, QImage::Format_RGBA8888)
     , _maxDistance(0)
@@ -25,14 +26,18 @@ PolarPlot::PolarPlot(QQuickItem* parent)
     setAcceptHoverEvents(true);
     _image.fill(QColor(Qt::transparent));
 
-    connect(&_updateTimer, &QTimer::timeout, this, [&] { update(); });
-    _updateTimer.setSingleShot(true);
-    _updateTimer.start(50);
+    //setVertex(":/opengl/polarplot/vertex.glsl");
+    //setFragment(":/opengl/polarplot/fragment.glsl");
 
-    connect(this, &Waterfall::mousePosChanged, this, &PolarPlot::updateMouseColumnData);
-    connect(this, &Waterfall::themeChanged, this, &PolarPlot::clear);
+    //connect(&_updateTimer, &QTimer::timeout, this, [&] { update(); });
+    //_updateTimer.setSingleShot(true);
+    //_updateTimer.start(50);
+
+    //connect(this, &Waterfall::mousePosChanged, this, &PolarPlot::updateMouseColumnData);
+    //connect(this, &Waterfall::themeChanged, this, &PolarPlot::clear);
 }
 
+/*
 void PolarPlot::clear()
 {
     qCDebug(polarplot) << "Cleaning waterfall and restarting internal variables";
@@ -40,6 +45,14 @@ void PolarPlot::clear()
     _distances.fill(0, _angularResolution);
     _maxDistance = 0;
 }
+*/
+
+/*
+void setValue(QOpenGLShaderProgram *shaderProgram)
+{
+    printf("");
+    //shaderProgram->setUniformValue("coord", static_cast<float>((_shift%100)/100.0f));
+}*/
 
 void PolarPlot::paint(QPainter* painter)
 {
@@ -102,18 +115,20 @@ void PolarPlot::draw(
         }
 
         for (int index = 0; index < _image.height(); index++) {
-            _image.setPixelColor(static_cast<int>(newAngle), index, valueToRGB(points[index * scale]));
+            //_image.setPixelColor(static_cast<int>(newAngle), index, valueToRGB(points[index * scale]));
         }
     }
 
     // Fix max update in 20Hz at max
+    /*
     if (!_updateTimer.isActive()) {
         _updateTimer.start(50);
-    }
+    }*/
 
     emit imageChanged();
 }
 
+#if 0
 void PolarPlot::updateMouseColumnData()
 {
     static const float rad2grad = 200.0f / M_PI;
@@ -146,3 +161,4 @@ void PolarPlot::updateMouseColumnData()
     emit mouseSampleAngleChanged();
     emit mouseSampleDistanceChanged();
 }
+#endif

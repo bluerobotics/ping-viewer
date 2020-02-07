@@ -60,7 +60,7 @@ Item {
 
     onWidthChanged: {
         if(chart.Layout.minimumWidth === chart.width) {
-            shader.parent.width = width - chart.width
+            waterfall.parent.width = width - chart.width
         }
     }
 
@@ -73,25 +73,25 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            /** TODO: The shader logic should be inside done inside of PolarPlot c++ Object
-             *   Or better encapsulated
-             */
-            ShaderEffect {
-                id: shader
+            PolarPlot {
+                id: waterfall
+                /*
                 height: Math.min(ping.sectorSize > 180 ? parent.height : parent.height*2, parent.width*scale)
                 width: height
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: ping.sectorSize > 180 ? parent.verticalCenter : parent.bottom
+                */
+                anchors.fill: parent
 
                 property var scale: ping.sectorSize >= 180 ? 1 : 0.8/Math.sin(ping.sectorSize*Math.PI/360)
-                property variant src: waterfall
+                //property variant src: waterfall
                 property var angle: 1
 
                 property bool verticalFlip: false
                 property bool horizontalFlip: false
 
-                vertexShader: "qrc:/opengl/polarplot/vertex.glsl"
-                fragmentShader: "qrc:/opengl/polarplot/fragment.glsl"
+                //vertexShader: "qrc:/opengl/polarplot/vertex.glsl"
+                //fragmentShader: "qrc:/opengl/polarplot/fragment.glsl"
 
                 Text {
                     id: northText
@@ -158,7 +158,7 @@ Item {
                 }
 
                 Shape {
-                    visible: waterfall.containsMouse
+                    //visible: waterfall.containsMouse
                     anchors.centerIn: parent
                     opacity: 0.5
                     ShapePath {
@@ -168,7 +168,7 @@ Item {
                         startY: 0
                         //TODO: This need to be updated in sensor integration
                         PathLine {
-                            property real angle: -Math.atan2(waterfall.mousePos.x - waterfall.width/2, waterfall.mousePos.y - waterfall.height/2) + Math.PI/2
+                            property real angle: 0//-Math.atan2(waterfall.mousePos.x - waterfall.width/2, waterfall.mousePos.y - waterfall.height/2) + Math.PI/2
                             x: waterfall.width*Math.cos(angle)/2
                             y: waterfall.height*Math.sin(angle)/2
                         }
@@ -176,22 +176,16 @@ Item {
                 }
 
                 transform: Rotation {
-                    origin.x: shader.width/2
-                    origin.y: shader.height/2
-                    axis { x: shader.verticalFlip; y: shader.horizontalFlip; z: ping.sectorSize > 180}
+                    origin.x: waterfall.width/2
+                    origin.y: waterfall.height/2
+                    axis { x: waterfall.verticalFlip; y: waterfall.horizontalFlip; z: ping.sectorSize > 180}
                     angle: -ping.heading*180/200
                 }
             }
 
-            PolarPlot {
-                id: waterfall
-                anchors.fill: shader
-                visible: false
-            }
-
             Text {
                 id: mouseReadout
-                visible: waterfall.containsMouse
+                //visible: waterfall.containsMouse
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.margins: 5
@@ -214,17 +208,17 @@ Item {
 
                     function calcAngleFromFlips(angle) {
                         var value = waterfall.mouseSampleAngle
-                        if(shader.verticalFlip && shader.horizontalFlip) {
+                        if(waterfall.verticalFlip && waterfall.horizontalFlip) {
                             value = (360 + 270 - value) % 360
                             return transformValue(value)
                         }
 
-                        if(shader.verticalFlip) {
+                        if(waterfall.verticalFlip) {
                             value = (360 + 180 - value) % 360
                             return transformValue(value)
                         }
 
-                        if(shader.horizontalFlip) {
+                        if(waterfall.horizontalFlip) {
                             value = 360 - value
                             return transformValue(value)
                         }
@@ -236,7 +230,7 @@ Item {
 
             PolarGrid {
                 id: polarGrid
-                anchors.fill: shader
+                anchors.fill: waterfall
                 angle: ping.sectorSize
                 maxDistance: waterfall.maxDistance
             }
@@ -246,7 +240,7 @@ Item {
                 height: 10
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
-                waterfallGradient: waterfall.waterfallGradient
+                //waterfallGradient: waterfall.waterfallGradient
             }
         }
 
@@ -311,7 +305,7 @@ Item {
                 Layout.columnSpan: 5
                 Layout.fillWidth: true
                 onCheckStateChanged: {
-                    shader.horizontalFlip = checkState
+                    waterfall.horizontalFlip = checkState
                 }
             }
 

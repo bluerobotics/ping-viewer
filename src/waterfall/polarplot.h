@@ -5,6 +5,7 @@
 #include <QTimer>
 
 #include "logger.h"
+#include "qquickopengl.h"
 #include "ringvector.h"
 #include "waterfall.h"
 #include "waterfallgradient.h"
@@ -15,7 +16,7 @@ Q_DECLARE_LOGGING_CATEGORY(waterfall)
  * @brief Polar widget
  *
  */
-class PolarPlot : public Waterfall {
+class PolarPlot : public QQuickOpenGL {
     Q_OBJECT
 
 public:
@@ -27,12 +28,19 @@ public:
     PolarPlot(QQuickItem* parent = nullptr);
 
     /**
+     * @brief Define setValue
+     *
+     * @param shaderProgram
+     */
+    //void setValue(QOpenGLShaderProgram *shaderProgram) override final;
+
+    /**
      * @brief This is used by the qml paint event
      *  This paint the a polar waterfall in qml
      *
      * @param painter
      */
-    void paint(QPainter* painter) final override;
+    void paint(QPainter* painter);
 
     /**
      * @brief Set the polar Image
@@ -58,7 +66,7 @@ public:
      * @brief Clear waterfall and restart all parameters
      *
      */
-    Q_INVOKABLE void clear() final override;
+    //Q_INVOKABLE void clear() final override;
 
     /**
      * @brief Return waterfall image
@@ -106,7 +114,7 @@ private:
      * @brief Update mouse column information
      *
      */
-    void updateMouseColumnData();
+    //void updateMouseColumnData();
 
     QVector<float> _distances;
     QImage _image;

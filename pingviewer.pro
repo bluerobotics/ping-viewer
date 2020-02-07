@@ -24,7 +24,7 @@ RESOURCES += \
 
 # Warning as error
 *-g++ | *-clang {
-    QMAKE_CXXFLAGS += -Werror
+    #QMAKE_CXXFLAGS += -Werror
 }
 *msvc {
     QMAKE_CXXFLAGS += /WX \

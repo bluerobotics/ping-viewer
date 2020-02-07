@@ -3,10 +3,12 @@
  * Tilman Schmidt [KeyMaster-] example
  */
 uniform sampler2D src;
-uniform float angle;
 varying vec2 coord;
 
 void main() {
+    gl_FragColor = vec4(0, coord.x, coord.y, 1.0);
+    return;
+
     vec2 sizeOverRadius = vec2(2.0, 2.0);
     float sampleOffset = 0.0;
     float polarFactor = 1.0;
@@ -25,8 +27,8 @@ void main() {
     polar.y = sqrt(relPos.x * relPos.x + relPos.y * relPos.y);
 
     //Any radius over 1 would go beyond the source texture size, this simply outputs black for those fragments
-    if(polar.y > 1.0){
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    if(polar.y > 0.5){
+        gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
         return;
     }
 

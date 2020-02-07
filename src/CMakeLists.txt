@@ -8,6 +8,7 @@ set(INCLUDE_DIRS
     mavlink
     network
     notification
+    qquickcomponents
     sensor
     settings
     style

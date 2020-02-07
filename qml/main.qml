@@ -29,6 +29,7 @@ ApplicationWindow {
             width: parent.width/2
             height: parent.height*0.9
             anchors.centerIn: parent
+            visible: false
         }
     }
 
