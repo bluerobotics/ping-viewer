@@ -510,8 +510,8 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
     emit firmwaresAvailableChanged();
 
     auto sensorVersion = QString("%1.%2")
-                             .arg(_commonVariables.firmware_version_major)
-                             .arg(_commonVariables.firmware_version_minor)
+                             .arg(_commonVariables.deviceInformation.firmware_version_major)
+                             .arg(_commonVariables.deviceInformation.firmware_version_minor)
                              .toFloat();
     static QString firmwareUpdateSteps {"https://github.com/bluerobotics/ping-viewer/wiki/firmware-update"};
     if (lastVersionAvailable > sensorVersion) {
