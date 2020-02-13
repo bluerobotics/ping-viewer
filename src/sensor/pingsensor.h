@@ -56,7 +56,7 @@ public:
      *
      * @return uint8_t firmware major version number
      */
-    uint8_t firmware_version_major() const { return _commonVariables.firmware_version_major; }
+    uint8_t firmware_version_major() const { return _commonVariables.deviceInformation.firmware_version_major; }
     Q_PROPERTY(int firmware_version_major READ firmware_version_major NOTIFY firmwareVersionMajorChanged)
 
     /**
@@ -64,7 +64,7 @@ public:
      *
      * @return uint8_t firmware minor version number
      */
-    uint16_t firmware_version_minor() const { return _commonVariables.firmware_version_minor; }
+    uint16_t firmware_version_minor() const { return _commonVariables.deviceInformation.firmware_version_minor; }
     Q_PROPERTY(int firmware_version_minor READ firmware_version_minor NOTIFY firmwareVersionMinorChanged)
 
     /**
@@ -72,7 +72,7 @@ public:
      *
      * @return uint8_t firmware patch version number
      */
-    uint16_t firmware_version_patch() const { return _commonVariables.firmware_version_patch; }
+    uint16_t firmware_version_patch() const { return _commonVariables.deviceInformation.firmware_version_patch; }
     Q_PROPERTY(int firmware_version_patch READ firmware_version_patch NOTIFY firmwareVersionPatchChanged)
 
     /**
@@ -80,7 +80,7 @@ public:
      *
      * @return uint8_t Device type number
      */
-    uint8_t device_type() const { return _commonVariables.device_type; }
+    uint8_t device_type() const { return _commonVariables.deviceInformation.device_type; }
     Q_PROPERTY(int device_type READ device_type NOTIFY deviceTypeChanged)
 
     /**
@@ -88,7 +88,7 @@ public:
      *
      * @return uint8_t Device model number
      */
-    uint8_t device_revision() const { return _commonVariables.device_revision; }
+    uint8_t device_revision() const { return _commonVariables.deviceInformation.device_revision; }
     Q_PROPERTY(int device_revision READ device_revision NOTIFY deviceRevisionChanged)
 
     /**
@@ -198,12 +198,17 @@ protected:
     // Common variables between all ping devices
     struct CommonVariables {
         QString ascii_text;
-        uint8_t device_revision {0};
-        uint8_t device_type {0};
         uint8_t dstId {0};
-        uint8_t firmware_version_major {0};
-        uint8_t firmware_version_minor {0};
-        uint8_t firmware_version_patch {0};
+
+        struct {
+            bool initialized = false;
+            uint8_t device_revision {0};
+            uint8_t device_type {0};
+            uint8_t firmware_version_major {0};
+            uint8_t firmware_version_minor {0};
+            uint8_t firmware_version_patch {0};
+        } deviceInformation;
+
         QString nack_msg;
         uint8_t protocol_version_major {0};
         uint8_t protocol_version_minor {0};
