@@ -81,11 +81,12 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
     case CommonId::DEVICE_INFORMATION: {
         common_device_information m(msg);
 
-        _commonVariables.device_type = m.device_type();
-        _commonVariables.device_revision = m.device_revision();
-        _commonVariables.firmware_version_major = m.firmware_version_major();
-        _commonVariables.firmware_version_minor = m.firmware_version_minor();
-        _commonVariables.firmware_version_patch = m.firmware_version_patch();
+        _commonVariables.deviceInformation.initialized = true;
+        _commonVariables.deviceInformation.device_type = m.device_type();
+        _commonVariables.deviceInformation.device_revision = m.device_revision();
+        _commonVariables.deviceInformation.firmware_version_major = m.firmware_version_major();
+        _commonVariables.deviceInformation.firmware_version_minor = m.firmware_version_minor();
+        _commonVariables.deviceInformation.firmware_version_patch = m.firmware_version_patch();
 
         emit deviceTypeChanged();
         emit deviceRevisionChanged();
@@ -114,9 +115,15 @@ void PingSensor::handleMessagePrivate(const ping_message& msg)
 
         m.device_type();
         // Ping1D uses device_model as device_type to specify which sersion is it
-        _commonVariables.device_type = m.device_model();
-        _commonVariables.firmware_version_major = m.firmware_version_major();
-        _commonVariables.firmware_version_minor = m.firmware_version_minor();
+        _commonVariables.deviceInformation.initialized = true;
+        _commonVariables.deviceInformation.device_type = m.device_model();
+        _commonVariables.deviceInformation.firmware_version_major = m.firmware_version_major();
+        _commonVariables.deviceInformation.firmware_version_minor = m.firmware_version_minor();
+
+        // Since this is a specific Ping1D message with an old firmware, we can assume device_type and device_revision
+        _commonVariables.deviceInformation.device_type
+            = static_cast<uint8_t>(PingDeviceType::PING1D); // move type to enum
+        _commonVariables.deviceInformation.device_revision = 0;
 
         emit deviceTypeChanged();
         emit firmwareVersionMajorChanged();
@@ -137,14 +144,17 @@ void PingSensor::printStatus() const
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "PingSensor Status:";
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- srcId:" << _commonVariables.srcId;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- dstID:" << _commonVariables.dstId;
-    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- device_type:" << _commonVariables.device_type;
-    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- device_revision:" << _commonVariables.device_revision;
+    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- device_type:" << _commonVariables.deviceInformation.device_type;
+    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- device_revision:" << _commonVariables.deviceInformation.device_revision;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- protocol_version_major:" << _commonVariables.protocol_version_major;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- protocol_version_minor:" << _commonVariables.protocol_version_minor;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- protocol_version_patch:" << _commonVariables.protocol_version_patch;
-    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- firmware_version_major:" << _commonVariables.firmware_version_major;
-    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- firmware_version_minor:" << _commonVariables.firmware_version_minor;
-    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- firmware_version_patch:" << _commonVariables.firmware_version_patch;
+    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- firmware_version_major:"
+                                      << _commonVariables.deviceInformation.firmware_version_major;
+    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- firmware_version_minor:"
+                                      << _commonVariables.deviceInformation.firmware_version_minor;
+    qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- firmware_version_patch:"
+                                      << _commonVariables.deviceInformation.firmware_version_patch;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- ascii_text:" << _commonVariables.ascii_text;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- nack_msg:" << _commonVariables.nack_msg;
     qCDebug(PING_PROTOCOL_PINGSENSOR) << "\t- lostMessages:" << _lostMessages;
