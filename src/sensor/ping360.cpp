@@ -278,8 +278,15 @@ void Ping360::handleMessage(const ping_message& msg)
         // This properties are changed internally only when the link is not writable
         // Such information is normally sync between our application and the sensor
         // So with normal links such attribution is not necessary
-        _sensorSettings.checkValidation({deviceData.transmit_duration(), deviceData.gain_setting(),
-            deviceData.data_length(), deviceData.sample_period(), deviceData.transmit_frequency()});
+        // clang-format off
+        _sensorSettings.checkValidation({
+            .transmit_duration = deviceData.transmit_duration(),
+            .gain_setting = deviceData.gain_setting(),
+            .num_points = deviceData.data_length(),
+            .sample_period = deviceData.sample_period(),
+            .transmit_frequency = deviceData.transmit_frequency()
+        });
+        // clang-format on
         // Everything should be valid, otherwise the sensor is not in sync
         if (!link()->isWritable() && _sensorSettings.valid) {
             set_gain_setting(deviceData.gain_setting());
