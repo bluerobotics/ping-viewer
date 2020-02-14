@@ -258,10 +258,6 @@ void Ping360::handleMessage(const ping_message& msg)
             _data.replace(i, deviceData.data()[i] / 255.0);
         }
 
-        // TODO: doublecheck what we are getting and what we want
-        // some parameter combinations are not valid and the sensor will automatically adjust
-        // in order to detect this, we will have to track our last commanded values separately
-        // from our presently commanded values
         emit angleChanged();
 
         // Only emit data changed when inside sector range
