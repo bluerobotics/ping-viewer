@@ -379,9 +379,22 @@ Item {
                 onCurrentTextChanged: waterfall.theme = currentText
             }
 
+            CheckBox {
+                id: headingIntegration
+                text: "Heading integration"
+                checked: true
+                Layout.columnSpan: 5
+                Layout.fillWidth: true
+                Layout.minimumWidth: 200
+                onCheckStateChanged: {
+                    ping.enableHeadingIntegration(checkState)
+                }
+            }
+
             Settings {
                 category: "Ping360Visualizer"
                 property alias flipAScanState: flipAScan.checkState
+                property alias headingIntegrationCheckState: headingIntegration.checkState
                 property alias plotThemeIndex: plotThemeCB.currentIndex
                 property alias removeAScanState:removeAScanChB.checkState
                 property alias smoothDataState: smoothDataChB.checkState
