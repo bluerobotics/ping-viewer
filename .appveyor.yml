@@ -5,7 +5,7 @@ init:
   - ps: $env:commit = $env:appveyor_repo_commit.SubString(0,7)
   - ps: Update-AppveyorBuild -Version ("{0}-{1}-{2}" -f $env:appveyor_repo_branch,$env:appveyor_build_number,$env:commit )
 
-os: Visual Studio 2017
+os: Visual Studio 2019
 
 environment:
   matrix:
@@ -14,7 +14,7 @@ environment:
       QT_VERSION: 5.12
       QT_LINKAGE: static
       COVERITY_BUILD_CANDIDATE: True
-      QTDIR: C:\Qt\%QT_VERSION%\msvc2017_64
+      QTDIR: C:\Qt\%QT_VERSION%\msvc2019_64
       OPENSSLDIR: C:\OpenSSL-Win64
       VCLIBS: VCRUNTIME140.dll MSVCP140.dll ucrtbased.dll
 
@@ -33,19 +33,19 @@ install:
   - if %QTDIR:msvc=%==%QTDIR% g++ --version
   - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
-  - if not "%QTDIR:msvc2017=%"=="%QTDIR%" (
+  - if not "%QTDIR:msvc2019=%"=="%QTDIR%" (
       if not "%ARCH:x64=%"=="x64" (
-        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat";
+        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat";
         echo "64";
       ) else (
-        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat";
+        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat";
         echo "32";
       )
     ) else if not "%QTDIR:msvc=%"=="%QTDIR%" (
       call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%;
       echo "msvc arch";
     )
-    
+
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
   # Travis and appveyor does not have compatible names to continuous release
