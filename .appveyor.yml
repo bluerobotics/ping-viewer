@@ -24,6 +24,8 @@ configuration:
 
 install:
   # Set and load necessary variables
+  - ls '%QTDIR%
+  - ls '%QTDIR%\bin
   - '%QTDIR%\bin\qtenv2.bat'
   - pip install jinja2
   - qmake -v
