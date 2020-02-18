@@ -27,7 +27,14 @@ void Ping360SimulationLink::handleData(const QByteArray& byteArray)
                 reinterpret_cast<const char*>(deviceInformation.msgData), deviceInformation.msgDataLength()));
         }
     } else if (message.message_id() == Ping360Id::TRANSDUCER) {
+        // We should update asap when running in speed test mode, to make sure that everything else is sharp
+        // If we are not running the test, we should replicate the same periodic behaviour
+#if defined(PING360_SPEED_TEST)
         randomUpdate();
+#else
+        // This goes near to 3s scan time or a sample rate of 133Hz per profile
+        QTimer::singleShot(7, [this] { randomUpdate(); });
+#endif
     }
 }
 
