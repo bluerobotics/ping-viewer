@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QTimer>
 
+#include "mavlinkmanager.h"
 #include "parser.h"
 #include "ping-message-common.h"
 #include "ping-message-ping360.h"
@@ -517,6 +518,13 @@ public:
      */
     void detectBaudrates();
 
+    /**
+     * @brief Enable or disable heading integration
+     *
+     * @param enable
+     */
+    Q_INVOKABLE void enableHeadingIntegration(bool enable);
+
 signals:
     /**
      * @brief emitted when property changes
@@ -803,4 +811,11 @@ private:
      * @param jsonDocument
      */
     void checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument);
+
+    /**
+     * @brief Process incoming mavlink messages
+     *
+     * @param message
+     */
+    void processMavlinkMessage(const mavlink_message_t& message);
 };

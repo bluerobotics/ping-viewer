@@ -18,7 +18,6 @@
 
 #include "hexvalidator.h"
 #include "link/seriallink.h"
-#include "mavlinkmanager.h"
 #include "networkmanager.h"
 #include "networktool.h"
 #include "notificationmanager.h"
@@ -98,12 +97,8 @@ Ping360::Ping360()
         emit messageFrequencyChanged();
     });
 
-    connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, [this](const auto& message) {
-        mavlink_attitude_t attitude;
-        mavlink_msg_attitude_decode(&message, &attitude);
-        _heading = attitude.yaw * 200 / M_PI;
-        emit headingChanged();
-    });
+    // By default heading integration is enabled
+    enableHeadingIntegration(true);
 }
 
 void Ping360::startPreConfigurationProcess()
@@ -525,6 +520,32 @@ void Ping360::resetSettings()
     // Signals will be update in the next profile, it's possible that old profiles contain older configurations
     // Turn sensor settings invalid and let the interface handle the sync
     _sensorSettings.valid = false;
+}
+
+void Ping360::enableHeadingIntegration(bool enable)
+{
+    if (enable) {
+        connect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, &Ping360::processMavlinkMessage);
+    } else {
+        disconnect(MavlinkManager::self(), &MavlinkManager::mavlinkMessage, this, &Ping360::processMavlinkMessage);
+        _heading = 0;
+        emit headingChanged();
+    }
+}
+
+void Ping360::processMavlinkMessage(const mavlink_message_t& message)
+{
+    switch (message.msgid) {
+    case MAVLINK_MSG_ID_ATTITUDE: {
+        mavlink_attitude_t attitude;
+        mavlink_msg_attitude_decode(&message, &attitude);
+        _heading = attitude.yaw * 200 / M_PI;
+        emit headingChanged();
+        break;
+    }
+    default:
+        qCWarning(PING_PROTOCOL_PING360) << "Unhandled mavlink message ID:" << message.msgid;
+    }
 }
 
 Ping360::~Ping360() { updateSensorConfigurationSettings(); }
