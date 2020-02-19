@@ -209,7 +209,7 @@ PingPopup {
                         Label {
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignHCenter
-                            text: connection.typeToString() + " " + connection.createConfString()
+                            text: connection.typeToString() + " " + connection.argsAsConst()[0]
                         }
 
                         StatusIndicator {
