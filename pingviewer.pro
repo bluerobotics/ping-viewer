@@ -24,7 +24,23 @@ RESOURCES += \
 
 # Warning as error
 *-g++ | *-clang {
-    QMAKE_CXXFLAGS += -Werror
+    QMAKE_CXXFLAGS += \
+        -Werror \
+        -Wall \
+        -Wextra \
+        -Wnon-virtual-dtor \
+        -Wunused \
+
+    *-g++ {
+        QMAKE_CXXFLAGS += \
+            -fsanitize=leak \
+            -Wmisleading-indentation \
+            -Wduplicated-cond \
+            -Wduplicated-branches \
+            -Wlogical-op \
+
+    }
+
 }
 *msvc {
     QMAKE_CXXFLAGS += /WX \
