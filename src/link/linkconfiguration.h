@@ -222,7 +222,7 @@ public:
      *
      * @return QString
      */
-    QString serialPort();
+    QString serialPort() const;
 
     /**
      * @brief Return serial baudrate
