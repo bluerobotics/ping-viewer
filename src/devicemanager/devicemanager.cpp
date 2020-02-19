@@ -29,7 +29,7 @@ DeviceManager::DeviceManager()
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName, const QString& detectorName)
 {
     for (int i {0}; i < _sensors[Connection].size(); i++) {
-        auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
+        const auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
         if (*vectorLinkConf == linkConf) {
             qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:" << _sensors[Name][i] << linkConf
                                    << linkConf.argsAsConst();
@@ -153,7 +153,7 @@ void DeviceManager::updateAvailableConnections(
     qCDebug(DEVICEMANAGER) << "Available devices:" << availableLinkConfigurations;
     // Make all connections unavailable by default
     for (int i {0}; i < _sensors[Available].size(); i++) {
-        auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
+        const auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
         if (linkConf->isSimulation() || _sensors[DetectorName][i] != detector) {
             continue;
         }
