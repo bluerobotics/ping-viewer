@@ -5,7 +5,8 @@
 #include <memory>
 
 #include "abstractlink.h"
-#include "linkconfiguration.h"
+
+class LinkConfiguration;
 
 /**
  * @brief Top class for all links
