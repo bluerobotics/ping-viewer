@@ -68,6 +68,7 @@ void ProtocolDetector::doScan()
     // Scan until something is connected
     while (_active) {
         auto linksConf = updateLinkConfigurations(_linkConfigs);
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Looking for devices in:" << linksConf;
         for (LinkConfiguration& tryLinkConf : linksConf) {
             if (!_active) {
                 break;
