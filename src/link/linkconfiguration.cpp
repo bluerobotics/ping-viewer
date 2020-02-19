@@ -102,7 +102,7 @@ void LinkConfiguration::setArgs(const QStringList& args)
     emit configurationChanged();
 }
 
-QString LinkConfiguration::serialPort()
+QString LinkConfiguration::serialPort() const
 {
     if (!checkType(LinkType::Serial) || !_linkConf.args.size()) {
         return QString();
