@@ -3,6 +3,7 @@
 
 #include "filelink.h"
 #include "link.h"
+#include "linkconfiguration.h"
 #include "logger.h"
 #include "ping1dsimulationlink.h"
 #include "ping360simulationlink.h"
