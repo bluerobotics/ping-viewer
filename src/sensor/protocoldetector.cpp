@@ -150,7 +150,7 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
 
     port.setBaudRate(baudrate);
     port.setBreakEnabled(true);
-    QThread::usleep(500);
+    QThread::msleep(50);
     port.setBreakEnabled(false);
     QThread::msleep(11);
     port.write("UUU");
