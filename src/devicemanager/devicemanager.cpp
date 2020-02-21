@@ -29,8 +29,8 @@ DeviceManager::DeviceManager()
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName, const QString& detectorName)
 {
     for (int i {0}; i < _sensors[Connection].size(); i++) {
-        const auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>().get();
-        if (*vectorLinkConf == linkConf) {
+        const auto vectorLinkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
+        if (!vectorLinkConf.isNull() && *vectorLinkConf == linkConf) {
             qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:" << _sensors[Name][i] << linkConf
                                    << linkConf.argsAsConst();
             _sensors[Available][i] = true;
@@ -171,8 +171,8 @@ void DeviceManager::updateAvailableConnections(
     for (const auto& link : availableLinkConfigurations) {
         const bool sameSerialDevice = std::any_of(
             _sensors[Connection].cbegin(), _sensors[Connection].cend(), [&link](const QVariant& variantLink) {
-                const auto sensorLink = variantLink.value<QSharedPointer<LinkConfiguration>>().get();
-                qCDebug(DEVICEMANAGER) << "Device" << sensorLink
+                const auto sensorLink = variantLink.value<QSharedPointer<LinkConfiguration>>();
+                qCDebug(DEVICEMANAGER) << "Device" << *sensorLink
                                        << "already already provided by a different connection:" << link;
                 return link.serialPort() == sensorLink->serialPort() && link != *sensorLink;
             });
