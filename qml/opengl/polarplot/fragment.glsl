@@ -4,7 +4,9 @@
  */
 
 // Set float precision
-precision mediump float;
+#ifdef GL_ES
+    precision mediump float;
+#endif
 
 uniform sampler2D src;
 uniform float angle;
