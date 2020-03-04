@@ -85,7 +85,7 @@ public:
      * @return true when color in between color1 and color2
      * @return false when color is not between color1 and color2
      */
-    bool colorsInRange(const QColor& color, const QColor& color1, const QColor& color2) const;
+    static bool colorsInRange(const QColor& color, const QColor& color1, const QColor& color2);
 
     /**
      * @brief Get a QColor from a linear interpolation from color1 and color2 using the value
@@ -96,7 +96,7 @@ public:
      * @param color2
      * @return QColor
      */
-    QColor colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2) const;
+    static QColor colorLinearInterpolation(float value, const QGradientStop& color1, const QGradientStop& color2);
 
     /**
      * @brief Get value from color interpolation
@@ -108,5 +108,6 @@ public:
      * @param color2
      * @return float
      */
-    float valueLinearInterpolation(const QColor& color, const QGradientStop& color1, const QGradientStop& color2) const;
+    static float valueLinearInterpolation(
+        const QColor& color, const QGradientStop& color1, const QGradientStop& color2);
 };
