@@ -67,7 +67,7 @@ public:
      * @param category
      * @return uint
      */
-    Q_INVOKABLE uint getCategoryIndex(QString category);
+    Q_INVOKABLE uint getCategoryIndex(const QString& category);
 
     /**
      * @brief Register this class to handle the messages

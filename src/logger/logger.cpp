@@ -106,7 +106,7 @@ void Logger::registerCategory(const char* category)
     emit registeredCategoryChanged();
 }
 
-uint Logger::getCategoryIndex(QString category) { return _categoryIndexer[category]; }
+uint Logger::getCategoryIndex(const QString& category) { return _categoryIndexer[category]; }
 
 Logger* Logger::self()
 {
