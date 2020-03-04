@@ -7,7 +7,7 @@
 
 PING_LOGGING_CATEGORY(waterfallGradient, "ping.waterfallGradient")
 
-WaterfallGradient::WaterfallGradient(QString name, QVector<QColor> colors)
+WaterfallGradient::WaterfallGradient(const QString& name, const QVector<QColor>& colors)
     : _name(name)
 {
     setColors(colors);
