@@ -295,7 +295,7 @@ void WaterfallPlot::updateMouseColumnData()
     _mousePos.setY(_mousePos.y() * (_maxDepthToDrawInPixels - _minDepthToDrawInPixels) / height());
 
     // depth
-    _mouseDepth = _mousePos.y() / (float)_minPixelsPerMeter;
+    _mouseDepth = _mousePos.y() / _minPixelsPerMeter;
     emit mouseMove();
 
     const auto& depthAndConfidence = _DCRing[_displayWidth - widthPos];
