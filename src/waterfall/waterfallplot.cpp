@@ -228,7 +228,7 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
     }
 
     // Do up/downsampling
-    float factor = points.length() / ((float)(virtualHeight));
+    float factor = points.length() / static_cast<float>(virtualHeight);
 
     // Check if everything is correct before the draw
     if (floor(factor * virtualHeight) > points.length() || factor * virtualHeight < 0) {
