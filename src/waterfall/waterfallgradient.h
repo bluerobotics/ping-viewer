@@ -22,7 +22,7 @@ public:
      * @param name
      * @param colors
      */
-    WaterfallGradient(QString name = QString(), QVector<QColor> colors = QVector<QColor>());
+    WaterfallGradient(const QString& name = QString(), const QVector<QColor>& colors = QVector<QColor>());
 
     /**
      * @brief Construct a new Waterfall Gradient object with QFile
