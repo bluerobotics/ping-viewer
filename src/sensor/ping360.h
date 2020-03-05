@@ -388,7 +388,7 @@ public:
      *
      * @return float
      */
-    float profileFrequency() const { return messageFrequencies[Ping360Id::DEVICE_DATA].frequency; }
+    float profileFrequency() const;
 
     Q_PROPERTY(float profileFrequency READ profileFrequency NOTIFY messageFrequencyChanged)
 
@@ -603,6 +603,11 @@ private:
         uint16_t num_points = _viewerDefaultNumberOfSamples;
         uint16_t sample_period = _viewerDefaultSamplePeriod;
         uint16_t transmit_frequency = _viewerDefaultTransmitFrequency;
+
+        uint16_t start_angle = 0;
+        uint16_t end_angle = 400;
+        bool checkSector = false;
+
         bool valid = true;
 
         /**
@@ -617,6 +622,9 @@ private:
             valid = other.transmit_duration == transmit_duration && other.gain_setting == gain_setting
                 && other.num_points == num_points && other.sample_period == sample_period
                 && other.transmit_frequency == transmit_frequency;
+            if (checkSector && valid) {
+                valid = other.start_angle == start_angle && other.end_angle == end_angle;
+            }
             return valid;
         }
     } _sensorSettings;
@@ -625,6 +633,31 @@ private:
     uint16_t _angle = 200;
     QVector<double> _data;
     ///@}
+
+    /**
+     * @brief Struct to deal with profile request logic and sensor state
+     *
+     */
+    struct Ping360RequestStateStruct {
+        enum class Type {
+            /**
+             * @brief Legacy request logic
+             *  It's based in a sync ping-pong request-reply approach,
+             *  each request creates a single reply.
+             */
+            Legacy,
+
+            /**
+             * @brief Async request logic
+             *  It's based in async requests for the profiles message (DEVICE_DATA [2300]),
+             *  a request can create multiple replies.
+             *  New `auto_transmit` message.
+             */
+            AutoTransmitAsync,
+        };
+
+        Type type = Type::Legacy;
+    } _profileRequestLogic;
 
     // Number of messages to check for best baud rate
     // using Auto Baud Rate detection
@@ -746,6 +779,20 @@ private:
      *
      */
     void requestNextProfile();
+
+    /**
+     * @brief Legacy profile request
+     *  Used in firmwares 3.1
+     *
+     */
+    void legacyProfileRequest();
+
+    /**
+     * @brief Async profile request
+     *  Used in firmwares from 3.2
+     *
+     */
+    void asyncProfileRequest();
 
     /**
      * @brief Internal function used to use as a flash callback
