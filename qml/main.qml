@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
@@ -32,6 +33,8 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: checkPosition()
+
     // Save windows position and size
     Settings {
         property alias x: window.x
@@ -52,5 +55,15 @@ ApplicationWindow {
         var title = applicationName + " - " + versionInfo
 
         return  title
+    }
+
+    // Ensure that the application is inside the screen boundaries
+    function checkPosition() {
+        print(`Screen position: (${x},${y}, ${width}, ${height}) [0, 0, ${Screen.desktopAvailableWidth}, ${Screen.desktopAvailableHeight}]`)
+        if(y < -height || x < -width ||
+            y > Screen.desktopAvailableHeight || x > Screen.desktopAvailableWidth) {
+            x = (Screen.desktopAvailableWidth - width)/2
+            y = (Screen.desktopAvailableHeight - height)/2
+        }
     }
 }
