@@ -26,6 +26,7 @@ The GUI log files (.txt) contain debug log output from the Ping Viewer applicati
 #### Sensor Logs
 
 The sensor log files (.bin) contain all of the raw binary communications received from the device. These binary communications are in [Ping Protocol](https://github.com/bluerobotics/ping-protocol) format. The logs can be [replayed](replay-data.md) by Ping Viewer application.
+To know more about the binary structure, please check [binary log file structure](binary-structure).
 
 #### Pictures
 
