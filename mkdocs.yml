@@ -19,6 +19,7 @@ nav:
         - Application Information: application-information.md
         - Hotkeys and Shortcuts: hotkeys-and-shortcuts.md
         - Logging and User Files: logging-and-user-files.md
+            - Binary file structure: binary-structure.md
         - FAQ and Troubleshooting: faq-and-troubleshooting.md
     - Developers:
         - Build Instructions: build-instructions.md
