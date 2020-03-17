@@ -27,7 +27,8 @@ Item {
     TextMetrics {
         id: textMetrics
         font: textField.font
-        text: validator.top
+        property var enabled: validator === undefined && !(validator instanceof RegExpValidator)
+        text: enabled ? validator.top : ""
     }
 
     Label {
@@ -47,7 +48,7 @@ Item {
         topPadding: 0
         bottomPadding: 0
         horizontalAlignment: TextInput.AlignRight
-        property var inputWidth: validator === undefined ? contentWidth : textMetrics.width
+        property var inputWidth: textMetrics.enabled ? textMetrics.width : contentWidth
         background.implicitWidth: inputWidth + 2*leftPadding
         background.implicitHeight: contentHeight*1.1
         background.y: contentHeight
