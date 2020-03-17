@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls.Material 2.2
-import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.12
 
 Item {
     id: root
