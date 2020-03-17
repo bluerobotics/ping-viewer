@@ -51,7 +51,6 @@ Item {
         property var inputWidth: textMetrics.enabled ? textMetrics.width : contentWidth
         background.implicitWidth: inputWidth + 2*leftPadding
         background.implicitHeight: contentHeight*1.1
-        background.y: contentHeight
 
         // editingFinished() is only emitted when TextField has focus
         // That's why we are using accepted()
