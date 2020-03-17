@@ -52,6 +52,12 @@ Item {
         background.implicitWidth: inputWidth + 2*leftPadding
         background.implicitHeight: contentHeight*1.1
 
+        // We can't access background rectangle item before the item is complete
+        // It's necessary to wait for acceptableInput change
+        onAcceptableInputChanged: {
+            background.border.color = acceptableInput ? "green" : "red"
+        }
+
         // editingFinished() is only emitted when TextField has focus
         // That's why we are using accepted()
         onAccepted: {
