@@ -8,6 +8,7 @@ Item {
     property alias source: image.source
     property double angle: 0
     property bool selected: false
+    property alias color: colorOverlay.color
 
     Image {
         id: image
