@@ -21,6 +21,7 @@
 #include "notificationmanager.h"
 #include "ping.h"
 #include "ping360.h"
+#include "ping360helperservice.h"
 #include "polarplot.h"
 #include "settingsmanager.h"
 #include "stylemanager.h"
@@ -54,6 +55,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
     qmlRegisterSingletonType<NotificationManager>("NotificationManager", 1, 0, "NotificationManager",
             NotificationManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<Ping360HelperService>("Ping360HelperService", 1, 0, "Ping360HelperService",
+            Ping360HelperService::qmlSingletonRegister);
     qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager",
             SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<StyleManager>("StyleManager", 1, 0, "StyleManager", StyleManager::qmlSingletonRegister);
