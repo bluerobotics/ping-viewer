@@ -5,7 +5,7 @@
 #include <QThread>
 
 #include "abstractlinknamespace.h"
-#include "ping360ethernetfinder.h"
+#include "ping360helperservice.h"
 #include "protocoldetector.h"
 #include "sensor.h"
 
@@ -196,7 +196,6 @@ private:
 
     QSharedPointer<Sensor> _primarySensor;
     ProtocolDetector* _detector;
-    Ping360EthernetFinder _ping360EthernetFinder;
     QThread _detectorThread;
 
     // Model variables

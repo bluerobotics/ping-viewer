@@ -22,7 +22,7 @@ DeviceManager::DeviceManager()
     // We need to take care here to not erase configurations that are already connected
     // Also we should remove or set Connected to false if device is disconnected
     connect(_detector, &ProtocolDetector::availableLinksChanged, this, &DeviceManager::updateAvailableConnections);
-    connect(&_ping360EthernetFinder, &Ping360EthernetFinder::availableLinkFound, this,
+    connect(Ping360HelperService::self(), &Ping360HelperService::availableLinkFound, this,
         &DeviceManager::updateAvailableConnections);
 }
 
@@ -61,13 +61,13 @@ void DeviceManager::startDetecting()
 {
     qCDebug(DEVICEMANAGER) << "Start protocol detector service.";
     _detectorThread.start();
-    _ping360EthernetFinder.start();
+    Ping360HelperService::self()->startBroadcastService();
 }
 
 void DeviceManager::stopDetecting()
 {
     qCDebug(DEVICEMANAGER) << "Stop protocol detector service.";
-    _ping360EthernetFinder.stop();
+    Ping360HelperService::self()->stopBroadcastService();
     _detector->stop();
     _detectorThread.quit();
 }
