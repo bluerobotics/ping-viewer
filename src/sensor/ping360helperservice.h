@@ -1,9 +1,15 @@
 #pragma once
 
+#include <QLoggingCategory>
 #include <QTimer>
 #include <QUdpSocket>
 
 #include "linkconfiguration.h"
+
+Q_DECLARE_LOGGING_CATEGORY(PING360HELPERSERVICE)
+
+class QJSEngine;
+class QQmlEngine;
 
 /**
  * @brief This class will scan the network for Ping360 devices
@@ -21,20 +27,30 @@
     When such a message is received, we emit a availableLinkFound() with the
     found device.
  */
-class Ping360EthernetFinder : public QObject {
+class Ping360HelperService : public QObject {
     Q_OBJECT
 public:
     /**
-     * @brief Construct a new Ping360 Ethernet Finder object
+     * @brief Return Ping360HelperService pointer
      *
+     * @return Ping360HelperService*
      */
-    Ping360EthernetFinder();
+    static Ping360HelperService* self();
+
+    /**
+     * @brief Return a pointer of this singleton to the qml register function
+     *
+     * @param engine
+     * @param scriptEngine
+     * @return QObject*
+     */
+    static QObject* qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine);
 
     /**
      * @brief Starts broadcasting the discovery message every second
      *
      */
-    void start();
+    void startBroadcastService();
 
     /**
      * @brief Broadcasts one UDP "Discovery" packet
@@ -46,10 +62,24 @@ public:
      * @brief Stops broadcasting the discovery message
      *
      */
-    void stop();
+    void stopBroadcastService();
+
+    /**
+     * @brief Configure device under specific IP as DHCP client
+     *
+     * @param ip
+     */
+    Q_INVOKABLE void setDHCPServer(const QString& ip);
+
+    /**
+     * @brief Configure device under specific IP as static IP client
+     *
+     * @param ip
+     * @param staticIp
+     */
+    Q_INVOKABLE void setStaticIP(const QString& ip, const QString& staticIp);
 
 signals:
-
     void availableLinkFound(const QVector<LinkConfiguration>& availableLinkConfigurations, const QString& detector);
 
 private slots:
@@ -61,7 +91,13 @@ private slots:
     void processBroadcastResponses();
 
 private:
-    Q_DISABLE_COPY(Ping360EthernetFinder)
+    Q_DISABLE_COPY(Ping360HelperService)
+
+    /**
+     * @brief Construct a new Ping360 Helper Service
+     *
+     */
+    Ping360HelperService();
 
     QUdpSocket _broadcastSocket;
     QTimer _broadcastTimer;
