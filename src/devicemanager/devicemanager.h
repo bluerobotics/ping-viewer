@@ -149,6 +149,12 @@ public:
     QVariant primarySensor() const { return QVariant::fromValue(_primarySensor.get()); }
     Q_PROPERTY(QVariant primarySensor READ primarySensor NOTIFY primarySensorChanged)
 
+    /**
+     * @brief Remove all found items and create a clear model once again
+     *
+     */
+    Q_INVOKABLE void clear();
+
 signals:
     void countChanged();
     void sensorChanged(int objIndex);
