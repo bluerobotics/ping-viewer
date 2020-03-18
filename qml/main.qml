@@ -25,10 +25,18 @@ ApplicationWindow {
         id: mainPage
         anchors.fill: parent
 
+        // Popups
         DeviceManagerViewer {
             id: deviceManagerViewer
             width: parent.width/2
             height: parent.height*0.9
+            anchors.centerIn: parent
+        }
+
+        Ping360EthernetConfiguration {
+            id: ping360EthernetConfiguration
+            width: 300
+            height: 280
             anchors.centerIn: parent
         }
     }
