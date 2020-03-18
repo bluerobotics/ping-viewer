@@ -5,6 +5,7 @@ STATIC
     ping.cpp
     ping360.cpp
     ping360ethernetfinder.cpp
+    ping360asciiprotocol.cpp
     pingparserext.cpp
     pingsensor.cpp
     protocoldetector.cpp
