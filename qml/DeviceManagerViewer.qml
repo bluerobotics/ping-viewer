@@ -4,7 +4,11 @@ import QtQuick.Controls.Material 2.1
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 
+import AbstractLinkNamespace 1.0
 import DeviceManager 1.0
+import LinkConfiguration 1.0
+import PingEnumNamespace 1.0
+import StyleManager 1.0
 
 PingPopup {
     id: root
@@ -212,12 +216,56 @@ PingPopup {
                             text: connection.typeToString() + " " + connection.createConfString()
                         }
 
+                        // Use same layout if item is not visible, to have a proper alignment
+                        Item {
+                            height: parent.height
+                            width: height
+                            PingImage {
+                                id: iconConfiguration
+                                source: StyleManager.settingsIcon()
+                                anchors.fill: parent
+                                selected: deviceConfigureMouseArea.containsMouse
+                                Layout.alignment: Qt.AlignRight
+
+                                /**
+                                 * We should only be visible when running under UDP connections with Ping360 and
+                                 * not using bridges as an companion interface, since we can't ensure if it's a serial
+                                 * connection
+                                 */
+                                visible: {
+                                    return connection.deviceType() == PingEnumNamespace.PingDeviceType.PING360 &&
+                                        connection.type() == AbstractLinkNamespace.Udp &&
+                                        !connection.isCompanionPort()
+                                }
+
+                                MouseArea {
+                                    id: deviceConfigureMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onClicked: {
+                                        root.close()
+                                        ping360EthernetConfiguration.configureConnection(connection)
+                                    }
+                                }
+                            }
+                        }
+
                         StatusIndicator {
                             Layout.preferredHeight: 20
                             Layout.preferredWidth: 20
                             Layout.rightMargin: 5
                             Layout.alignment: Qt.AlignRight
-                            color: available ? "green" : "red"
+                            color: {
+                                if (!available) {
+                                    return "red";
+                                }
+
+                                if (!connection.isValid()) {
+                                    return "yellow";
+                                }
+
+                                return "green";
+                            }
                             active: true
 
                             MouseArea {
@@ -225,7 +273,17 @@ PingPopup {
                                 hoverEnabled: true
                                 ToolTip {
                                     visible: parent.containsMouse
-                                    text: available ? "Device available." : "Device busy or not available."
+                                    text: {
+                                        if (!available) {
+                                            return "Device busy or not available."
+                                        }
+
+                                        if (!connection.isValid()) {
+                                            return connection.errorToString()
+                                        }
+
+                                        return "Device available."
+                                    }
                                 }
                             }
                         }
