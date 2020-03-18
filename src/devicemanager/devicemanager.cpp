@@ -167,6 +167,16 @@ void DeviceManager::updateAvailableConnections(
     }
 }
 
+void DeviceManager::clear()
+{
+    beginResetModel();
+    for (const auto category : _roleNames.keys()) {
+        _sensors[category].clear();
+    }
+    endResetModel();
+    emit countChanged();
+}
+
 QObject* DeviceManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
 {
     Q_UNUSED(engine)
