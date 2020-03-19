@@ -282,6 +282,13 @@ public:
     };
 
     /**
+     * @brief Check if UDP port is a valid companion port
+     *
+     * @return bool
+     */
+    Q_INVOKABLE bool isCompanionPort() const;
+
+    /**
      * @brief Will return argument with UDP host name
      *
      * @return QString
@@ -314,6 +321,7 @@ signals:
     void configurationChanged();
 
 private:
+    static const QVector<int> _companionPorts;
     static const QMap<Error, QString> _errorMap;
     LinkConf _linkConf;
 };

@@ -2,6 +2,8 @@
 
 #include "linkconfiguration.h"
 
+const QVector<int> LinkConfiguration::_companionPorts {9090, 9092};
+
 const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
     {NoErrors, "No link configuration errors."},
     {MissingConfiguration, "Warning: Link configuration is missing."},
@@ -117,6 +119,15 @@ int LinkConfiguration::serialBaudrate() const
     }
 
     return _linkConf.args[1].toInt();
+}
+
+bool LinkConfiguration::isCompanionPort() const
+{
+    if (!isValid() || !checkType(LinkType::Udp)) {
+        return false;
+    }
+
+    return _companionPorts.contains(udpPort());
 }
 
 QString LinkConfiguration::udpHost() const
