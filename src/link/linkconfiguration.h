@@ -229,7 +229,7 @@ public:
      *
      * @return int
      */
-    Q_INVOKABLE int serialBaudrate();
+    Q_INVOKABLE int serialBaudrate() const;
 
     /**
      * @brief Set the Type object
@@ -286,14 +286,14 @@ public:
      *
      * @return QString
      */
-    QString udpHost();
+    QString udpHost() const;
 
     /**
      * @brief Will return port used in UDP connection
      *
      * @return int
      */
-    int udpPort();
+    int udpPort() const;
 
     /**
      * @brief Copy operator

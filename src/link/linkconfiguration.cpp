@@ -110,7 +110,7 @@ QString LinkConfiguration::serialPort() const
     return _linkConf.args[0];
 }
 
-int LinkConfiguration::serialBaudrate()
+int LinkConfiguration::serialBaudrate() const
 {
     if (!checkType(LinkType::Serial) || _linkConf.args.size() < 1) {
         return 0;
@@ -119,7 +119,7 @@ int LinkConfiguration::serialBaudrate()
     return _linkConf.args[1].toInt();
 }
 
-QString LinkConfiguration::udpHost()
+QString LinkConfiguration::udpHost() const
 {
     if (!checkType(LinkType::Udp) || !_linkConf.args.size()) {
         return QString();
@@ -128,7 +128,7 @@ QString LinkConfiguration::udpHost()
     return _linkConf.args[0];
 }
 
-int LinkConfiguration::udpPort()
+int LinkConfiguration::udpPort() const
 {
     if (!checkType(LinkType::Udp) || _linkConf.args.size() < 1) {
         return 0;
