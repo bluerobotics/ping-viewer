@@ -44,7 +44,9 @@ public:
         InvalidArgsNumber,
         ArgsAreEmpty,
         InvalidUrl,
+        InvalidSubnet,
     };
+    Q_ENUM(Error)
 
     /**
      * @brief Construct a new Link Configuration object
@@ -179,7 +181,7 @@ public:
      *
      * @return Error
      */
-    Error error() const;
+    Q_INVOKABLE LinkConfiguration::Error error() const;
 
     /**
      * @brief Convert error number in a friendly human message
@@ -194,7 +196,7 @@ public:
      *
      * @return QString
      */
-    QString errorToString() const { return errorToString(error()); }
+    Q_INVOKABLE QString errorToString() const { return errorToString(error()); }
 
     /**
      * @brief Check if configuration is correct
@@ -237,6 +239,14 @@ public:
      * @param type
      */
     void setType(const LinkType& type) { _linkConf.type = type; };
+
+    /**
+     * @brief Check if IP is subnet
+     *
+     * @return true
+     * @return false if IP is not in the same subnet as the computer or is not an ethernet connection
+     */
+    bool isInSubnet() const;
 
     /**
      * @brief Return link configuration type
