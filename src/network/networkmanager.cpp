@@ -2,8 +2,10 @@
 #include "logger.h"
 
 #include <QDebug>
+#include <QHostAddress>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
+#include <QNetworkInterface>
 #include <QNetworkReply>
 #include <QQmlEngine>
 #include <QTemporaryFile>
@@ -71,6 +73,25 @@ void NetworkManager::download(const QUrl& url, std::function<void(QString)> func
         temporaryFile.setAutoRemove(false);
         function(temporaryFile.fileName());
     });
+}
+
+bool NetworkManager::isIpInSubnet(const QString& ip)
+{
+    const QHostAddress testAddress {ip};
+    if (testAddress.protocol() != QAbstractSocket::IPv4Protocol) {
+        qCWarning(NETWORKMANAGER) << "Invalid network interface for ip:" << testAddress;
+        return false;
+    }
+
+    for (const auto& address : QNetworkInterface::allAddresses()) {
+        // Remove the last value of the IP address
+        const bool sameSubnet = (address.toIPv4Address() & 0xffffff00) == (testAddress.toIPv4Address() & 0xffffff00);
+        if (sameSubnet) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 QObject* NetworkManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)

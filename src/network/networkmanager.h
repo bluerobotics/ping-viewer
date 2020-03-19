@@ -40,6 +40,15 @@ public:
     static void download(const QUrl& url, std::function<void(QString)> function);
 
     /**
+     * @brief Check if IP address is a valid IP of the host network interfaces
+     *
+     * @param ip
+     * @return true
+     * @return false
+     */
+    static bool isIpInSubnet(const QString& ip);
+
+    /**
      * @brief Return a pointer of this singleton to the qml register function
      *
      * @param engine
