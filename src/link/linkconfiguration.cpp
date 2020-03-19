@@ -1,6 +1,7 @@
 #include <QUrl>
 
 #include "linkconfiguration.h"
+#include "networkmanager.h"
 
 const QVector<int> LinkConfiguration::_companionPorts {9090, 9092};
 
@@ -13,6 +14,7 @@ const QMap<LinkConfiguration::Error, QString> LinkConfiguration::_errorMap {
     {InvalidArgsNumber, "Link configuration have a invalid number of arguments"},
     {ArgsAreEmpty, "Link configuration arguments are empty."},
     {InvalidUrl, "Url not formatted properly."},
+    {InvalidSubnet, "IP is not in a reachable subnet. Configure your computer network settings."},
 };
 
 LinkConfiguration::LinkConfiguration(const QString& configurationString)
@@ -61,11 +63,6 @@ LinkConfiguration::Error LinkConfiguration::error() const
         return InvalidType;
     }
 
-    // Name is not necessary to do a connection
-    if (!_linkConf.name.isEmpty()) {
-        return MissingConfiguration;
-    }
-
     // Simulation does not need args
     // TODO: rework this check, check linkconfiguration capabilities or add new ones for this case
     if (isSimulation() && !_linkConf.args.length()) {
@@ -89,13 +86,25 @@ LinkConfiguration::Error LinkConfiguration::error() const
         }
     }
 
+    // Check for issues in UDP configuration
     if (_linkConf.type == LinkType::Udp) {
+        // If is not in the same subnet
+        if (!isInSubnet()) {
+            return InvalidSubnet;
+        }
+
+        // If the address is invalid
         if (!QUrl(_linkConf.args[0]).isValid()) {
             return InvalidUrl;
         }
     }
 
-    return NoErrors;
+    // Name is not necessary to do a connection
+    if (!_linkConf.name.isEmpty()) {
+        return MissingConfiguration;
+    }
+
+    return NoType;
 }
 
 void LinkConfiguration::setArgs(const QStringList& args)
@@ -147,6 +156,8 @@ int LinkConfiguration::udpPort() const
 
     return _linkConf.args[1].toInt();
 }
+
+bool LinkConfiguration::isInSubnet() const { return NetworkManager::isIpInSubnet(udpHost()); }
 
 bool operator==(const LinkConfiguration& first, const LinkConfiguration& second)
 {
