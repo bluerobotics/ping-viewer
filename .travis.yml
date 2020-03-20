@@ -3,8 +3,16 @@ language: minimal
 git:
   depth: 1
 
+python: 3.8
+addons:
+  apt:
+    update: true
+    packages:
+      - python3-pip
+      - python3-setuptools
+
 install:
-  - sudo pip install mkdocs-material
+  - pip3 install mkdocs-material --user
   - gem install html-proofer
 
 script:
