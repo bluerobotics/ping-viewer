@@ -104,7 +104,7 @@ LinkConfiguration::Error LinkConfiguration::error() const
         return MissingConfiguration;
     }
 
-    return NoType;
+    return NoErrors;
 }
 
 void LinkConfiguration::setArgs(const QStringList& args)
