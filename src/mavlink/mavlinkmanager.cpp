@@ -55,7 +55,14 @@ void MavlinkManager::parseData(const QByteArray data)
     }
 }
 
-void MavlinkManager::sendHeartbeatMessage() { _linkIn->self()->write(_heartbeatMessage); }
+void MavlinkManager::sendHeartbeatMessage()
+{
+    if (_linkIn) {
+        _linkIn->self()->write(_heartbeatMessage);
+    } else {
+        qCWarning(MAVLINKMANAGER) << "No connection link to communicate.";
+    }
+}
 
 QObject* MavlinkManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
 {
