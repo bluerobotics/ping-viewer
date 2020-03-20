@@ -35,8 +35,8 @@ public:
      * @brief Link configuration errors
      *
      */
-    enum Error {
-        MissingConfiguration, // This can be used in future for warnings and not real errors
+    enum Error : int {
+        MissingConfiguration = -1, // This can be used in future for warnings and not real errors
         NoErrors = 0,
         NoType,
         InvalidType,
