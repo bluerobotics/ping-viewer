@@ -15,7 +15,7 @@ MavlinkManager::MavlinkManager()
 
     // This is our default udpin connection link
     // TODO: Allow the user to configure this
-    connect({LinkType::Udp, {"192.168.2.2", "14660"}});
+    connect({LinkType::Udp, {"192.168.2.2", "14660"}, "MAVLinkManager"});
 
     QObject::connect(&_heartbeatTimer, &QTimer::timeout, this, &MavlinkManager::sendHeartbeatMessage);
     _heartbeatTimer.start(4000);
