@@ -100,7 +100,7 @@ LinkConfiguration::Error LinkConfiguration::error() const
     }
 
     // Name is not necessary to do a connection
-    if (!_linkConf.name.isEmpty()) {
+    if (_linkConf.name.isEmpty()) {
         return MissingConfiguration;
     }
 
