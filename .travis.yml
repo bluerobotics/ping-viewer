@@ -1,6 +1,7 @@
 dist: xenial
-
 language: minimal
+git:
+  depth: 1
 
 install:
   - sudo pip install mkdocs-material
