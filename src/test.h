@@ -4,8 +4,7 @@
  * @brief Test class to test basic functionalities
  *
  */
-class Test: public QObject
-{
+class Test : public QObject {
     Q_OBJECT
 private slots:
     /**
