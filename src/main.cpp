@@ -1,13 +1,13 @@
 #include <QApplication>
+#include <QDebug>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickStyle>
-#include <QDebug>
 #include <QRegularExpression>
 
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
-    #include <KCrash>
+#include <KCrash>
 #endif
 
 #include "abstractlink.h"
@@ -32,7 +32,7 @@ Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     // Start logger ASAP
     Logger::installHandler();
@@ -49,22 +49,22 @@ int main(int argc, char *argv[])
     qRegisterMetaType<PingEnumNamespace::PingDeviceType>();
     qRegisterMetaType<PingEnumNamespace::PingMessageId>();
 
-    qmlRegisterSingletonType<DeviceManager>("DeviceManager", 1, 0, "DeviceManager",
-                                            DeviceManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<DeviceManager>(
+        "DeviceManager", 1, 0, "DeviceManager", DeviceManager::qmlSingletonRegister);
     qmlRegisterSingletonType<FileManager>("FileManager", 1, 0, "FileManager", FileManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Logger>("Logger", 1, 0, "Logger", Logger::qmlSingletonRegister);
-    qmlRegisterSingletonType<NotificationManager>("NotificationManager", 1, 0, "NotificationManager",
-            NotificationManager::qmlSingletonRegister);
-    qmlRegisterSingletonType<Ping360HelperService>("Ping360HelperService", 1, 0, "Ping360HelperService",
-            Ping360HelperService::qmlSingletonRegister);
-    qmlRegisterSingletonType<SettingsManager>("SettingsManager", 1, 0, "SettingsManager",
-            SettingsManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<NotificationManager>(
+        "NotificationManager", 1, 0, "NotificationManager", NotificationManager::qmlSingletonRegister);
+    qmlRegisterSingletonType<Ping360HelperService>(
+        "Ping360HelperService", 1, 0, "Ping360HelperService", Ping360HelperService::qmlSingletonRegister);
+    qmlRegisterSingletonType<SettingsManager>(
+        "SettingsManager", 1, 0, "SettingsManager", SettingsManager::qmlSingletonRegister);
     qmlRegisterSingletonType<StyleManager>("StyleManager", 1, 0, "StyleManager", StyleManager::qmlSingletonRegister);
     qmlRegisterSingletonType<Util>("Util", 1, 0, "Util", Util::qmlSingletonRegister);
 
     // Normal register
-    qmlRegisterUncreatableType<AbstractLink>("AbstractLink", 1, 0, "AbstractLink",
-            "Link abstraction class can't be created.");
+    qmlRegisterUncreatableType<AbstractLink>(
+        "AbstractLink", 1, 0, "AbstractLink", "Link abstraction class can't be created.");
     qmlRegisterType<Flasher>("Flasher", 1, 0, "Flasher");
     qmlRegisterType<GradientScale>("GradientScale", 1, 0, "GradientScale");
     qmlRegisterType<LinkConfiguration>("LinkConfiguration", 1, 0, "LinkConfiguration");
@@ -73,15 +73,11 @@ int main(int argc, char *argv[])
     qmlRegisterType<PolarPlot>("PolarPlot", 1, 0, "PolarPlot");
     qmlRegisterType<WaterfallPlot>("WaterfallPlot", 1, 0, "WaterfallPlot");
 
-    qmlRegisterUncreatableMetaObject(
-        AbstractLinkNamespace::staticMetaObject,
-        "AbstractLinkNamespace", 1, 0, "AbstractLinkNamespace", "Namespace for LinkType enum access from QML."
-    );
+    qmlRegisterUncreatableMetaObject(AbstractLinkNamespace::staticMetaObject, "AbstractLinkNamespace", 1, 0,
+        "AbstractLinkNamespace", "Namespace for LinkType enum access from QML.");
 
-    qmlRegisterUncreatableMetaObject(
-        PingEnumNamespace::staticMetaObject,
-        "PingEnumNamespace", 1, 0, "PingEnumNamespace", "Namespace for Ping protocol enums access from QML."
-    );
+    qmlRegisterUncreatableMetaObject(PingEnumNamespace::staticMetaObject, "PingEnumNamespace", 1, 0,
+        "PingEnumNamespace", "Namespace for Ping protocol enums access from QML.");
 
     // DPI support and HiDPI pixmaps
     // Attributes must be set before QCoreApplication is created.
@@ -104,9 +100,9 @@ int main(int argc, char *argv[])
     // Function used in CI to test runtime errors
     // After 5 seconds, check if qml engine was loaded
 #ifdef AUTO_KILL
-    QTimer *timer = new QTimer();
+    QTimer* timer = new QTimer();
     QObject::connect(timer, &QTimer::timeout, [&app, &engine]() {
-        if(engine.rootObjects().isEmpty()) {
+        if (engine.rootObjects().isEmpty()) {
             printf("Application failed to load GUI!");
             app.exit(-1);
         } else {
