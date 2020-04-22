@@ -51,6 +51,22 @@ ColumnLayout {
                 }
 
                 CheckBox {
+                    id: alwaysOnTopCB
+                    text: "Enable Always-On-Top mode"
+                    checked: SettingsManager.alwaysOnTop
+                    Layout.columnSpan: 5
+                    Layout.fillWidth: true
+                    onCheckedChanged: {
+                        if (checked) {
+                            window.flags |= Qt.WindowStaysOnTopHint
+                        } else {
+                            window.flags &= ~Qt.WindowStaysOnTopHint
+                        }
+                        SettingsManager.alwaysOnTop = checked
+                    }
+                }
+
+                CheckBox {
                     id: replayChB
                     text: "Enable replay menu"
                     checked: SettingsManager.replayMenu
