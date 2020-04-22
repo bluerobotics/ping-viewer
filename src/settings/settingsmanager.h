@@ -117,6 +117,7 @@ private:
      */
 
     // Everything after this line should be AUTO_PROPERTY
+    AUTO_PROPERTY(uint, applicationOpacityIndex, 0)
     AUTO_PROPERTY(bool, alwaysOnTop, false)
     AUTO_PROPERTY(bool, debugMode, false)
     AUTO_PROPERTY(uint, enabledCategories, 0)
