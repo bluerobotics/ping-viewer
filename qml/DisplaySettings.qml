@@ -66,6 +66,23 @@ ColumnLayout {
                     }
                 }
 
+                Label {
+                    text: "Opacity:"
+                }
+
+                ComboBox {
+                    id: opacityCB
+                    Layout.columnSpan: 4
+                    Layout.fillWidth: true
+                    currentIndex: SettingsManager.applicationOpacityIndex
+                    model: [100, 90, 80, 70]
+                    displayText: currentText + "%"
+                    onCurrentTextChanged: {
+                        window.opacity = currentText / 100.0
+                        SettingsManager.applicationOpacityIndex = currentIndex
+                    }
+                }
+
                 CheckBox {
                     id: replayChB
                     text: "Enable replay menu"
