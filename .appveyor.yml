@@ -15,7 +15,7 @@ environment:
       QT_LINKAGE: static
       COVERITY_BUILD_CANDIDATE: True
       QTDIR: C:\Qt\%QT_VERSION%\msvc2017_64
-      OPENSSLDIR: C:\OpenSSL-Win64
+      OPENSSLDIR: C:\OpenSSL-v11-Win64\bin
       VCLIBS: VCRUNTIME140.dll MSVCP140.dll ucrtbased.dll
 
 configuration:
