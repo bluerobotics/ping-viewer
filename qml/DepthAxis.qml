@@ -143,7 +143,6 @@ Item {
         onWidthChanged: requestPaint()
         visible: depth_mm ? depth_mm > 0 : false
         onPaint: {
-            print(width, height)
             var ctx = getContext("2d")
 
             ctx.fillStyle = "red"
