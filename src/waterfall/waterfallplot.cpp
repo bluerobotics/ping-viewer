@@ -15,8 +15,8 @@ uint16_t WaterfallPlot::_displayWidth = 500;
 
 WaterfallPlot::WaterfallPlot(QQuickItem* parent)
     : Waterfall(parent)
-    , _currentDrawIndex(_displayWidth)
-    , _image(2048, 2500, QImage::Format_RGBA8888)
+    , _currentDrawIndex(0)
+    , _image(_displayWidth, 2000, QImage::Format_RGBA8888)
     , _maxDepthToDrawInPixels(0)
     , _minDepthToDrawInPixels(0)
     , _mouseDepth(0)
@@ -50,20 +50,13 @@ void WaterfallPlot::paint(QPainter* painter)
         _painter = painter;
     }
 
-    static uint16_t first;
-
-    if (_currentDrawIndex < _displayWidth) {
-        first = 0;
-    } else {
-        first = _currentDrawIndex - _displayWidth;
-    }
-
     // http://blog.qt.io/blog/2006/05/13/fast-transformed-pixmapimage-drawing/
     pix = QPixmap::fromImage(_image, Qt::NoFormatConversion);
     // Code for debug, draw the entire waterfall
-    //_painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
-    _painter->drawPixmap(QRect(0, 0, width(), height()), pix,
-        QRect(first, _minDepthToDrawInPixels, _displayWidth, _maxDepthToDrawInPixels));
+    _painter->drawPixmap(_painter->viewport(), pix, QRect(0, 0, _image.width(), _image.height()));
+
+    emit drawHorizontalRatioChanged();
+    emit drawVerticalRatioChanged();
 }
 
 void WaterfallPlot::setImage(const QImage& image)
@@ -137,6 +130,10 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
     // This ring vector will store variables of the last n samples for user access
     _DCRing.append({initPoint, length, confidence, distance});
 
+    // Limit currentDrawIndex to be inside our image max width
+    _currentDrawIndex++;
+    _currentDrawIndex %= _displayWidth;
+
     /**
      * @brief Get lastMaxDepth from the last n samples
      */
@@ -183,7 +180,6 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
         QPainter painter(&_image);
         // Clean everything and start from zero
         painter.fillRect(_image.rect(), Qt::transparent);
-        // QRect(0, 0, _image.width(), _image.height()*dynamicPixelsPerMeterScalar), old
         painter.drawImage(dst, old, src);
         painter.end();
     };
@@ -216,16 +212,6 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
     _maxDepthToDrawInPixels = (_maxDepthToDraw - _minDepthToDraw) * _minPixelsPerMeter * dynamicPixelsPerMeterScalar;
     int virtualFloor = initPoint * _minPixelsPerMeter;
     int virtualHeight = length * _minPixelsPerMeter * dynamicPixelsPerMeterScalar;
-
-    // Copy tail to head
-    // TODO: can we get even better and allocate just once at initialization? ie circular buffering
-    if (_currentDrawIndex >= _image.width()) {
-        redrawImage(QRect(0, 0, _displayWidth, _image.height()),
-            QRect(old.width() - _displayWidth, 0, _displayWidth, old.height()));
-
-        // Start painting from the beginning
-        _currentDrawIndex = _displayWidth;
-    }
 
     // Do up/downsampling
     float factor = points.length() / static_cast<float>(virtualHeight);
@@ -273,7 +259,10 @@ void WaterfallPlot::draw(const QVector<double>& points, float confidence, float 
             _image.setPixelColor(_currentDrawIndex, i + virtualFloor, valueToRGB(points[factor * i]));
         }
     }
-    _currentDrawIndex++; // This can get to be an issue at very fast update rates from ping
+
+    for (int i = virtualHeight; i < _image.height(); i++) {
+        _image.setPixelColor(_currentDrawIndex, i, Qt::transparent);
+    }
 
     // Fix max update in 20Hz at max
     if (!_updateTimer->isActive()) {
