@@ -497,10 +497,10 @@ private:
         {{"3_gainIndex"},
             {0, 0, 6, std::bind(&Ping::gain_setting, this), [this](long long int value) { set_gain_setting(value); }}},
         {{"3_lengthDistance"},
-            {5000, 500, 70000, std::bind(&Ping::length_mm, this),
+            {5000, 500, 120000, std::bind(&Ping::length_mm, this),
                 [this](long long int value) { set_length_mm(value); }}},
         {{"3_startDistance"},
-            {0, 0, 70000, std::bind(&Ping::start_mm, this), [this](long long int value) { set_start_mm(value); }}},
+            {0, 0, 120000, std::bind(&Ping::start_mm, this), [this](long long int value) { set_start_mm(value); }}},
     };
 
     struct messageStatus {
