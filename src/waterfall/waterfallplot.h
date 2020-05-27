@@ -45,7 +45,15 @@ public:
      *
      * @param maxDepth
      */
-    Q_INVOKABLE void setWaterfallMaxDepth(float maxDepth);
+    void setMaxDepth(float maxDepth);
+
+    /**
+     * @brief Get the waterfall max depth in meters
+     *
+     * @return float
+     */
+    float maxDepth() const { return _waterfallDepth; };
+    Q_PROPERTY(float maxDepth READ maxDepth WRITE setMaxDepth)
 
     /**
      * @brief Draw a list of points in the waterfall
