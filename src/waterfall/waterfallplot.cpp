@@ -24,7 +24,7 @@ WaterfallPlot::WaterfallPlot(QQuickItem* parent)
     , _updateTimer(new QTimer(this))
 {
     // This is the max depth that ping returns
-    setWaterfallMaxDepth(70);
+    setMaxDepth(70);
     _DCRing.fill({static_cast<float>(_image.height()), 0, 0, 0}, _displayWidth);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -37,7 +37,7 @@ WaterfallPlot::WaterfallPlot(QQuickItem* parent)
     connect(this, &Waterfall::mousePosChanged, this, &WaterfallPlot::updateMouseColumnData);
 }
 
-void WaterfallPlot::setWaterfallMaxDepth(float maxDepth)
+void WaterfallPlot::setMaxDepth(float maxDepth)
 {
     _waterfallDepth = maxDepth;
     _minPixelsPerMeter = _image.height() / _waterfallDepth;
