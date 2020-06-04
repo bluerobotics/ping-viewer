@@ -13,6 +13,7 @@ echob() {
 
 echob "Running style script:"
 ${scriptpath}/clang-format.sh
+qmlformat -i ${projectpath}/qml/*.qml
 if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
     echob "Style error ! Run clang-format in tools. ($ ./tools/clang-format.sh)"
     git diff | cat
