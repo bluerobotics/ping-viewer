@@ -1,8 +1,8 @@
 import QtQuick 2.1
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Styles 1.0
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.1
 
 RowLayout {
     id: root
@@ -19,33 +19,30 @@ RowLayout {
 
     // Do the necessary logic if a model is used
     onModelValueChanged: {
-        if(model == undefined || model[value] == Math.round(modelValue)) {
-            return
-        }
+        if (model == undefined || model[value] == Math.round(modelValue))
+            return ;
 
         // Get something that is closer to an item in our model
         // E.g: New value is 0.99, select the value in the model that is closer [1]
         var closeItem = {
-            index: 0,
-            distance: Number.MAX_SAFE_INTEGER
-        }
-
-        for(var i in model) {
-            if(typeof(closeItem.value) != 'number') {
-                if(model[i] == Math.round(modelValue)) {
-                    closeItem.index = i
-                    break
+            "index": 0,
+            "distance": Number.MAX_SAFE_INTEGER
+        };
+        for (var i in model) {
+            if (typeof (closeItem.value) != "number") {
+                if (model[i] == Math.round(modelValue)) {
+                    closeItem.index = i;
+                    break;
                 }
             } else {
-                if(Math.abs(model[i] - modelValue) < closeItem.distance) {
-                    closeItem.index = i
-                    closeItem.distance = Math.abs(model[i] - modelValue)
+                if (Math.abs(model[i] - modelValue) < closeItem.distance) {
+                    closeItem.index = i;
+                    closeItem.distance = Math.abs(model[i] - modelValue);
                 }
             }
         }
-
         // Update the new value
-        root.value = closeItem.index
+        root.value = closeItem.index;
     }
 
     Binding {
@@ -60,11 +57,6 @@ RowLayout {
         value: root.value
     }
 
-    Binding on modelValue {
-        when: root.value !== undefined && model !== undefined
-        value: model[root.value]
-    }
-
     Label {
         horizontalAlignment: Text.AlignRight
         wrapMode: Text.Wrap
@@ -75,6 +67,7 @@ RowLayout {
 
     Slider {
         id: sliderControl
+
         Layout.fillWidth: true
         Layout.minimumWidth: 300
         Layout.minimumHeight: 50
@@ -84,10 +77,9 @@ RowLayout {
         to: root.to
         enabled: visible
 
-        background:
-            Rectangle {
+        background: Rectangle {
             x: sliderControl.leftPadding
-            y: sliderControl.topPadding + sliderControl.availableHeight/2 - height/2
+            y: sliderControl.topPadding + sliderControl.availableHeight / 2 - height / 2
             implicitWidth: sliderControl.availableWidth
             implicitHeight: 1
             width: sliderControl.availableWidth
@@ -96,26 +88,33 @@ RowLayout {
 
             Repeater {
                 id: internalTicks
+
                 model: ticksNumber + 1
 
                 delegate: Rectangle {
                     id: tick
+
                     width: 1
-                    height: parent.implicitHeight*6
-                    x: index*(sliderControl.availableWidth - sliderControl.handle.width)/root.ticksNumber + sliderControl.handle.width/2
+                    height: parent.implicitHeight * 6
+                    x: index * (sliderControl.availableWidth - sliderControl.handle.width) / root.ticksNumber + sliderControl.handle.width / 2
                     y: parent.implicitHeight
                     color: Material.accent
 
                     Text {
                         id: tickText
+
                         anchors.top: tick.bottom
-                        text: root.model ? root.model[index] : ((index/root.ticksNumber)*(sliderControl.to - sliderControl.from) + sliderControl.from).toFixed(0)
+                        text: root.model ? root.model[index] : ((index / root.ticksNumber) * (sliderControl.to - sliderControl.from) + sliderControl.from).toFixed(0)
                         color: Material.accent
-                        x: -width/2
+                        x: -width / 2
                     }
+
                 }
+
             }
+
         }
+
     }
 
     Label {
@@ -126,6 +125,7 @@ RowLayout {
 
     SpinBox {
         id: spinBox
+
         Layout.minimumWidth: 150
         Layout.maximumWidth: 150
         visible: model === undefined
@@ -134,6 +134,11 @@ RowLayout {
         stepSize: sliderControl.stepSize
         editable: true
         enabled: visible
+    }
+
+    Binding on modelValue {
+        when: root.value !== undefined && model !== undefined
+        value: model[root.value]
     }
 
     Binding on value {
@@ -160,4 +165,5 @@ RowLayout {
         when: spinBox.focus
         value: spinBox.value
     }
+
 }

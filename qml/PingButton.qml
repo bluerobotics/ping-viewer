@@ -4,6 +4,7 @@ import QtQuick.Controls.Styles 1.0
 
 Button {
     id: buttonText
+
     width: parent.width
     height: parent.height
 }

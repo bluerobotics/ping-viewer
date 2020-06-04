@@ -1,19 +1,20 @@
+import DeviceManager 1.0
 import QtGraphicalEffects 1.0
 import QtQml 2.2
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
-
-import DeviceManager 1.0
 import SettingsManager 1.0
 import StyleManager 1.0
 
 ColumnLayout {
     id: settingsLayout
+
     RowLayout {
         PingGroupBox {
             id: displayGroup
+
             title: "Display"
             Layout.fillWidth: true
 
@@ -29,6 +30,7 @@ ColumnLayout {
 
                 ComboBox {
                     id: distanceUnitsCb
+
                     model: SettingsManager.distanceUnitsModel
                     textRole: "name"
                     currentIndex: SettingsManager.distanceUnitsIndex
@@ -43,7 +45,8 @@ ColumnLayout {
 
                 ComboBox {
                     id: themeCB
-                    Layout.columnSpan:  4
+
+                    Layout.columnSpan: 4
                     Layout.fillWidth: true
                     currentIndex: !SettingsManager.darkTheme
                     model: ["Dark", "Light"]
@@ -52,17 +55,18 @@ ColumnLayout {
 
                 CheckBox {
                     id: alwaysOnTopCB
+
                     text: "Enable Always-On-Top mode"
                     checked: SettingsManager.alwaysOnTop
                     Layout.columnSpan: 5
                     Layout.fillWidth: true
                     onCheckedChanged: {
-                        if (checked) {
-                            window.flags |= Qt.WindowStaysOnTopHint
-                        } else {
-                            window.flags &= ~Qt.WindowStaysOnTopHint
-                        }
-                        SettingsManager.alwaysOnTop = checked
+                        if (checked)
+                            window.flags |= Qt.WindowStaysOnTopHint;
+                        else
+                            window.flags &= ~Qt.WindowStaysOnTopHint;
+
+                        SettingsManager.alwaysOnTop = checked;
                     }
                 }
 
@@ -72,43 +76,49 @@ ColumnLayout {
 
                 ComboBox {
                     id: opacityCB
+
                     Layout.columnSpan: 4
                     Layout.fillWidth: true
                     currentIndex: SettingsManager.applicationOpacityIndex
                     model: [100, 90, 80, 70]
                     displayText: currentText + "%"
                     onCurrentTextChanged: {
-                        window.opacity = currentText / 100.0
-                        SettingsManager.applicationOpacityIndex = currentIndex
+                        window.opacity = currentText / 100;
+                        SettingsManager.applicationOpacityIndex = currentIndex;
                     }
                 }
 
                 CheckBox {
                     id: replayChB
+
                     text: "Enable replay menu"
                     checked: SettingsManager.replayMenu
-                    Layout.columnSpan:  5
+                    Layout.columnSpan: 5
                     Layout.fillWidth: true
                     onCheckedChanged: SettingsManager.replayMenu = checked
                 }
 
                 Loader {
-                    sourceComponent: DeviceManager.primarySensor ?
-                        DeviceManager.primarySensor.sensorVisualizer().displaySettings : null
-                    Layout.columnSpan:  5
+                    sourceComponent: DeviceManager.primarySensor ? DeviceManager.primarySensor.sensorVisualizer().displaySettings : null
+                    Layout.columnSpan: 5
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                 }
 
                 CheckBox {
                     id: debugChB
+
                     text: "Debug mode"
                     checked: SettingsManager.debugMode
-                    Layout.columnSpan:  5
+                    Layout.columnSpan: 5
                     Layout.fillWidth: true
                     onCheckedChanged: SettingsManager.debugMode = checked
                 }
+
             }
+
         }
+
     }
+
 }
