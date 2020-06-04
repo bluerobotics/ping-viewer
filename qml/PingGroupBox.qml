@@ -9,4 +9,5 @@ GroupBox {
         when: visible
         value: Text.AlignHCenter
     }
+
 }
