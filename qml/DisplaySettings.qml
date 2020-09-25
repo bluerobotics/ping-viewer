@@ -98,6 +98,17 @@ ColumnLayout {
                     onCheckedChanged: SettingsManager.replayMenu = checked
                 }
 
+                CheckBox {
+                    id: realTimeReplayChB
+
+                    text: "Enable real-time replay"
+                    checked: SettingsManager.realTimeReplay
+                    visible: SettingsManager.replayMenu
+                    Layout.columnSpan: 5
+                    Layout.fillWidth: true
+                    onCheckedChanged: SettingsManager.realTimeReplay = checked
+                }
+
                 Loader {
                     sourceComponent: DeviceManager.primarySensor ? DeviceManager.primarySensor.sensorVisualizer().displaySettings : null
                     Layout.columnSpan: 5
