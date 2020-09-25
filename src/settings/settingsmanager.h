@@ -122,6 +122,7 @@ private:
     AUTO_PROPERTY(bool, debugMode, false)
     AUTO_PROPERTY(uint, enabledCategories, 0)
     AUTO_PROPERTY(bool, logScrollLock, true)
+    AUTO_PROPERTY(bool, realTimeReplay, true)
     AUTO_PROPERTY(bool, replayMenu, false)
     AUTO_PROPERTY(bool, reset, false)
     AUTO_PROPERTY(bool, darkTheme, false)
