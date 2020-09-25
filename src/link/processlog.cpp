@@ -9,6 +9,8 @@ ProcessLog::ProcessLog(QObject* parent)
     : QObject(parent)
     , _logIndex(0)
     , _play(true)
+    , _replayTimeMs(0)
+    , _sleepTime(0)
     , _stop(false)
 {
 }
@@ -53,7 +55,12 @@ void ProcessLog::run()
             continue;
         }
 
-        QThread::msleep(diffMSecs);
+
+        _sleepTime = _replayTimeMs ? _replayTimeMs.load() : diffMSecs;
+        while(_sleepTime > 0) {
+            QThread::msleep(10);
+            _sleepTime -= 10;
+        }
     }
 }
 
