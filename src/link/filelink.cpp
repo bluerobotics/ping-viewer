@@ -7,6 +7,7 @@
 
 #include "filelink.h"
 #include "logger.h"
+#include "settingsmanager.h"
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_FILELINK, "ping.protocol.filelink")
 
@@ -110,11 +111,22 @@ bool FileLink::startConnection()
 
     _processLog.reset(new ProcessLog());
     _processLog->moveToThread(&_processLogThread);
+
+    auto updateProcessReplayTime = [this]() {
+        int replayTimeMs = SettingsManager::self()->realTimeReplay() ? 0 : 100;
+        qCDebug(PING_PROTOCOL_FILELINK) << "Update replay time:" << replayTimeMs;
+        _processLog.get()->setReplayTimeMs(replayTimeMs);
+    };
+
+    updateProcessReplayTime();
+
     connect(&_processLogThread, &QThread::started, _processLog.get(), &ProcessLog::run);
     connect(&_processLogThread, &QThread::finished, _processLog.get(), &ProcessLog::stop);
     connect(_processLog.get(), &ProcessLog::newPackage, this, &FileLink::newData);
     connect(_processLog.get(), &ProcessLog::packageIndexChanged, this, &FileLink::packageIndexChanged);
     connect(_processLog.get(), &ProcessLog::packageIndexChanged, this, &FileLink::elapsedTimeChanged);
+    connect(SettingsManager::self(), &SettingsManager::realTimeReplayChanged, this,
+        [updateProcessReplayTime] { updateProcessReplayTime(); });
 
     processFile();
     return true;
