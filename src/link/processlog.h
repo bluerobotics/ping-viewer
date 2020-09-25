@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atomic>
+
 #include <QByteArray>
 #include <QLoggingCategory>
 #include <QThread>
@@ -76,8 +78,10 @@ public:
      */
     void setPackageIndex(int index)
     {
-        if (_logIndex < _log.size())
+        if (_logIndex < _log.size()) {
             _logIndex = index;
+            _sleepTime = 0;
+        }
     }
 
     /**
@@ -88,6 +92,7 @@ public:
     {
         _play = true;
         _stop = false;
+        _sleepTime = 0;
     };
 
     /**
@@ -106,6 +111,18 @@ public:
      */
     QTime totalTime();
 
+    /**
+     * @brief Set the time between each message
+     *  Set time to 0 for real-time
+     *
+     * @param replayTimeMs
+     */
+    void setReplayTimeMs(int replayTimeMs)
+    {
+        _replayTimeMs = replayTimeMs;
+        _sleepTime = 0;
+    }
+
 signals:
     void newPackage(const QByteArray& data);
     void packageIndexChanged(int index);
@@ -119,7 +136,9 @@ private:
     };
 
     QVector<Pack> _log;
-    int _logIndex;
-    bool _play;
-    bool _stop;
+    std::atomic<int> _logIndex;
+    std::atomic<bool> _play;
+    std::atomic<int> _replayTimeMs;
+    std::atomic<int> _sleepTime;
+    std::atomic<bool> _stop;
 };
