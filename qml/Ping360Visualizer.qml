@@ -208,18 +208,30 @@ Item {
 
                 }
 
-                transform: Rotation {
-                    origin.x: shader.width / 2
-                    origin.y: shader.height / 2
-                    angle: -ping.heading * 180 / 200
+                transform: [
+                    Rotation {
+                        origin.x: shader.width / 2
+                        origin.y: shader.height / 2
+                        angle: -ping.heading * 180 / 200
 
-                    axis {
-                        x: shader.verticalFlip
-                        y: shader.horizontalFlip
-                        z: ping.sectorSize > 180
+                        axis {
+                            x: 0
+                            y: 0
+                            z: ping.sectorSize > 180
+                        }
+                    },
+                    Rotation {
+                        origin.x: shader.width / 2
+                        origin.y: shader.height / 2
+                        angle: 180
+
+                        axis {
+                            x: shader.verticalFlip
+                            y: shader.horizontalFlip
+                            z: 0
+                        }
                     }
-
-                }
+                ]
 
             }
 
