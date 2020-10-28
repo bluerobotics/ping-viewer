@@ -10,6 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.bluerobotics.pingviewer)
 
 set(CMAKE_AUTORCC ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Update submodules if necessary and load our GIT variables
 include("cmake/git.cmake")
