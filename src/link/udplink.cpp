@@ -14,7 +14,7 @@ UDPLink::UDPLink(QObject* parent)
     setType(LinkType::Udp);
 
     connect(_udpSocket, &QIODevice::readyRead, this, [this] { emit newData(_udpSocket->readAll()); });
-    connect(_udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this,
+    connect(_udpSocket, &QAbstractSocket::errorOccurred, this,
         [this](QAbstractSocket::SocketError /*socketError*/) { printErrorMessage(); });
 
     // QUdpSocket fail to emit state signal
