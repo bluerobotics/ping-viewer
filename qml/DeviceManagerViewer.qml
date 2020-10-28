@@ -53,7 +53,6 @@ PingPopup {
                         stack.push(connectionMenu);
                     else
                         stack.pop();
-
                 }
             }
 
