@@ -19,8 +19,8 @@ Ping360HelperService::Ping360HelperService()
 
     connect(&_broadcastTimer, &QTimer::timeout, this, &Ping360HelperService::doBroadcast);
     connect(&_broadcastSocket, &QUdpSocket::readyRead, this, &Ping360HelperService::processBroadcastResponses);
-    connect(&_broadcastSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this,
-        [this](QAbstractSocket::SocketError socketError) {
+    connect(
+        &_broadcastSocket, &QAbstractSocket::errorOccurred, this, [this](QAbstractSocket::SocketError socketError) {
             qCWarning(PING360HELPERSERVICE)
                 << QStringLiteral("Socket error[%1]: %2").arg(socketError).arg(_broadcastSocket.errorString());
         });
