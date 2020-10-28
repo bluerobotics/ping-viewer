@@ -82,7 +82,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
     lastReleaseAvailable.version = actualVersion;
 
     // Check payload
-    for (const QJsonValue& versionPayload : versionsAvailable) {
+    for (const QJsonValue versionPayload : versionsAvailable) {
         auto versionString = versionPayload[QStringLiteral("tag_name")].toString();
         qCDebug(NETWORKTOOL) << "Testing version:" << versionString;
 
@@ -135,7 +135,7 @@ void NetworkTool::checkNewVersionInGitHubPayload(const QJsonDocument& jsonDocume
 #endif
         // *INDENT-ON*
 
-        for (const QJsonValue& artifact : assets) {
+        for (const QJsonValue artifact : assets) {
             if (artifact["name"].toString().contains(extension)) {
                 downloadLink = artifact["browser_download_url"].toString();
                 break;
