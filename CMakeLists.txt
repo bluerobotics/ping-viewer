@@ -4,7 +4,7 @@ project(ping-viewer LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 
-set(QT_MIN_VERSION "5.12.0")
+set(QT_MIN_VERSION "5.15.0")
 
 set(CMAKE_AUTOMOC ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.bluerobotics.pingviewer)
