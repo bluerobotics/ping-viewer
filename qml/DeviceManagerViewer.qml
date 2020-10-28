@@ -23,12 +23,14 @@ PingPopup {
     }
 
     Connections {
-        target: DeviceManager
-        onPrimarySensorChanged: {
+
+        function onPrimarySensorChanged() {
             if (DeviceManager.primarySensor)
                 close();
 
         }
+
+        target: DeviceManager
     }
 
     ColumnLayout {

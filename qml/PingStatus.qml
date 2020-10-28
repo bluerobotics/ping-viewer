@@ -93,8 +93,8 @@ Item {
     }
 
     Connections {
-        target: root.parent
-        onWidthChanged: {
+
+        function onWidthChanged() {
             if (parentWidth) {
                 var scaleW = root.parent.width / parentWidth;
                 if (scaleW) {
@@ -105,7 +105,8 @@ Item {
             }
             parentWidth = root.parent.width;
         }
-        onHeightChanged: {
+
+        function onHeightChanged() {
             if (parentHeight) {
                 var scaleH = root.parent.height / parentHeight;
                 if (scaleH) {
@@ -116,6 +117,8 @@ Item {
             }
             parentHeight = root.parent.height;
         }
+
+        target: root.parent
     }
 
 }
