@@ -1,7 +1,7 @@
-LIBPATH = $$PWD/fmt/
+QMAKE_LIBDIR = $$absolute_path($$PWD/fmt)
 
-HEADERS += $$LIBPATH/include/fmt/*.h
+HEADERS += $$files($$QMAKE_LIBDIR/include/fmt/*.h)
 
-SOURCES += $$LIBPATH/src/*.cc
+SOURCES += $$files($$QMAKE_LIBDIR/src/*.cc)
 
-INCLUDEPATH += $$LIBPATH/include/
+INCLUDEPATH += $$QMAKE_LIBDIR/include/
