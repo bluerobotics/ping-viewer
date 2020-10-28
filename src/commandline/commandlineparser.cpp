@@ -11,14 +11,14 @@ CommandLineParser::CommandLineParser(const QCoreApplication& app)
     addHelpOption();
     addVersionOption();
 
-    for (const auto optionStruct : _optionsStruct) {
+    for (const auto& optionStruct : _optionsStruct) {
         addOption(optionStruct.option);
     }
 
     // Parser the main application
     process(app);
 
-    for (const auto optionStruct : _optionsStruct) {
+    for (const auto& optionStruct : _optionsStruct) {
         QString result = value(optionStruct.option);
         if (!result.isEmpty()) {
             qCDebug(COMMANDLINEPARSER) << QStringLiteral("Valid option: %1 [%2]: %3")
