@@ -191,7 +191,7 @@ if $clangbuild; then
 fi
 
 runstep "qmake -o ${buildfolder} ${qmakeconfig} -r -Wall -Wlogic -Wparser DEFINES=${qtdefines} CONFIG+=${qtconfig} ${projectpath}" "Run qmake" "Qmake failed."
-runstep "make -C ${buildfolder} -j${numberofthreads}" "Project compiled" "Failed to compile project"
+make -C ${buildfolder} -j${numberofthreads}
 
 if [ "$deploy" == "false" ]; then
     echob "Done!"
