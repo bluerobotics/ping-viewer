@@ -1,6 +1,6 @@
 add_library(
     settings
-SHARED
+STATIC
     qjsonsettings.cpp
     settingsmanager.cpp
     varianttree.cpp
