@@ -21,14 +21,14 @@ foreach(directory ${INCLUDE_DIRS})
     add_subdirectory(${directory})
 endforeach()
 
-add_executable(ping-viewer
+add_executable(pingviewer
     main.cpp
     ../resources.qrc
     ../lib/ping-cpp/ping-cpp/src/message/ping-message-all.h
 )
 
 target_link_libraries(
-    ping-viewer
+    pingviewer
 PRIVATE
     Qt5::Core
     Qt5::Qml
