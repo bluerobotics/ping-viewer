@@ -15,7 +15,7 @@ matrix:
           sources:
             - sourceline: 'ppa:cs50/ppa'
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:beineri/opt-qt-5.12.2-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.15.0-xenial'
             - sourceline: 'deb http://apt.llvm.org/stretch/ llvm-toolchain-stretch-9 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
@@ -25,8 +25,8 @@ matrix:
             - git
             - build-essential
             - pulseaudio
-            - qt512base
-            - qt512charts-no-lgpl qt512graphicaleffects qt512multimedia qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
+            - qt515base
+            - qt515charts-no-lgpl qt515graphicaleffects qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515scxml qt515serialport qt515svg
             - libgl1-mesa-dev
             - xvfb
       env:
@@ -42,13 +42,13 @@ matrix:
         apt:
           sources:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:beineri/opt-qt-5.12.2-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.15.0-xenial'
           packages:
             - g++-7
             - git
             - build-essential
-            - qt512base
-            - qt512charts-no-lgpl qt512graphicaleffects qt512multimedia qt512quickcontrols qt512quickcontrols2 qt512scxml qt512serialport qt512svg
+            - qt515base
+            - qt515charts-no-lgpl qt515graphicaleffects qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515scxml qt515serialport qt515svg
             - libgl1-mesa-dev
       env:
         - DESC="AppImage deploy"
@@ -56,7 +56,7 @@ matrix:
 
     # .dmg file deploy for Mac OS (release)
     - os: osx
-      osx_image: xcode9.3
+      osx_image: xcode12.2
       compiler: clang
       env:
         - DESC="dmg deploy"
@@ -65,7 +65,7 @@ matrix:
 
     # .dmg file deploy for Mac OS (debug)
     - os: osx
-      osx_image: xcode9.3
+      osx_image: xcode12.2
       compiler: clang
       env:
         - DESC="dmg debug"
@@ -123,12 +123,12 @@ script:
 # Move necessary files in deploy folder
 # Create AppImage with linuxdeployqt
 - if [[ "${TRAVIS_OS_NAME}" == "linux" && "$PINGTEST" != "true" ]]; then
-    ./tools/compile.sh || travis_terminate 1;
+    travis_wait 30 ./tools/compile.sh || travis_terminate 1;
   fi
 # Create .dmg for Mac OS with macdeployqt
 # The steps are the same one in Linux
 - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-    ./tools/compile.sh || travis_terminate 1;
+    travis_wait 30 ./tools/compile.sh || travis_terminate 1;
   fi
 
 after_success:
