@@ -124,7 +124,7 @@ void Flasher::flash()
     _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
     qCDebug(FLASH) << "3... 2... 1...";
     qCDebug(FLASH) << cmd;
-    _firmwareProcess->start(cmd);
+    _firmwareProcess->start(cmd, QStringList {});
     emit flashProgress(0);
 
     connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, [this] {
