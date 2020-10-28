@@ -108,7 +108,6 @@ PingPopup {
                     Ping360HelperService.setDHCPServer(ip);
                 else
                     Ping360HelperService.setStaticIP(ip, ipTextField.text);
-
                 // Reset model to remove old results
                 DeviceManager.clear();
                 root.close();

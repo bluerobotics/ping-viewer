@@ -65,7 +65,6 @@ ColumnLayout {
                             window.flags |= Qt.WindowStaysOnTopHint;
                         else
                             window.flags &= ~Qt.WindowStaysOnTopHint;
-
                         SettingsManager.alwaysOnTop = checked;
                     }
                 }

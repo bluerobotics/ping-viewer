@@ -247,7 +247,6 @@ Item {
                             connectionType = AbstractLinkNamespace.Ping1DSimulation;
                         else
                             connectionType = AbstractLinkNamespace.Ping360Simulation;
-
                         connectionConf = [" ", " "];
                         break;
                     }

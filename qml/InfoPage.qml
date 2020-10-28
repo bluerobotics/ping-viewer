@@ -344,7 +344,6 @@ Item {
                                 log.enabledCategories |= Logger.getCategoryIndex(modelData.toString());
                             else
                                 log.enabledCategories ^= Logger.getCategoryIndex(modelData.toString());
-
                         }
                     }
 
