@@ -1,0 +1,69 @@
+name: Build & Deploy
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+        - os: macos-latest
+          DEPLOY_PATH: pingviewer-Release.dmg
+        - os: ubuntu-latest
+          DEPLOY_PATH: pingviewer-Release.AppImage
+        - os: windows-latest
+          DEPLOY_PATH: deploy
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.1'
+        target: 'desktop'
+        modules: qtcharts
+
+    - name: Install jinja2
+      run: |
+        pip install --user --upgrade pip;
+        pip install --user jinja2;
+
+    - name: Build Linux
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt update
+        sudo apt install libxcb-*
+        ./tools/compile.sh
+        mv /tmp/pingviewer-x86_64.AppImage pingviewer-Release.AppImage
+
+    - name: Build Mac
+      if: runner.os == 'macOS'
+      run: |
+        ./tools/compile.sh
+        mv /tmp/ping* .
+
+    - name: Build Windows
+      if: runner.os == 'Windows'
+      env:
+        OPENSSL: 'C:\Program Files\OpenSSL\bin'
+        SYSTEM32: 'C:\windows\system32'
+        SYSTEM32_DLLS: 'VCRUNTIME140.dll MSVCP140.dll ucrtbased.dll'
+      run: |
+        env
+        cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel --config Release
+        cp build/Release/pingviewer.exe deploy/pingviewer.exe
+        if (($env:OPENSSL) -and (Test-Path $env:OPENSSL -pathType container)) {
+          Copy-Item ${env:OPENSSL}\*.dll -Destination deploy -Force
+        }
+        curl https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -o deploy/stm32flash.exe
+        foreach ($I in (${env:SYSTEM32_DLLS} -split ' ')) { copy ${env:SYSTEM32}\$I deploy\ }
+        windeployqt --qmldir qml --release deploy/pingviewer.exe --verbose=2
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: pingviewer-${{ matrix.os }}
+        path: ${{ matrix.DEPLOY_PATH }}
