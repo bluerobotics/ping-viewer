@@ -8,11 +8,10 @@ projectpath=${scriptpath}/..
 buildfolder=${projectpath}/build
 deployfolder=${buildfolder}/deploy
 scriptname=$(basename "$0")
-qtdefines=""
-qtconfig="release"
+define=""
+buildtype="Release"
 numberofthreads=1
 verboseoutput="/tmp/compile_output.txt"
-qmakeconfig=""
 
 linuxdeployfiles=(
     "${projectpath}/qml/imgs/pingviewer.png"
@@ -92,18 +91,18 @@ do
 case $i in
     --autokill)
     autokill=true
-    qtdefines="AUTO_KILL"
-    qtconfig="debug"
+    define="-DAUTO_KILL=ON"
+    buildtype="Debug"
     shift ;;
 
     --ping360speedtest)
-    qtdefines="PING360_SPEED_TEST"
-    qtconfig="debug"
+    define="-DPING360_SPEED_TEST=ON"
+    buildtype="Debug"
     shift ;;
 
     --debug)
     debug=true
-    qtconfig="debug"
+    buildtype="Debug"
     shift ;;
 
     --no-deploy)
@@ -186,12 +185,12 @@ runstep "git submodule update" "Update submodule" "Failed to update submodule"
 runstep "rm -rf ${buildfolder}" "Check for old build folder" "Failed to delete old build folder"
 runstep "mkdir -p ${buildfolder}" "Build folder created" "Failed to create build folder in ${buildfolder}"
 
-if $clangbuild; then
-    qmakeconfig="${qmakeconfig} ""-spec linux-clang"
-fi
-
-runstep "qmake -o ${buildfolder} ${qmakeconfig} -r -Wall -Wlogic -Wparser DEFINES=${qtdefines} CONFIG+=${qtconfig} ${projectpath}" "Run qmake" "Qmake failed."
-make -C ${buildfolder} -j${numberofthreads}
+# Build type is necessary for both configuratio and compilation step
+# - For the first when using a makefile based system (unix makefiles, nmake makefiles, mingw makefiles)
+# - For the second when using multi-configuration build system tools (vscode, xcode)
+# Parallel configuration will use the available cpus
+runstep "cmake -S ${projectpath} -B ${buildfolder} -DCMAKE_BUILD_TYPE=${buildtype} ${define}" "Configure project" "Project configuration failed"
+runstep "cmake --build ${buildfolder} --parallel --config ${buildtype}" "Build project" "Failed to build project"
 
 if [ "$deploy" == "false" ]; then
     echob "Done!"
@@ -224,5 +223,5 @@ else
     runstep "chmod +x /tmp/stm32flash" "Convert stm32flash to executable" "Failed to turn stm32flash in executable"
     runstep "mv /tmp/stm32flash ${deployfolder}" "Move stm32flash to deploy" "Failed to move stm32flash into deploy folder"
     runstep "macdeployqt ${deployfolder} -qmldir=${projectpath}/qml -dmg" "Use macdeployqt" "Fail to use macdeployqt"
-    runstep "mv ${buildfolder}/pingviewer.dmg /tmp/pingviewer-${qtconfig}.dmg" "Move .dmg folder to /tmp/" "Faile to move .dmg file"
+    runstep "mv ${buildfolder}/pingviewer.dmg /tmp/pingviewer-${buildtype}.dmg" "Move .dmg folder to /tmp/" "Faile to move .dmg file"
 fi
