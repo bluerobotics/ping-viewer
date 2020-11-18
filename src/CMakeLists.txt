@@ -49,6 +49,7 @@ PRIVATE
     Qt5::Quick
     Qt5::QuickControls2
     Qt5::Charts
+    Qt5::Svg
     Qt5::Widgets # QApplication
     ${INCLUDE_DIRS}
     fmt::fmt
