@@ -76,7 +76,7 @@ Item {
     // Take care of the item position while resizing parent
     Connections {
         target: parent
-        onWidthChanged: {
+        function onWidthChanged() {
             if (parentWidth) {
                 var scaleW = parent.width / parentWidth;
                 if (scaleW) {
@@ -87,7 +87,7 @@ Item {
             }
             parentWidth = parent.width;
         }
-        onHeightChanged: {
+        function onHeightChanged() {
             if (parentHeight) {
                 var scaleH = parent.height / parentHeight;
                 if (scaleH) {
