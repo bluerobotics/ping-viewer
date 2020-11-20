@@ -201,21 +201,22 @@ echo ""
 echob "Start to deploy project.."
 
 if [[ $machine = *"Linux"* ]]; then
-    # For all crazy things necessary for linuxdeployqt, check https://github.com/probonopd/linuxdeployqt/issues/340
     runstep "mkdir -p ${deployfolder}" "Deploy folder created" "Failed to create deploy folder in ${buildfolder}"
     for i in "${linuxdeployfiles[@]}"; do
         runstep "cp ${i} ${deployfolder}" "Move file to deploy folder ""${i}" "Failed to deploy file: ""${i}"
     done
-    runstep "mkdir -p ${deployfolder}/usr/share/doc/libc6/" "Add libc6 path" "Failed to add libc6 path"
-    runstep "cp /usr/share/doc/libc6/copyright ${deployfolder}/usr/share/doc/libc6/copyright || touch ${deployfolder}/usr/share/doc/libc6/copyright" "Create libc6 copyright" "Failed to create libc6 copyright file"
+
     runstep "wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip -O /tmp/stm32flash_linux.zip" "Download stm32flash_linux" "Faile to download stm32flash_linux"
     runstep "unzip /tmp/stm32flash_linux.zip -d /tmp" "Unzip stm32flash" "Fail to unzip stm32flash"
     runstep "chmod +x /tmp/stm32flash" "Convert stm32flash to executable" "Failed to turn stm32flash in executable"
     runstep "mv /tmp/stm32flash ${deployfolder}" "Move stm32flash to deploy" "Failed to move stm32flash into deploy folder"
-    runstep "wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O /tmp/linuxdeployqt.AppImage" "Download linuxdeployqt" "Failed to download linuxdeployqt"
-    runstep "chmod a+x /tmp/linuxdeployqt.AppImage" "Convert linuxdeployqt to executable" "Failed to turn linuxdeplopyqt in executable"
+    runstep "wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -O /tmp/linuxdeploy.AppImage" "Download linuxdeploy" "Failed to download linuxdeploy"
+    runstep "wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage -O /tmp/linuxdeploy-plugin-qt.AppImage" "Download linuxdeploy Qt plugin" "Failed to download linuxdeploy Qt plugin"
+    runstep "chmod a+x /tmp/linuxdeploy.AppImage" "Convert linuxdeploy to executable" "Failed to turn linuxdeploy in executable"
+    runstep "chmod a+x /tmp/linuxdeploy-plugin-qt.AppImage" "Convert linuxdeploy Qt plugin to executable" "Failed to turn linuxdeploy Qt plugin in executable"
     runstep "unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;" "Unset some Qt variables" "Failed to unsed Qt variables"
-    runstep "/tmp/linuxdeployqt.AppImage ${deployfolder}/pingviewer.desktop -unsupported-allow-new-glibc -bundle-non-qt-libs -extra-plugins=iconengines,imageformats -verbose=2 -qmldir=${projectpath}/qml -appimage" "Run linuxdeployqt" "Failed to run linuxdeployqt"
+    runstep "export QML_SOURCES_PATHS=${projectpath}/qml" "Set QML_SOURCES_PATHS" "Failed to set QML_SOURCES_PATHS"
+    runstep "/tmp/linuxdeploy.AppImage --icon-file=$PWD/qml/imgs/pingviewer.png --desktop-file=${deployfolder}/pingviewer.desktop --executable=${deployfolder}/pingviewer --appdir=${deployfolder} --plugin qt --output appimage --verbosity=3" "Run linuxdeploy" "Failed to run linuxdeploy"
     runstep "mv pingviewer*.AppImage /tmp/pingviewer-x86_64.AppImage" "Move .AppImage folder to /tmp/" "Faile to move .AppImage file"
 else
     runstep "wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip -O /tmp/stm32flash_linux.zip" "Download stm32flash_linux" "Faile to download stm32flash_linux"
