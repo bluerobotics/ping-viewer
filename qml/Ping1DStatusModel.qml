@@ -1,5 +1,5 @@
 import QtQml.Models 2.12
-import QtQuick 2.7
+import QtQuick 2.15
 
 Item {
     property var title: "Ping1D specific data:"

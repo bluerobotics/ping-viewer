@@ -1,7 +1,7 @@
 import AbstractLinkNamespace 1.0
 import DeviceManager 1.0
 import QtQml 2.2
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import SettingsManager 1.0
