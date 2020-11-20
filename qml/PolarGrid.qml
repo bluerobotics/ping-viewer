@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQuick.Shapes 1.12
 import SettingsManager 1.0
 

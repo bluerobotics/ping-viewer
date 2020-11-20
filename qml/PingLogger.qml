@@ -1,5 +1,5 @@
 import Logger 1.0
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import SettingsManager 1.0
 

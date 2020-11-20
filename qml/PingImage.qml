@@ -1,5 +1,5 @@
 import QtGraphicalEffects 1.12
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls.Material 2.2
 
 Item {
