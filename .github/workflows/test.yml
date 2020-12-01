@@ -1,0 +1,38 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+        - os: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.1'
+        target: 'desktop'
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        modules: qtcharts
+
+    - name: Install jinja2
+      run: |
+        pip install --user --upgrade pip;
+        pip install --user jinja2;
+
+    - name: Build Linux
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt update
+        sudo apt install libxcb-* doxygen
+        export LD_LIBRARY_PATH=$Qt5_DIR/lib/
+        ./tools/runtests.sh
