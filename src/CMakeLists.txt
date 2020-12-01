@@ -24,11 +24,21 @@ endforeach()
 find_package(Qt5QuickCompiler)
 qtquick_compiler_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../resources.qrc)
 
-add_executable(pingviewer
+# Configure icon for mac build
+set(MACOSX_BUNDLE_ICON_FILE icon.icns)
+set(APP_ICON ${CMAKE_CURRENT_SOURCE_DIR}/../deploy/${MACOSX_BUNDLE_ICON_FILE})
+set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+set(SOURCES
     MACOSX_BUNDLE
     main.cpp
+    ${APP_ICON}
     ${RESOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib/ping-cpp/ping-cpp/src/message/ping-message-all.h
+)
+
+add_executable(pingviewer
+    ${SOURCES}
 )
 
 target_link_libraries(
