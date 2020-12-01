@@ -75,7 +75,6 @@ Item {
 
     // Take care of the item position while resizing parent
     Connections {
-        target: parent
         function onWidthChanged() {
             if (parentWidth) {
                 var scaleW = parent.width / parentWidth;
@@ -87,6 +86,7 @@ Item {
             }
             parentWidth = parent.width;
         }
+
         function onHeightChanged() {
             if (parentHeight) {
                 var scaleH = parent.height / parentHeight;
@@ -98,6 +98,8 @@ Item {
             }
             parentHeight = parent.height;
         }
+
+        target: parent
     }
 
     ColumnLayout {

@@ -35,7 +35,6 @@ Item {
         // After we moved from StringListModel to our own "QQmlListModel"
         // We forgot to add the count signal to be able to do the scroll lock
         Connections {
-
             function onCountChanged() {
                 if (scrollLockEnabled)
                     listView.currentIndex = listView.count - 1;
