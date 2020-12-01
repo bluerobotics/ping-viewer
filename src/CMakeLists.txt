@@ -22,13 +22,13 @@ foreach(directory ${INCLUDE_DIRS})
 endforeach()
 
 find_package(Qt5QuickCompiler)
-qtquick_compiler_add_resources(RESOURCES ../resources.qrc)
+qtquick_compiler_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../resources.qrc)
 
 add_executable(pingviewer
     MACOSX_BUNDLE
     main.cpp
     ${RESOURCES}
-    ../lib/ping-cpp/ping-cpp/src/message/ping-message-all.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lib/ping-cpp/ping-cpp/src/message/ping-message-all.h
 )
 
 target_link_libraries(
