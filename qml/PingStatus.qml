@@ -93,7 +93,6 @@ Item {
     }
 
     Connections {
-
         function onWidthChanged() {
             if (parentWidth) {
                 var scaleW = root.parent.width / parentWidth;

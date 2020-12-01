@@ -23,7 +23,6 @@ PingPopup {
     }
 
     Connections {
-
         function onPrimarySensorChanged() {
             if (DeviceManager.primarySensor)
                 close();
