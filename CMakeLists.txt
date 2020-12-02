@@ -16,6 +16,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Update submodules if necessary and load our GIT variables
 include("cmake/git.cmake")
+# Helper module
+include("cmake/helper.cmake")
 
 add_compile_definitions(
     QT_USE_QSTRINGBUILDER
