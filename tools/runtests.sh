@@ -49,10 +49,3 @@ ${scriptpath}/compile.sh --ping360speedtest --no-deploy --debug || exit 1
 export DISPLAY=:99.0
 build_folder="$projectpath/build"
 xvfb-run --server-args="-screen 0 1024x768x24" ${build_folder}/pingviewer || exit 1
-
-echob "Test CMake build:"
-build_folder="$projectpath/build_cmake"
-mkdir ${build_folder}
-cd $build_folder
-cmake ..
-make
