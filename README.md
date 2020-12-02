@@ -1,7 +1,7 @@
 # Ping-Viewer
 
-[![Travis Build Status](https://travis-ci.org/bluerobotics/ping-viewer.svg?branch=master)](https://travis-ci.org/bluerobotics/ping-viewer)
-[![Build status](https://ci.appveyor.com/api/projects/status/y4nl4spd3yw1s4bn/branch/master?svg=true)](https://ci.appveyor.com/project/blueroboticsappveyor/ping-viewer/branch/master)
+[![Build & Deploy](https://github.com/bluerobotics/ping-viewer/workflows/Build%20&%20Deploy/badge.svg)](https://github.com/bluerobotics/ping-viewer/actions?query=workflow%3ABuild+%26+Deploy)
+[![Test](https://github.com/bluerobotics/ping-viewer/workflows/Test/badge.svg)](https://github.com/bluerobotics/ping-viewer/actions?query=workflow%3ATest)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/bluerobotics/ping-viewer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/bluerobotics/ping-viewer/context:cpp)
 [![Gitter](https://img.shields.io/badge/gitter-online-green.svg)](https://gitter.im/bluerobotics/discussion/)
 ![](https://img.shields.io/github/commit-activity/4w/bluerobotics/ping-viewer.svg)
