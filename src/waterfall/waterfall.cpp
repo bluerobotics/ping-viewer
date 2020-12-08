@@ -86,7 +86,7 @@ void Waterfall::loadUserGradients()
             qCDebug(waterfall) << "Invalid gradient file:" << fileInfo.fileName();
             continue;
         }
-        if (std::any_of(_gradients.cbegin(), _gradients.cend(),
+        if (std::any_of(std::cbegin(_gradients), std::cend(_gradients),
                 [&](const auto& gradientItem) { return gradientItem.name() == gradient.name(); })) {
             qCDebug(waterfall) << "Gradient already exist:" << gradient.name() << fileInfo.fileName();
             continue;
