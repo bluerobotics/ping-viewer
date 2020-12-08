@@ -13,7 +13,7 @@ jobs:
         - os: ubuntu-latest
           DEPLOY_PATH: pingviewer-Release.AppImage
         - os: windows-latest
-          DEPLOY_PATH: deploy
+          DEPLOY_PATH: pingviewer-Release.zip
 
     steps:
     - name: Checkout
@@ -61,6 +61,13 @@ jobs:
         curl https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -o deploy/stm32flash.exe
         foreach ($I in (${env:SYSTEM32_DLLS} -split ' ')) { copy ${env:SYSTEM32}\$I deploy\ }
         windeployqt --qmldir qml --release deploy/pingviewer.exe --verbose=2
+
+    - name: Zip windows
+      uses: papeloto/action-zip@v1
+      if: runner.os == 'Windows'
+      with:
+        files: deploy
+        dest: ${{ matrix.DEPLOY_PATH }}
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
