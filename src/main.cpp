@@ -118,6 +118,8 @@ int main(int argc, char* argv[])
     engine.rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
+    qCInfo(mainCategory).noquote()
+        << QStringLiteral("OS: %1 - %2").arg(QSysInfo::prettyProductName(), QSysInfo::productVersion());
     qCInfo(mainCategory) << "Git version:" << GIT_VERSION;
     qCInfo(mainCategory) << "Git version date:" << GIT_VERSION_DATE;
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
