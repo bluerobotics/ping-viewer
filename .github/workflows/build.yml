@@ -67,3 +67,17 @@ jobs:
       with:
         name: pingviewer-${{ matrix.os }}
         path: ${{ matrix.DEPLOY_PATH }}
+
+    - name: Update continuous release
+      uses: xresloader/upload-to-github-release@v1
+      if: ${{ github.event_name != 'pull_request' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: continuous
+        file: ${{ matrix.DEPLOY_PATH }}
+        tags: false
+        draft: false
+        overwrite: true
+        prerelease: true
+        verbose: true
