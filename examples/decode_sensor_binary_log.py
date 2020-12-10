@@ -108,11 +108,11 @@ class Log:
 
     def process(self):
         with open(self.filename, "rb") as file:
-            log.unpack_header(file)
+            self.unpack_header(file)
             while True:
                 try:
-                    self.messages.append(log.unpack_message(file))
-                except Exception as _:
+                    self.messages.append(self.unpack_message(file))
+                except:
                     break
 
 
