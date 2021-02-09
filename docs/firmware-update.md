@@ -54,4 +54,30 @@ If the led is not blinking:
    - On linux `.\stm32flash -v -g 0x0 -b 115200 -w .\Ping_V3.26_115kb.hex /dev/ttyUSB0`
      - Where /dev/ttyUSB0 is my serial port
 
+You should see the following output:
+
+```
+stm32flash 0.5
+
+http://stm32flash.sourceforge.net/
+
+Using Parser : Intel HEX
+Interface serial_posix: 115200 8E1
+Version      : 0x31
+Option 1     : 0x00
+Option 2     : 0x00
+Device ID    : 0x0446 (STM32F302xD(E)/F303xD(E)/F398xx)
+- RAM        : 64KiB  (6144b reserved by bootloader)
+- Flash      : 512KiB (size first sector: 2x2048)
+- Option RAM : 16b
+- System RAM : 8KiB
+Write to memory
+Erasing memory
+Wrote and verified address 0x080202c8 (100.00%) Done.
+
+Starting execution at address 0x08000000... done.
+```
+
+Keep in mind that the writing percentage should be 100%, if not, check your connections.
+
 If the instructions are not clear or sound a bit complicated, please wait a bit more for us to create a Ping-Viewer version that allows you to recover devices.
