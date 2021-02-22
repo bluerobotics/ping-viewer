@@ -2,6 +2,8 @@
 
 The Firmware Update menu allows you to update the programming on a Ping device.
 
+## Automatic Firmware Update
+
 Steps to flash the device:
 
 1. [Connect](device-manager.md) to the device
@@ -13,6 +15,26 @@ Steps to flash the device:
 > Wait for the update process to complete before unplugging the device!
 
 ![Firmware Update Waiting](/ping-viewer/images/viewer/firmware-update-waiting.gif)
+
+## Manual Firmware Update
+
+Steps to flash the device:
+
+1. [Connect](device-manager.md) to the device
+2. Open the Firmware Update menu
+3. Choose 'Manual Update'
+4. Download your desired firmware from the `/ping1d` folder inside the [firmware repository](https://github.com/bluerobotics/ping-firmware/tree/master/ping1d)
+    1. Click 'Raw' to view the raw document
+    ![Raw](/ping-viewer/images/firmware-update/download.png)
+    2. Right-click the webpage and click 'Save As...' to save the firmware hex file (`.hex`)
+5. In Ping-Viewer, click `Browse` to select the firmware hex file that you saved
+6. Click _FIRMWARE UPDATE_ to start the process.
+7. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume it's idle animation, and the Ping device will resume data transmission.
+
+> Wait for the update process to complete before unplugging the device!
+
+![Manual Firmware Update](/ping-viewer/images/firmware-update/manual.png)
+
 
 ## Device recovery
 
