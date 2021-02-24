@@ -12,7 +12,7 @@ addons:
       - python3-setuptools
 
 install:
-  - pip3 install mkdocs-material --user
+  - pip3 install mkdocs mkdocs-material pymdown-extensions pygments --user
   - gem install html-proofer
 
 script:
