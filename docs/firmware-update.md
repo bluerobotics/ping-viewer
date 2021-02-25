@@ -1,4 +1,4 @@
-![Firmware Update](/ping-viewer/images/viewer/firmware-update.png)
+![Firmware Update](./images/viewer/firmware-update.png)
 
 The Firmware Update menu allows you to update the programming on a Ping device.
 
@@ -12,7 +12,7 @@ Steps to flash the device:
 
 > Wait for the update process to complete before unplugging the device!
 
-![Firmware Update Waiting](/ping-viewer/images/viewer/firmware-update-waiting.gif)
+![Firmware Update Waiting](./images/viewer/firmware-update-waiting.gif)
 
 ## Device recovery
 
@@ -22,7 +22,7 @@ The device must be opened to restore the firmware. We only want to open the devi
 
 To open the device, hold it firmly, and turn the blue ring in counterclockwise direction:
 
-![Firmware Update Waiting](/ping-viewer/images/firmware-update/open-ping.png)
+![Firmware Update Waiting](./images/firmware-update/open-ping.png)
 
 After the device is opened, turn it on and look for a blinking led on the circuit board inside of the device. If you see a blinking led, the device should be good and the firmware is running fine, you may close the device and double check the [troubleshooting instructions](http://docs.bluerobotics.com/ping-viewer/faq-and-troubleshooting/#troubleshooting).
 
@@ -45,7 +45,7 @@ If the led is not blinking:
  - With the device open, you should see a BOOT button in the main board. Power down the device, press and hold this button down, then power the device and let go of the button
  - You should check the port of the device with windows **Device Manager** or with `dmesg` on linux.
 
- ![Firmware Update Waiting](/ping-viewer/images/firmware-update/device-manager.png)
+ ![Firmware Update Waiting](./images/firmware-update/device-manager.png)
 
  - After finding the port (`COMx` on windows and `/dev/ttyUSB*` on linux) you can start the flash procedure.
  - In the same terminal type:

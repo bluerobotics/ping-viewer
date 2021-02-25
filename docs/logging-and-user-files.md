@@ -46,4 +46,4 @@ Ping Viewer uses the native settings environment of each operating system, you c
 * Linux: Under the file `"~/.config/Blue Robotics Inc/Ping Viewer.conf"`
 * Windows: Open the **Registry Editor** and follow the path: `Computer\HKEY_CURRENT_USER\Software\Blue Robotics Inc.\Ping Viewer`
 
-![Windows settings](/ping-viewer/images/settings/windows-registry.png)
+![Windows settings](./images/settings/windows-registry.png)

@@ -6,7 +6,7 @@
 4. [**Application log**](#application-log)
 5. [**Log categories**](#log-categories)
 
-![Application information annotated](/ping-viewer/images/viewer/annotated/application-information-annotated.png)
+![Application information annotated](./images/viewer/annotated/application-information-annotated.png)
 
 #### Application software information
 
@@ -17,10 +17,10 @@ This area shows information about the Ping Viewer application software version.
 This area shows information about the connected device.
 
 #### Header buttons
-- ![](/ping-viewer/images/icons/lock.png) Scroll lock for log window
-- ![](/ping-viewer/images/icons/chat.png) [Blue Robotics Forum](https://discuss.bluerobotics.com)
-- ![](/ping-viewer/images/icons/report.png) [Bug reports and feature requests](https://github.com/bluerobotics/ping-viewer/issues)
-- ![](/ping-viewer/images/icons/settings.png) Reset application settings
+- ![](./images/icons/lock.png) Scroll lock for log window
+- ![](./images/icons/chat.png) [Blue Robotics Forum](https://discuss.bluerobotics.com)
+- ![](./images/icons/report.png) [Bug reports and feature requests](https://github.com/bluerobotics/ping-viewer/issues)
+- ![](./images/icons/settings.png) Reset application settings
 
 #### Application log
 
