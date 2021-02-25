@@ -1,0 +1,41 @@
+name: Docs - Build and Deploy
+
+on: [push]
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v2
+        with: 
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run:
+          python -m pip install --upgrade pip
+          pip install mkdocs-material
+
+      - name: Build MkDocs
+        run:
+          mkdocs build
+
+      - name: HTMLProofer
+        uses: chabad360/htmlproofer@v1.1
+        with:
+          directory: "./ping-viewer"
+          arguments: --empty-alt-ignore --file-ignore "./ping-viewer/404.html" --url-ignore "https://fonts.gstatic.com"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/docs'
+    steps:
+      - name: Deploy documentation
+        run:
+          echo "Deploying documentation..."
+          mkdocs gh-deploy --force
+          echo "Documentation deployed."
