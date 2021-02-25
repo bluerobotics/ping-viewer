@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Build docs
+    name: Build and deploy docs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -33,12 +33,8 @@ jobs:
         with:
           directory: "."
           arguments: --empty-alt-ignore --file-ignore "./ping-viewer/404.html" --url-ignore "https://fonts.gstatic.com"
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/docs'
-    steps:
+          
       - name: Deploy documentation
+        if: github.ref == 'refs/heads/docs'
         run:
           mkdocs gh-deploy --force
