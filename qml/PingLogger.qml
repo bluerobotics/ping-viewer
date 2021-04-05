@@ -45,7 +45,7 @@ Item {
         }
 
         delegate: Row {
-            width: parent.width
+            width: listView.width
             spacing: 10
 
             Text {
