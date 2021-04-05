@@ -61,7 +61,7 @@ public:
      * @return Util*
      */
     static Util* self();
-    ~Util();
+    ~Util() = default;
 
     /**
      * @brief Return a pointer of this singleton to the qml register function

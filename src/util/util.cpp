@@ -96,5 +96,3 @@ Util* Util::self()
     static Util self;
     return &self;
 }
-
-Util::~Util() {}
