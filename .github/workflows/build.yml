@@ -6,7 +6,6 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      max-parallel: 1
       matrix:
         include:
         - os: macos-latest
@@ -76,19 +75,15 @@ jobs:
         name: pingviewer-${{ matrix.os }}
         path: ${{ matrix.DEPLOY_PATH }}
 
-    - name: Update continuous release
-      uses: xresloader/upload-to-github-release@v1
+    - name: Upload continuous to release
+      uses: svenstaro/upload-release-action@v2
       if: ${{ github.event_name != 'pull_request' }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: continuous
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ matrix.DEPLOY_PATH }}
-        tags: false
-        draft: false
+        tag: continuous
         overwrite: true
         prerelease: true
-        verbose: true
 
     - name: Create Release
       uses: actions/create-release@v1
