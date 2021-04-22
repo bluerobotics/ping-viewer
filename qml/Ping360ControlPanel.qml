@@ -186,8 +186,7 @@ PingGroupBox {
                     }
 
                     Connections {
-                        target: ping
-                        onLinkChanged: {
+                        function onLinkChanged() {
                             // Change baud rate in combobox if the one of the sensor changes
                             if (ping.link.configuration.serialBaudrate() == baudRateComboBox.currentText)
                                 return ;
@@ -199,6 +198,8 @@ PingGroupBox {
                             }
                             baudRateComboBox.currentIndex = newIndex;
                         }
+
+                        target: ping
                     }
 
                 }
