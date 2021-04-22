@@ -80,7 +80,6 @@ RowLayout {
         background: Rectangle {
             x: sliderControl.leftPadding
             y: sliderControl.topPadding + sliderControl.availableHeight / 2 - height / 2
-            implicitWidth: sliderControl.availableWidth
             implicitHeight: 1
             width: sliderControl.availableWidth
             height: implicitHeight
