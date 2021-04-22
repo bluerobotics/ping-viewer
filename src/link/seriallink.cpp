@@ -74,7 +74,8 @@ bool SerialLink::startConnection()
     }
 
     if (!_port.open(QIODevice::ReadWrite)) {
-        qCWarning(PING_PROTOCOL_SERIALLINK) << "Fail to open serial port:" << _port.error();
+        qCWarning(PING_PROTOCOL_SERIALLINK) << QStringLiteral("Fail to open serial port: %1, error: %2")
+                                                   .arg(_linkConfiguration.createFullConfString(), _port.error());
         return false;
     }
 
