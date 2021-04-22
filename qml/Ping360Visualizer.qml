@@ -68,16 +68,19 @@ Item {
          *  Any change in scale is a result of user input
          */
 
-        target: ping
-        onRangeChanged: {
+        function onRangeChanged() {
             clear();
         }
-        onSectorSizeChanged: {
+
+        function onSectorSizeChanged() {
             clear();
         }
-        onDataChanged: {
+
+        function onDataChanged() {
             waterfall.draw(ping.data, ping.angle, 0, ping.range, ping.angular_speed, ping.sectorSize);
         }
+
+        target: ping
     }
 
     QC1.SplitView {
@@ -339,10 +342,11 @@ Item {
             // Sensor connections should be done inside component
             // Components are local '.qml' descriptions, so it's not possible get outside connections
             Connections {
-                target: ping
-                onSectorSizeChanged: {
+                function onSectorSizeChanged() {
                     settingsLayout.isFullCircle = ping.sectorSize == 360;
                 }
+
+                target: ping
             }
 
             CheckBox {
