@@ -25,12 +25,17 @@ PingGroupBox {
             Layout.fillWidth: true
             text: "Range (m)"
             model: [1, 2, 5, 10, 15, 20, 30, 40, 50, 60]
-            modelValue: ping.range
 
             Binding {
                 target: ping
                 property: "range"
                 value: rangeSlider.modelValue
+            }
+
+            Binding {
+                target: rangeSlider
+                property: "modelValue"
+                value: ping.range
             }
 
         }
