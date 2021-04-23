@@ -45,3 +45,9 @@ add_compile_definitions(
     GIT_TAG="${GIT_TAG}"
     GIT_URL="${GIT_URL}"
 )
+
+message(STATUS "Git information:")
+message(STATUS " Tag: ${GIT_TAG}")
+message(STATUS " Version: ${GIT_VERSION}")
+message(STATUS " Version Date: ${GIT_VERSION_DATE}")
+message(STATUS " URL: ${GIT_URL}")
