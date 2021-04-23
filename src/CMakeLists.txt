@@ -63,3 +63,23 @@ PRIVATE
     ${INCLUDE_DIRS}
     fmt::fmt
 )
+
+# Test target
+enable_testing(true)
+add_executable(test test.cpp)
+add_test(NAME test COMMAND test)
+
+target_link_libraries(
+    test
+PRIVATE
+    Qt5::Core
+    Qt5::Qml
+    Qt5::Quick
+    Qt5::QuickControls2
+    Qt5::Charts
+    Qt5::Svg
+    Qt5::Test
+    Qt5::Widgets
+    ${INCLUDE_DIRS}
+    fmt::fmt
+)
