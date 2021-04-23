@@ -137,35 +137,87 @@ PingGroupBox {
                 text: "Transmit Duration (μs)"
                 from: ping.transmitDurationMin
                 to: ping.transmitDurationMax
-                onValueChanged: ping.transmit_duration = value
-                value: ping.transmit_duration
+
+                Binding {
+                    target: ping
+                    property: "transmit_duration"
+                    value: transmitDurationSlider.value
+                }
+
+                Binding {
+                    target: transmitDurationSlider
+                    property: "value"
+                    value: ping.transmit_duration
+                }
+
             }
 
             PingSlider {
+                id: transmitFrequencySlider
+
                 Layout.fillWidth: true
                 text: "Transmit Frequency (kHz)"
-                value: ping.transmit_frequency
                 from: 500
                 to: 1000
-                onValueChanged: ping.transmit_frequency = value
+
+                Binding {
+                    target: ping
+                    property: "transmit_frequency"
+                    value: transmitFrequencySlider.value
+                }
+
+                Binding {
+                    target: transmitFrequencySlider
+                    property: "value"
+                    value: ping.transmit_frequency
+                }
+
             }
 
             PingSlider {
+                id: speedOfSoundSlider
+
                 Layout.fillWidth: true
                 text: "Speed of Sound (m/s)"
-                value: ping.speed_of_sound
                 from: 1450
                 to: 1550
-                onValueChanged: ping.speed_of_sound = value
+
+                Binding {
+                    target: ping
+                    property: "speed_of_sound"
+                    value: speedOfSoundSlider.value
+                }
+
+                Binding {
+                    target: speedOfSoundSlider
+                    property: "value"
+                    value: ping.speed_of_sound
+                }
+
             }
 
             PingSlider {
+                id: angularSpeedSlider
+
                 Layout.fillWidth: true
                 text: "Angular Resolution (gradian)"
                 value: ping.angular_speed
                 from: 1
                 to: 10
                 onValueChanged: ping.angular_speed = value
+
+                Binding {
+                    target: ping
+                    property: "angular_speed"
+                    value: angularSpeedSlider.value
+                }
+
+                Binding {
+                    target: angularSpeedSlider
+                    property: "value"
+                    value: ping.angular_speed
+                }
+
             }
 
             RowLayout {
