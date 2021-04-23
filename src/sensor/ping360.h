@@ -575,6 +575,7 @@ private:
     static const uint16_t _viewerDefaultNumberOfSamples;
     static const float _viewerDefaultRange;
     static const uint16_t _viewerDefaultSamplePeriod;
+    static const uint32_t _viewerDefaultSpeedOfSound;
     static const uint16_t _viewerDefaultTransmitDuration;
 
     // Physical properties of the sensor
