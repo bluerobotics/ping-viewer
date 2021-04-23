@@ -27,9 +27,8 @@ echob "Compile code in test mode:"
 build_test="$projectpath/build_test"
 rm -rf $build_test
 mkdir -p ${build_test}
-qmake -o ${build_test} -r -Wall -Wlogic -Wparser CONFIG+=test ${projectpath}
-make -C ${build_test}
-xvfb-run --server-args="-screen 0 1024x768x24" $build_test/pingviewer || exit 1
+cmake -B ${build_test} -DCMAKE_BUILD_TYPE=Debug && cmake --build ${build_test} --parallel --config Debug
+xvfb-run --server-args="-screen 0 1024x768x24" $build_test/test || exit 1
 
 echob "Do runtime test:"
 ${scriptpath}/compile.sh --autokill --no-deploy --debug || exit 1
