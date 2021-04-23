@@ -159,7 +159,7 @@ echob "Compiling for ${machine}"
 echob "Checking for tools..."
 
 checktool "git --version"
-checktool "qmake --version"
+checktool "cmake --version"
 checktool "python --version"
 checktool 'python -c "import jinja2; print(jinja2.__version__);"' jinja2 "Version 2.10+ is necessary."
 
