@@ -16,6 +16,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Defaults
 include("cmake/default.cmake")
+# Compiler information
+include("cmake/compiler.cmake")
 # Update submodules if necessary and load our GIT variables
 include("cmake/git.cmake")
 # Helper module
