@@ -50,6 +50,15 @@ add_executable(pingviewer
     ${SOURCES}
 )
 
+# Set windows administrator request
+if(WIN32 AND ENABLE_REQUIRE_ADMIN)
+    set_target_properties(
+        pingviewer
+    PROPERTIES
+        LINK_FLAGS "/level='requireAdministrator'"
+    )
+endif()
+
 target_link_libraries(
     pingviewer
 PRIVATE
