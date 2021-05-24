@@ -81,3 +81,18 @@ When installing, you must minimally select all Visual C++ components.
     - `./pingviewer`
 
 > **Tip**: You can use `make -jN` where N is the number of threads in your computer to improve the compiling speed.
+
+## Build documentation
+
+1. Follow the **Source Code** guide.
+2. Checkout to the documentation branch.
+    - `git checkout docs`
+3. Install `pipenv`.
+    - `pip install pipenv --user`
+4. Configure `pipenv` for the project and install necessary tools.
+    - `pipenv install`
+    - `pipenv run pip install mkdocs-material`
+5. Build the documentation.
+    - `pipenv run mkdocs build`
+6. Access the generated documentation using your favorite browser.
+    - `cd ping-viewer && firefox index.html`
