@@ -115,16 +115,16 @@ void Flasher::flash()
         return;
     }
 
-    static QString cmd
-        = QStringLiteral("\"%0\" -w \"%1\" %2 -g 0x0 -b %3 %4")
-              .arg(stm32flashPath(), firmwareFileInfo.absoluteFilePath(), _verify ? "-v" : "", baudRate, portLocation);
+    QStringList cmd {stm32flashPath(), "-w", firmwareFileInfo.absoluteFilePath(), _verify ? "-v" : "", "-g", "0x0",
+        "-b", baudRate, portLocation};
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
     _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
     _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
     qCDebug(FLASH) << "3... 2... 1...";
     qCDebug(FLASH) << cmd;
-    _firmwareProcess->start(cmd, QStringList {});
+    auto program = cmd.takeFirst();
+    _firmwareProcess->start(program, cmd);
     emit flashProgress(0);
 
     connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, [this] {
