@@ -151,7 +151,8 @@ void Flasher::flash()
     });
 
     connect(_firmwareProcess.data(), &QProcess::errorOccurred, this, [this](QProcess::ProcessError error) {
-        QString message = QStringLiteral("Unexpected error in process: %1").arg(error);
+        QString message = QStringLiteral("Unexpected error in process (%1): %2")
+                              .arg(QString::number(error), _firmwareProcess->errorString());
         qCCritical(FLASH) << message;
         setState(Error, message);
     });
