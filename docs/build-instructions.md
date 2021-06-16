@@ -8,17 +8,14 @@ If you just want to test (and not debug) a recent build of *Ping-Viewer* you can
 
 ## Source Code
 
-Source code for *Ping-Viewer* is kept on GitHub here: https://github.com/bluerobotics/ping-viewer, and it's [licensed under GPLv3](https://github.com/bluerobotics/ping-viewer/blob/master/LICENSE.md).
+Source code for *Ping-Viewer* is kept on GitHub here: [https://github.com/bluerobotics/ping-viewer](https://github.com/bluerobotics/ping-viewer), and it's [licensed under GPLv3](https://github.com/bluerobotics/ping-viewer/blob/master/LICENSE.md).
 
 To get the source files:
+
 1. Clone the repo (or your fork) including submodules and go inside folder:
-   ```
-   git clone https://github.com/bluerobotics/ping-viewer --recursive && cd ping-viewer
-   ```
+    - `git clone https://github.com/bluerobotics/ping-viewer --recursive && cd ping-viewer`
 2. Update submodules (required each time you pull new source code):
-   ```
-   git submodule update --init --recursive
-   ```
+    - `git submodule update --init --recursive`
 
 > **Note:** Github source-code zip files cannot be used because these do not contain the appropriate submodule source code. You must use git!
 
@@ -96,3 +93,4 @@ When installing, you must minimally select all Visual C++ components.
     - `pipenv run mkdocs build`
 6. Access the generated documentation using your favorite browser.
     - `cd ping-viewer && firefox index.html`
+    - `cd ping-viewer && open -a "Firefox" index.html` on MacOS
