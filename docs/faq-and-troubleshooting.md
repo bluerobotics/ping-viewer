@@ -12,7 +12,10 @@ Ping Viewer should run on any modern computer.
 
 ### No Connection to the Device
 
-- Reset the ping-viewer setting by clicking the gear icon in the [application information header](https://docs.bluerobotics.com/ping-viewer/application-information/#header-buttons)
+- If using a UDP connection via the Blue Robotics companion computer, power on the ping device(s) before or at the same time as the companion computer, so they can be detected correctly on companion startup
+- If connecting directly to a computer with a serial connection, ensure QGroundControl is closed, or that 'SiK Radio' is deselected from the 'AutoConnect to the following devices' section of [Application Settings/General](https://docs.qgroundcontrol.com/master/en/SettingsView/General.html). It's generally recommended to unselect the AutoConnect options for any device not actually being used.
+![QGC AutoConnect options with SiK Radio deselected](/ping-viewer/images/external/qgc-autoconnect.png)
+- Reset the ping-viewer settings by clicking the gear icon in the [application information header](https://docs.bluerobotics.com/ping-viewer/application-information/#header-buttons)
 - Ensure that your usb cable is in good condition and supports data transfer. Try to use another usb cable or a cable known to work with another device like a phone.
 - Ensure that the usb-uart bridge is working with your computer. The list of communication ports should change when you plug/unplug your device.
   - Windows: check the COM port list in the [windows device manager](https://en.wikipedia.org/wiki/Device_Manager)
