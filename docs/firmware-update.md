@@ -24,9 +24,9 @@ Steps to flash the device:
 2. Open the Firmware Update menu
 3. Choose 'Manual Update'
 4. Download your desired firmware from the `/ping1d` folder inside the [firmware repository](https://github.com/bluerobotics/ping-firmware/tree/master/ping1d)
-    1. Click 'Raw' to view the raw document
+    1. Right click 'Raw' and click 'Save Link As...' to save the firmware hex file (`.hex`)
     ![Raw](/ping-viewer/images/firmware-update/download.png)
-    2. Right-click the webpage and click 'Save As...' to save the firmware hex file (`.hex`)
+    2. If the file format is coming up as 'Text Document (.txt)' or similar, change it to 'HEX File (.hex)' if possible, or select 'All files' and ensure the file extension is `.hex`, not `.hex.txt`
 5. In Ping-Viewer, click `Browse` to select the firmware hex file that you saved
 6. Click _FIRMWARE UPDATE_ to start the process.
 7. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume it's idle animation, and the Ping device will resume data transmission.
@@ -35,6 +35,8 @@ Steps to flash the device:
 
 ![Manual Firmware Update](/ping-viewer/images/firmware-update/manual.png)
 
+
+[//]: # (Can we add a subsection here about updating through BR companion computer? This would likely be helpful for anyone who doesn't want to take apart their ROV but wants to update the firmware)
 
 ## Device recovery
 
