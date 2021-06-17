@@ -36,8 +36,6 @@ Steps to flash the device:
 ![Manual Firmware Update](/ping-viewer/images/firmware-update/manual.png)
 
 
-[//]: # (Can we add a subsection here about updating through BR companion computer? This would likely be helpful for anyone who doesn't want to take apart their ROV but wants to update the firmware)
-
 ## Device recovery
 
 If the device is not working after flashing a new firmware, or if some problem was encountered during installation, a recovery process may be necessary.
