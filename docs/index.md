@@ -1,9 +1,11 @@
 *Ping Viewer* Documentation
 ===========================
 
-*Ping Viewer* is the graphical user interface for the [Blue Robotics *Ping* Altimeter and Echosounder](https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/). The application allows you to connect, configure, view data, and record data from a *Ping* device.
+*Ping Viewer* is the graphical user interface for the Blue Robotics [*Ping1D* Altimeter and Echosounder](https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/) and [*Ping360* Scanning Imaging Sonar](https://bluerobotics.com/store/sensors-sonars-cameras/sonar/ping360-sonar-r1-rp/). The application allows you to connect, configure, view data, and record data from a *Ping* device.
 
-![Ping Viewer main display](https://www.bluerobotics.com/wp-content/uploads/2019/01/ping-viewer-1.jpg)
+![Ping Viewer main Ping1D display](https://www.bluerobotics.com/wp-content/uploads/2019/01/ping-viewer-1.jpg)
+![Ping Viewer main Ping360 display](https://bluerobotics.com/wp-content/uploads/2019/07/Ping360_Pilings.png)
+
 
 ## Installing and Running the Application
 
@@ -47,7 +49,9 @@ Visit the [Device Manager](device-manager.md) menu for more connection options.
 
 ## Main Application Interface
 
-The Ping Viewer window consists of four important components:
+### Ping1D
+
+When using the Ping1D, the Ping Viewer window consists of four important components:
 
 1. [Distance Readout](#distance-readout)
 2. [Distance Axis](#distance-axis)
@@ -89,6 +93,14 @@ The Return Plot displays the return strength vs distance of the most recent prof
 The Waterfall is a three dimensional plot that occupies the main portion of the application window. The Waterfall plots consecutive profile samples (distance running vertically and color indicating signal strength). The horizontal axis is time; new data is displayed on the right edge of the Waterfall as older data moves to the left.
 
 The color scheme (gradient) of the Waterfall can be [customized](display-settings.md).
+
+
+### Ping360
+
+For the Ping360, there is no distance readout, the waterfall is wrapped around into a circular (polar) plot showing the scan data at each angle, and the distance axis is along the right-hand edge of the sector scan. The return plot is the same as for the Ping1D, and shows the signal return strength over the full range of the latest ping.
+
+The sector angle and range [can be set](device-settings-ping360.md) to match your operating requirements, and there are options for [heading integration and head down mode](display-settings.md) to adapt the display to your ROV and Ping360's orientation.
+
 
 ## Application and Device Settings
 
