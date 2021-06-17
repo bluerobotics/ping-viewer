@@ -5,20 +5,32 @@
 - **Units:**
 Select the units (meters or feet) for the application to display
 
-- **Plot Theme:**
-Select the color swath/gradient to use for the [Waterfall](index.md#waterfall) display. Custom gradients can be created according to the [custom gradients](#custom-gradients) section.
-
 - **Theme:**
 Select the application menu theme (light or dark)
 
 - **Enable Replay Menu:**
 Enable the [Replay Menu](replay-data.md)
 
+- **Head Down (Ping360 only):**
+Project the polar scan as though [viewing the seabed](https://bluerobotics.com/learn/understanding-and-using-scanning-sonars/#viewing-the-seabed). 
+
+- **Flip A-Scan**:
+Flip between furthers/closest ping data at the top of the [Return Plot](index.md#return-plot).
+
 - **Smooth Data:**
 Filter the [Waterfall](index.md#waterfall) data to smooth noise and fluctuations.
 
 - **Antialiasing:**
 Enable antialiasing in the Waterfall display rendering
+
+- **A-Scan:**
+Enable a display of the signal intensity of the latest ping ([Return Plot](index.md#return-plot)).
+
+- **Plot Theme:**
+Select the color swath/gradient to use for the [Waterfall](index.md#waterfall) display. Custom gradients can be created according to the [custom gradients](#custom-gradients) section.
+
+- **Heading Integration (Ping360 only):**
+Integrate with ROV compass reading to allow sonar display to account for ROV rotations.
 
 - **Debug Mode:**
 Enable Debug information and settings
