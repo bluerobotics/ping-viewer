@@ -93,4 +93,4 @@ When installing, you must minimally select all Visual C++ components.
     - `pipenv run mkdocs build`
 6. Access the generated documentation using your favorite browser.
     - `cd ping-viewer && firefox index.html`
-    - `cd ping-viewer && open -a "Firefox" index.html` on MacOS
+    - `cd ping-viewer && open index.html` on MacOS
