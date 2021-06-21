@@ -13,8 +13,8 @@ Item {
     // Emited when edition if finished with enter/return key or when TextField loses focus
     signal editingFinished()
 
-    width: label.width + textField.width
-    height: label.height
+    Layout.minimumWidth: label.width + textField.width
+    Layout.minimumHeight: label.height
     // This avoid connection interactions while user input is on
     onTextChanged: {
         if (textField.focus)
