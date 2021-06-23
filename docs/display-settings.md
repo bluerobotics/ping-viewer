@@ -3,16 +3,25 @@
 ## Menu Items
 
 - **Units:**
-Select the units (meters or feet) for the application to display
+Select the units (Metric [meters] or Imperial [feets]) for the application to display
 
 - **Theme:**
-Select the application menu theme (light or dark)
+Select the application menu theme (Light or Dark)
+
+- **Enable Always-On-Top mode:**
+The application will be over (in front of) all other windows.
+
+- **Opacity:**
+Select the application opacity. Used to partially view content (e.g. video stream) behind the application window.
 
 - **Enable Replay Menu:**
 Enable the [Replay Menu](replay-data.md)
 
+- **Enable Real-Time Replay:**
+Shows playback as it was recorded (ie what you would see from a screen recording when the data was captured). Sets profile messages to display based on recorded timestamps, instead of using a constant period/update rate.
+
 - **Head Down (Ping360 only):**
-Project the polar scan as though [viewing the seabed](https://bluerobotics.com/learn/understanding-and-using-scanning-sonars/#viewing-the-seabed). 
+Project the polar scan as though [viewing the seabed](https://bluerobotics.com/learn/understanding-and-using-scanning-sonars/#viewing-the-seabed).
 
 - **Flip A-Scan**:
 Flip between furthers/closest ping data at the top of the [Return Plot](index.md#return-plot).
