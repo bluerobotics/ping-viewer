@@ -38,7 +38,7 @@ To know more about the binary structure, please check [binary log file structure
 
 #### Settings
 
-Ping Viewer uses the native settings environment of each operating system, you can reset the settings with the [reset settings button](https://docs.bluerobotics.com/ping-viewer/application-information/#header-buttons) or by manually removing the settings in your computer, they are located under:
+Ping Viewer uses the native settings environment of each operating system, you can reset the settings with the [reset settings button](application-information.md#header-buttons) or by manually removing the settings in your computer, they are located under:
 
 
 
