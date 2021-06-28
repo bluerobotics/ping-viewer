@@ -14,6 +14,7 @@ PingViewer attempts to connect to UDP ports 9090 ([Ping1D](https://bluerobotics.
     4- Describes the connection type and the connection configuration.
     5- Allows the user to go to **Manual Connection**.
     6- Cancel and exit **Device Manager**.
+    7- Opens **Ping360 Ethernet Configuration** painel.
 
 #### Manual Connection
 
@@ -40,3 +41,9 @@ PingViewer attempts to connect to UDP ports 9090 ([Ping1D](https://bluerobotics.
 > `python -m brping/pingproxy --device <device>`
 >
 > `<device>` is the serial port where the Ping device is connected (eg. `/dev/ttyUSB0`).
+
+#### Ping360 Ethernet Configuration
+
+Allows ethernet mode type as _DHCP Client_ or _static IP_. When using _static IP_, be sure to set an IP address that exists under your configured subnet.
+
+> This configuration is only for users that have a custom network environment, such option is not supported fully.
