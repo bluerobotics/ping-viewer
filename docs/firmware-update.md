@@ -40,13 +40,13 @@ Steps to flash the device:
 
 If the device is not working after flashing a new firmware, or if some problem was encountered during installation, a recovery process may be necessary.
 
-The device must be opened to restore the firmware. We only want to open the device if it's absolutely necessary, so to make sure, please [reset ping-viewer settings](https://docs.bluerobotics.com/ping-viewer/application-information/#header-buttons), and connect the device to the computer again. If ping-viewer detects the device automatically, there is no problem! If not, then we can proceed to recover the device.
+The device must be opened to restore the firmware. We only want to open the device if it's absolutely necessary, so to make sure, please [reset ping-viewer settings](application-information.md#header-buttons), and connect the device to the computer again. If ping-viewer detects the device automatically, there is no problem! If not, then we can proceed to recover the device.
 
 To open the device, hold it firmly, and turn the blue ring in counterclockwise direction:
 
 ![Firmware Update Waiting](/ping-viewer/images/firmware-update/open-ping.png)
 
-After the device is opened, turn it on and look for a blinking led on the circuit board inside of the device. If you see a blinking led, the device should be good and the firmware is running fine, you may close the device and double check the [troubleshooting instructions](http://docs.bluerobotics.com/ping-viewer/faq-and-troubleshooting/#troubleshooting).
+After the device is opened, turn it on and look for a blinking led on the circuit board inside of the device. If you see a blinking led, the device should be good and the firmware is running fine, you may close the device and double check the [troubleshooting instructions](faq-and-troubleshooting.md#troubleshooting).
 
 If the led is blinking:
 
