@@ -219,8 +219,8 @@ if [[ $machine = *"Linux"* ]]; then
     runstep "/tmp/linuxdeploy.AppImage --icon-file=$PWD/qml/imgs/pingviewer.png --desktop-file=${deployfolder}/pingviewer.desktop --executable=${deployfolder}/pingviewer --appdir=${deployfolder} --plugin qt --output appimage --verbosity=3" "Run linuxdeploy" "Failed to run linuxdeploy"
     runstep "mv pingviewer*.AppImage /tmp/pingviewer-x86_64.AppImage" "Move .AppImage folder to /tmp/" "Faile to move .AppImage file"
 else
-    runstep "wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_linux.zip -O /tmp/stm32flash_linux.zip" "Download stm32flash_linux" "Faile to download stm32flash_linux"
-    runstep "unzip /tmp/stm32flash_linux.zip  -d /tmp" "Unzip stm32flash" "Fail to unzip stm32flash"
+    runstep "wget https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash_osx.zip -O /tmp/stm32flash_osx.zip" "Download stm32flash_osx" "Faile to download stm32flash_osx"
+    runstep "unzip /tmp/stm32flash_osx.zip  -d /tmp" "Unzip stm32flash" "Fail to unzip stm32flash"
     runstep "chmod +x /tmp/stm32flash" "Convert stm32flash to executable" "Failed to turn stm32flash in executable"
     runstep "mv /tmp/stm32flash ${deployfolder}" "Move stm32flash to deploy" "Failed to move stm32flash into deploy folder"
     runstep "macdeployqt ${deployfolder} -qmldir=${projectpath}/qml -dmg" "Use macdeployqt" "Fail to use macdeployqt"
