@@ -59,6 +59,12 @@ if(WIN32 AND ENABLE_REQUIRE_ADMIN)
     )
 endif()
 
+# Disable console when running in release mode,
+# this is accomplished using the WIN32_EXCUTABLE property
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set_property(TARGET pingviewer PROPERTY WIN32_EXECUTABLE true)
+endif()
+
 target_link_libraries(
     pingviewer
 PRIVATE
