@@ -29,7 +29,7 @@ To get the source files:
 - **macOS:** v10.14 or higher
 - **Linux:** 64 bit, gcc-8 or clang-7 compiler versions or higher
 - **Windows:** 10 or higher, Visual Studio 2017 compiler (64 bit)
-- **Qt version:** 5.12 **(only)**
+- **Qt version:** 5.15 **(only)**
 
 > **Tip:** For more information see: [Qt 5 supported platform list](http://doc.qt.io/qt-5/supported-platforms.html).
 
@@ -42,7 +42,7 @@ When installing, you must minimally select all Visual C++ components.
 #### Install Qt
 
 1. Download and run the [Qt Online Installer](http://www.qt.io/download-open-source).
-2. In the installer *Select Components* dialog choose: 5.12.
+2. In the installer *Select Components* dialog choose: 5.15.
 
    Then install just the following components:
    - **Qt binary version:**
@@ -56,14 +56,33 @@ When installing, you must minimally select all Visual C++ components.
 
 #### Building using Qt Creator
 
-1. Launch *Qt Creator* and open the **pingviewer.pro** project.
+1. Launch *Qt Creator* and open the **CMakeLists.txt** project.
 2. Select the appropriate kit for your needs:
-  - **macOS:** Desktop Qt 5.12 Clang 64 bit
-  - **Linux:** Desktop Qt 5.12 GCC 64 bit
-  - **Windows:** Desktop Qt 5.12 MSVC2017 64 bit
+  - **macOS:** Desktop Qt 5 Clang 64 bit
+  - **Linux:** Desktop Qt 5.15 GCC 64 bit
+  - **Windows:** Desktop Qt 5.15 MSVC2017 64 bit
 3. Build and run with the **Green Play icon**.
 
 #### Building with terminal
+
+Since Ping-Viewer v2.2.0, the project now uses CMake to simplify the build process.
+For more information about CMake with Qt based projects, check the [Qt CMake manual](https://doc.qt.io/qt-5/cmake-manual.html);
+
+1. Use CMake to configure the project
+    - `cmake -B build -DCMAKE_BUILD_TYPE=Debug`
+    > **Note**: CMake may fail to find the necessary `*.cmake` files for configuration, for that, you can set the `Qt5_DIR` variable with the path for the cmake/Qt5 folder.
+    > Like: `cmake -B build -DCMAKE_BUILD_TYPE=Debug -DQt5_DIR=$(brew --prefix qt5)/lib/cmake/Qt5`
+2. Use CMake again to build it
+    - `cmake --build build --parallel --config Debug`
+3. Go inside build folder
+    - `cd build`
+4. And after that you'll be able to run the project
+    - `./pingviewer`
+    > **Note**: macOS uses a different path for application binaries, the binary will be available under: `./pingviewer.app/Contents/MacOS/pingviewer`
+
+##### QMake build
+
+For Ping-Viewer versions under v2.2.0.
 
 1. Go outside the cloned folder of Ping-Viewer
 2. Create the build folder
