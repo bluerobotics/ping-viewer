@@ -21,7 +21,10 @@ foreach(directory ${INCLUDE_DIRS})
     add_subdirectory(${directory})
 endforeach()
 
-find_package(Qt5QuickCompiler)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
+    QuickCompiler
+)
+
 qtquick_compiler_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../resources.qrc)
 
 # Configure icon for mac build
