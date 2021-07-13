@@ -407,6 +407,9 @@ void Ping::setLastPingConfiguration()
     // Load previous configuration with device id
     loadLastPingConfigurationSettings();
 
+    // Request at least a single profile to get device configuration
+    emitPing();
+
     // Print last configuration
     QString output = QStringLiteral("\nPingConfiguration {\n");
     for (const auto& key : _pingConfiguration.keys()) {
