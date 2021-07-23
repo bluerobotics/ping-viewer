@@ -17,8 +17,8 @@ The log file that Ping Viewer provides has a header description structure that a
 > Note: The binary file structure is done in **big-endian**.
 
 Arrays (**Strings**) are defined with the following structure:
-- Array size (**uint32**)
-- Array data (**byte_array[]**)
+  - Array size (**uint32**)
+  - Array data (**byte_array[]**)
 
 The source code that defines this structure can be found in Ping Viewer source code [LogSensorStruct file](https://github.com/bluerobotics/ping-viewer/blob/master/src/link/logsensorstruct.cpp).
 
