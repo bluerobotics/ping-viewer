@@ -22,6 +22,12 @@ Arrays (**Strings**) are defined with the following structure:
 
 The source code that defines this structure can be found in Ping Viewer source code [LogSensorStruct file](https://github.com/bluerobotics/ping-viewer/blob/master/src/link/logsensorstruct.cpp).
 
+After the header block, the messages are organized in the following format: **[Timestamp string][Byte array from the serial buffer]**
+
+Where the timestamp string follows the format: `hh:mm:ss.zzz`.
+
+> Note that the byte array part may not contain a full valid message, it just contains the data available on the serial buffer during the sample time of the timestamp.
+
 ## Python example
 
 You can check [this minimal Python example](https://github.com/bluerobotics/ping-viewer/blob/master/examples/decode_sensor_binary_log.py) (needs Python 3.7+).
