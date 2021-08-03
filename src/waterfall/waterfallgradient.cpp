@@ -48,11 +48,12 @@ WaterfallGradient::WaterfallGradient(QFile& file)
             continue;
         }
         qCDebug(waterfallGradient) << "Check line:" << line;
-        for (auto i : {2, 5, 8, 11}) {
+        for (auto i : {2, 5, 7, 8, 11}) {
             /*
                 Check for:
                 #RGB
                 #RRGGBB
+                #AARRGGBB
                 #RRRGGGBBB
                 #RRRRGGGGBBBB
             */
