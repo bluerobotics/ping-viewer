@@ -62,6 +62,7 @@ WaterfallGradient::WaterfallGradient(QFile& file)
             if (match.hasMatch()) {
                 qCDebug(waterfallGradient) << "New color:" << match.capturedTexts();
                 colors.append(match.capturedTexts()[0]);
+                break;
             }
         }
     }
