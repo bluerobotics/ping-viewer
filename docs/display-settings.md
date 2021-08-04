@@ -63,4 +63,4 @@ This is an example of gradient file:
 #ff0000
 ```
 
-Where `#000000` is white (low power signal - 0.0), `#ffffff` (average power signal - 0.5) is black and `#ff0000` is red (max power signal - 1.0).
+Where `#000000` is black (low power signal - 0.0), `#ffffff` (average power signal - 0.5) is white and `#ff0000` is red (max power signal - 1.0).
