@@ -132,14 +132,17 @@ float WaterfallGradient::getValue(const QColor& color) const
 bool WaterfallGradient::colorsInRange(const QColor& color, const QColor& color1, const QColor& color2)
 {
     QColor maxColor;
+    maxColor.setAlpha(color1.alpha() < color2.alpha() ? color2.alpha() : color1.alpha());
     maxColor.setRed(color1.red() < color2.red() ? color2.red() : color1.red());
     maxColor.setGreen(color1.green() < color2.green() ? color2.green() : color1.green());
     maxColor.setBlue(color1.blue() < color2.blue() ? color2.blue() : color1.blue());
     QColor minColor;
+    minColor.setAlpha(color1.alpha() > color2.alpha() ? color2.alpha() : color1.alpha());
     minColor.setRed(color1.red() > color2.red() ? color2.red() : color1.red());
     minColor.setGreen(color1.green() > color2.green() ? color2.green() : color1.green());
     minColor.setBlue(color1.blue() > color2.blue() ? color2.blue() : color1.blue());
 
+    bool aOk = color.alpha() >= minColor.alpha() && color.alpha() <= maxColor.alpha();
     bool rOk = color.red() >= minColor.red() && color.red() <= maxColor.red();
     bool gOk = color.green() >= minColor.green() && color.green() <= maxColor.green();
     bool bOk = color.blue() >= minColor.blue() && color.blue() <= maxColor.blue();
@@ -153,11 +156,12 @@ QColor WaterfallGradient::colorLinearInterpolation(
     float minimum = color1.first;
     float maximum = color2.first;
     float ratio = (value - minimum) / (maximum - minimum);
+    float a = ratio * color2.second.alpha() + (1 - ratio) * color1.second.alpha();
     float r = ratio * color2.second.red() + (1 - ratio) * color1.second.red();
     float g = ratio * color2.second.green() + (1 - ratio) * color1.second.green();
     float b = ratio * color2.second.blue() + (1 - ratio) * color1.second.blue();
 
-    return QColor(r, g, b);
+    return QColor(r, g, b, a);
 }
 
 float WaterfallGradient::valueLinearInterpolation(
@@ -167,6 +171,7 @@ float WaterfallGradient::valueLinearInterpolation(
     float value = 0;
     float minimum = 0;
     float maximum = 0;
+    float testA = qAbs(color2.second.alpha() - color1.second.alpha());
     float testR = qAbs(color2.second.red() - color1.second.red());
     float testG = qAbs(color2.second.green() - color1.second.green());
     float testB = qAbs(color2.second.blue() - color1.second.blue());
@@ -189,6 +194,13 @@ float WaterfallGradient::valueLinearInterpolation(
         minimum = qMin(color2.second.blue(), color1.second.blue());
         ratio = float(color.blue()) / (maximum - minimum);
         if (color2.second.blue() < color1.second.blue()) {
+            ratio = 1 - ratio;
+        }
+    } else {
+        maximum = qMax(color2.second.alpha(), color1.second.alpha());
+        minimum = qMin(color2.second.alpha(), color1.second.alpha());
+        ratio = float(color.alpha()) / (maximum - minimum);
+        if (color2.second.alpha() < color1.second.alpha()) {
             ratio = 1 - ratio;
         }
     }
