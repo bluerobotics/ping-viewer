@@ -67,9 +67,9 @@ The user can create his own gradients for the waterfall, for this, it's necessar
 This is an example of gradient file:
 ```
 ; Put this example in a file called `Gradient_test.txt` in **Waterfall_Gradients**.
-#000000
+#7f000000
 #ffffff
 #ff0000
 ```
 
-Where `#000000` is black (low power signal - 0.0), `#ffffff` (average power signal - 0.5) is white and `#ff0000` is red (max power signal - 1.0).
+Where `#7f000000` is black with 50% transparency (low power signal - 0.0), `#ffffff` (average power signal - 0.5) is white and `#ff0000` is red (max power signal - 1.0).
