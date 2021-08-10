@@ -21,7 +21,7 @@ Enable the [Replay Menu](replay-data.md)
 Shows playback as it was recorded (ie what you would see from a screen recording when the data was captured). Sets profile messages to display based on recorded timestamps, instead of using a constant period/update rate.
 
 - **Head Down (Ping360 only):**
-Project the polar scan as though [viewing the seabed](https://bluerobotics.com/learn/understanding-and-using-scanning-sonars/#viewing-the-seabed).
+Flip the polar scan so the display is correct for a Ping360 that is positioned upside down (scanning head at the bottom).
 
 - **Flip A-Scan**:
 Flip between furthers/closest ping data at the top of the [Return Plot](index.md#return-plot).
