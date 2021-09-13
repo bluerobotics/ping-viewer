@@ -1,3 +1,4 @@
+#include <QNetworkDatagram>
 #include <QQmlEngine>
 #include <QUdpSocket>
 
@@ -47,20 +48,27 @@ void Ping360HelperService::doBroadcast()
 void Ping360HelperService::processBroadcastResponses()
 {
     while (_broadcastSocket.hasPendingDatagrams()) {
-        QHostAddress sender;
-        QByteArray datagram;
-        datagram.resize(_broadcastSocket.pendingDatagramSize());
-        _broadcastSocket.readDatagram(datagram.data(), datagram.size(), &sender);
-        // Make sure we have an IPV4 address, and not something like "::ffff:192.168.1.1"
-        sender = QHostAddress(sender.toIPv4Address());
+        QHostAddress sender, destination;
 
-        const Ping360DiscoveryResponse decoded = Ping360AsciiProtocol::decodeDiscoveryResponse(datagram);
+        QNetworkDatagram datagram = _broadcastSocket.receiveDatagram();
+
+        // Make sure we have an IPV4 address, and not something like "::ffff:192.168.1.1"
+        sender = QHostAddress(datagram.senderAddress().toIPv4Address());
+
+        // if the sender ip address starts with 169.254.x.x, then the ping360 has not
+        // been assigned an ip address and we will not be able to reach it on this address
+        // we need to broadcast on the destination subnet, where we will be able to communicate
+        if (sender.isLinkLocal()) {
+            sender = QHostAddress(datagram.destinationAddress().toIPv4Address() | 255);
+        }
+
+        const Ping360DiscoveryResponse decoded = Ping360AsciiProtocol::decodeDiscoveryResponse(datagram.data());
         if (decoded.deviceName.contains("PING360")) {
             emit availableLinkFound(
                 {{LinkType::Udp, {sender.toString(), "12345"}, "Ping360 Port", PingDeviceType::PING360}},
                 QStringLiteral("Ping360 Ethernet Protocol Detector"));
         } else {
-            qCWarning(PING360HELPERSERVICE) << "Invalid message:" << datagram;
+            qCWarning(PING360HELPERSERVICE) << "Invalid message:" << datagram.data();
         }
     }
 }
