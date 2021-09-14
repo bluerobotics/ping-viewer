@@ -12,6 +12,8 @@ jobs:
           DEPLOY_PATH: pingviewer-Release.dmg
         - os: ubuntu-latest
           DEPLOY_PATH: pingviewer-Release.AppImage
+        - os: [self-hosted, Linux, ARM64]
+          DEPLOY_PATH: pingviewer-Release-ARM64.AppImage
         - os: windows-latest
           DEPLOY_PATH: pingviewer-Release.zip
 
