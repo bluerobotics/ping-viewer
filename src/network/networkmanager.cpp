@@ -94,6 +94,16 @@ bool NetworkManager::isIpInSubnet(const QString& ip)
     return false;
 }
 
+bool NetworkManager::isIpSubnetBroadcast(const QString& ip)
+{
+    if (!NetworkManager::isIpInSubnet(ip)) {
+        qCWarning(NETWORKMANAGER) << "IP address does not have a valid subnet:" << ip;
+        return false;
+    }
+
+    return ip.endsWith("255");
+}
+
 QObject* NetworkManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
 {
     Q_UNUSED(engine)

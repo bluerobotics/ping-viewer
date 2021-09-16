@@ -49,6 +49,15 @@ public:
     static bool isIpInSubnet(const QString& ip);
 
     /**
+     * @brief Check if IP address is a valid broadcast IP in a /24 network.
+     *
+     * @param ip
+     * @return true
+     * @return false
+     */
+    static bool isIpSubnetBroadcast(const QString& ip);
+
+    /**
      * @brief Return a pointer of this singleton to the qml register function
      *
      * @param engine
