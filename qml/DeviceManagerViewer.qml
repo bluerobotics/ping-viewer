@@ -12,6 +12,13 @@ import StyleManager 1.0
 PingPopup {
     id: root
 
+    enum ConnectionStatus {
+        Available,
+        Unavailable,
+        InvalidConfiguration,
+        ConfigurationIsRequired
+    }
+
     closePolicy: Popup.NoAutoClose
     onVisibleChanged: {
         visible ? DeviceManager.startDetecting() : DeviceManager.stopDetecting();
@@ -194,6 +201,20 @@ PingPopup {
                 delegate: Rectangle {
                     id: rectDelegate
 
+                    //TODO: Move this logic and variable to C++ somehow
+                    property var connectionStatus: {
+                        if (!connection.isValid())
+                            return DeviceManagerViewer.ConnectionStatus.InvalidConfiguration;
+
+                        if (connection.deviceType() == PingEnumNamespace.PingDeviceType.PING360 && connection.type() == AbstractLinkNamespace.Udp && connection.isSubnetBroadcast())
+                            return DeviceManagerViewer.ConnectionStatus.ConfigurationIsRequired;
+
+                        if (available)
+                            return DeviceManagerViewer.ConnectionStatus.Available;
+
+                        return DeviceManagerViewer.ConnectionStatus.Unavailable;
+                    }
+
                     height: 40
                     width: parent.width
                     color: buttonMouseArea.containsMouse ? "gainsboro" : "transparent"
@@ -216,6 +237,7 @@ PingPopup {
 
                         anchors.fill: parent
                         hoverEnabled: true
+                        enabled: rectDelegate.connectionStatus != DeviceManagerViewer.ConnectionStatus.ConfigurationIsRequired
                         onClicked: {
                             DeviceManager.connectLink(connection);
                         }
@@ -268,7 +290,9 @@ PingPopup {
                                 selected: deviceConfigureMouseArea.containsMouse
                                 Layout.alignment: Qt.AlignRight
                                 visible: {
-                                    return connection.deviceType() == PingEnumNamespace.PingDeviceType.PING360 && connection.type() == AbstractLinkNamespace.Udp && !connection.isCompanionPort();
+                                    const canBeConfigured = connection.deviceType() == PingEnumNamespace.PingDeviceType.PING360 && connection.type() == AbstractLinkNamespace.Udp && !connection.isCompanionPort();
+                                    const configurationRequired = parent.parent.connectionStatus == DeviceManagerViewer.ConnectionStatus.ConfigurationIsRequired;
+                                    return canBeConfigured || configurationRequired;
                                 }
 
                                 MouseArea {
@@ -292,13 +316,18 @@ PingPopup {
                             Layout.rightMargin: 5
                             Layout.alignment: Qt.AlignRight
                             color: {
-                                if (!available)
+                                switch (rectDelegate.connectionStatus) {
+                                case DeviceManagerViewer.ConnectionStatus.Available:
+                                    return "green";
+                                case DeviceManagerViewer.ConnectionStatus.Unavailable:
                                     return "red";
-
-                                if (!connection.isValid())
+                                case DeviceManagerViewer.ConnectionStatus.InvalidConfiguration:
                                     return "yellow";
-
-                                return "green";
+                                case DeviceManagerViewer.ConnectionStatus.ConfigurationIsRequired:
+                                    return "blue";
+                                default:
+                                    return "orange";
+                                }
                             }
                             active: true
 
@@ -309,13 +338,18 @@ PingPopup {
                                 ToolTip {
                                     visible: parent.containsMouse
                                     text: {
-                                        if (!available)
+                                        switch (rectDelegate.connectionStatus) {
+                                        case DeviceManagerViewer.ConnectionStatus.Available:
+                                            return "Device available.";
+                                        case DeviceManagerViewer.ConnectionStatus.Unavailable:
                                             return "Device busy or not available.";
-
-                                        if (!connection.isValid())
+                                        case DeviceManagerViewer.ConnectionStatus.InvalidConfiguration:
                                             return connection.errorToString();
-
-                                        return "Device available.";
+                                        case DeviceManagerViewer.ConnectionStatus.ConfigurationIsRequired:
+                                            return "Configuration is required.";
+                                        default:
+                                            return "Unknown connection status.";
+                                        }
                                     }
                                 }
 
