@@ -249,6 +249,14 @@ public:
     bool isInSubnet() const;
 
     /**
+     * @brief Check if IP has a valid and accessible broadcast IP.
+     *
+     * @return true
+     * @return false
+     */
+    Q_INVOKABLE bool isSubnetBroadcast() const;
+
+    /**
      * @brief Return link configuration type
      *
      * @return AbstractLinkNamespace::LinkType
