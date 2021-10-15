@@ -59,6 +59,7 @@ void Ping360HelperService::processBroadcastResponses()
         // been assigned an ip address and we will not be able to reach it on this address
         // we need to broadcast on the destination subnet, where we will be able to communicate
         if (sender.isLinkLocal()) {
+            qDebug() << datagram.destinationAddress() << datagram.interfaceIndex() << datagram.senderAddress();
             sender = QHostAddress(datagram.destinationAddress().toIPv4Address() | 255);
         }
 
