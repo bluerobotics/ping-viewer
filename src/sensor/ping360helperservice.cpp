@@ -1,4 +1,5 @@
 #include <QNetworkDatagram>
+#include <QNetworkInterface>
 #include <QQmlEngine>
 #include <QUdpSocket>
 
@@ -17,6 +18,17 @@ Ping360HelperService* Ping360HelperService::self()
 Ping360HelperService::Ping360HelperService()
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
+    const int randomPort = 0; // Force OS to give a random port
+    _broadcastSocket.bind(QHostAddress::AnyIPv4, randomPort, QAbstractSocket::ReuseAddressHint);
+
+    // Bind all available interfaces
+    const auto interfaces = QNetworkInterface::allInterfaces();
+    for (const QNetworkInterface& networkInterface : interfaces) {
+        if (networkInterface.flags() & QNetworkInterface::CanBroadcast) {
+            _broadcastSocket.joinMulticastGroup(QHostAddress(QHostAddress::Broadcast), networkInterface);
+        }
+    }
 
     connect(&_broadcastTimer, &QTimer::timeout, this, &Ping360HelperService::doBroadcast);
     connect(&_broadcastSocket, &QUdpSocket::readyRead, this, &Ping360HelperService::processBroadcastResponses);
