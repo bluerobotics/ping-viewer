@@ -6,16 +6,14 @@ endif()
 
 # Update submodules as needed
 option(GIT_SUBMODULE "Check submodules during build" ON)
-if(NOT GIT_SUBMODULE)
-    return()
-endif()
-
-message(STATUS "Submodule update")
-execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-                RESULT_VARIABLE GIT_SUBMODULE_RESULT)
-if(NOT GIT_SUBMODULE_RESULT EQUAL "0")
-    message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMODULE_RESULT}, please checkout submodules")
+if(GIT_SUBMODULE)
+    message(STATUS "Submodule update")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                    RESULT_VARIABLE GIT_SUBMODULE_RESULT)
+    if(NOT GIT_SUBMODULE_RESULT EQUAL "0")
+        message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMODULE_RESULT}, please checkout submodules")
+    endif()
 endif()
 
 # Fetch the necessary git variables
