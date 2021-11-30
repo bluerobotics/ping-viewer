@@ -45,6 +45,8 @@ find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
     Widgets
 )
 
+message(STATUS "Qt Version: ${Qt5_VERSION}")
+
 # global include directories
 include_directories(
     lib/fmt/fmt/include/
