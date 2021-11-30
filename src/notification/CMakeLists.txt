@@ -8,7 +8,7 @@ STATIC
 target_link_libraries(
     notification
 PRIVATE
-    Qt5::Core
-    Qt5::Widgets # because of stylemanager.h
-    Qt5::Quick # because of stylemanager.h
+    Qt6::Core
+    Qt6::Widgets # because of stylemanager.h
+    Qt6::Quick # because of stylemanager.h
 )

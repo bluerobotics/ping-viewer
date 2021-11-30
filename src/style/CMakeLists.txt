@@ -7,8 +7,8 @@ STATIC
 target_link_libraries(
     style
 PRIVATE
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Qml
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Qml
 )
