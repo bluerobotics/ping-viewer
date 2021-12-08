@@ -86,6 +86,8 @@ bool NetworkManager::isIpInSubnet(const QString& ip)
     for (const auto& address : QNetworkInterface::allAddresses()) {
         // Remove the last value of the IP address
         const bool sameSubnet = (address.toIPv4Address() & 0xffffff00) == (testAddress.toIPv4Address() & 0xffffff00);
+        qCDebug(NETWORKMANAGER)
+            << QStringLiteral("Checking host address %1 against %2").arg(address.toString(), testAddress.toString());
         if (sameSubnet) {
             return true;
         }
