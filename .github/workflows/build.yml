@@ -50,7 +50,7 @@ jobs:
       env:
         OPENSSL: 'C:\Program Files\OpenSSL\bin'
         SYSTEM32: 'C:\windows\system32'
-        SYSTEM32_DLLS: 'VCRUNTIME140.dll MSVCP140.dll ucrtbased.dll'
+        SYSTEM32_DLLS: 'VCRUNTIME140.dll VCRUNTIME140_1.dll MSVCP140.dll MSVCP140_1.dll'
       run: |
         env
         cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel --target ALL_BUILD --config Release
