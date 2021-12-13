@@ -78,7 +78,7 @@ void NetworkManager::download(const QUrl& url, std::function<void(QString)> func
 bool NetworkManager::isIpInSubnet(const QString& ip)
 {
     const QHostAddress testAddress {ip};
-    if (testAddress.protocol() != QAbstractSocket::IPv4Protocol) {
+    if (testAddress.protocol() == QAbstractSocket::IPv6Protocol) {
         qCWarning(NETWORKMANAGER) << "Invalid network interface for ip:" << testAddress;
         return false;
     }
