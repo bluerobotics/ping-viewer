@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QHostAddress>
+#include <QHostInfo>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkInterface>
@@ -75,9 +76,15 @@ void NetworkManager::download(const QUrl& url, std::function<void(QString)> func
     });
 }
 
-bool NetworkManager::isIpInSubnet(const QString& ip)
+QHostAddress NetworkManager::addressToIp(const QString& address)
 {
-    const QHostAddress testAddress {ip};
+    return QHostInfo::fromName(address).addresses().first();
+}
+
+bool NetworkManager::isAddressInSubnet(const QString& address)
+{
+    const QHostAddress testAddress = addressToIp(address);
+
     if (testAddress.protocol() == QAbstractSocket::IPv6Protocol) {
         qCWarning(NETWORKMANAGER) << "Invalid network interface for ip:" << testAddress;
         return false;
@@ -96,14 +103,16 @@ bool NetworkManager::isIpInSubnet(const QString& ip)
     return false;
 }
 
-bool NetworkManager::isIpSubnetBroadcast(const QString& ip)
+bool NetworkManager::isAddressSubnetBroadcast(const QString& address)
 {
-    if (!NetworkManager::isIpInSubnet(ip)) {
-        qCWarning(NETWORKMANAGER) << "IP address does not have a valid subnet:" << ip;
+    const QString testAddress = addressToIp(address).toString();
+
+    if (!NetworkManager::isAddressInSubnet(testAddress)) {
+        qCWarning(NETWORKMANAGER) << "IP address does not have a valid subnet:" << testAddress;
         return false;
     }
 
-    return ip.endsWith("255");
+    return testAddress.endsWith("255");
 }
 
 QObject* NetworkManager::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
