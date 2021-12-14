@@ -2,6 +2,7 @@
 
 #include <functional>
 
+#include <QHostAddress>
 #include <QLoggingCategory>
 
 class QJSEngine;
@@ -40,22 +41,30 @@ public:
     static void download(const QUrl& url, std::function<void(QString)> function);
 
     /**
-     * @brief Check if IP address is a valid IP of the host network interfaces
+     * @brief Fetch address information
      *
-     * @param ip
-     * @return true
-     * @return false
+     * @param address
+     * @return QHostAddress
      */
-    static bool isIpInSubnet(const QString& ip);
+    static QHostAddress addressToIp(const QString& address);
 
     /**
-     * @brief Check if IP address is a valid broadcast IP in a /24 network.
+     * @brief Check if an address is a valid IP of the host network interfaces
      *
-     * @param ip
+     * @param address
      * @return true
      * @return false
      */
-    static bool isIpSubnetBroadcast(const QString& ip);
+    static bool isAddressInSubnet(const QString& address);
+
+    /**
+     * @brief Check if an address is a valid broadcast IP in a /24 network.
+     *
+     * @param address
+     * @return true
+     * @return false
+     */
+    static bool isAddressSubnetBroadcast(const QString& address);
 
     /**
      * @brief Return a pointer of this singleton to the qml register function
