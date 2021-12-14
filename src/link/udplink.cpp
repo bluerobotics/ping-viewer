@@ -37,7 +37,12 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
     qCDebug(PING_PROTOCOL_UDPLINK) << linkConfiguration;
     if (!linkConfiguration.isValid()) {
         qCDebug(PING_PROTOCOL_UDPLINK) << LinkConfiguration::errorToString(linkConfiguration.error());
-        return false;
+
+        // We allow wrong subnet connections
+        // A VPN software or something may be using OS API to provice access to it
+        if (linkConfiguration.error() != LinkConfiguration::Error::InvalidSubnet) {
+            return false;
+        }
     }
 
     setName(linkConfiguration.name());
