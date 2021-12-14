@@ -90,13 +90,21 @@ bool NetworkManager::isAddressInSubnet(const QString& address)
         return false;
     }
 
-    for (const auto& address : QNetworkInterface::allAddresses()) {
-        // Remove the last value of the IP address
-        const bool sameSubnet = (address.toIPv4Address() & 0xffffff00) == (testAddress.toIPv4Address() & 0xffffff00);
-        qCDebug(NETWORKMANAGER)
-            << QStringLiteral("Checking host address %1 against %2").arg(address.toString(), testAddress.toString());
-        if (sameSubnet) {
-            return true;
+    for (const auto& interface : QNetworkInterface::allInterfaces()) {
+        for (const auto& networkAddressEntry : interface.addressEntries()) {
+            const auto address = networkAddressEntry.ip();
+            const auto netmask = networkAddressEntry.netmask();
+
+            // Remove the last value of the IP address
+            const bool sameSubnet = (address.toIPv4Address() & netmask.toIPv4Address())
+                == (testAddress.toIPv4Address() & netmask.toIPv4Address());
+            qCDebug(NETWORKMANAGER) << QStringLiteral(
+                "Checking interface %1 (%2): host address %3 against %4 using netmask %5")
+                                           .arg(interface.humanReadableName(), interface.name(), address.toString(),
+                                               testAddress.toString(), netmask.toString());
+            if (sameSubnet) {
+                return true;
+            }
         }
     }
 
