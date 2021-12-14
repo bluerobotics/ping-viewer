@@ -157,9 +157,9 @@ int LinkConfiguration::udpPort() const
     return _linkConf.args[1].toInt();
 }
 
-bool LinkConfiguration::isInSubnet() const { return NetworkManager::isIpInSubnet(udpHost()); }
+bool LinkConfiguration::isInSubnet() const { return NetworkManager::isAddressInSubnet(udpHost()); }
 
-bool LinkConfiguration::isSubnetBroadcast() const { return NetworkManager::isIpSubnetBroadcast(udpHost()); }
+bool LinkConfiguration::isSubnetBroadcast() const { return NetworkManager::isAddressSubnetBroadcast(udpHost()); }
 
 bool operator==(const LinkConfiguration& first, const LinkConfiguration& second)
 {
