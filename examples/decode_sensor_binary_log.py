@@ -8,7 +8,7 @@ assert (sys.version_info.major >= 3 and sys.version_info.minor >= 8), \
 
 from brping import PingParser, PingMessage
 from dataclasses import dataclass
-from typing import IO, Any
+from typing import IO, Any, Set
 
 
 def indent(obj, by=' '*4):
@@ -62,7 +62,7 @@ class Header:
     """
 
 
-class Log:
+class PingViewerLogReader:
     ''' Structured as a big-endian sequence of
         size: uint32, data: byte_array[size].
     '''
@@ -170,7 +170,7 @@ class Log:
         self.messages.extend(self)
 
     def __iter__(self):
-        """ Creates an iterator for efficient reading of this Log.
+        """ Creates an iterator for efficient reading of self.filename.
 
         Yields (timestamp, message) pairs for decoding.
 
@@ -183,14 +183,18 @@ class Log:
                 except struct.error:
                     break # reading complete
 
-    def parser(self):
-        """ Returns a generator that parses and decodes this Log.
+    def parser(self, message_ids: Set[int] = {1300, 2300, 2301}):
+        """ Returns a generator that parses and decodes this log's messages.
 
-        Yields (timestamp, message) pairs. Message decoded as PingMessage.
+        Yields (timestamp, message) pairs. message decoded as a PingMessage.
+
+        'message_ids' is the set of Ping Profile message ids to filter by.
+            Default value is {1300, 2300, 2301} -> {Ping1D.profile,
+                                                    Ping360.device_data,
+                                                    Ping360.auto_device_data}
 
         """
         self._parser = PingParser()
-        ping_ids = {1300, 2300, 2301} # Ping1D, Ping360, Ping360 auto-data
 
         for (timestamp, message) in self:
             # parse each byte of the message
@@ -199,7 +203,7 @@ class Log:
                 if self._parser.parse_byte(byte) == self._parser.NEW_MESSAGE:
                     # Get decoded message
                     decoded_message = self._parser.rx_msg
-                    if decoded_message.message_id in ping_ids:
+                    if decoded_message.message_id in message_ids:
                         yield timestamp, decoded_message
                         break # this message is (should be?) over, get next one
                 # else message is still being parsed
@@ -271,7 +275,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Open log and begin processing
-    log = Log(args.file)
+    log = PingViewerLogReader(args.file)
 
     for index, (timestamp, decoded_message) in enumerate(log.parser()):
         if index == 0:
