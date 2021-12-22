@@ -6,7 +6,7 @@ import struct, sys, re
 assert (sys.version_info.major >= 3 and sys.version_info.minor >= 8), \
     "Python version should be at least 3.8."
 
-from brping import PingParser
+from brping import PingParser, PingMessage
 from dataclasses import dataclass
 from typing import IO, Any
 
@@ -203,6 +203,62 @@ class Log:
                         yield timestamp, decoded_message
                         break # this message is (should be?) over, get next one
                 # else message is still being parsed
+
+
+@dataclass(init=False, order=True)
+class Ping1DSettings:
+    transmit_duration : int # [us]
+    scan_start        : int # [mm] from transducer
+    scan_length       : int # [mm]
+    gain_setting      : int # [0-6 -> 0.6-144]
+
+    def __init__(self, profile: PingMessage):
+        for attr in self.__annotations__:
+            setattr(self, attr, getattr(profile, attr))
+
+    @property
+    def gain(self):
+        """ Returns device receiver 'gain', as specified by 
+        https://docs.bluerobotics.com/ping-protocol/pingmessage-ping1d/#1300-profile.
+        
+        """
+        assert 0 <= self.gain_setting <= 6, "Invalid gain value."
+        return (0.6, 1.8, 5.5, 12.9, 30.2, 66.1, 144)[self.gain_setting]
+
+
+@dataclass(init=False, order=True)
+class Ping360Settings:
+    mode               : int # Ping360 = 1
+    gain_setting       : int # 0-2 (low,normal,high)
+    transmit_duration  : int # 1-1000 [us]
+    sample_period      : int # 80-40_000 [25ns]
+    transmit_frequency : int # [kHz]
+    number_of_samples  : int # per ping
+
+    def __init__(self, device_data: PingMessage):
+        for attr in self.__annotations__:
+            setattr(self, attr, getattr(device_data, attr))
+
+    @property
+    def gain(self):
+        assert 0 <= self.gain_setting <= 2, "Invalid gain value."
+        return ('low', 'medium', 'high')[self.gain_setting]
+
+    @property
+    def sample_period_us(self):
+        """ Returns device sample period in microseconds. """
+        assert 80 <= self.sample_period <= 40_000, "Invalid sample period."
+        return self.sample_period * 25e-3
+    
+    def meters_per_sample(self, v_sound):
+        """ Returns the distance [m] covered by each sample of a ping.
+
+        Distance depends on 'v_sound' [m/s], the speed of sound in the
+            surrounding liquid.
+
+        """
+        # time of flight -> v_sound * (there + back) / 2
+        return v_sound * self.sample_period_us * 1e-6 / 2
 
 
 if __name__ == "__main__":
