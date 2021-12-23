@@ -12,7 +12,7 @@ class PingViewerLogWriter:
 
     def __init__(self, filename: str,
                  messages: Iterable[Tuple[str, PingMessage]],
-                 header: Header):
+                 header: Header, progress: bool = True):
         """ Writes a log file in the PingViewer binary format.
 
         'filename' is the filename/path to write to
@@ -23,12 +23,17 @@ class PingViewerLogWriter:
         'header' is the Header to save with. If re-encoding an existing log
             file, the PingViewerLogWriter.with_reference_log constructor may
             be a more convenient alternative.
+        'progress' is a boolean specifying whether to print progress updates.
 
         """
         with open(filename, 'wb') as file:
             file.write(self.pack_header(header))
-            for timestamp, message in messages:
+            for i, (timestamp, message) in enumerate(messages):
                 file.write(self.pack_message(timestamp, message))
+                if progress:
+                    print("message:", i, end='\r')
+        if progress:
+            print(i, 'messages written to', filename)
 
     @classmethod
     def pack_array(cls, array: bytes):
@@ -57,9 +62,9 @@ class PingViewerLogWriter:
             ))
 
     @classmethod
-    def with_reference_log(cls, output_file: str,
-                        messages: Iterable[Tuple[str, PingMessage]],
-                        reference_bin_file: str):
+    def with_reference_log(cls, reference_bin_file: str, output_file: str,
+                           messages: Iterable[Tuple[str, PingMessage]],
+                           *args, **kwargs):
         """ Writes a log file in the PingViewer binary format.
 
         This alternate constructor takes an existing log filename and extracts
@@ -68,7 +73,7 @@ class PingViewerLogWriter:
         """
         reference_log = PingViewerLogReader(reference_bin_file)
         next(iter(reference_log)) # parse first message, to extract header
-        cls(output_file, messages, reference_log.header)
+        cls(output_file, messages, reference_log.header, *args, **kwargs)
 
 
 if __name__ == '__main__':
@@ -87,6 +92,8 @@ if __name__ == '__main__':
     parser.add_argument("--step", type=int, default=1,
                         help=("Extract every nth message. "
                               "Default 1 (every message)."))
+    parser.add_argument("-q", "--quiet", action="store_true",
+                        help="turn off progress prints")
     args = parser.parse_args()
 
     in_file = args.file
@@ -94,4 +101,5 @@ if __name__ == '__main__':
 
     log = PingViewerLogReader(in_file)
     process = islice(log.parser(), args.start, args.stop, args.step)
-    PingViewerLogWriter.with_reference_log(output, process, in_file)
+    PingViewerLogWriter.with_reference_log(in_file, output, process,
+                                           not args.quiet)
