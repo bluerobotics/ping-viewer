@@ -38,14 +38,14 @@ void FileLink::writeData(const QByteArray& data)
     }
 
     // This save the data as a structure to deal with the timestamp
-    if (_openModeFlag == QIODevice::WriteOnly && _file.isWritable()) {
+    if (_openModeFlag == QIODevice::WriteOnly && isWritable()) {
         QString time = QTime::fromMSecsSinceStartOfDay(_timer.elapsed()).toString(_timeFormat);
         Pack pack {time, data};
         _inout << pack.time << pack.data;
     } else {
         qCWarning(PING_PROTOCOL_FILELINK) << "Something is wrong!";
         qCDebug(PING_PROTOCOL_FILELINK) << "File is opened as write only:" << (_openModeFlag == QIODevice::WriteOnly);
-        qCDebug(PING_PROTOCOL_FILELINK) << "File can be writable:" << _file.isWritable();
+        qCDebug(PING_PROTOCOL_FILELINK) << "File can be writable:" << isWritable();
     }
 }
 
@@ -67,10 +67,7 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
     _file.setFileName(linkConfiguration.args()->at(0));
 
     if (_openModeFlag == QIODevice::WriteOnly) {
-        // The file will be created when something is received
-        // Avoiding empty files
-        // Check if path is writable
-        return QFileInfo(QFileInfo(_file).canonicalPath()).isWritable();
+        return isWritable();
     }
 
     // Everything after this point is to deal with reading data
@@ -99,10 +96,8 @@ bool FileLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
 bool FileLink::startConnection()
 {
-    // The file will be created when something is received
-    // Avoiding empty files
     if (_openModeFlag == QIODevice::WriteOnly) {
-        return QFileInfo(QFileInfo(_file).canonicalPath()).isWritable();
+        return isWritable();
     }
 
     if (!isOpen()) {
@@ -184,7 +179,7 @@ bool FileLink::isOpen()
 {
     // If filelink exist to create a log, the file will be only created after receiving the first data
     // To return at least a good answer, we do check the path to see if it's writable
-    return (QFileInfo(QFileInfo(_file).canonicalPath()).isWritable() && _openModeFlag == QIODevice::WriteOnly)
+    return (isWritable() && _openModeFlag == QIODevice::WriteOnly)
         || _file.isReadable(); // If file is readable it's already opened and working
 };
 
