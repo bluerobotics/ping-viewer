@@ -188,6 +188,18 @@ bool FileLink::isOpen()
         || _file.isReadable(); // If file is readable it's already opened and working
 };
 
+bool FileLink::isWritable()
+{
+    // We should use the absoluteBasePath to make sure that the path is writable
+    // Using the complete path with the file name may result in problems (E.g: Mac)
+    // If the file does not exist yet the check may result in isWritable as false
+    // Checking for the base path is a working and equivalent check
+    // This also avoids the creation of empty files
+    const auto absoluteBasePath = QFileInfo(_file).absolutePath();
+    const bool isWritable = QFileInfo(absoluteBasePath).isWritable();
+    return isWritable;
+}
+
 bool FileLink::finishConnection()
 {
     // Stop reading log process if it's running

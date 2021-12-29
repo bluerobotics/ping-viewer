@@ -70,7 +70,7 @@ public:
      * @return true
      * @return false
      */
-    bool isWritable() final { return false; };
+    bool isWritable() final;
 
     /**
      * @brief Return package index
