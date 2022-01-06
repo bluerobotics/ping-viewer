@@ -63,7 +63,7 @@ jobs:
         windeployqt --qmldir qml --release deploy/pingviewer.exe --verbose=2
 
     - name: Zip windows
-      uses: papeloto/action-zip@v1
+      uses: vimtor/action-zip@v1
       if: runner.os == 'Windows'
       with:
         files: deploy
