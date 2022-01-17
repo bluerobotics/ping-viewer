@@ -177,7 +177,7 @@ class Log:
         """
         with open(self.filename, "rb") as file:
             self.unpack_header(file)
-            while True:
+            while "data available":
                 try:
                     yield self.unpack_message(file)
                 except struct.error:
