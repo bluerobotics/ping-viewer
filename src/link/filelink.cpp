@@ -192,7 +192,7 @@ bool FileLink::isWritable()
     // This also avoids the creation of empty files
     const auto absoluteBasePath = QFileInfo(_file).absolutePath();
     const bool isWritable = QFileInfo(absoluteBasePath).isWritable();
-    return isWritable;
+    return isWritable && _openModeFlag == QIODevice::WriteOnly || _openModeFlag == QIODevice::ReadWrite;
 }
 
 bool FileLink::finishConnection()
