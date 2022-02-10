@@ -61,22 +61,26 @@ If the led is not blinking:
 
  - Open the folder where the ping-viewer executable binary is located
  - Copy the folder path (we will use `/folder/path` in this example)
- - Open your OS terminal. (powershell on windows, what you prefer on linux :) )
+ - Open your OS terminal. (Powershell on Windows, Terminal on Mac, or what you prefer on Linux :) )
  - type: `cd "/folder/path"`
+   - Mac requires going into the `.app`, e.g. `cd /Applications/pingviewer.app`
  - After that you should download the last firmware available:
-   - On windows: `Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.26_115kb.hex" -OutFile "$PWD/Ping_V3.26_115kb.hex"`
-   - On mac/linux: `wget "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.26_115kb.hex"`
+   - On Windows: `Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.28_auto.hex" -OutFile "$PWD/Ping_V3.28_auto.hex"`
+   - On Linux: `wget "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.28_auto.hex"`
+   - On Mac: `curl -O "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.28_auto.hex"`
  - With the device open, you should see a BOOT button in the main board. Power down the device, press and hold this button down, then power the device and let go of the button
- - You should check the port of the device with windows **Device Manager** or with `dmesg` on linux.
+ - You should check the port of the device with Windows **Device Manager**, `dmesg` on Linux, or `ls /dev/tty.usbserial*` on Mac.
 
  ![Firmware Update Waiting](/ping-viewer/images/firmware-update/device-manager.png)
 
- - After finding the port (`COMx` on windows and `/dev/ttyUSB*` on linux) you can start the flash procedure.
+ - After finding the port (`COMx` on Windows, `/dev/ttyUSB*` on Linux, `/dev/tty.usbserial*` on Mac) you can start the flash procedure.
  - In the same terminal type:
-   - On windows `.\stm32flash.exe -v -g 0x0 -b 115200 -w .\Ping_V3.26_115kb.hex COM4`
+   - On Windows `.\stm32flash.exe -v -g 0x0 -b 115200 -w .\Ping_V3.28_auto.hex COM4`
      - Where COM4 is my serial port
-   - On linux `.\stm32flash -v -g 0x0 -b 115200 -w .\Ping_V3.26_115kb.hex /dev/ttyUSB0`
+   - On Linux `.\stm32flash -v -g 0x0 -b 115200 -w .\Ping_V3.28_auto.hex /dev/ttyUSB0`
      - Where /dev/ttyUSB0 is my serial port
+   - On Mac `./stm32flash -v -g 0x0 -b 115200 -w Ping_V3.28_auto.hex /dev/tty.usbserial-D200BEDP`
+     - Where /dev/tty.usbserial-D200BEDP is my serial port
 
 You should see the following output:
 
