@@ -8,11 +8,13 @@ Steps to flash the device:
 
 1. [Connect](device-manager.md) to the device
 2. Open the Firmware Update menu
-3. Choose 'Automatic Update', and the baudrate that you would like to use to communicate with the device (115kbps or 9600bps, if you are not sure choose 115kbps)
+3. Choose 'Automatic Update', and the latest available firmware version*
 4. Click _FIRMWARE UPDATE_ to start the process.
 5. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume it's idle animation, and the Ping device will resume data transmission.
 
 > Wait for the update process to complete before unplugging the device!
+
+> *Firmware versions before v3.28 only communicate at a fixed baudrate, so require specifying the desired rate for your application (115kbps or 9600bps). Newer firmwares determine the baudrate automatically.
 
 ![Firmware Update Waiting](/ping-viewer/images/viewer/firmware-update-waiting.gif)
 
