@@ -168,9 +168,8 @@ void Flasher::flash()
             }
         });
 
-    connect(_firmwareProcess.data(), &QProcess::stateChanged, this, [this](QProcess::ProcessState state) {
-        qCDebug(FLASH) << "New process state:" << state;
-    });
+    connect(_firmwareProcess.data(), &QProcess::stateChanged, this,
+        [this](QProcess::ProcessState state) { qCDebug(FLASH) << "New process state:" << state; });
 
     _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
     _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
