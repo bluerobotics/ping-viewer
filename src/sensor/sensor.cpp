@@ -58,6 +58,7 @@ void Sensor::connectLink(const LinkConfiguration conConf, const LinkConfiguratio
     emit linkChanged();
 
     if (_parser) {
+        _parser->clearBuffer();
         connect(link(), &AbstractLink::newData, _parser, &Parser::parseBuffer, Qt::DirectConnection);
     }
 
