@@ -3,7 +3,7 @@ import FileManager 1.0
 import GradientScale 1.0
 import PolarPlot 1.0
 import Qt.labs.settings 1.0
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4 as QC1

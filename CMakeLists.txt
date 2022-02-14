@@ -43,6 +43,7 @@ find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
     Svg
     Test
     Widgets
+    Multimedia
 )
 
 message(STATUS "Qt Version: ${Qt5_VERSION}")

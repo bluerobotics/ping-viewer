@@ -1,3 +1,5 @@
+#include <QCoreApplication>
+#include <QProcess>
 #include <QQmlEngine>
 #include <QSerialPortInfo>
 #include <QtCharts/QXYSeries>
@@ -21,7 +23,7 @@ QStringList Util::serialPortList()
     return portNameList;
 }
 
-void Util::update(QtCharts::QAbstractSeries* series, const QVector<double>& points, const float initPos,
+void Util::update(QAbstractSeries* series, const QVector<double>& points, const float initPos,
     const float finalPos, const float minPoint, const float maxPoint, const float multiplier)
 {
     // This value should be updated in Charts.qml to make it compatible

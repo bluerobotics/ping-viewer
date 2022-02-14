@@ -10,9 +10,9 @@
 #include <QRegularExpression>
 
 #include "abstractlink.h"
-#include "filemanager.h"
+//#include "filemanager.h"
 #include "linkconfiguration.h"
-#include "logger.h"
+//#include "logger.h"
 #include "ping.h"
 #include "settingsmanager.h"
 #include "util.h"
@@ -24,11 +24,12 @@
 
 void Test::initTestCase()
 {
-    FileManager::self();
-    Logger::self()->installHandler();
+    //FileManager::self();
+    //Logger::self()->installHandler();
     SettingsManager::self();
 }
 
+/*
 void Test::fileManager()
 {
     auto fileManager = FileManager::self();
@@ -70,8 +71,9 @@ void Test::fileManager()
     }
 
     // TODO: Populate gradients folder and test FileManager.getFilesFrom
-}
+}*/
 
+/*
 void Test::logger()
 {
     auto logger = Logger::self();
@@ -82,6 +84,7 @@ void Test::logger()
 
     QVERIFY2(!logger->isEmpty(), qPrintable("Log file is empty."));
 }
+*/
 
 void Test::ringVector()
 {

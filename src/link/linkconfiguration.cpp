@@ -1,4 +1,5 @@
 #include <QUrl>
+#include <QVariant>
 
 #include "linkconfiguration.h"
 #include "networkmanager.h"
@@ -189,7 +190,9 @@ QDataStream& operator<<(QDataStream& out, const LinkConfiguration linkConfigurat
 QDataStream& operator>>(QDataStream& in, LinkConfiguration& linkConfiguration)
 {
     QString name;
-    QVariant variantArgs, variantType, variantDeviceType;
+    QVariant variantArgs;
+    QVariant variantType;
+    QVariant variantDeviceType;
     in >> name;
     in >> variantArgs;
     in >> variantType;

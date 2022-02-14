@@ -115,7 +115,7 @@ float Waterfall::RGBToValue(const QColor& color) { return _gradient.getValue(col
 void Waterfall::hoverMoveEvent(QHoverEvent* event)
 {
     event->accept();
-    _mousePos = event->pos();
+    _mousePos = event->position();
     _containsMouse = true;
     emit mousePosChanged();
     emit containsMouseChanged();

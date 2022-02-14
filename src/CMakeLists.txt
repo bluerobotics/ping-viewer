@@ -79,12 +79,14 @@ PRIVATE
     Qt6::Charts
     Qt6::Svg
     Qt6::Widgets # QApplication
+    Qt6::Multimedia
     ${INCLUDE_DIRS}
     fmt::fmt
 )
 
 # Test target
-if(NOT WIN32)
+
+if(false)
     enable_testing(true)
     add_executable(test test.cpp)
     add_test(NAME test COMMAND test)
