@@ -119,13 +119,6 @@ void Flasher::flash()
         "-b", baudRate, portLocation};
 
     _firmwareProcess = QSharedPointer<QProcess>(new QProcess);
-    _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
-    _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
-    qCDebug(FLASH) << "3... 2... 1...";
-    qCDebug(FLASH) << cmd;
-    auto program = cmd.takeFirst();
-    _firmwareProcess->start(program, cmd);
-    emit flashProgress(0);
 
     connect(_firmwareProcess.data(), &QProcess::readyReadStandardOutput, this, [this] {
         // Error strings used to detect important messages for the user
@@ -174,6 +167,18 @@ void Flasher::flash()
                 qCCritical(FLASH) << message;
             }
         });
+
+    connect(_firmwareProcess.data(), &QProcess::stateChanged, this, [this](QProcess::ProcessState state) {
+        qCDebug(FLASH) << "New process state:" << state;
+    });
+
+    _firmwareProcess->setEnvironment(QProcess::systemEnvironment());
+    _firmwareProcess->setProcessChannelMode(QProcess::MergedChannels);
+    qCDebug(FLASH) << "3... 2... 1...";
+    qCDebug(FLASH) << cmd;
+    auto program = cmd.takeFirst();
+    _firmwareProcess->start(program, cmd);
+    emit flashProgress(0);
 }
 
 void Flasher::firmwareUpdatePercentage(const QString& output)
