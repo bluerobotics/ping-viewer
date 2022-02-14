@@ -58,7 +58,7 @@ jobs:
         if (($env:OPENSSL) -and (Test-Path $env:OPENSSL -pathType container)) {
           Copy-Item ${env:OPENSSL}\*.dll -Destination deploy -Force
         }
-        curl https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -o deploy/stm32flash.exe
+        curl -L https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -o deploy/stm32flash.exe
         foreach ($I in (${env:SYSTEM32_DLLS} -split ' ')) { copy ${env:SYSTEM32}\$I deploy\ }
         windeployqt --qmldir qml --release deploy/pingviewer.exe --verbose=2
 
