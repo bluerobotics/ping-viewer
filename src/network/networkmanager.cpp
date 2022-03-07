@@ -78,6 +78,15 @@ void NetworkManager::download(const QUrl& url, std::function<void(QString)> func
 
 QHostAddress NetworkManager::addressToIp(const QString& address)
 {
+    const QHostAddress testAddress(address);
+
+    // Check first if the address is a valid IPV4/6 and avoid calling QHostInfo::fromName
+    if (testAddress.protocol() == QAbstractSocket::IPv4Protocol
+        || testAddress.protocol() == QAbstractSocket::IPv6Protocol) {
+        return testAddress;
+    }
+
+    // This function can freeze the interface if something is wrong with the OS mDNS interface
     return QHostInfo::fromName(address).addresses().first();
 }
 
