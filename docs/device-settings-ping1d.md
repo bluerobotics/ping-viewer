@@ -4,7 +4,7 @@
 
 - **Emit Ping:** Request a single profile sample from the device, and stop continuous transmission of profile data (if active).
 - **Ping Rate Slider:** Enable continuous transmission of profile data, and set the maximum update rate (the actual update rate may be slower).
-- **Speed of Sound:** The speed of sound to be used for distance calculations. At 20℃ this should be roughly 1520 m/s in salt water, 1480 m/s in fresh water, and 343 m/s in air (for testing!). See [this calculator](http://resource.npl.co.uk/acoustics/techguides/soundseawater/index.html) for more accurate speeds in water at different depths, temperatures, and salinity levels.
+- **Speed of Sound:** The speed of sound to be used for distance calculations. At 20℃ this should be roughly 1520 m/s in salt water, 1480 m/s in fresh water, and 343 m/s in air (for testing!). See [this calculator](https://bluerobotics.com/learn/speed-of-sound-in-water-calculator) for more accurate speeds in water at different depths, temperatures, and salinity levels.
 - **Ping Enabled:** Enable the acoustic output of the Ping device. When set to disabled, the Ping will not emit energy from the transducer. When set to enabled, energy may be emitted for background operations, even when there is no data being transmitted.
 - **Reset Settings:** Reset sensor to default configuration.
 
