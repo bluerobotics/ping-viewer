@@ -42,6 +42,10 @@ ProtocolDetector::ProtocolDetector()
         reinterpret_cast<const char*>(deviceInformationMessage.msgData), deviceInformationMessage.msgDataLength());
 
     _linkConfigs.append({{LinkType::Udp, {"192.168.2.2", "9090"}, "BlueRov2 Ping1D Port"},
+        {LinkType::Udp, {"blueos.local", "9090"}, "BlueRov2 Ping1D Port"},
+        {LinkType::Udp, {"blueos-wifi.local", "9090"}, "BlueRov2 Ping1D Port on wifi"},
+        {LinkType::Udp, {"blueos.local", "9092"}, "BlueRov2 Ping360 Port"},
+        {LinkType::Udp, {"blueos-wifi.local", "9092"}, "BlueRov2 Ping360 Port on wifi"},
         {LinkType::Udp, {"192.168.2.2", "9092"}, "BlueRov2 Ping360 Port"},
         {LinkType::Udp, {"127.0.0.1", "1234"}, "Development port"}});
 
