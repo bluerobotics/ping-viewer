@@ -10,6 +10,12 @@ import StyleManager 1.0
 ApplicationWindow {
     id: window
 
+    signal requestNewWindow()
+    Shortcut {
+        sequence: StandardKey.New
+        onActivated: requestNewWindow()
+    }
+
     function createTitle() {
         var applicationName = "Ping Viewer";
         var versionInfo = GitTag;
