@@ -31,9 +31,45 @@
 #include "waterfallplot.h"
 #include "runguard.h"
 
+#include <memory>
+
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
+
+std::unique_ptr<QQmlEngine> createEngine() {
+    auto engine = std::make_unique<QQmlApplicationEngine>();
+        // Load the QML and set the Context
+    // Logo
+#ifdef QT_NO_DEBUG
+    engine->load(QUrl(QStringLiteral("qrc:/Logo.qml")));
+    app.exec();
+#endif
+
+    // Function used in CI to test runtime errors
+    // After 5 seconds, check if qml engine was loaded
+#ifdef AUTO_KILL
+    QTimer* timer = new QTimer();
+    QObject::connect(timer, &QTimer::timeout, [&app, &engine]() {
+        if (engine->rootObjects().isEmpty()) {
+            printf("Application failed to load GUI!");
+            app.exit(-1);
+        } else {
+            app.exit(0);
+        }
+    });
+    timer->start(5000);
+#endif
+
+    engine->rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
+    engine->rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
+    engine->rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
+    engine->rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
+    engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    StyleManager::self()->setQmlEngine(engine.get());
+    return engine;
+}
 
 int main(int argc, char* argv[])
 {
@@ -97,37 +133,7 @@ int main(int argc, char* argv[])
 
     CommandLineParser parser(app);
 
-    QQmlApplicationEngine engine;
-
-    // Load the QML and set the Context
-    // Logo
-#ifdef QT_NO_DEBUG
-    engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
-    app.exec();
-#endif
-
-    // Function used in CI to test runtime errors
-    // After 5 seconds, check if qml engine was loaded
-#ifdef AUTO_KILL
-    QTimer* timer = new QTimer();
-    QObject::connect(timer, &QTimer::timeout, [&app, &engine]() {
-        if (engine.rootObjects().isEmpty()) {
-            printf("Application failed to load GUI!");
-            app.exit(-1);
-        } else {
-            app.exit(0);
-        }
-    });
-    timer->start(5000);
-#endif
-
-    engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
-    engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
-    engine.rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
-    engine.rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
-    StyleManager::self()->setQmlEngine(&engine);
+    auto thisEngine = createEngine();
 
     qCInfo(mainCategory).noquote()
         << QStringLiteral("OS: %1 - %2").arg(QSysInfo::prettyProductName(), QSysInfo::productVersion());
