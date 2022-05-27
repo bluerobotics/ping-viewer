@@ -6,6 +6,8 @@
 #include <QQuickStyle>
 #include <QRegularExpression>
 
+#include <iostream>
+
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
 #include <KCrash>
 #endif
@@ -27,6 +29,7 @@
 #include "stylemanager.h"
 #include "util.h"
 #include "waterfallplot.h"
+#include "runguard.h"
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
@@ -34,6 +37,12 @@ PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
 int main(int argc, char* argv[])
 {
+    RunGuard guard( "pingviewer-app" );
+    if ( !guard.tryToRun() ) {
+        std::cerr << "Another instance of this application is already running" << std::endl;
+        return 0;
+    }
+
     // Start logger ASAP
     Logger::installHandler();
 

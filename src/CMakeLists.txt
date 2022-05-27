@@ -43,6 +43,7 @@ configure_file(
 set(SOURCES
     MACOSX_BUNDLE
     main.cpp
+    runguard.cpp
     ${APP_ICON}
     ${WINDOWS_RC_FILE}
     ${RESOURCES}
