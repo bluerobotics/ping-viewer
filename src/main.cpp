@@ -37,7 +37,24 @@ Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
-std::unique_ptr<QQmlEngine> createEngine() {
+class LambdaHelper : public QObject {
+  Q_OBJECT
+  std::function<void()> m_fun;
+
+private:
+  LambdaHelper(std::function<void()> && fun, QObject * parent = {}) :
+    QObject(parent),
+    m_fun(std::move(fun)) {}
+
+public:
+   Q_SLOT void call() { m_fun(); }
+   static QMetaObject::Connection connect(QObject * sender, const char * signal, std::function<void()> && fun)
+   {
+     return QObject::connect(sender, signal, new LambdaHelper(std::move(fun), sender), SLOT(call()));
+   }
+};
+
+void createEngine(std::vector<std::unique_ptr<QQmlApplicationEngine>>& engines) {
     auto engine = std::make_unique<QQmlApplicationEngine>();
         // Load the QML and set the Context
     // Logo
@@ -67,8 +84,14 @@ std::unique_ptr<QQmlEngine> createEngine() {
     engine->rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
     engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
 
+    QObject *item = engine->rootObjects()[0];
+    LambdaHelper::connect(item, SIGNAL(requestNewWindow()),
+                    [&engines]{
+                        createEngine(engines);
+                    });
+
     StyleManager::self()->setQmlEngine(engine.get());
-    return engine;
+    engines.push_back(std::move(engine));
 }
 
 int main(int argc, char* argv[])
@@ -130,10 +153,10 @@ int main(int argc, char* argv[])
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication app(argc, argv);
-
     CommandLineParser parser(app);
 
-    auto thisEngine = createEngine();
+    std::vector<std::unique_ptr<QQmlApplicationEngine>> engines;
+    createEngine(engines);
 
     qCInfo(mainCategory).noquote()
         << QStringLiteral("OS: %1 - %2").arg(QSysInfo::prettyProductName(), QSysInfo::productVersion());
@@ -149,3 +172,5 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
+
+#include "main.moc"
