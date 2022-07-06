@@ -310,7 +310,7 @@ void Ping360::handleMessage(const ping_message& msg)
         // Restart timer, if the channel allows it
         if (link()->isWritable()) {
             // Use 200ms for network delay
-            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 200;
+            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 2000;
             _timeoutProfileMessage.start(profileRunningTimeout);
         }
 
@@ -360,7 +360,7 @@ void Ping360::handleMessage(const ping_message& msg)
         // Restart timer, if the channel allows it
         if (link()->isWritable()) {
             // Use 200ms for network delay
-            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 200;
+            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 2000;
             _timeoutProfileMessage.start(profileRunningTimeout);
         }
 
