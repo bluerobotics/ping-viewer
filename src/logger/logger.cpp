@@ -122,4 +122,6 @@ void Logger::test()
     qCritical() << "This is a critical message";
 }
 
-Logger::~Logger() = default;
+Logger::~Logger() {
+    qCDebug(logger) << "Logger class exiting.";
+}
