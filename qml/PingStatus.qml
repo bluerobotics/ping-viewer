@@ -85,7 +85,7 @@ Item {
             }
 
             Repeater {
-                model: root.visible ? sensorModel.model : []
+                model: root.visible && sensorModel ? sensorModel.model : []
             }
 
         }
