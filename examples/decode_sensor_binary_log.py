@@ -87,6 +87,7 @@ class PingViewerLogReader:
         self.filename = filename
         self.header = Header()
         self.messages = []
+        self.failed_bytes = 0
 
     @classmethod
     def unpack_int(cls, file: IO[Any]):
@@ -127,6 +128,7 @@ class PingViewerLogReader:
         read until the next timestamp, and continue as normal from there.
 
         """
+        # TODO: log when recovery attempts occur, and bytes lost when they succeed
         file.seek(current_pos := (file.tell() - cls.UINT.size))
         prev_ = next_ = b''
         start = amount_read = 0
@@ -146,13 +148,20 @@ class PingViewerLogReader:
             # match was found
             end = match.end()
             timestamp = roi[match.start():end].decode('UTF-8')
+            amount_read -= (len(roi) - end)
+            self.failed_bytes += amount_read
             # return the file pointer to the end of this timestamp
-            file.seek(current_pos + amount_read - (len(roi) - end))
+            file.seek(current_pos + amount_read)
             # attempt to extract the corresponding message, or recover anew
             if (message := cls.unpack_array(file)) is None:
                 return cls.recover(file)
             return (timestamp, message)
-        raise EOFError('No timestamp match found in recovery attempt')
+        # Calculate bytes from start of recovery attempt to end of the file
+        file_size = file.tell()
+        self.failed_bytes += file_size - current_pos
+        raise EOFError('No timestamp match found in final recovery attempt'
+                       f' - lost {self.failed_bytes} bytes in total'
+                       f' ({self.failed_bytes / file_size:.1%} of file).')
 
     def unpack_header(self, file: IO[Any]):
         self.header.string = self.unpack_string(file)
