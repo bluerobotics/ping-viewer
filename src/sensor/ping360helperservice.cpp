@@ -77,7 +77,7 @@ void Ping360HelperService::processBroadcastResponses()
         const Ping360DiscoveryResponse decoded = Ping360AsciiProtocol::decodeDiscoveryResponse(datagram.data());
         if (decoded.deviceName.contains("PING360")) {
             emit availableLinkFound(
-                {{LinkType::Udp, {sender.toString(), "12345"}, "Ping360 Port", PingDeviceType::PING360}},
+                {{LinkType::Udp, {decoded.ipAddress, "12345"}, "Ping360 Port", PingDeviceType::PING360}},
                 QStringLiteral("Ping360 Ethernet Protocol Detector"));
         } else {
             qCWarning(PING360HELPERSERVICE) << "Invalid message:" << datagram.data();
