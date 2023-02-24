@@ -46,6 +46,8 @@ public:
      */
     static Ping360DiscoveryResponse decodeDiscoveryResponse(const QString& response);
 
+    static QString removeLeadingZerosFromIP(const QString& line);
+
     /**
      * @brief Get UDP port for this communication protocol
      *
