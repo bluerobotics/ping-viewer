@@ -122,8 +122,22 @@ RowLayout {
                 PingComboBox {
                     id: fwCombo
 
+                    function sortPingFiles(firmwares) {
+                        return Object.keys(firmwares).sort((first, second) => {
+                            const regex = /Ping[-_](V\d+\.\d+)/i;
+                            const firstMatch = first.match(regex);
+                            const secondMatch = second.match(regex);
+                            const firstVersion = firstMatch ? firstMatch[1] : "V0.0";
+                            const secondVersion = secondMatch ? secondMatch[1] : "V0.0";
+                            return secondVersion.localeCompare(firstVersion, undefined, {
+                                "numeric": true,
+                                "sensitivity": 'base'
+                            });
+                        });
+                    }
+
                     visible: automaticUpdateCB.currentIndex === 0
-                    model: ping && ping.firmwaresAvailable ? Object.keys(ping.firmwaresAvailable) : []
+                    model: ping && ping.firmwaresAvailable ? sortPingFiles(ping.firmwaresAvailable) : []
                     Layout.minimumWidth: 220
                 }
 
