@@ -10,7 +10,7 @@ jobs:
         include:
         - os: macos-latest
           DEPLOY_PATH: pingviewer-Release.dmg
-        - os: ubuntu-18.04
+        - os: ubuntu-latest
           DEPLOY_PATH: pingviewer-Release.AppImage
         - os: windows-latest
           DEPLOY_PATH: pingviewer-Release.zip
