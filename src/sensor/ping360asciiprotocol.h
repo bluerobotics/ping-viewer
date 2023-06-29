@@ -46,6 +46,12 @@ public:
      */
     static Ping360DiscoveryResponse decodeDiscoveryResponse(const QString& response);
 
+    /**
+     * @brief removes leading zeros from IP address
+     *
+     * @param line IP address as returned by the Ping360, e.g: 192.168.002.004"
+     * @return QString
+     */
     static QString removeLeadingZerosFromIP(const QString& line);
 
     /**
