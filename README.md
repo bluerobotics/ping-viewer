@@ -27,9 +27,9 @@ Take a look at [our documentation with **installation steps** and **technical in
 
 ## Downloads :package:
 
-- :computer: [Windows](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-Release.zip)
-- :apple: [Apple](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-Release.dmg)
-- :penguin: [Linux](https://github.com/bluerobotics/ping-viewer/releases/download/stable/pingviewer-Release.AppImage)
+- :computer: [Windows](https://github.com/bluerobotics/ping-viewer/releases/latest/download/pingviewer-Release.zip)
+- :apple: [Apple](https://github.com/bluerobotics/ping-viewer/releases/latest/download/pingviewer-Release.dmg)
+- :penguin: [Linux](https://github.com/bluerobotics/ping-viewer/releases/latest/download/pingviewer-Release.AppImage)
 
 ## Resources :paperclip:
 
