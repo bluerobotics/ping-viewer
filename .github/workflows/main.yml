@@ -25,14 +25,18 @@ jobs:
           pip install mkdocs-material
 
       - name: Build MkDocs
-        run:
+        run: |
           mkdocs build
+          rm ping-viewer/404.html # Page is broken
 
-      - name: Check HTML
-        uses: chabad360/htmlproofer@master
+      - name: Htmlproofer
+        uses: athackst/htmlproofer-action@v0.2.0
+        if: false # Waiting for https://github.com/athackst/htmlproofer-action/issues/55 and https://github.com/athackst/htmlproofer-action/issues/54
         with:
           directory: "."
-          arguments: --empty-alt-ignore --file-ignore "./ping-viewer/404.html" --url-ignore "https://fonts.gstatic.com"
+          empty_alt_ignore: true
+          ignore_urls: |
+            https://fonts.gstatic.com
 
       - name: Deploy documentation
         if: github.ref == 'refs/heads/docs'
