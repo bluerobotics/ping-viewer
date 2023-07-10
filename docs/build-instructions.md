@@ -24,14 +24,14 @@ To get the source files:
 
 ### Native Builds
 
-*Ping-Viewer* builds are supported for Windows, Linux and macOS. This is possible with the [Qt toolkit](http://www.qt.io) as its cross-platform support library.
+*Ping-Viewer* builds are supported for Windows, Linux and macOS. This is possible with the [Qt toolkit](https://www.qt.io) as its cross-platform support library.
 
 - **macOS:** v10.14 or higher
 - **Linux:** 64 bit, gcc-8 or clang-7 compiler versions or higher
 - **Windows:** 10 or higher, Visual Studio 2017 compiler (64 bit)
 - **Qt version:** 5.15 **(only)**
 
-> **Tip:** For more information see: [Qt 5 supported platform list](http://doc.qt.io/qt-5/supported-platforms.html).
+> **Tip:** For more information see: [Qt 5 supported platform list](https://doc.qt.io/qt-5/supported-platforms.html).
 
 #### Install Visual Studio 2017 (Windows Only)
 
@@ -41,7 +41,7 @@ When installing, you must minimally select all Visual C++ components.
 
 #### Install Qt
 
-1. Download and run the [Qt Online Installer](http://www.qt.io/download-open-source).
+1. Download and run the [Qt Online Installer](https://www.qt.io/download-open-source).
 2. In the installer *Select Components* dialog choose: 5.15.
 
    Then install just the following components:

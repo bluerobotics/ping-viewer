@@ -87,7 +87,7 @@ You should see the following output:
 ```
 stm32flash 0.5
 
-http://stm32flash.sourceforge.net/
+https://stm32flash.sourceforge.net/
 
 Using Parser : Intel HEX
 Interface serial_posix: 115200 8E1

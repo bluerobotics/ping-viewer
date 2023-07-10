@@ -59,7 +59,7 @@ The user can create his own gradients for the waterfall, for this, it's necessar
     4. `#RRRGGGBBB`
     5. `#RRRRGGGGBBBB`
 
-    There is a very good tool to help with gradient colours [here](http://www.perbang.dk/rgbgradient/).
+    There is a very good tool to help with gradient colours [here](https://www.perbang.dk/rgbgradient/).
 
 6. First value will represent 0.0
 7. The last value will represent 1.0
