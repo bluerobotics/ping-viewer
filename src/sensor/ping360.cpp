@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QThread>
 #include <QUrl>
+#include <QVersionNumber>
 
 #include "hexvalidator.h"
 #include "link/seriallink.h"
@@ -99,19 +100,17 @@ Ping360::Ping360()
     });
 
     connect(this, &Ping360::firmwareVersionMinorChanged, this, [this] {
-        qCDebug(PING_PROTOCOL_PING360) << "Firmware version:"
-                                       << _commonVariables.deviceInformation.firmware_version_major
-                                       << _commonVariables.deviceInformation.firmware_version_minor
-                                       << _commonVariables.deviceInformation.firmware_version_patch;
+        QVersionNumber version(_commonVariables.deviceInformation.firmware_version_major,
+            _commonVariables.deviceInformation.firmware_version_minor,
+            _commonVariables.deviceInformation.firmware_version_patch);
+        qCDebug(PING_PROTOCOL_PING360) << "Firmware version:" << version;
 
         // Wait for firmware information to be available before looking for new versions
         static bool once = false;
         if (!once && _commonVariables.deviceInformation.initialized) {
             once = true;
 
-            if (_commonVariables.deviceInformation.firmware_version_major == 3
-                && _commonVariables.deviceInformation.firmware_version_minor == 3
-                && _commonVariables.deviceInformation.firmware_version_patch == 1) {
+            if (version > QVersionNumber(3, 3, 0)) {
                 _profileRequestLogic.type = Ping360RequestStateStruct::Type::AutoTransmitAsync;
             } else {
                 _profileRequestLogic.type = Ping360RequestStateStruct::Type::Legacy;
