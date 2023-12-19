@@ -234,7 +234,10 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
 bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& linkConf)
 {
-    qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << buffer;
+    if (buffer.isEmpty()) {
+        return false;
+    }
+    qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "received buffer:" << buffer;
     for (const auto& byte : buffer) {
         if (_parser.parseByte(byte) == Parser::NEW_MESSAGE) {
             // Print information from detected devices
