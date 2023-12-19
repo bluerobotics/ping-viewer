@@ -18,6 +18,7 @@ public:
      * @brief Construct a new Flasher object
      *
      * @param parent
+     * @param validBaudRates
      */
     Flasher(QObject* parent = nullptr);
 
@@ -73,6 +74,12 @@ public:
     Q_PROPERTY(Flasher::States state READ state NOTIFY stateChanged)
 
     /**
+     * @brief Return the valid baud rates for device communication
+     */
+    const QVariantList& validBaudRates() const { return _validBaudRates; };
+    Q_PROPERTY(QVariant validBaudRates READ validBaudRates CONSTANT);
+
+    /**
      * @brief Start the flash procedure
      *
      */
@@ -122,6 +129,6 @@ private:
     LinkConfiguration _link;
     QString _message;
     States _state = Idle;
-    const QList<int> _validBaudRates = {57600, 115200, 230400};
+    const QList<QVariant> _validBaudRates = {57600, 115200, 230400};
     bool _verify = true;
 };
