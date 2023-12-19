@@ -62,11 +62,12 @@ Ping360::Ping360()
     _data = QVector<double>(_maxNumberOfPoints, 0);
 
     setName("Ping360");
+
     setControlPanel({"qrc:/Ping360ControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
     setSensorStatusModel({"qrc:/Ping360StatusModel.qml"});
 
-    connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
+    connect(this, &Sensor::connectionOpen, this, &Ping360::checkBootloader);
 
     // Add timer for worst case scenario
     _timeoutProfileMessage.setInterval(_sensorTimeout);
@@ -137,6 +138,53 @@ Ping360::Ping360()
             NetworkTool::self()->checkNewFirmware(
                 "ping360", std::bind(&Ping360::checkNewFirmwareInGitHubPayload, this, std::placeholders::_1));
         }
+    });
+}
+
+void Ping360::checkBootloader()
+{
+    _isBootloader = false;
+    emit isBootloaderChanged();
+    if (!link()) {
+        return;
+    }
+
+    // bootloader may only be present on serial links, it does not communicate
+    // by ethernet
+    if (link()->type() != LinkType::Serial) {
+        startPreConfigurationProcess();
+        return;
+    }
+    if (!link()->isOpen()) {
+        return;
+    }
+    if (!link()->isWritable()) {
+        return;
+    }
+
+    qCWarning(PING_PROTOCOL_PING360) << "checking for bootloader...";
+    Ping360BootloaderPacket::packet_cmd_read_version_t readVersion
+        = Ping360BootloaderPacket::packet_cmd_read_version_init;
+    Ping360BootloaderPacket::packet_update_footer(readVersion.data);
+    link()->write(
+        reinterpret_cast<const char*>(readVersion.data), Ping360BootloaderPacket::packet_get_length(readVersion.data));
+    _ping360BootloaderPacketParser.reset();
+
+    QMetaObject::Connection blScanCallback
+        = connect(link(), &AbstractLink::newData, this, [this](const QByteArray& data) {
+              for (auto byte : data) {
+                  if (_ping360BootloaderPacketParser.packet_parse_byte(byte) == Ping360BootloaderPacket::NEW_MESSAGE) {
+                      qCWarning(PING_PROTOCOL_PING360) << "bootloader found!";
+                      _isBootloader = true;
+                      emit isBootloaderChanged();
+                      emit firmwareVersionMinorChanged();
+                  }
+              }
+          });
+
+    QTimer::singleShot(250, [=] {
+        disconnect(blScanCallback);
+        startPreConfigurationProcess();
     });
 }
 

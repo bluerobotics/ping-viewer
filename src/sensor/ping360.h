@@ -12,6 +12,7 @@
 #include "parser.h"
 #include "ping-message-common.h"
 #include "ping-message-ping360.h"
+#include "ping360bootloaderpacket.h"
 #include "pingparserext.h"
 #include "pingsensor.h"
 #include "protocoldetector.h"
@@ -436,6 +437,12 @@ public:
     Q_PROPERTY(float heading READ heading NOTIFY headingChanged)
 
     /**
+     * @brief flag is true if the device is in bootloader mode
+     */
+    bool isBootloader() { return _isBootloader; }
+    Q_PROPERTY(bool isBootloader READ isBootloader NOTIFY isBootloaderChanged)
+
+    /**
      * @brief adjust the transmit duration according to automatic mode, and current configuration
      */
     void adjustTransmitDuration()
@@ -548,6 +555,7 @@ signals:
     void transmitDurationChanged();
     void transmitDurationMaxChanged();
     void transmitFrequencyChanged();
+    void isBootloaderChanged();
     ///@}
 
 private:
@@ -866,4 +874,21 @@ private:
      * @param message
      */
     void processMavlinkMessage(const mavlink_message_t& message);
+
+    /**
+     * @brief Check the link to see if the sonar is stuck in the bootloader
+     * this is performed once when the link is opened
+     */
+    void checkBootloader();
+
+    /**
+     * @brief This is used to probe/communicate with the bootloader
+     */
+    Ping360BootloaderPacket _ping360BootloaderPacketParser;
+
+    /**
+     * @brief This is used to flag the qml so that the user can be notified that the
+     * device is stuck in the bootloader
+     */
+    bool _isBootloader = false;
 };
