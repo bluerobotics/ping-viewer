@@ -6,6 +6,8 @@
 #include <QQuickStyle>
 #include <QRegularExpression>
 
+#include <iostream>
+
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
 #include <KCrash>
 #endif
@@ -27,13 +29,79 @@
 #include "stylemanager.h"
 #include "util.h"
 #include "waterfallplot.h"
+#include "runguard.h"
+
+#include <memory>
 
 Q_DECLARE_LOGGING_CATEGORY(mainCategory)
 
 PING_LOGGING_CATEGORY(mainCategory, "ping.main")
 
+class LambdaHelper : public QObject {
+  Q_OBJECT
+  std::function<void()> m_fun;
+
+private:
+  LambdaHelper(std::function<void()> && fun, QObject * parent = {}) :
+    QObject(parent),
+    m_fun(std::move(fun)) {}
+
+public:
+   Q_SLOT void call() { m_fun(); }
+   static QMetaObject::Connection connect(QObject * sender, const char * signal, std::function<void()> && fun)
+   {
+     return QObject::connect(sender, signal, new LambdaHelper(std::move(fun), sender), SLOT(call()));
+   }
+};
+
+void createEngine(std::vector<std::unique_ptr<QQmlApplicationEngine>>& engines) {
+    auto engine = std::make_unique<QQmlApplicationEngine>();
+        // Load the QML and set the Context
+    // Logo
+#ifdef QT_NO_DEBUG
+    engine->load(QUrl(QStringLiteral("qrc:/Logo.qml")));
+    app.exec();
+#endif
+
+    // Function used in CI to test runtime errors
+    // After 5 seconds, check if qml engine was loaded
+#ifdef AUTO_KILL
+    QTimer* timer = new QTimer();
+    QObject::connect(timer, &QTimer::timeout, [&app, &engine]() {
+        if (engine->rootObjects().isEmpty()) {
+            printf("Application failed to load GUI!");
+            app.exit(-1);
+        } else {
+            app.exit(0);
+        }
+    });
+    timer->start(5000);
+#endif
+
+    engine->rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
+    engine->rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
+    engine->rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
+    engine->rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
+    engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    QObject *item = engine->rootObjects()[0];
+    LambdaHelper::connect(item, SIGNAL(requestNewWindow()),
+                    [&engines]{
+                        createEngine(engines);
+                    });
+
+    StyleManager::self()->setQmlEngine(engine.get());
+    engines.push_back(std::move(engine));
+}
+
 int main(int argc, char* argv[])
 {
+    RunGuard guard( "pingviewer-app" );
+    if ( !guard.tryToRun() ) {
+        std::cerr << "Another instance of this application is already running" << std::endl;
+        return 0;
+    }
+
     // Start logger ASAP
     Logger::installHandler();
 
@@ -85,38 +153,10 @@ int main(int argc, char* argv[])
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication app(argc, argv);
-
     CommandLineParser parser(app);
 
-    QQmlApplicationEngine engine;
-
-    // Load the QML and set the Context
-    // Logo
-#ifdef QT_NO_DEBUG
-    engine.load(QUrl(QStringLiteral("qrc:/Logo.qml")));
-    app.exec();
-#endif
-
-    // Function used in CI to test runtime errors
-    // After 5 seconds, check if qml engine was loaded
-#ifdef AUTO_KILL
-    QTimer* timer = new QTimer();
-    QObject::connect(timer, &QTimer::timeout, [&app, &engine]() {
-        if (engine.rootObjects().isEmpty()) {
-            printf("Application failed to load GUI!");
-            app.exit(-1);
-        } else {
-            app.exit(0);
-        }
-    });
-    timer->start(5000);
-#endif
-
-    engine.rootContext()->setContextProperty("GitVersion", QStringLiteral(GIT_VERSION));
-    engine.rootContext()->setContextProperty("GitVersionDate", QStringLiteral(GIT_VERSION_DATE));
-    engine.rootContext()->setContextProperty("GitTag", QStringLiteral(GIT_TAG));
-    engine.rootContext()->setContextProperty("GitUrl", QStringLiteral(GIT_URL));
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    std::vector<std::unique_ptr<QQmlApplicationEngine>> engines;
+    createEngine(engines);
 
     qCInfo(mainCategory).noquote()
         << QStringLiteral("OS: %1 - %2").arg(QSysInfo::prettyProductName(), QSysInfo::productVersion());
@@ -125,8 +165,6 @@ int main(int argc, char* argv[])
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
     qCInfo(mainCategory) << "Git url:" << GIT_URL;
 
-    StyleManager::self()->setQmlEngine(&engine);
-
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
     // Start KCrash
     KCrash::initialize();
@@ -134,3 +172,5 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
+
+#include "main.moc"
