@@ -148,7 +148,6 @@ Item {
                 PingItem {
                     id: firmwareUpdateItem
 
-                    visible: ping ? ping.link.configuration.deviceType() == PingEnumNamespace.PingDeviceType.PING1D : false
                     isSubItem: true
                     icon: StyleManager.firmwareUpdateIcon()
                     onHideItemChanged: {
