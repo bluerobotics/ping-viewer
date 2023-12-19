@@ -3,6 +3,7 @@
 #include <QThread>
 
 #include "linkconfiguration.h"
+#include "ping360bootloaderpacket.h"
 #include "pingparserext.h"
 
 class QSerialPortInfo;
@@ -123,4 +124,5 @@ private:
     static const QStringList _invalidSerialPortNames;
     QByteArray _deviceInformationMessageByteArray;
     PingParserExt _parser;
+    Ping360BootloaderPacket _ping360BootloaderPacket;
 };
