@@ -21,7 +21,14 @@ PingPopup {
 
     closePolicy: Popup.NoAutoClose
     onVisibleChanged: {
-        visible ? DeviceManager.startDetecting() : DeviceManager.stopDetecting();
+        print(stack.depth);
+        if (visible) {
+            if (stack.depth == 1) {
+                DeviceManager.startDetecting()
+            }
+        } else {
+            DeviceManager.stopDetecting();
+        }
     }
     Component.onCompleted: {
         if (!DeviceManager.primarySensor)
@@ -57,10 +64,13 @@ PingPopup {
                 Layout.fillWidth: true
                 onClicked: {
                     print(stack.depth);
-                    if (stack.depth == 1)
+                    if (stack.depth == 1) {
+                        DeviceManager.stopDetecting();
                         stack.push(connectionMenu);
-                    else
+                    } else {
+                        DeviceManager.startDetecting();
                         stack.pop();
+                    }
                 }
             }
 
