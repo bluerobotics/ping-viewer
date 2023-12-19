@@ -681,13 +681,12 @@ Ping360::~Ping360()
 {
     updateSensorConfigurationSettings();
 
-    // TODO: Find a better way
-    // Force sensor to stop sensor if running with anything different from Legacy mode
-    // The sensor will stop any automatic behaviour when receiving a normal profile request message
-    if (_profileRequestLogic.type != Ping360RequestStateStruct::Type::Legacy) {
-        for (int i {0}; i < 10; i++) {
-            deltaStep(0);
-            QThread::msleep(100);
-        }
+    ping360_motor_off message;
+    message.updateChecksum();
+
+    // Stop scanning and turn off the stepper motor
+    for (int i {0}; i < 10; i++) {
+        writeMessage(message);
+        QThread::msleep(100);
     }
 }
