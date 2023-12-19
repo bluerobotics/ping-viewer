@@ -305,28 +305,39 @@ void Ping360::legacyProfileRequest()
 void Ping360::asyncProfileRequest()
 {
     if (!_sensorSettings.valid) {
-        qCDebug(PING_PROTOCOL_PING360) << "Invalid automatic sensor configuration, sending message.";
-        ping360_auto_transmit auto_transmit;
+        qCDebug(PING_PROTOCOL_PING360) << "Invalid automatic sensor configuration.";
         _sensorSettings.start_angle = angle_offset() - _sectorSize / 2;
         _sensorSettings.end_angle = (angle_offset() + _sectorSize / 2 - 1);
         // Make sure that we are still inside our valid space
         _sensorSettings.end_angle %= _angularResolutionGrad;
-
-        auto_transmit.set_mode(1);
-        auto_transmit.set_gain_setting(_sensorSettings.gain_setting);
-        auto_transmit.set_transmit_duration(_sensorSettings.transmit_duration);
-        auto_transmit.set_sample_period(_sensorSettings.sample_period);
-        auto_transmit.set_transmit_frequency(_sensorSettings.transmit_frequency);
-        auto_transmit.set_number_of_samples(_sensorSettings.num_points);
-
-        auto_transmit.set_start_angle(_sensorSettings.start_angle);
-        auto_transmit.set_stop_angle(_sensorSettings.end_angle);
-        auto_transmit.set_num_steps(_angular_speed);
-        auto_transmit.set_delay(0);
-        auto_transmit.updateChecksum();
-
-        writeMessage(auto_transmit);
     }
+
+    qCDebug(PING_PROTOCOL_PING360) << QString::asprintf(
+        "Sending auto transmit message. start: %d end: %d", _sensorSettings.start_angle, _sensorSettings.end_angle);
+
+    ping360_auto_transmit auto_transmit;
+    auto_transmit.set_mode(1);
+    auto_transmit.set_gain_setting(_sensorSettings.gain_setting);
+    auto_transmit.set_transmit_duration(_sensorSettings.transmit_duration);
+    auto_transmit.set_sample_period(_sensorSettings.sample_period);
+    auto_transmit.set_transmit_frequency(_sensorSettings.transmit_frequency);
+    auto_transmit.set_number_of_samples(_sensorSettings.num_points);
+
+    auto_transmit.set_start_angle(_sensorSettings.start_angle);
+    auto_transmit.set_stop_angle(_sensorSettings.end_angle);
+    auto_transmit.set_num_steps(_angular_speed);
+    auto_transmit.set_delay(0);
+    auto_transmit.updateChecksum();
+
+    // reset the baudrate to stop any ongoing async data transmission from the device and avoid collisions
+    SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
+    if (serialLink) {
+        setBaudRate(serialLink->getBaudRate());
+        QThread::msleep(200);
+    }
+    writeMessage(auto_transmit);
+
+    _timeoutProfileMessage.start(_sensorTimeout);
 }
 
 void Ping360::handleMessage(const ping_message& msg)
@@ -458,6 +469,7 @@ void Ping360::handleMessage(const ping_message& msg)
         }
 
         if (!_sensorSettings.valid) {
+            qCDebug(PING_PROTOCOL_PING360) << "AUTO_DEVICE_DATA parameters do not match settings (invalid)";
             requestNextProfile();
         }
 
