@@ -109,15 +109,13 @@ Ping360::Ping360()
             _commonVariables.deviceInformation.firmware_version_patch);
         qCDebug(PING_PROTOCOL_PING360) << "Firmware version:" << version;
 
-        // Wait for firmware information to be available before looking for new versions
-        static bool once = false;
-        if (!once && _commonVariables.deviceInformation.initialized) {
-            once = true;
-
+        if (_commonVariables.deviceInformation.initialized) {
             if (version > QVersionNumber(3, 3, 0)) {
                 _profileRequestLogic.type = Ping360RequestStateStruct::Type::AutoTransmitAsync;
+                qCInfo(PING_PROTOCOL_PING360) << "using asynchronous automatic transmit strategy";
             } else {
                 _profileRequestLogic.type = Ping360RequestStateStruct::Type::Legacy;
+                qCInfo(PING_PROTOCOL_PING360) << "using synchronous transmit strategy";
             }
         }
     });
