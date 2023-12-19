@@ -92,7 +92,7 @@ public:
      *
      * @return Flasher*
      */
-    Flasher* flasher() { return &_flasher; };
+    Flasher* flasher() { return _flasher; };
     Q_PROPERTY(Flasher* flasher READ flasher CONSTANT)
 
     /**
@@ -157,7 +157,7 @@ protected:
     QMap<QString, QVariant> _firmwares;
     // This class should be a singleton that will work with the future DeviceManager class
     // TODO: Move to a singleton and integrate with DeviceManager
-    Flasher _flasher;
+    Flasher* _flasher;
     QSharedPointer<Link> _linkIn;
     QSharedPointer<Link> _linkOut;
     Parser* _parser; // communication implementation
