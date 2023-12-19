@@ -35,6 +35,8 @@ Ping::Ping()
     : PingSensor(PingDeviceType::PING1D)
     , _points(_num_points, 0)
 {
+    _flasher = new Flasher(nullptr);
+
     setName("Ping1D");
     setControlPanel({"qrc:/Ping1DControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping1DVisualizer.qml"});
@@ -392,7 +394,7 @@ void Ping::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, 
     QTimer::singleShot(1000, finishConnection);
 
     // Clear last configuration src ID to detect device as a new one
-    connect(&_flasher, &Flasher::stateChanged, this, [this] {
+    connect(_flasher, &Flasher::stateChanged, this, [this] {
         if (flasher()->state() == Flasher::States::FlashFinished) {
             QThread::msleep(500);
             // Clear last configuration src ID to detect device as a new one

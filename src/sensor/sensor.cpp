@@ -16,6 +16,7 @@ const QUrl Sensor::_defaultControlPanelUrl("qrc:/NoControlPanel.qml");
 Sensor::Sensor(SensorInfo sensorInfo)
     : _connected(false)
     , _controlPanelUrl(_defaultControlPanelUrl)
+    , _flasher(nullptr)
     , _linkIn(new Link())
     , _linkOut(nullptr)
     , _parser(nullptr)
