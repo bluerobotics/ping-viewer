@@ -206,7 +206,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     int attempts = 0;
 
-    // Try to get a valid response, timeout after 10 * 50 ms
+    // Try to get a valid response, timeout after 20 * 50 ms
     while (_active && !_detected && attempts++ < 20) {
         socket.waitForReadyRead(50);
         /**
