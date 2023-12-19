@@ -50,11 +50,12 @@ message(STATUS "Qt Version: ${Qt5_VERSION}")
 # global include directories
 include_directories(
     lib/fmt/fmt/include/
-    lib/ping-cpp/ping-cpp/src/message/
+    lib/libcintelhex/include
     lib/maddy/maddy/include/
     lib/mavlink/c_library_v2/
     lib/mavlink/c_library_v2/minimal
     lib/mavlink/c_library_v2/common
+    lib/ping-cpp/ping-cpp/src/message/
 )
 
 add_subdirectory(lib/fmt/fmt)
