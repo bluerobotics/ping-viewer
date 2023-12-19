@@ -2,7 +2,6 @@
 
 #include <QThread>
 
-#include "abstractlink.h"
 #include "linkconfiguration.h"
 #include "pingparserext.h"
 
