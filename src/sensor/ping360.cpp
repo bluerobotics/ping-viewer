@@ -421,21 +421,14 @@ void Ping360::handleMessage(const ping_message& msg)
     }
 
     case Ping360Id::AUTO_DEVICE_DATA: {
+        // Stop profile message timeout, the data will be automatically sent
+        _timeoutProfileMessage.stop();
+
         // Parse message
         const ping360_auto_device_data autoDeviceData = *static_cast<const ping360_auto_device_data*>(&msg);
 
         // Get angle to request next message
         _angle = autoDeviceData.angle();
-
-        // Restart timer, if the channel allows it
-        if (link()->isWritable()) {
-            // Use 200ms for network delay
-            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 200;
-            _timeoutProfileMessage.start(profileRunningTimeout);
-            qCDebug(PING_PROTOCOL_PING360) << QString::asprintf("restarting timeout with %d ms", profileRunningTimeout);
-        } else {
-            qCDebug(PING_PROTOCOL_PING360) << "link is not writable to restart timeout";
-        }
 
         _data.resize(autoDeviceData.data_length());
 #pragma omp for
