@@ -74,7 +74,8 @@ Ping360::Ping360()
     _baudrateConfigurationTimer.setInterval(100);
 
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
-        qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
+        qCWarning(PING_PROTOCOL_PING360) << QString::asprintf(
+            "Profile message timeout (%d), new request will be done.", _timeoutProfileMessage.interval());
         requestNextProfile();
 
         static int timeoutedTime = 0;
@@ -431,6 +432,9 @@ void Ping360::handleMessage(const ping_message& msg)
             // Use 200ms for network delay
             const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 200;
             _timeoutProfileMessage.start(profileRunningTimeout);
+            qCDebug(PING_PROTOCOL_PING360) << QString::asprintf("restarting timeout with %d ms", profileRunningTimeout);
+        } else {
+            qCDebug(PING_PROTOCOL_PING360) << "link is not writable to restart timeout";
         }
 
         _data.resize(autoDeviceData.data_length());
