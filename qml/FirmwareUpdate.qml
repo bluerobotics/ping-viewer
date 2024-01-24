@@ -158,7 +158,7 @@ RowLayout {
                 Layout.fillWidth: true
                 enabled: !running && ((fwCombo.currentText != "" && !browseBt.visible) || (fileDialog.fileName != "" && browseBt.visible))
                 onClicked: {
-                    var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 57600;
+                    var baud = SettingsManager.debugMode ? baudComboBox.model[baudComboBox.currentIndex] : 115200;
                     var verify = SettingsManager.debugMode ? verifyCB.checked : true;
                     var path = automaticUpdateCB.currentIndex ? fileDialog.fileUrl : ping.firmwaresAvailable[fwCombo.currentText];
                     running = true;
