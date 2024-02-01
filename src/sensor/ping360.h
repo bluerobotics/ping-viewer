@@ -295,6 +295,7 @@ public:
     {
         if (angular_speed != _angular_speed) {
             _angular_speed = angular_speed;
+            _sensorSettings.num_steps = angular_speed;
             emit angularSpeedChanged();
         }
     }
@@ -615,6 +616,7 @@ private:
 
         uint16_t start_angle = 0;
         uint16_t end_angle = 399;
+        uint8_t num_steps = 1;
         bool checkSector = false;
 
         bool valid = true;
@@ -632,7 +634,8 @@ private:
                 && other.num_points == num_points && other.sample_period == sample_period
                 && other.transmit_frequency == transmit_frequency;
             if (checkSector && valid) {
-                valid = other.start_angle == start_angle && other.end_angle == end_angle;
+                valid
+                    = other.start_angle == start_angle && other.end_angle == end_angle && other.num_steps == num_steps;
             }
             return valid;
         }
