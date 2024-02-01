@@ -273,7 +273,7 @@ void SerialLink::forceSensorAutomaticBaudRateDetection()
     _port.setBreakEnabled(true);
     QThread::msleep(10);
     _port.setBreakEnabled(false);
-    QThread::usleep(10);
+    QThread::msleep(10);
     _port.write(QByteArray("U").repeated(10));
     _port.flush();
     QThread::msleep(11);
