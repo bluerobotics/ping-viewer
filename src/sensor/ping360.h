@@ -614,7 +614,7 @@ private:
         uint16_t transmit_frequency = _viewerDefaultTransmitFrequency;
 
         uint16_t start_angle = 0;
-        uint16_t end_angle = 400;
+        uint16_t end_angle = 399;
         bool checkSector = false;
 
         bool valid = true;
