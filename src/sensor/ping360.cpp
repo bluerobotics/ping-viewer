@@ -324,7 +324,7 @@ void Ping360::asyncProfileRequest()
 
     auto_transmit.set_start_angle(_sensorSettings.start_angle);
     auto_transmit.set_stop_angle(_sensorSettings.end_angle);
-    auto_transmit.set_num_steps(_angular_speed);
+    auto_transmit.set_num_steps(_sensorSettings.num_steps);
     auto_transmit.set_delay(0);
     auto_transmit.updateChecksum();
 
@@ -452,7 +452,7 @@ void Ping360::handleMessage(const ping_message& msg)
         _sensorSettings.checkSector = true;
         _sensorSettings.checkValidation({autoDeviceData.transmit_duration(), autoDeviceData.gain_setting(),
             autoDeviceData.data_length(), autoDeviceData.sample_period(), autoDeviceData.transmit_frequency(),
-            autoDeviceData.start_angle(), autoDeviceData.stop_angle()});
+            autoDeviceData.start_angle(), autoDeviceData.stop_angle(), autoDeviceData.num_steps()});
 
         // Everything should be valid, otherwise the sensor is not in sync
         if (!link()->isWritable() && _sensorSettings.valid) {
@@ -461,6 +461,7 @@ void Ping360::handleMessage(const ping_message& msg)
             set_sample_period(autoDeviceData.sample_period());
             set_transmit_frequency(autoDeviceData.transmit_frequency());
             set_number_of_points(autoDeviceData.data_length());
+            set_angular_speed(autoDeviceData.num_steps());
         }
 
         if (!_sensorSettings.valid) {
