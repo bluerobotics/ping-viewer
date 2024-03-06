@@ -247,6 +247,22 @@ Item {
             }
 
             Text {
+                id: bootloaderWarning
+
+                visible: ping.isBootloader
+                anchors.fill: waterfall
+                anchors.margins: 5
+                font.bold: true
+                font.family: "Arial"
+                font.pointSize: 15
+                text: "Ping360 is in Bootloader Mode. Please flash firmware."
+                color: "red"
+                z: 100
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Text {
                 id: mouseReadout
 
                 visible: waterfall.containsMouse

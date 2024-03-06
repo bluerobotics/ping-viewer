@@ -169,6 +169,47 @@ bool ProtocolDetector::checkSerial(LinkConfiguration& linkConf)
         _detected = checkBuffer(port.readAll(), linkConf);
     }
 
+    // no ping device, check for ping360 bootloader
+    if (!_detected) {
+
+        // Probe for Ping360 Bootloader
+        Ping360BootloaderPacket::packet_cmd_read_dev_id_t readDevId
+            = Ping360BootloaderPacket::packet_cmd_read_dev_id_init;
+        Ping360BootloaderPacket::packet_update_footer(readDevId.data);
+        port.write(
+            reinterpret_cast<const char*>(readDevId.data), Ping360BootloaderPacket::packet_get_length(readDevId.data));
+        port.waitForBytesWritten(100);
+
+        // Try to get a valid response, timeout after 5 * 50 ms
+        _ping360BootloaderPacket.reset();
+        attempts = 0;
+        while (_active && !_detected && attempts++ < 5) {
+            port.waitForReadyRead(50);
+            _detected = checkBuffer(port.readAll(), linkConf);
+        }
+
+        // The device may have just been plugged in, and will stay in the bootloader
+        // after bootloader contact has been made. Send a reset command to start the main
+        // firmware application it has a valid firmware
+        if (_detected) {
+            qCInfo(PING_PROTOCOL_PROTOCOLDETECTOR) << "resetting ping360 processor";
+
+            Ping360BootloaderPacket::packet_cmd_jump_start_t jumpStart
+                = Ping360BootloaderPacket::packet_cmd_jump_start_init;
+            Ping360BootloaderPacket::packet_update_footer(jumpStart.data);
+            port.write(reinterpret_cast<const char*>(jumpStart.data),
+                Ping360BootloaderPacket::packet_get_length(jumpStart.data));
+
+            port.waitForBytesWritten(100);
+            port.waitForReadyRead(100);
+            _ping360BootloaderPacket.reset();
+
+            if (checkBuffer(port.readAll(), linkConf)) {
+                qCInfo(PING_PROTOCOL_PROTOCOLDETECTOR) << "got response to reset command";
+            }
+        }
+    }
+
     port.close();
 
     return _detected;
@@ -206,7 +247,7 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     int attempts = 0;
 
-    // Try to get a valid response, timeout after 10 * 50 ms
+    // Try to get a valid response, timeout after 20 * 50 ms
     while (_active && !_detected && attempts++ < 20) {
         socket.waitForReadyRead(50);
         /**
@@ -234,7 +275,10 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
 bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& linkConf)
 {
-    qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << buffer;
+    if (buffer.isEmpty()) {
+        return false;
+    }
+    qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "received buffer:" << buffer;
     for (const auto& byte : buffer) {
         if (_parser.parseByte(byte) == Parser::NEW_MESSAGE) {
             // Print information from detected devices
@@ -255,6 +299,11 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& 
             } else {
                 linkConf.setDeviceType(PingDeviceType::PING1D);
             }
+            return true;
+        }
+        if (_ping360BootloaderPacket.packet_parse_byte(byte) == Ping360BootloaderPacket::NEW_MESSAGE) {
+            qCCritical(PING_PROTOCOL_PROTOCOLDETECTOR) << "received ping360 bootloader packet";
+            linkConf.setDeviceType(PingDeviceType::PING360);
             return true;
         }
     }

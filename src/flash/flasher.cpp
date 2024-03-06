@@ -12,8 +12,9 @@
 
 PING_LOGGING_CATEGORY(FLASH, "ping.flash")
 
-Flasher::Flasher(QObject* parent)
+Flasher::Flasher(QObject* parent, const QList<QVariant> validBaudRates)
     : QObject(parent)
+    , _validBaudRates(validBaudRates)
 {
     _binRelativePath =
 #ifdef Q_OS_OSX

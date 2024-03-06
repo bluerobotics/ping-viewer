@@ -22,6 +22,7 @@
 #include "networkmanager.h"
 #include "networktool.h"
 #include "notificationmanager.h"
+#include "ping360flasher.h"
 #include "settingsmanager.h"
 
 #include <mavlink_msg_attitude.h>
@@ -55,22 +56,26 @@ const float Ping360::_angularSpeedGradPerMs = 400.0f / 2400.0f;
 Ping360::Ping360()
     : PingSensor(PingDeviceType::PING360)
 {
+    _flasher = new Ping360Flasher(nullptr);
+
     // QVector crashs when constructed in initialization list
     _data = QVector<double>(_maxNumberOfPoints, 0);
 
     setName("Ping360");
+
     setControlPanel({"qrc:/Ping360ControlPanel.qml"});
     setSensorVisualizer({"qrc:/Ping360Visualizer.qml"});
     setSensorStatusModel({"qrc:/Ping360StatusModel.qml"});
 
-    connect(this, &Sensor::connectionOpen, this, &Ping360::startPreConfigurationProcess);
+    connect(this, &Sensor::connectionOpen, this, &Ping360::checkBootloader);
 
     // Add timer for worst case scenario
     _timeoutProfileMessage.setInterval(_sensorTimeout);
     _baudrateConfigurationTimer.setInterval(100);
 
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
-        qCWarning(PING_PROTOCOL_PING360) << "Profile message timeout, new request will be done.";
+        qCWarning(PING_PROTOCOL_PING360) << QString::asprintf(
+            "Profile message timeout (%d), new request will be done.", _timeoutProfileMessage.interval());
         requestNextProfile();
 
         static int timeoutedTime = 0;
@@ -105,15 +110,13 @@ Ping360::Ping360()
             _commonVariables.deviceInformation.firmware_version_patch);
         qCDebug(PING_PROTOCOL_PING360) << "Firmware version:" << version;
 
-        // Wait for firmware information to be available before looking for new versions
-        static bool once = false;
-        if (!once && _commonVariables.deviceInformation.initialized) {
-            once = true;
-
+        if (_commonVariables.deviceInformation.initialized) {
             if (version > QVersionNumber(3, 3, 0)) {
                 _profileRequestLogic.type = Ping360RequestStateStruct::Type::AutoTransmitAsync;
+                qCInfo(PING_PROTOCOL_PING360) << "using asynchronous automatic transmit strategy";
             } else {
                 _profileRequestLogic.type = Ping360RequestStateStruct::Type::Legacy;
+                qCInfo(PING_PROTOCOL_PING360) << "using synchronous transmit strategy";
             }
         }
     });
@@ -125,6 +128,63 @@ Ping360::Ping360()
 
     // By default heading integration is enabled
     enableHeadingIntegration(true);
+
+    connect(this, &Ping360::firmwareVersionMinorChanged, this, [this] {
+        // Wait for firmware information to be available before looking for new versions
+        static bool once = false;
+        if (!once) {
+            once = true;
+            NetworkTool::self()->checkNewFirmware(
+                "ping360", std::bind(&Ping360::checkNewFirmwareInGitHubPayload, this, std::placeholders::_1));
+        }
+    });
+}
+
+void Ping360::checkBootloader()
+{
+    _isBootloader = false;
+    emit isBootloaderChanged();
+    if (!link()) {
+        return;
+    }
+
+    // bootloader may only be present on serial links, it does not communicate
+    // by ethernet
+    if (link()->type() != LinkType::Serial) {
+        startPreConfigurationProcess();
+        return;
+    }
+    if (!link()->isOpen()) {
+        return;
+    }
+    if (!link()->isWritable()) {
+        return;
+    }
+
+    qCWarning(PING_PROTOCOL_PING360) << "checking for bootloader...";
+    Ping360BootloaderPacket::packet_cmd_read_version_t readVersion
+        = Ping360BootloaderPacket::packet_cmd_read_version_init;
+    Ping360BootloaderPacket::packet_update_footer(readVersion.data);
+    link()->write(
+        reinterpret_cast<const char*>(readVersion.data), Ping360BootloaderPacket::packet_get_length(readVersion.data));
+    _ping360BootloaderPacketParser.reset();
+
+    QMetaObject::Connection blScanCallback
+        = connect(link(), &AbstractLink::newData, this, [this](const QByteArray& data) {
+              for (auto byte : data) {
+                  if (_ping360BootloaderPacketParser.packet_parse_byte(byte) == Ping360BootloaderPacket::NEW_MESSAGE) {
+                      qCWarning(PING_PROTOCOL_PING360) << "bootloader found!";
+                      _isBootloader = true;
+                      emit isBootloaderChanged();
+                      emit firmwareVersionMinorChanged();
+                  }
+              }
+          });
+
+    QTimer::singleShot(250, [=] {
+        disconnect(blScanCallback);
+        startPreConfigurationProcess();
+    });
 }
 
 void Ping360::startPreConfigurationProcess()
@@ -244,28 +304,39 @@ void Ping360::legacyProfileRequest()
 void Ping360::asyncProfileRequest()
 {
     if (!_sensorSettings.valid) {
-        qCDebug(PING_PROTOCOL_PING360) << "Invalid automatic sensor configuration, sending message.";
-        ping360_auto_transmit auto_transmit;
+        qCDebug(PING_PROTOCOL_PING360) << "Invalid automatic sensor configuration.";
         _sensorSettings.start_angle = angle_offset() - _sectorSize / 2;
         _sensorSettings.end_angle = (angle_offset() + _sectorSize / 2 - 1);
         // Make sure that we are still inside our valid space
         _sensorSettings.end_angle %= _angularResolutionGrad;
-
-        auto_transmit.set_mode(1);
-        auto_transmit.set_gain_setting(_sensorSettings.gain_setting);
-        auto_transmit.set_transmit_duration(_sensorSettings.transmit_duration);
-        auto_transmit.set_sample_period(_sensorSettings.sample_period);
-        auto_transmit.set_transmit_frequency(_sensorSettings.transmit_frequency);
-        auto_transmit.set_number_of_samples(_sensorSettings.num_points);
-
-        auto_transmit.set_start_angle(_sensorSettings.start_angle);
-        auto_transmit.set_stop_angle(_sensorSettings.end_angle);
-        auto_transmit.set_num_steps(_angular_speed);
-        auto_transmit.set_delay(0);
-        auto_transmit.updateChecksum();
-
-        writeMessage(auto_transmit);
     }
+
+    qCDebug(PING_PROTOCOL_PING360) << QString::asprintf(
+        "Sending auto transmit message. start: %d end: %d", _sensorSettings.start_angle, _sensorSettings.end_angle);
+
+    ping360_auto_transmit auto_transmit;
+    auto_transmit.set_mode(1);
+    auto_transmit.set_gain_setting(_sensorSettings.gain_setting);
+    auto_transmit.set_transmit_duration(_sensorSettings.transmit_duration);
+    auto_transmit.set_sample_period(_sensorSettings.sample_period);
+    auto_transmit.set_transmit_frequency(_sensorSettings.transmit_frequency);
+    auto_transmit.set_number_of_samples(_sensorSettings.num_points);
+
+    auto_transmit.set_start_angle(_sensorSettings.start_angle);
+    auto_transmit.set_stop_angle(_sensorSettings.end_angle);
+    auto_transmit.set_num_steps(_sensorSettings.num_steps);
+    auto_transmit.set_delay(0);
+    auto_transmit.updateChecksum();
+
+    // reset the baudrate to stop any ongoing async data transmission from the device and avoid collisions
+    SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
+    if (serialLink) {
+        setBaudRate(serialLink->getBaudRate());
+        QThread::msleep(200);
+    }
+    writeMessage(auto_transmit);
+
+    _timeoutProfileMessage.start(_sensorTimeout);
 }
 
 void Ping360::handleMessage(const ping_message& msg)
@@ -350,18 +421,14 @@ void Ping360::handleMessage(const ping_message& msg)
     }
 
     case Ping360Id::AUTO_DEVICE_DATA: {
+        // Stop profile message timeout, the data will be automatically sent
+        _timeoutProfileMessage.stop();
+
         // Parse message
         const ping360_auto_device_data autoDeviceData = *static_cast<const ping360_auto_device_data*>(&msg);
 
         // Get angle to request next message
         _angle = autoDeviceData.angle();
-
-        // Restart timer, if the channel allows it
-        if (link()->isWritable()) {
-            // Use 200ms for network delay
-            const int profileRunningTimeout = _angular_speed / _angularSpeedGradPerMs + 200;
-            _timeoutProfileMessage.start(profileRunningTimeout);
-        }
 
         _data.resize(autoDeviceData.data_length());
 #pragma omp for
@@ -385,7 +452,7 @@ void Ping360::handleMessage(const ping_message& msg)
         _sensorSettings.checkSector = true;
         _sensorSettings.checkValidation({autoDeviceData.transmit_duration(), autoDeviceData.gain_setting(),
             autoDeviceData.data_length(), autoDeviceData.sample_period(), autoDeviceData.transmit_frequency(),
-            autoDeviceData.start_angle(), autoDeviceData.stop_angle()});
+            autoDeviceData.start_angle(), autoDeviceData.stop_angle(), autoDeviceData.num_steps()});
 
         // Everything should be valid, otherwise the sensor is not in sync
         if (!link()->isWritable() && _sensorSettings.valid) {
@@ -394,9 +461,11 @@ void Ping360::handleMessage(const ping_message& msg)
             set_sample_period(autoDeviceData.sample_period());
             set_transmit_frequency(autoDeviceData.transmit_frequency());
             set_number_of_points(autoDeviceData.data_length());
+            set_angular_speed(autoDeviceData.num_steps());
         }
 
         if (!_sensorSettings.valid) {
+            qCDebug(PING_PROTOCOL_PING360) << "AUTO_DEVICE_DATA parameters do not match settings (invalid)";
             requestNextProfile();
         }
 
@@ -442,20 +511,114 @@ void Ping360::handleMessage(const ping_message& msg)
 
 void Ping360::firmwareUpdate(QString fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
-    Q_UNUSED(fileUrl)
-    Q_UNUSED(sendPingGotoBootloader)
-    Q_UNUSED(baud)
-    Q_UNUSED(verify)
-    // TODO
+    if (fileUrl.contains("http")) {
+        NetworkManager::self()->download(fileUrl, [this, sendPingGotoBootloader, baud, verify](const QString& path) {
+            qCDebug(FLASH) << "Downloaded firmware:" << path;
+            flash(path, sendPingGotoBootloader, baud, verify);
+        });
+    } else {
+        flash(fileUrl, sendPingGotoBootloader, baud, verify);
+    }
 }
 
 void Ping360::flash(const QString& fileUrl, bool sendPingGotoBootloader, int baud, bool verify)
 {
-    Q_UNUSED(fileUrl)
-    Q_UNUSED(sendPingGotoBootloader)
-    Q_UNUSED(baud)
-    Q_UNUSED(verify)
-    // TODO
+    flasher()->setState(Flasher::Idle);
+    flasher()->setState(Flasher::StartingFlash);
+    if (!HexValidator::isValidFile(fileUrl)) {
+        auto errorMsg = QStringLiteral("File does not contain a valid Intel Hex format: %1").arg(fileUrl);
+        qCWarning(PING_PROTOCOL_PING360) << errorMsg;
+        flasher()->setState(Flasher::Error, errorMsg);
+        return;
+    };
+
+    SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
+    if (!serialLink) {
+        auto errorMsg = QStringLiteral("It's only possible to flash via serial.");
+        qCWarning(PING_PROTOCOL_PING360) << errorMsg;
+        flasher()->setState(Flasher::Error, errorMsg);
+        return;
+    }
+
+    // cache the current baudrate so that we can connect with the same
+    // after flashing
+    qint32 oldBaudRate = serialLink->getBaudRate();
+
+    if (!link()->isOpen()) {
+        auto errorMsg = QStringLiteral("Link is not open to do the flash procedure.");
+        qCWarning(PING_PROTOCOL_PING360) << errorMsg;
+        flasher()->setState(Flasher::Error, errorMsg);
+        return;
+    }
+
+    // Stop requests and messages from the sensor
+    _timeoutProfileMessage.stop();
+
+    if (sendPingGotoBootloader) {
+        qCDebug(PING_PROTOCOL_PING360) << "Put it in bootloader mode.";
+
+        // set the baudrate for two reasons:
+        // 1: if doing an auto scan, this will break the sensor out of
+        // automatic transmission mode
+        // 2: use a low baudrate to decrease chances of corruption in transmission
+        ping360_reset m;
+        m.set_bootloader(1);
+        m.updateChecksum();
+        // send the message 5x
+        for (int i = 0; i < 5; i++) {
+            setBaudRate(115200);
+            QThread::msleep(25);
+            writeMessage(m);
+            while (serialLink->port()->bytesToWrite()) {
+                // We are not changing the connection structure, only waiting for bytes to be written
+                const_cast<QSerialPort*>(serialLink->port())->waitForBytesWritten();
+            }
+        }
+    }
+
+    // Wait for bytes to be written before finishing the connection
+    while (serialLink->port()->bytesToWrite()) {
+        qCDebug(PING_PROTOCOL_PING360) << "Waiting for bytes to be written...";
+        // We are not changing the connection structure, only waiting for bytes to be written
+        const_cast<QSerialPort*>(serialLink->port())->waitForBytesWritten();
+        qCDebug(PING_PROTOCOL_PING360) << "Done !";
+    }
+
+    qCDebug(PING_PROTOCOL_PING360) << "Finish connection.";
+    auto flashSensor = [=] {
+        flasher()->setBaudRate(baud);
+        flasher()->setFirmwarePath(fileUrl);
+        flasher()->setLink(link()->configuration()[0]);
+        flasher()->setVerify(verify);
+        flasher()->flash();
+    };
+
+    auto finishConnection = [=] {
+        link()->finishConnection();
+
+        qCDebug(PING_PROTOCOL_PING360) << "Save sensor configuration.";
+        updateSensorConfigurationSettings();
+
+        qCDebug(PING_PROTOCOL_PING360) << "Start flash.";
+
+        // we stop the timer again after the link is closed
+        // in case a device data message came in asynchronously and restarted
+        // the timer
+        _timeoutProfileMessage.stop();
+
+        QTimer::singleShot(500, flashSensor);
+    };
+    QTimer::singleShot(250, finishConnection);
+
+    connect(_flasher, &Flasher::stateChanged, this, [this, oldBaudRate] {
+        if (flasher()->state() == Flasher::States::FlashFinished) {
+            QThread::msleep(500);
+            // Clear last configuration src ID to detect device as a new one
+            resetSensorLocalVariables();
+            setBaudRate(oldBaudRate);
+            Sensor::connectLink(*link()->configuration());
+        }
+    });
 }
 
 void Ping360::setLastSensorConfiguration()
@@ -476,8 +639,33 @@ void Ping360::printSensorInformation() const
 
 void Ping360::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
 {
-    Q_UNUSED(jsonDocument)
-    // TODO
+    float lastVersionAvailable = 0.0;
+
+    auto filesPayload = jsonDocument.array();
+    for (const QJsonValue& filePayload : filesPayload) {
+        qCDebug(PING_PROTOCOL_PING360) << filePayload["name"].toString();
+
+        // Get version from Ping[_|-]V(major).(patch)*.hex where (major).(patch) is <version>
+        static const QRegularExpression versionRegex(QStringLiteral(R"(Ping360[_|-]V(?<version>\d+\.\d+).*\.hex)"));
+        auto filePayloadVersion = versionRegex.match(filePayload["name"].toString()).captured("version").toFloat();
+        _firmwares[filePayload["name"].toString()] = filePayload["download_url"].toString();
+
+        if (filePayloadVersion > lastVersionAvailable) {
+            lastVersionAvailable = filePayloadVersion;
+        }
+    }
+    emit firmwaresAvailableChanged();
+
+    auto sensorVersion = QString("%1.%2")
+                             .arg(_commonVariables.deviceInformation.firmware_version_major)
+                             .arg(_commonVariables.deviceInformation.firmware_version_minor)
+                             .toFloat();
+    static QString firmwareUpdateSteps {"https://github.com/bluerobotics/ping-viewer/wiki/firmware-update"};
+    if (lastVersionAvailable > sensorVersion) {
+        QString newVersionText = QStringLiteral("Firmware update for Ping available: %1<br>").arg(lastVersionAvailable)
+            + QStringLiteral("<a href=\"%1\">Check firmware update steps here!</a>").arg(firmwareUpdateSteps);
+        NotificationManager::self()->create(newVersionText, "green", StyleManager::infoIcon());
+    }
 }
 
 void Ping360::resetSensorLocalVariables()
@@ -681,13 +869,18 @@ Ping360::~Ping360()
 {
     updateSensorConfigurationSettings();
 
-    // TODO: Find a better way
-    // Force sensor to stop sensor if running with anything different from Legacy mode
-    // The sensor will stop any automatic behaviour when receiving a normal profile request message
-    if (_profileRequestLogic.type != Ping360RequestStateStruct::Type::Legacy) {
-        for (int i {0}; i < 10; i++) {
-            deltaStep(0);
-            QThread::msleep(100);
-        }
+    ping360_motor_off message;
+    message.updateChecksum();
+
+    // set the baudrate for two reasons:
+    // 1: if doing an auto scan, this will break the sensor out of
+    // automatic transmission mode
+    // 2: use a low baudrate to decrease chances of corruption in transmission
+    setBaudRate(115200);
+    QThread::msleep(100);
+    // Stop scanning and turn off the stepper motor
+    for (int i {0}; i < 10; i++) {
+        writeMessage(message);
+        QThread::msleep(100);
     }
 }
