@@ -38,15 +38,19 @@ Steps to flash the device:
 ![Manual Firmware Update](/ping-viewer/images/firmware-update/manual.png)
 
 
-## Device recovery
+## Ping Sonar Device Recovery
 
-If the device is not working after flashing a new firmware, or if some problem was encountered during installation, a recovery process may be necessary.
+If a Ping sonar is not working after flashing new firmware, or if some problem was encountered during installation, a recovery process may be necessary.
 
 The device must be opened to restore the firmware. We only want to open the device if it's absolutely necessary, so to make sure, please [reset ping-viewer settings](application-information.md#header-buttons), and connect the device to the computer again. If ping-viewer detects the device automatically, there is no problem! If not, then we can proceed to recover the device.
 
-To open the device, hold it firmly, and turn the blue ring in counterclockwise direction:
+To open a first generation Ping sonar, hold it firmly, and turn the blue ring in counterclockwise direction:
 
 ![Firmware Update Waiting](/ping-viewer/images/firmware-update/open-ping.png)
+
+To open a Ping2, pull out the plastic locking cord, then carefully separate the top from the case:
+
+![Firmware Update Waiting](/ping-viewer/images/firmware-update/ping2-open.png)
 
 After the device is opened, turn it on and look for a blinking led on the circuit board inside of the device. If you see a blinking led, the device should be good and the firmware is running fine, you may close the device and double check the [troubleshooting instructions](faq-and-troubleshooting.md#troubleshooting).
 
