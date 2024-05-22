@@ -56,35 +56,44 @@ After the device is opened, turn it on and look for a blinking led on the circui
 
 If the led is blinking:
 
- - No recovery is necessary, the firmware is working fine
- - Try with a different serial-USB adapter
- - Check if the adapter is providing 5V and all connections are correct without short circuits
- - Contact Blue Robotics support email
+- No recovery is necessary, the firmware is working fine
+- Try with a different serial-USB adapter
+- Check if the adapter is providing 5V and all connections are correct without short circuits
+- Contact Blue Robotics support email
 
 If the led is not blinking:
 
- - Open the folder where the ping-viewer executable binary is located
- - Copy the folder path (we will use `/folder/path` in this example)
- - Open your OS terminal. (Powershell on Windows, Terminal on Mac, or what you prefer on Linux :) )
- - type: `cd "/folder/path"`
-   - Mac requires going into the `.app`, e.g. `cd /Applications/pingviewer.app`
- - After that you should download the last firmware available:
-   - On Windows: `Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.28_auto.hex" -OutFile "$PWD/Ping_V3.28_auto.hex"`
-   - On Linux: `wget "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.28_auto.hex"`
-   - On Mac: `curl -O "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/ping1d/Ping_V3.28_auto.hex"`
- - With the device open, you should see a BOOT button in the main board. Power down the device, press and hold this button down, then power the device and let go of the button
- - You should check the port of the device with Windows **Device Manager**, `dmesg` on Linux, or `ls /dev/tty.usbserial*` on Mac.
+- Open the folder where the ping-viewer executable binary is located
+- Copy the folder path (we will use `/folder/path` in this example)
+- Open your OS terminal. (Powershell on Windows, Terminal on Mac, or what you prefer on Linux :) )
+- type: `cd "/folder/path"`
+    - Mac requires going into the `.app`, e.g. `cd /Applications/pingviewer.app`
+- After that you should download the last firmware available:
+    - On Windows:
+        1. `set DEVICE=ping2` (for the Ping2 Sonar) or `set DEVICE=ping1d` (for the original Ping Sonar)
+        2. `set FIRMWARE=Ping2-V1.0.0_auto.hex` or `set FIRMWARE=Ping-V3.29_auto.hex`
+        3. `Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/%DEVICE%/%FIRMWARE%" -OutFile "$PWD/%FIRMWARE%"`
+    - On Linux:
+        1. `DEVICE=ping2` (for the Ping2 Sonar) or `DEVICE=ping1d` (for the original Ping Sonar)
+        2. `FIRMWARE=Ping2-V1.0.0_auto.hex` or `FIRMWARE=Ping-V3.29_auto.hex`
+        3. `wget "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/$DEVICE/$FIRMWARE"`
+    - On Mac:
+        1. `DEVICE=ping2` (for the Ping2 Sonar) or `DEVICE=ping1d` (for the original Ping Sonar)
+        2. `FIRMWARE=Ping2-V1.0.0_auto.hex` or `FIRMWARE=Ping-V3.29_auto.hex`
+        2. `curl -O "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/$DEVICE/$FIRMWARE"`
+- With the device open, you should see a BOOT button in the main board. Power down the device, press and hold this button down, then power the device and let go of the button
+- You should check the port of the device with Windows **Device Manager**, `dmesg` on Linux, or `ls /dev/tty.usbserial*` on Mac.
 
- ![Firmware Update Waiting](/ping-viewer/images/firmware-update/device-manager.png)
+![Firmware Update Waiting](/ping-viewer/images/firmware-update/device-manager.png)
 
- - After finding the port (`COMx` on Windows, `/dev/ttyUSB*` on Linux, `/dev/tty.usbserial*` on Mac) you can start the flash procedure.
- - In the same terminal type:
-   - On Windows `.\stm32flash.exe -v -g 0x0 -b 115200 -w .\Ping_V3.28_auto.hex COM4`
-     - Where COM4 is my serial port
-   - On Linux `.\stm32flash -v -g 0x0 -b 115200 -w .\Ping_V3.28_auto.hex /dev/ttyUSB0`
-     - Where /dev/ttyUSB0 is my serial port
-   - On Mac `./stm32flash -v -g 0x0 -b 115200 -w Ping_V3.28_auto.hex /dev/tty.usbserial-D200BEDP`
-     - Where /dev/tty.usbserial-D200BEDP is my serial port
+- After finding the port (`COMx` on Windows, `/dev/ttyUSB*` on Linux, `/dev/tty.usbserial*` on Mac) you can start the flash procedure.
+- In the same terminal type:
+    - On Windows `.\stm32flash.exe -v -g 0x0 -b 115200 -w .\%FIRMWARE% COM4`
+        - Where `COM4` is my serial port (yours may be different)
+    - On Linux `./stm32flash -v -g 0x0 -b 115200 -w $FIRMWARE /dev/ttyUSB0`
+        - Where `/dev/ttyUSB0` is my serial port (yours may be different)
+    - On Mac `./stm32flash -v -g 0x0 -b 115200 -w $FIRMWARE /dev/tty.usbserial-D200BEDP`
+        - Where `/dev/tty.usbserial-D200BEDP` is my serial port (yours may be different)
 
 You should see the following output:
 
