@@ -513,6 +513,10 @@ void Ping::checkNewFirmwareInGitHubPayload(const QJsonDocument& jsonDocument)
         // Get version from Ping(\d|)[_|-]V(major).(patch)*.hex where (major).(patch) is <version>
         static const QRegularExpression versionRegex(QStringLiteral(R"(Ping(\d|)[_|-]V(?<version>\d+\.\d+).*\.hex)"));
         auto filePayloadVersion = versionRegex.match(filePayload["name"].toString()).captured("version").toFloat();
+        if (filePayloadVersion <= 0) {
+            qCWarning(PING_PROTOCOL_PING) << "Invalid version:" << filePayload["name"].toString();
+            continue;
+        }
         _firmwares[filePayload["name"].toString()] = filePayload["download_url"].toString();
 
         if (filePayloadVersion > lastVersionAvailable) {
