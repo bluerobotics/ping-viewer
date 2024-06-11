@@ -97,7 +97,7 @@ void Ping::startPreConfigurationProcess()
     request(Ping1dId::PING_ENABLE);
     request(Ping1dId::MODE_AUTO);
     request(Ping1dId::PROFILE);
-    request(Ping1dId::FIRMWARE_VERSION);
+    request(CommonId::DEVICE_INFORMATION); // We should use this over Ping1dId::FIRMWARE_VERSION
     request(Ping1dId::DEVICE_ID);
     request(Ping1dId::SPEED_OF_SOUND);
 
