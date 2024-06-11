@@ -61,6 +61,10 @@ Ping::Ping()
         }
         emit lostMessagesChanged();
 
+        if (!_commonVariables.deviceInformation.initialized) {
+            request(CommonId::DEVICE_INFORMATION);
+        }
+
         request(Ping1dId::PCB_TEMPERATURE);
         request(Ping1dId::PROCESSOR_TEMPERATURE);
         request(Ping1dId::VOLTAGE_5);
