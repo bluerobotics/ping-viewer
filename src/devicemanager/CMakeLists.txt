@@ -7,8 +7,8 @@ STATIC
 target_link_libraries(
     devicemanager
 PRIVATE
-    Qt5::Core
-    Qt5::Network
-    Qt5::Qml
-    Qt5::Quick
+    Qt6::Core
+    Qt6::Network
+    Qt6::Qml
+    Qt6::Quick
 )
