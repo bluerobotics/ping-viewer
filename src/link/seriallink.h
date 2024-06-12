@@ -79,6 +79,12 @@ public:
     bool startConnection() final override;
 
     /**
+     * @brief get the serial port baudrate
+     * @return the serial port baudrate
+     */
+    qint32 getBaudRate() { return _port.baudRate(); }
+
+    /**
      * @brief Set a valid baudrate
      *
      * @param baudRate
