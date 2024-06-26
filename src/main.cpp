@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDebug>
+#include <QNetworkInterface>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -124,6 +125,19 @@ int main(int argc, char* argv[])
     qCInfo(mainCategory) << "Git version date:" << GIT_VERSION_DATE;
     qCInfo(mainCategory) << "Git tag:" << GIT_TAG;
     qCInfo(mainCategory) << "Git url:" << GIT_URL;
+    qCInfo(mainCategory) << "Network interfaces:";
+    for (const QNetworkInterface& iface : QNetworkInterface::allInterfaces()) {
+        qCInfo(mainCategory).noquote() << QString("  Name (%1 - %2): %3")
+                                              .arg(QString::number(iface.index()), iface.name(),
+                                                  iface.humanReadableName());
+        qCInfo(mainCategory) << "    Valid:" << iface.isValid();
+        qCInfo(mainCategory) << "    Type:" << iface.type();
+        qCInfo(mainCategory) << "    Hardware address:" << iface.hardwareAddress();
+        qCInfo(mainCategory) << "    Flags:" << iface.flags();
+        for (const QNetworkAddressEntry& entry : iface.addressEntries()) {
+            qCInfo(mainCategory) << "    address:" << entry.ip().toString() << "netmask:" << entry.netmask().toString();
+        };
+    };
 
     StyleManager::self()->setQmlEngine(&engine);
 
