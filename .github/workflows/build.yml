@@ -33,7 +33,7 @@ jobs:
         version: '5.15.2'
         target: 'desktop'
         modules: qtcharts
-        setup-python: 'true'
+        setup-python: 'false'
 
     - name: Install jinja2
       run: |
