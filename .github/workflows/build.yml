@@ -13,7 +13,7 @@ jobs:
           DEPLOY_PATH: pingviewer-Release.dmg
         - os: ubuntu-latest
           DEPLOY_PATH: pingviewer-Release.AppImage
-        - os: ubuntu-24-arm
+        - os: ubuntu-22-arm
           DEPLOY_PATH: pingviewer-Release-Arm.AppImage
         - os: windows-latest
           DEPLOY_PATH: pingviewer-Release.zip
