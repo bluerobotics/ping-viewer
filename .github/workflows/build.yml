@@ -26,7 +26,8 @@ jobs:
       if: matrix.os == 'ubuntu-22-arm'
       run: |
         sudo apt install -y python3
-        sudo echo -e "[global]\nbreak-system-packages = true" > /etc/pip.conf
+        echo -e "[global]\nbreak-system-packages = true" | sudo tee /etc/pip.conf
+
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
