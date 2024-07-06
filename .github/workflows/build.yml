@@ -23,9 +23,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Qt
-      if: matrix.os == 'ubuntu-24-arm'
+      if: matrix.os == 'ubuntu-22-arm'
       run: |
         sudo apt install -y python3
+        sudo echo -e "[global]\nbreak-system-packages = true" > /etc/pip.conf
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
