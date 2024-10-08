@@ -76,6 +76,13 @@ Ping360::Ping360()
     connect(&_timeoutProfileMessage, &QTimer::timeout, this, [this] {
         qCWarning(PING_PROTOCOL_PING360) << QString::asprintf(
             "Profile message timeout (%d), new request will be done.", _timeoutProfileMessage.interval());
+        // reset the baudrate to reinitialize serial communicaiton on the device side
+        // otherwise, 3.1.1 gets hung up here and doesn't respond to the requests
+        SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
+        if (serialLink) {
+            setBaudRate(serialLink->getBaudRate());
+            QThread::msleep(200);
+        }
         requestNextProfile();
 
         static int timeoutedTime = 0;
