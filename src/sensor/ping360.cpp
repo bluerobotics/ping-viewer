@@ -335,6 +335,10 @@ void Ping360::asyncProfileRequest()
     auto_transmit.set_delay(0);
     auto_transmit.updateChecksum();
 
+    char msgString[1024];
+    auto_transmit.getMessageAsString(msgString, 1024);
+    qCDebug(PING_PROTOCOL_PING360) << "Sending auto transmit message:" << msgString;
+
     // reset the baudrate to stop any ongoing async data transmission from the device and avoid collisions
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
     if (serialLink) {
