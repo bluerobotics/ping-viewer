@@ -251,9 +251,20 @@ public:
             double desiredRange = round(range());
             _speed_of_sound = speed_of_sound;
             _sensorSettings.sample_period = calculateSamplePeriod(desiredRange);
+
+            // reduce _sample period until we are within operational parameters
+            // maximize the number of points
+            while (_sensorSettings.sample_period < _firmwareMinSamplePeriod) {
+                _sensorSettings.num_points--;
+                _sensorSettings.sample_period = calculateSamplePeriod(desiredRange);
+            }
+
+            emit numberOfPointsChanged();
             emit speedOfSoundChanged();
             emit samplePeriodChanged();
-            emit rangeChanged();
+            emit rangeChanged(); // does this belong here?
+            emit transmitDurationMaxChanged();
+            adjustTransmitDuration();
         }
     }
     Q_PROPERTY(int speed_of_sound READ speed_of_sound WRITE set_speed_of_sound NOTIFY speedOfSoundChanged)
