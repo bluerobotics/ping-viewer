@@ -481,7 +481,10 @@ void Ping360::handleMessage(const ping_message& msg)
 
     case CommonId::NACK: {
         const common_nack nack(msg);
-        if (nack.nacked_id() == Ping360Id::TRANSDUCER) {
+        char msgString[1024];
+        nack.getMessageAsString(msgString, 1024);
+        qCWarning(PING_PROTOCOL_PING360) << "Got NACK" << msgString;
+        if (nack.nacked_id() == Ping360Id::TRANSDUCER || nack.nacked_id() == Ping360Id::AUTO_TRANSMIT) {
             qCWarning(PING_PROTOCOL_PING360) << "transducer control was NACKED, reverting to default settings";
 
             set_gain_setting(_firmwareDefaultGainSetting);
