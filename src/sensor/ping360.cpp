@@ -190,7 +190,7 @@ void Ping360::checkBootloader()
 
     QTimer::singleShot(250, [=] {
         disconnect(blScanCallback);
-        startPreConfigurationProcess();
+        startConfiguration();
     });
 }
 
