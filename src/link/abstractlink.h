@@ -229,7 +229,11 @@ public:
      */
     void write(const char* data, int size)
     {
-        if (size > 0) {
+        // size may be zero in the case of an empty datagram
+        // empty datagram signals to a serial bridge program
+        // to send a line break and perform the auto-baudrate
+        // procedure
+        if (size >= 0) {
             emit sendData(QByteArray(data, size));
         };
     }
