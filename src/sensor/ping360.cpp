@@ -344,6 +344,8 @@ void Ping360::asyncProfileRequest()
 
 void Ping360::handleMessage(const ping_message& msg)
 {
+    static uint8_t _waitRetryMessages = 1;
+
     qCDebug(PING_PROTOCOL_PING360) << QStringLiteral("Handling Message: %1 [%2]")
                                           .arg(PingHelper::nameFromMessageId(
                                               static_cast<PingEnumNamespace::PingMessageId>(msg.message_id())))
@@ -467,9 +469,25 @@ void Ping360::handleMessage(const ping_message& msg)
             set_angular_speed(autoDeviceData.num_steps());
         }
 
+        // If the settings in the received message do not match the
+        // settings selected by the user, send a new request with
+        // the correct settings.
+        // Given the nature of UDP and the asynchronous handling of
+        // the program, some messages with the old settings may be
+        // recieved after sending the new request.
+        // _waitRetryMessages will prevent multiple redundant requests
+        // from being sent while the program and the device resynchronize
+        // with the new settings.
         if (!_sensorSettings.valid) {
-            qCDebug(PING_PROTOCOL_PING360) << "AUTO_DEVICE_DATA parameters do not match settings (invalid)";
-            requestNextProfile();
+            if (!--_waitRetryMessages) {
+                // Allow 5 messages with old settings to be recieved
+                // before sending a new request.
+                _waitRetryMessages = 5;
+                qCDebug(PING_PROTOCOL_PING360) << "AUTO_DEVICE_DATA parameters do not match settings (invalid)";
+                requestNextProfile();
+            }
+        } else {
+            _waitRetryMessages = 1;
         }
 
         break;
