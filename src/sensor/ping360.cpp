@@ -78,11 +78,7 @@ Ping360::Ping360()
             "Profile message timeout (%d), new request will be done.", _timeoutProfileMessage.interval());
         // reset the baudrate to reinitialize serial communicaiton on the device side
         // otherwise, 3.1.1 gets hung up here and doesn't respond to the requests
-        SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
-        if (serialLink) {
-            setBaudRate(serialLink->getBaudRate());
-            QThread::msleep(200);
-        }
+        resetBaudrate();
         requestNextProfile();
 
         static int timeoutedTime = 0;
@@ -340,11 +336,7 @@ void Ping360::asyncProfileRequest()
     qCDebug(PING_PROTOCOL_PING360) << "Sending auto transmit message:" << msgString;
 
     // reset the baudrate to stop any ongoing async data transmission from the device and avoid collisions
-    SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
-    if (serialLink) {
-        setBaudRate(serialLink->getBaudRate());
-        QThread::msleep(200);
-    }
+    resetBaudrate();
     writeMessage(auto_transmit);
 
     _timeoutProfileMessage.start(_sensorTimeout);
@@ -700,6 +692,22 @@ const QList<int>& Ping360::validBaudRates()
 
 const QVariantList& Ping360::validBaudRatesAsVariantList() const { return _validBaudRates; }
 
+void Ping360::resetBaudrate()
+{
+    SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
+    if (serialLink) {
+        setBaudRate(serialLink->getBaudRate());
+    } else {
+        // send an empty datagram on network links to signal
+        // the serial bridge program to send a line break and
+        // perform the auto-baudrate procedure
+        if (link() && link()->isOpen() && link()->isWritable()) {
+            link()->write(nullptr, 0);
+        }
+    }
+    QThread::msleep(200);
+}
+
 void Ping360::setBaudRate(int baudRate)
 {
     // It's only possible to change baudrates in serial connections
@@ -891,6 +899,7 @@ Ping360::~Ping360()
     // automatic transmission mode
     // 2: use a low baudrate to decrease chances of corruption in transmission
     setBaudRate(115200);
+    resetBaudrate(); // in case of network connection
     QThread::msleep(100);
     // Stop scanning and turn off the stepper motor
     for (int i {0}; i < 10; i++) {
