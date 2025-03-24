@@ -503,6 +503,14 @@ public:
     Q_PROPERTY(QVariant validBaudRates READ validBaudRatesAsVariantList CONSTANT)
 
     /**
+     * @brief Send a line break and renegoatiate the current baudrate
+     * this works for serial and network connections (the bridge program
+     * will renegotiate the baudrate for network connections)
+     *
+     */
+    void resetBaudrate();
+
+    /**
      * @brief Set the communication baud rate
      *
      * @param baudRate
