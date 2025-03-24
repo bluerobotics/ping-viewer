@@ -242,6 +242,11 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
         return _detected;
     }
 
+    // Send an empty datagram to signal to the serial bridge
+    // program to send a line break and perform the auto-baudrate
+    // procedure
+    socket.write(nullptr, 0);
+    QThread::msleep(100);
     // Send message
     socket.write(_deviceInformationMessageByteArray);
 
