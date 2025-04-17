@@ -1,4 +1,5 @@
 #include <QUrl>
+#include <QVariant>
 
 #include "linkconfiguration.h"
 #include "networkmanager.h"
@@ -180,16 +181,18 @@ QDebug operator<<(QDebug d, const LinkConfiguration& other)
 QDataStream& operator<<(QDataStream& out, const LinkConfiguration linkConfiguration)
 {
     out << linkConfiguration.configurationStructPtr()->name;
-    out << QVariant(linkConfiguration.configurationStructPtr()->args);
-    out << QVariant(linkConfiguration.configurationStructPtr()->type);
-    out << QVariant(static_cast<int>(linkConfiguration.configurationStructPtr()->deviceType));
+    out << linkConfiguration.configurationStructPtr()->args;
+    out << linkConfiguration.configurationStructPtr()->type;
+    out << static_cast<int>(linkConfiguration.configurationStructPtr()->deviceType);
     return out;
 }
 
 QDataStream& operator>>(QDataStream& in, LinkConfiguration& linkConfiguration)
 {
     QString name;
-    QVariant variantArgs, variantType, variantDeviceType;
+    QVariant variantArgs;
+    QVariant variantType;
+    QVariant variantDeviceType;
     in >> name;
     in >> variantArgs;
     in >> variantType;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QLoggingCategory>
-#include <QtCharts>
+#include <QAbstractSeries>
 
 class QJSEngine;
 class QQmlEngine;
@@ -29,7 +29,7 @@ public:
      * @param maxPoint
      * @param multiplier
      */
-    Q_INVOKABLE void update(QtCharts::QAbstractSeries* series, const QVector<double>& points, const float initPos,
+    Q_INVOKABLE void update(QAbstractSeries* series, const QVector<double>& points, const float initPos,
         const float finalPos, const float minPoint, const float maxPoint, const float multiplier = 1);
 
     /**
