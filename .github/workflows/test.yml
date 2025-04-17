@@ -19,10 +19,12 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '5.15.1'
+        version: '5.15.2'
         target: 'desktop'
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
         modules: qtcharts
+      env:
+        AQT_CONFIG: ${{ github.workspace }}/tools/aqt-settings.ini
 
     - name: Install jinja2
       run: |
