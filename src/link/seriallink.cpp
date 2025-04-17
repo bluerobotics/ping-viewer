@@ -24,8 +24,7 @@ SerialLink::SerialLink(QObject* parent)
 {
     setType(LinkType::Serial);
 
-    connect(
-        &_port, &QIODevice::readyRead, this, [this]() { emit newData(_port.readAll()); }, Qt::DirectConnection);
+    connect(&_port, &QIODevice::readyRead, this, [this]() { emit newData(_port.readAll()); }, Qt::DirectConnection);
 
     connect(
         this, &AbstractLink::sendData, this,
