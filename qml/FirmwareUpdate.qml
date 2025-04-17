@@ -123,15 +123,35 @@ RowLayout {
 
                     function sortPingFiles(firmwares) {
                         return Object.keys(firmwares).sort((first, second) => {
-                            const regex = /Ping[-_](V\d+\.\d+)/i;
+                            // Extract device type and version
+                            const regex = /^(Ping|Ping360|Ping2)[-_]V(\d+)\.(\d+)(?:\.(\d+))?/i;
                             const firstMatch = first.match(regex);
                             const secondMatch = second.match(regex);
-                            const firstVersion = firstMatch ? firstMatch[1] : "V0.0";
-                            const secondVersion = secondMatch ? secondMatch[1] : "V0.0";
-                            return secondVersion.localeCompare(firstVersion, undefined, {
-                                "numeric": true,
-                                "sensitivity": 'base'
-                            });
+                            if (!firstMatch || !secondMatch)
+                                return 0;
+
+                            // Compare device types first
+                            const firstDevice = firstMatch[1];
+                            const secondDevice = secondMatch[1];
+                            if (firstDevice !== secondDevice)
+                                return firstDevice.localeCompare(secondDevice);
+
+                            // Compare major version
+                            const firstMajor = parseInt(firstMatch[2]);
+                            const secondMajor = parseInt(secondMatch[2]);
+                            if (firstMajor !== secondMajor)
+                                return secondMajor - firstMajor;
+
+                            // Compare minor version
+                            const firstMinor = parseInt(firstMatch[3]);
+                            const secondMinor = parseInt(secondMatch[3]);
+                            if (firstMinor !== secondMinor)
+                                return secondMinor - firstMinor;
+
+                            // Compare patch version if available
+                            const firstPatch = firstMatch[4] ? parseInt(firstMatch[4]) : 0;
+                            const secondPatch = secondMatch[4] ? parseInt(secondMatch[4]) : 0;
+                            return secondPatch - firstPatch;
                         });
                     }
 
