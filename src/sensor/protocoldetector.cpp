@@ -239,6 +239,7 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& 
         if (_parser.parseByte(byte) == Parser::NEW_MESSAGE) {
             // Print information from detected devices
             common_device_information device_information(_parser.rxMessage());
+            // clang-format off
             qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR)
                 << "Detect new device:"
                 << "\ndevice_type:" << device_information.device_type()
@@ -246,6 +247,7 @@ bool ProtocolDetector::checkBuffer(const QByteArray& buffer, LinkConfiguration& 
                 << "\nfirmware_version_major:" << device_information.firmware_version_major()
                 << "\nfirmware_version_minor:" << device_information.firmware_version_minor()
                 << "\nfirmware_version_patch:" << device_information.firmware_version_patch();
+            // clang-format on
 
             // TODO: Ping1D with firmware 3.26 or older
             // We should remove this code in future releases but allowing undetected devices to be flashed
