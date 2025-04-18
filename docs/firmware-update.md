@@ -1,20 +1,20 @@
 ![Firmware Update](images/viewer/firmware-update.png)
 
-The Firmware Update menu allows you to update the programming on a Ping device.
+The Firmware Update menu allows you to update the programming on a Blue Robotics [*Ping Sonar*](https://bluerobotics.com/store/sonars/echosounders/ping-sonar-r2-rp/) or [*Ping360*](https://bluerobotics.com/store/sonars/imaging-sonars/ping360-sonar-r1-rp/) device.
 
 ## Automatic Firmware Update
 
 Steps to flash the device:
 
-1. [Connect](device-manager.md) to the device
+1. [Connect](device-manager.md) to the device directly, with a serial connection
 2. Open the Firmware Update menu
 3. Choose 'Automatic Update', and the latest available firmware version*
 4. Click _FIRMWARE UPDATE_ to start the process.
-5. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume it's idle animation, and the Ping device will resume data transmission.
+5. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume its idle animation, and the Ping device will resume data transmission.
 
 > Wait for the update process to complete before unplugging the device!
-
-> *Firmware versions before v3.28 only communicate at a fixed baudrate, so require specifying the desired rate for your application (115kbps or 9600bps). Newer firmwares determine the baudrate automatically.
+<!-- -->
+> **Ping Sonar* firmware versions before v3.28 only communicate at a fixed baudrate, so require specifying the desired rate for your application (115kbps or 9600bps). Newer firmwares determine the baudrate automatically.
 
 ![Firmware Update Waiting](images/viewer/firmware-update-waiting.gif)
 
@@ -22,16 +22,25 @@ Steps to flash the device:
 
 Steps to flash the device:
 
-1. [Connect](device-manager.md) to the device
+1. [Connect](device-manager.md) to the device directly, with a serial connection
 2. Open the Firmware Update menu
 3. Choose 'Manual Update'
-4. Download your desired firmware from the `/ping1d` folder inside the [firmware repository](https://github.com/bluerobotics/ping-firmware/tree/master/ping1d)
-    1. Right click 'Raw' and click 'Save Link As...' to save the firmware hex file (`.hex`)
-    ![Raw](images/firmware-update/download.png)
-    2. If the file format is coming up as 'Text Document (.txt)' or similar, change it to 'HEX File (.hex)' if possible, or select 'All files' and ensure the file extension is `.hex`, not `.hex.txt`
+4. Get your desired firmware
+    - from the [official firmware repository](https://github.com/bluerobotics/ping-firmware/)
+        1. Open the relevant folder
+            - Second generation (full black) *Ping Sonar* devices use the `ping2` folder
+            - Original *Ping Sonar* devices (with a blue ring around the transducer) use the `ping1d` folder
+            - *Ping360* devices use the `ping360` folder
+        1. Right click 'Raw' and click 'Save Link As...' to download and save the firmware hex file (`.hex`)
+        ![Raw](images/firmware-update/download.png)
+        1. If the file format is coming up as 'Text Document (.txt)' or similar, change it to 'HEX File (.hex)' if possible, or select 'All files' and ensure the file extension is `.hex`, not `.hex.txt`
+    - from the [open source sonar repository](https://github.com/bluerobotics/ping-firmware-oss/)
+        - ***Ping Sonar* devices only**
+        - Pre-builds are available in the [release assets](https://github.com/bluerobotics/ping-firmware-oss/releases) or a custom build of the open source sonar repository
+        - [Custom builds](https://github.com/bluerobotics/ping-firmware-oss?tab=readme-ov-file#building-the-firmware) are also possible
 5. In Ping-Viewer, click `Browse` to select the firmware hex file that you saved
 6. Click _FIRMWARE UPDATE_ to start the process.
-7. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume it's idle animation, and the Ping device will resume data transmission.
+7. The update progress is indicated by the progress bar located at the bottom of the menu. When the update completes, the progress bar will resume its idle animation, and the Ping device will resume data transmission.
 
 > Wait for the update process to complete before unplugging the device!
 
@@ -40,15 +49,15 @@ Steps to flash the device:
 
 ## Ping Sonar Device Recovery
 
-If a Ping sonar is not working after flashing new firmware, or if some problem was encountered during installation, a recovery process may be necessary.
+If a *Ping Sonar* is not working after flashing new firmware, or if some problem was encountered during installation, a recovery process may be necessary.
 
 The device must be opened to restore the firmware. We only want to open the device if it's absolutely necessary, so to make sure, please [reset ping-viewer settings](application-information.md#header-buttons), and connect the device to the computer again. If ping-viewer detects the device automatically, there is no problem! If not, then we can proceed to recover the device.
 
-To open a first generation Ping sonar, hold it firmly, and turn the blue ring in counterclockwise direction:
+To open a first generation *Ping Sonar*, hold it firmly, and turn the blue ring in counterclockwise direction:
 
 ![Firmware Update Waiting](images/firmware-update/open-ping.png)
 
-To open a Ping2, pull out the plastic locking cord, then carefully separate the top from the case:
+To open a second generation *Ping Sonar*, pull out the plastic locking cord, then carefully separate the top from the case:
 
 ![Firmware Update Waiting](images/firmware-update/ping2-open.png)
 
@@ -70,15 +79,15 @@ If the led is not blinking:
     - Mac requires going into the `.app`, e.g. `cd /Applications/pingviewer.app`
 - After that you should download the last firmware available:
     - On Windows:
-        1. `set DEVICE=ping2` (for the Ping2 Sonar) or `set DEVICE=ping1d` (for the original Ping Sonar)
+        1. `set DEVICE=ping2` (for the second generation *Ping Sonar*) or `set DEVICE=ping1d` (for the original *Ping Sonar*)
         2. `set FIRMWARE=Ping2-V1.0.0_auto.hex` or `set FIRMWARE=Ping-V3.29_auto.hex`
         3. `Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/%DEVICE%/%FIRMWARE%" -OutFile "$PWD/%FIRMWARE%"`
     - On Linux:
-        1. `DEVICE=ping2` (for the Ping2 Sonar) or `DEVICE=ping1d` (for the original Ping Sonar)
+        1. `DEVICE=ping2` (for the second generation *Ping Sonar*) or `DEVICE=ping1d` (for the original *Ping Sonar*)
         2. `FIRMWARE=Ping2-V1.0.0_auto.hex` or `FIRMWARE=Ping-V3.29_auto.hex`
         3. `wget "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/$DEVICE/$FIRMWARE"`
     - On Mac:
-        1. `DEVICE=ping2` (for the Ping2 Sonar) or `DEVICE=ping1d` (for the original Ping Sonar)
+        1. `DEVICE=ping2` (for the second generation *Ping Sonar*) or `DEVICE=ping1d` (for the original *Ping Sonar*)
         2. `FIRMWARE=Ping2-V1.0.0_auto.hex` or `FIRMWARE=Ping-V3.29_auto.hex`
         2. `curl -O "https://raw.githubusercontent.com/bluerobotics/ping-firmware/master/$DEVICE/$FIRMWARE"`
 - With the device open, you should see a BOOT button in the main board. Power down the device, press and hold this button down, then power the device and let go of the button
