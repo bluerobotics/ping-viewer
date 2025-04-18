@@ -100,16 +100,20 @@ For Ping-Viewer versions under v2.2.0.
 
 ## Build documentation
 
-1. Follow the **Source Code** guide.
-2. Checkout to the documentation branch.
+1. Follow the [Source Code](#source-code) guide.
+2. Checkout to the documentation branch:
     - `git checkout docs`
-3. Install `pipenv`.
-    - `pip install pipenv --user`
-4. Configure `pipenv` for the project and install necessary tools.
-    - `pipenv install`
-    - `pipenv run pip install mkdocs-material`
-5. Build the documentation.
-    - `pipenv run mkdocs build`
-6. Access the generated documentation using your favorite browser.
-    - `cd ping-viewer && firefox index.html`
-    - `cd ping-viewer && open index.html` on MacOS
+3. Create and activate a virtual environment:
+    - `python -m venv .venv`
+    - `source .venv/bin/activate`
+4. Install necessary tools:
+    - `pip install mkdocs-material`
+5. Build the documentation:
+    - `mkdocs build`
+6. Serve the documentation to view it locally:
+    - `mkdocs serve`
+    - Copy the serving URL (e.g. `http://127.0.0.1:8000`) to your browser to view
+7. Stop serving the docs site:
+    - Press `CTRL+C` while the terminal is in focus
+8. Deactivate the virtual environment:
+    - `deactivate`
