@@ -1,11 +1,29 @@
 *Ping Viewer* Documentation
 ===========================
 
-*Ping Viewer* is the graphical user interface for the Blue Robotics [*Ping1D* Altimeter and Echosounder](https://www.bluerobotics.com/store/sensors-sonars-cameras/sonar/ping-sonar-r2-rp/) and [*Ping360* Scanning Imaging Sonar](https://bluerobotics.com/store/sensors-sonars-cameras/sonar/ping360-sonar-r1-rp/). The application allows you to connect, configure, view data, and record data from a *Ping* device.
+*Ping Viewer* is a graphical user interface for devices supporting the [*Ping* protocol](https://docs.bluerobotics.com/ping-protocol). The application allows you to connect, configure, view data, and record data from a *Ping* device.
+
+## Supported Device Types
+
+### Single-Direction Echosounders
 
 ![Ping Viewer main Ping1D display](https://www.bluerobotics.com/wp-content/uploads/2019/01/ping-viewer-1.jpg)
+
+- Requires the [*Ping1D* message set](https://docs.bluerobotics.com/ping-protocol/pingmessage-ping1d/)
+- Estimates distance to an object or surface, for obstacle avoidance or surface/terrain tracking
+- Moving the device creates a [waterfall](#waterfall) profile of the covered obstacles/terrain
+- Known examples include:
+    - Blue Robotics [*Ping Sonar* Altimeter and Echosounder](https://bluerobotics.com/store/sonars/echosounders/ping-sonar-r2-rp/)
+    - Cerulean Sonar [*Sounder S500*](https://ceruleansonar.com/product/sounder-s500/)
+
+### Rotating Scanning Sonars
 ![Ping Viewer main Ping360 display](https://bluerobotics.com/wp-content/uploads/2019/07/Ping360_Pilings.png)
 
+- Requires the [*Ping360* message set](https://docs.bluerobotics.com/ping-protocol/pingmessage-ping360/)
+- Requesting different transducer angles builds up an image of objects in the space around the device
+- Can compensate for vehicle heading, if mounted on a MAVLink-enabled vehicle
+- Known examples include:
+    - Blue Robotics [*Ping360* Scanning Imaging Sonar](https://bluerobotics.com/store/sonars/imaging-sonars/ping360-sonar-r1-rp/)
 
 ## Installing and Running the Application
 
