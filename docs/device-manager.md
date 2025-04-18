@@ -4,7 +4,7 @@ PingViewer attempts to connect to UDP ports 9090 ([Ping1D](https://bluerobotics.
 
 #### Device Manager
 
-![Device Manager](/ping-viewer/images/viewer/device-manager-1.png)
+![Device Manager](images/viewer/device-manager-1.png)
 
     1- Shows an animation and the name of the available sensor.
     2- Describes the kind of the available connection.
@@ -18,7 +18,7 @@ PingViewer attempts to connect to UDP ports 9090 ([Ping1D](https://bluerobotics.
 
 #### Manual Connection
 
-![Manual Connection](/ping-viewer/images/viewer/device-manager-2.png)
+![Manual Connection](images/viewer/device-manager-2.png)
 
     1- Displays all devices compatible.
     2- Shows available connection types.

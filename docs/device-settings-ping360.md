@@ -1,4 +1,4 @@
-![Ping360 Settings](/ping-viewer/images/viewer/ping360-settings.png)
+![Ping360 Settings](images/viewer/ping360-settings.png)
 
 ## Menu Items
 
