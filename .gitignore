@@ -1,1 +1,10 @@
 site/
+
+# standard docs build
+ping-viewer/
+
+# macOS file index
+.DS_Store
+
+# common python virtual environment
+.venv
