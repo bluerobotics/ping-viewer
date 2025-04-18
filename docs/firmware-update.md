@@ -1,4 +1,4 @@
-![Firmware Update](/ping-viewer/images/viewer/firmware-update.png)
+![Firmware Update](images/viewer/firmware-update.png)
 
 The Firmware Update menu allows you to update the programming on a Ping device.
 
@@ -16,7 +16,7 @@ Steps to flash the device:
 
 > *Firmware versions before v3.28 only communicate at a fixed baudrate, so require specifying the desired rate for your application (115kbps or 9600bps). Newer firmwares determine the baudrate automatically.
 
-![Firmware Update Waiting](/ping-viewer/images/viewer/firmware-update-waiting.gif)
+![Firmware Update Waiting](images/viewer/firmware-update-waiting.gif)
 
 ## Manual Firmware Update
 
@@ -27,7 +27,7 @@ Steps to flash the device:
 3. Choose 'Manual Update'
 4. Download your desired firmware from the `/ping1d` folder inside the [firmware repository](https://github.com/bluerobotics/ping-firmware/tree/master/ping1d)
     1. Right click 'Raw' and click 'Save Link As...' to save the firmware hex file (`.hex`)
-    ![Raw](/ping-viewer/images/firmware-update/download.png)
+    ![Raw](images/firmware-update/download.png)
     2. If the file format is coming up as 'Text Document (.txt)' or similar, change it to 'HEX File (.hex)' if possible, or select 'All files' and ensure the file extension is `.hex`, not `.hex.txt`
 5. In Ping-Viewer, click `Browse` to select the firmware hex file that you saved
 6. Click _FIRMWARE UPDATE_ to start the process.
@@ -35,7 +35,7 @@ Steps to flash the device:
 
 > Wait for the update process to complete before unplugging the device!
 
-![Manual Firmware Update](/ping-viewer/images/firmware-update/manual.png)
+![Manual Firmware Update](images/firmware-update/manual.png)
 
 
 ## Ping Sonar Device Recovery
@@ -46,11 +46,11 @@ The device must be opened to restore the firmware. We only want to open the devi
 
 To open a first generation Ping sonar, hold it firmly, and turn the blue ring in counterclockwise direction:
 
-![Firmware Update Waiting](/ping-viewer/images/firmware-update/open-ping.png)
+![Firmware Update Waiting](images/firmware-update/open-ping.png)
 
 To open a Ping2, pull out the plastic locking cord, then carefully separate the top from the case:
 
-![Firmware Update Waiting](/ping-viewer/images/firmware-update/ping2-open.png)
+![Firmware Update Waiting](images/firmware-update/ping2-open.png)
 
 After the device is opened, turn it on and look for a blinking led on the circuit board inside of the device. If you see a blinking led, the device should be good and the firmware is running fine, you may close the device and double check the [troubleshooting instructions](faq-and-troubleshooting.md#troubleshooting).
 
@@ -84,7 +84,7 @@ If the led is not blinking:
 - With the device open, you should see a BOOT button in the main board. Power down the device, press and hold this button down, then power the device and let go of the button
 - You should check the port of the device with Windows **Device Manager**, `dmesg` on Linux, or `ls /dev/tty.usbserial*` on Mac.
 
-![Firmware Update Waiting](/ping-viewer/images/firmware-update/device-manager.png)
+![Firmware Update Waiting](images/firmware-update/device-manager.png)
 
 - After finding the port (`COMx` on Windows, `/dev/ttyUSB*` on Linux, `/dev/tty.usbserial*` on Mac) you can start the flash procedure.
 - In the same terminal type:
