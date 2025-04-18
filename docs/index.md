@@ -14,6 +14,7 @@
 - Moving the device creates a [waterfall](#waterfall) profile of the covered obstacles/terrain
 - Known examples include:
     - Blue Robotics [*Ping Sonar* Altimeter and Echosounder](https://bluerobotics.com/store/sonars/echosounders/ping-sonar-r2-rp/)
+        - [Open source firmware variant](https://github.com/bluerobotics/ping-firmware-oss/) available for reference
     - Cerulean Sonar [*Sounder S500*](https://ceruleansonar.com/product/sounder-s500/)
 
 ### Rotating Scanning Sonars
@@ -67,7 +68,7 @@ Visit the [Device Manager](device-manager.md) menu for more connection options.
 
 ### Ping1D
 
-When using the Ping1D, the Ping Viewer window consists of four important components:
+When using a Ping1D device, the Ping Viewer window consists of four important components:
 
 1. [Distance Readout](#distance-readout)
 2. [Distance Axis](#distance-axis)
