@@ -1,6 +1,6 @@
 ![Firmware Update](images/viewer/firmware-update.png)
 
-The Firmware Update menu allows you to update the programming on a Ping device.
+The Firmware Update menu allows you to update the programming on a Blue Robotics [*Ping Sonar*](https://bluerobotics.com/store/sonars/echosounders/ping-sonar-r2-rp/) or [*Ping360*](https://bluerobotics.com/store/sonars/imaging-sonars/ping360-sonar-r1-rp/) device.
 
 ## Automatic Firmware Update
 
@@ -14,7 +14,7 @@ Steps to flash the device:
 
 > Wait for the update process to complete before unplugging the device!
 
-> *Firmware versions before v3.28 only communicate at a fixed baudrate, so require specifying the desired rate for your application (115kbps or 9600bps). Newer firmwares determine the baudrate automatically.
+> *Ping Sonar firmware versions before v3.28 only communicate at a fixed baudrate, so require specifying the desired rate for your application (115kbps or 9600bps). Newer firmwares determine the baudrate automatically.
 
 ![Firmware Update Waiting](images/viewer/firmware-update-waiting.gif)
 
