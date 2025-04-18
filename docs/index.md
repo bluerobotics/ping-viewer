@@ -27,13 +27,11 @@ Download [this .dmg file](https://github.com/bluerobotics/ping-viewer/releases/l
 
 ![Install from .dmg](images/install/mac-install-from-dmg.jpg)
 
-If you get an 'unidentified developer' notification when you try to open the application, you may adjust your security preferences to allow the application to run. Visit **System Preferences** -> **Security and Privacy**, click the lock and enter your password to make changes, then click 'Open Anyway'.
+If you get an 'unidentified developer' notification when you try to open the application, you may need to adjust your security preferences to allow the application to run. Visit **System Preferences** -> **Privacy and Security**, scroll to the bottom, click 'Open Anyway', and enter your password when prompted.
 
 ![Mac Unindentified Developer](images/install/mac-unidentified-developer.png)
 
-![Mac System Preferences](images/install/mac-system-preferences-annotated.png)
-
-![Mac Security and Privacy](images/install/mac-security-and-privacy-annotated.png)
+![Mac Privacy and Security](images/install/mac-privacy-and-security.png)
 
 ### Linux
 
