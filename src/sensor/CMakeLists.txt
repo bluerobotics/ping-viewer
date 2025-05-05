@@ -16,12 +16,12 @@ STATIC
 target_link_libraries(
     sensor
 PRIVATE
-    Qt5::Core
-    Qt5::Network
-    Qt5::Quick
-    Qt5::SerialPort
-    Qt5::Widgets # because of stylemanager
-    Qt5::Concurrent
+    Qt6::Core
+    Qt6::Network
+    Qt6::Quick
+    Qt6::SerialPort
+    Qt6::Widgets # because of stylemanager
+    Qt6::Concurrent
 
     mavlink
     network

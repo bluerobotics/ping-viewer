@@ -8,9 +8,9 @@ STATIC
 target_link_libraries(
     logger
 PRIVATE
-    Qt5::Concurrent
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Qml
+    Qt6::Concurrent
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
     filemanager # for the construtor only, perhaps we should remove that dependency.
 )
