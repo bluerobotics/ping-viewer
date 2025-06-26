@@ -2,6 +2,9 @@ name: Build & Deploy
 
 on: [push, pull_request]
 
+env:
+  DOCKER_BUILDKIT: 1
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -21,6 +24,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install Qt
+      if: runner.os != 'Linux'
       uses: jurplel/install-qt-action@v4
       with:
         version: '5.15.2'
@@ -30,17 +34,40 @@ jobs:
         AQT_CONFIG: ${{ github.workspace }}/tools/aqt-settings.ini
 
     - name: Install jinja2
+      if: runner.os != 'Linux'
       run: |
         pip install --user --upgrade pip;
         pip install --user jinja2;
 
+    - name: Set up Docker Buildx
+      if: runner.os == 'Linux'
+      uses: docker/setup-buildx-action@v3
+
+    - name: Cache Docker layers
+      if: runner.os == 'Linux'
+      uses: actions/cache@v4
+      with:
+        path: /tmp/.buildx-cache
+        key: linux-builder-${{ hashFiles('tools/Dockerfile.pingviewer-linux-builder-ubuntu18') }}
+        restore-keys: |
+          linux-builder-
+
+    - name: Build Docker
+      if: runner.os == 'Linux'
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: tools/Dockerfile.pingviewer-linux-builder-ubuntu18
+        tags: pingviewer-linux-builder-ubuntu18
+        cache-from: type=local,src=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+        load: true
+
     - name: Build Linux
       if: runner.os == 'Linux'
       run: |
-        sudo apt update
-        sudo apt install libxcb-* libfuse-dev
-        ./tools/compile.sh
-        mv /tmp/pingviewer-x86_64.AppImage pingviewer-Release.AppImage
+        docker run --rm -v "$PWD:/output" pingviewer-linux-builder-ubuntu18 bash -c \
+          "./tools/compile.sh && mv /tmp/pingviewer-x86_64.AppImage /output/pingviewer-Release.AppImage"
 
     - name: Build Mac
       if: runner.os == 'macOS'
