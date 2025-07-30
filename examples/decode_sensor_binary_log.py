@@ -111,16 +111,14 @@ class PingViewerLogReader:
     def unpack_string(cls, file: IO[Any]):
         return cls.unpack_array(file).decode('UTF-8')
 
-    @classmethod
-    def unpack_message(cls, file: IO[Any]):
-        timestamp = cls.unpack_string(file)
-        message = cls.unpack_array(file)
+    def unpack_message(self, file: IO[Any]):
+        timestamp = self.unpack_string(file)
+        message = self.unpack_array(file)
         if message is None:
-            return cls.recover(file)
+            return self.recover(file)
         return (timestamp, message)
 
-    @classmethod
-    def recover(cls, file: IO[Any]):
+    def recover(self, file: IO[Any]):
         """ Attempt to recover from a failed read.
 
         Assumed that a bad number has been read from the last cls.UINT.size
@@ -129,21 +127,21 @@ class PingViewerLogReader:
 
         """
         # TODO: log when recovery attempts occur, and bytes lost when they succeed
-        file.seek(current_pos := (file.tell() - cls.UINT.size))
+        file.seek(current_pos := (file.tell() - self.UINT.size))
         prev_ = next_ = b''
         start = amount_read = 0
-        while not (match := cls.TIMESTAMP_FORMAT.search(
+        while not (match := self.TIMESTAMP_FORMAT.search(
                 roi := (prev_ + next_), start)):
             prev_ = next_
-            next_ = file.read(cls.MAX_ARRAY_LENGTH)
+            next_ = file.read(self.MAX_ARRAY_LENGTH)
             if not next_:
                 break # run out of file
-            amount_read += cls.MAX_ARRAY_LENGTH
+            amount_read += self.MAX_ARRAY_LENGTH
             if start == 0 and prev_:
                 # onto the second read
                 # -> match on potential overlap + new region, not the
                 #    already-checked (impossible) region
-                start = cls.MAX_ARRAY_LENGTH - cls.MAX_TIMESTAMP_LENGTH
+                start = self.MAX_ARRAY_LENGTH - self.MAX_TIMESTAMP_LENGTH
         else:
             # match was found
             end = match.end()
@@ -153,8 +151,8 @@ class PingViewerLogReader:
             # return the file pointer to the end of this timestamp
             file.seek(current_pos + amount_read)
             # attempt to extract the corresponding message, or recover anew
-            if (message := cls.unpack_array(file)) is None:
-                return cls.recover(file)
+            if (message := self.unpack_array(file)) is None:
+                return self.recover(file)
             return (timestamp, message)
         # Calculate bytes from start of recovery attempt to end of the file
         file_size = file.tell()
