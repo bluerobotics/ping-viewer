@@ -80,7 +80,7 @@ class PingViewerLogReader:
     # timestamp format for recovery hh:mm:ss.xxx
     # includes optional \x00 (null byte) before every character because Windows
     TIMESTAMP_FORMAT = re.compile(
-        b'(\x00?\d){2}(\x00?:\x00?[0-5]\x00?\d){2}\x00?\.(\x00?\d){3}')
+        b'(\x00?\\d){2}(\x00?:\x00?[0-5]\x00?\\d){2}\x00?\\.(\x00?\\d){3}')
     MAX_TIMESTAMP_LENGTH = 12 * 2
 
     def __init__(self, filename: str):
