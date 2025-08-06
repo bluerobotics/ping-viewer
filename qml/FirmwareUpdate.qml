@@ -1,11 +1,11 @@
 import DeviceManager 1.0
 import Flasher 1.0
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 import QtQml 2.2
 import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import QtQuick.Layouts 1.3
 import SettingsManager 1.0
 
