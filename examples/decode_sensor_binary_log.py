@@ -82,6 +82,8 @@ class PingViewerLogReader:
     TIMESTAMP_FORMAT = re.compile(
         b'(\x00?\\d){2}(\x00?:\x00?[0-5]\x00?\\d){2}\x00?\\.(\x00?\\d){3}')
     MAX_TIMESTAMP_LENGTH = 12 * 2
+    # byte encoding assumes posix until proven otherwise
+    ENCODING = 'UTF-8'
 
     def __init__(self, filename: str):
         self.filename = filename
@@ -107,9 +109,8 @@ class PingViewerLogReader:
         if array_size <= cls.MAX_ARRAY_LENGTH:
             return file.read(array_size)
 
-    @classmethod
-    def unpack_string(cls, file: IO[Any]):
-        return cls.unpack_array(file).decode('UTF-8')
+    def unpack_string(self, file: IO[Any]):
+        return self.unpack_array(file).decode(self.ENCODING)
 
     def unpack_message(self, file: IO[Any]):
         timestamp = self.unpack_string(file)
@@ -145,7 +146,7 @@ class PingViewerLogReader:
         else:
             # match was found
             end = match.end()
-            timestamp = roi[match.start():end].decode('UTF-8')
+            timestamp = roi[match.start():end].decode(self.ENCODING)
             amount_read -= (len(roi) - end)
             self.failed_bytes += amount_read
             # return the file pointer to the end of this timestamp
@@ -163,6 +164,10 @@ class PingViewerLogReader:
 
     def unpack_header(self, file: IO[Any]):
         self.header.string = self.unpack_string(file)
+        if '\x00' in self.header.string:
+            # Windows uses big-endian wide characters
+            self.ENCODING = 'UTF-16-be'
+            self.header.string = self.header.string.encode('UTF-8').decode(self.ENCODING)
         self.header.version = self.unpack_int(file)
 
         for info in ('hash_commit', 'date', 'tag', 'os_name', 'os_version'):
