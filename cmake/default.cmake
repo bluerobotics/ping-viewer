@@ -1,7 +1,7 @@
 set(default_build_type "Debug")
 
 if(WIN32)
-    set(ENABLE_REQUIRE_ADMIN TRUE)
+    set(ENABLE_REQUIRE_ADMIN FALSE)
 endif()
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
