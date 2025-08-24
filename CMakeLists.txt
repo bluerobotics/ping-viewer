@@ -4,7 +4,7 @@ project(ping-viewer LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 
-set(QT_MIN_VERSION "5.15.0")
+set(QT_MIN_VERSION "6.2.0")
 
 set(CMAKE_AUTOMOC ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.bluerobotics.pingviewer)
@@ -31,7 +31,7 @@ add_compile_definitions(
     QT_USE_FAST_OPERATOR_PLUS
 )
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
     Charts
     Concurrent
     Core
@@ -43,6 +43,7 @@ find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
     Svg
     Test
     Widgets
+    Multimedia
 )
 
 message(STATUS "Qt Version: ${Qt5_VERSION}")

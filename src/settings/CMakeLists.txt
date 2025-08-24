@@ -9,7 +9,7 @@ STATIC
 target_link_libraries(
     settings
 PRIVATE
-    Qt5::Core
-    Qt5::Qml
-    Qt5::Widgets # because of QColor
+    Qt6::Core
+    Qt6::Qml
+    Qt6::Widgets # because of QColor
 )

@@ -7,7 +7,7 @@ STATIC
 target_link_libraries(
     filemanager
 PRIVATE
-    Qt5::Core
-    Qt5::Quick
+    Qt6::Core
+    Qt6::Quick
     logger
 )

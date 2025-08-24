@@ -121,7 +121,7 @@ void Ping::loadLastPingConfigurationSettings()
 
     // Load settings for device using device id
     QVariant pingConfigurationVariant
-        = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString(_commonVariables.srcId)});
+        = SettingsManager::self()->getMapValue({"Ping", "PingConfiguration", QString::number(_commonVariables.srcId)});
     if (pingConfigurationVariant.type() != QVariant::Map) {
         qCWarning(PING_PROTOCOL_PING) << "No valid PingConfiguration in settings." << pingConfigurationVariant.type();
         return;
@@ -140,8 +140,7 @@ void Ping::updatePingConfigurationSettings()
     for (const auto& key : _pingConfiguration.keys()) {
         auto& dataStruct = _pingConfiguration[key];
         dataStruct.set(dataStruct.getClassValue());
-        SettingsManager::self()->setMapValue(
-            {"Ping", "PingConfiguration", QString(_commonVariables.srcId), key}, dataStruct.value);
+        SettingsManager::self()->setMapValue({"Ping", "PingConfiguration", QString::number(_commonVariables.srcId), key}, dataStruct.value);
     }
 }
 

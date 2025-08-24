@@ -17,7 +17,7 @@ QVariantMap* VariantTree::getMap(const QStringList& path)
     for (auto& key : path) {
         if (!finalMap->contains(key)) {
             finalMap->insert(key, QVariantMap());
-        } else if ((*finalMap)[key].type() != QVariant::Map) {
+        } else if ((*finalMap)[key].typeId() != QVariant::Map) {
             finalMap->insert(key, QVariantMap());
         }
         finalMap = static_cast<QVariantMap*>((*finalMap)[key].data());

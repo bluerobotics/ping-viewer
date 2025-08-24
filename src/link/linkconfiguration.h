@@ -370,7 +370,7 @@ struct LinkConfigurationRegisterStruct {
 
         const int newId = qRegisterMetaType<LinkConfiguration>("LinkConfiguration");
         metatypeId.storeRelease(newId);
-        qRegisterMetaTypeStreamOperators<LinkConfiguration>("LinkConfiguration");
+        //qRegisterMetaTypeStreamOperators<LinkConfiguration>("LinkConfiguration");
     }
 };
 

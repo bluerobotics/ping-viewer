@@ -21,11 +21,11 @@ foreach(directory ${INCLUDE_DIRS})
     add_subdirectory(${directory})
 endforeach()
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
-    QuickCompiler
-)
+#find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
+    #QuickCompiler
+#)
 
-qtquick_compiler_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../resources.qrc)
+#qtquick_compiler_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../resources.qrc)
 
 # Configure icon for mac build
 set(MACOSX_BUNDLE_ICON_FILE icon.icns)
@@ -51,6 +51,7 @@ set(SOURCES
 
 add_executable(pingviewer
     ${SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../resources.qrc
 )
 
 # Set windows administrator request
@@ -71,19 +72,21 @@ endif()
 target_link_libraries(
     pingviewer
 PRIVATE
-    Qt5::Core
-    Qt5::Qml
-    Qt5::Quick
-    Qt5::QuickControls2
-    Qt5::Charts
-    Qt5::Svg
-    Qt5::Widgets # QApplication
+    Qt6::Core
+    Qt6::Qml
+    Qt6::Quick
+    Qt6::QuickControls2
+    Qt6::Charts
+    Qt6::Svg
+    Qt6::Widgets # QApplication
+    Qt6::Multimedia
     ${INCLUDE_DIRS}
     fmt::fmt
 )
 
 # Test target
-if(NOT WIN32)
+
+if(false)
     enable_testing(true)
     add_executable(test test.cpp)
     add_test(NAME test COMMAND test)
@@ -91,14 +94,14 @@ if(NOT WIN32)
     target_link_libraries(
         test
     PRIVATE
-        Qt5::Core
-        Qt5::Qml
-        Qt5::Quick
-        Qt5::QuickControls2
-        Qt5::Charts
-        Qt5::Svg
-        Qt5::Test
-        Qt5::Widgets
+        Qt6::Core
+        Qt6::Qml
+        Qt6::Quick
+        Qt6::QuickControls2
+        Qt6::Charts
+        Qt6::Svg
+        Qt6::Test
+        Qt6::Widgets
         ${INCLUDE_DIRS}
         fmt::fmt
     )

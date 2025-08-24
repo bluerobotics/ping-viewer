@@ -4,12 +4,12 @@ import FileManager 1.0
 import Ping 1.0
 import PingEnumNamespace 1.0
 import Qt.labs.settings 1.0
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 import QtMultimedia 5.12
 import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import QtQuick.Layouts 1.3
 import SettingsManager 1.0
 import StyleManager 1.0
@@ -370,11 +370,12 @@ Item {
     }
 
     // Sound effect for screenshot
+    /*
     SoundEffect {
         id: cameraShutterSound
 
         source: "qrc:/sounds/camera-shutter.wav"
-    }
+    }*/
 
     // Flash effect for screenshot
     Rectangle {

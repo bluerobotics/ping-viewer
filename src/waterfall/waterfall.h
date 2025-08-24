@@ -86,8 +86,8 @@ public:
      *
      * @return QPoint
      */
-    QPoint mousePos() { return _mousePos; }
-    Q_PROPERTY(QPoint mousePos READ mousePos NOTIFY mousePosChanged)
+    QPointF mousePos() { return _mousePos; }
+    Q_PROPERTY(QPointF mousePos READ mousePos NOTIFY mousePosChanged)
 
     /**
      * @brief Return true if the mouse is currently inside the waterfall area
@@ -170,7 +170,7 @@ protected:
     bool _containsMouse;
     WaterfallGradient _gradient;
     static QList<WaterfallGradient> _gradients;
-    QPoint _mousePos;
+    QPointF _mousePos;
     bool _smooth;
     QString _theme;
     QStringList _themes;
