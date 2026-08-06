@@ -271,6 +271,15 @@ signals:
     void availableConnectionsChanged();
     void configurationChanged();
     void nameChanged(const QString& name);
+
+    /**
+     * @brief Emitted when the link fails in a way the user should be told about, with an
+     *  actionable, human-readable message. Unlike transient logging, this is throttled/escalated
+     *  by the link implementation so upper layers can surface it once instead of on every retry.
+     *
+     * @param errorMessage
+     */
+    void linkError(const QString& errorMessage);
     void autoConnectChanged();
     void linkChanged(AbstractLinkNamespace::LinkType link);
     void newData(const QByteArray& data);

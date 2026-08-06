@@ -3,6 +3,7 @@
 #include <QAbstractListModel>
 #include <QLoggingCategory>
 #include <QThread>
+#include <QTimer>
 
 #include "abstractlinknamespace.h"
 #include "ping360helperservice.h"
@@ -178,6 +179,14 @@ private:
     void updateAvailableConnections(
         const QVector<LinkConfiguration>& availableLinkConfigurations, const QString& detectorName);
 
+    /**
+     * @brief Mark detected devices as unavailable once they have not been seen for longer than
+     *  the availability TTL. This replaces flipping every entry to unavailable on each scan
+     *  cycle, which made the device list flicker whenever a single discovery cycle missed a reply.
+     *
+     */
+    void expireStaleConnections();
+
     // Role and names
     enum Roles {
         Available = 0,
@@ -201,4 +210,10 @@ private:
     // Model variables
     QVector<int> _roles;
     QHash<int, QVector<QVariant>> _sensors;
+
+    // Availability bookkeeping: last time (ms since epoch) each row was reported by a detector,
+    // kept in sync with the model rows (rows are only ever appended or cleared).
+    QVector<qint64> _lastSeenMs;
+    QTimer _availabilityTimer;
+    static constexpr qint64 _availabilityTtlMs {5000};
 };

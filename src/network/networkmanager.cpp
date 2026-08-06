@@ -90,19 +90,39 @@ QHostAddress NetworkManager::addressToIp(const QString& address)
     return QHostInfo::fromName(address).addresses().first();
 }
 
+bool NetworkManager::isInterfaceUsable(const QNetworkInterface& interface)
+{
+    const auto flags = interface.flags();
+    return flags.testFlag(QNetworkInterface::IsUp) && flags.testFlag(QNetworkInterface::IsRunning)
+        && !flags.testFlag(QNetworkInterface::IsLoopBack);
+}
+
 bool NetworkManager::isAddressInSubnet(const QString& address)
 {
     const QHostAddress testAddress = addressToIp(address);
 
-    if (testAddress.protocol() == QAbstractSocket::IPv6Protocol) {
+    if (testAddress.protocol() != QAbstractSocket::IPv4Protocol) {
         qCWarning(NETWORKMANAGER) << "Invalid network interface for ip:" << testAddress;
         return false;
     }
 
     for (const auto& interface : QNetworkInterface::allInterfaces()) {
+        // Skip interfaces that are not up and running (e.g. a disconnected Wi-Fi or Bluetooth
+        // adapter). These may still expose stale link-local addresses that would otherwise
+        // produce false matches and log noise.
+        if (!isInterfaceUsable(interface)) {
+            continue;
+        }
+
         for (const auto& networkAddressEntry : interface.addressEntries()) {
             const auto address = networkAddressEntry.ip();
             const auto netmask = networkAddressEntry.netmask();
+
+            // Only IPv4 entries can be compared against an IPv4 target. Skip IPv6 (e.g. fe80::)
+            // entries and any entry without a valid netmask.
+            if (address.protocol() != QAbstractSocket::IPv4Protocol || netmask.isNull()) {
+                continue;
+            }
 
             // Remove the last value of the IP address
             const bool sameSubnet = (address.toIPv4Address() & netmask.toIPv4Address())

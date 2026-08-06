@@ -77,8 +77,28 @@ private:
      */
     void printErrorMessage();
 
+    /**
+     * @brief Handle a failed connection attempt: log it, count consecutive failures, and once the
+     *  escalation threshold is reached emit a single actionable linkError instead of silently
+     *  retrying forever.
+     *
+     */
+    void handleConnectionFailure();
+
+    /**
+     * @brief Reset the failure counter and reconnect backoff after a successful connection.
+     *
+     */
+    void resetConnectionState();
+
     QString _hostAddress;
     QTimer _stateTimer;
     QUdpSocket* _udpSocket;
     uint _port;
+
+    int _connectionErrorCount {0};
+    bool _errorEscalated {false};
+    static constexpr int _baseReconnectIntervalMs {1000};
+    static constexpr int _maxReconnectIntervalMs {8000};
+    static constexpr int _errorEscalationThreshold {3};
 };

@@ -216,7 +216,7 @@ PingPopup {
                         if (!connection.isValid())
                             return DeviceManagerViewer.ConnectionStatus.InvalidConfiguration;
 
-                        if (connection.deviceType() == PingEnumNamespace.PingDeviceType.PING360 && connection.type() == AbstractLinkNamespace.Udp && connection.isSubnetBroadcast())
+                        if (connection.deviceType() == PingEnumNamespace.PingDeviceType.PING360 && connection.type() == AbstractLinkNamespace.Udp && (connection.isSubnetBroadcast() || !connection.isInSubnet()))
                             return DeviceManagerViewer.ConnectionStatus.ConfigurationIsRequired;
 
                         if (available)

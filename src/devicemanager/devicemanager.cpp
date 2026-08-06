@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include <QQmlEngine>
 
 #include "devicemanager.h"
@@ -24,6 +25,11 @@ DeviceManager::DeviceManager()
     connect(_detector, &ProtocolDetector::availableLinksChanged, this, &DeviceManager::updateAvailableConnections);
     connect(Ping360HelperService::self(), &Ping360HelperService::availableLinkFound, this,
         &DeviceManager::updateAvailableConnections);
+
+    // Periodically expire devices that have not been reported recently instead of dropping them
+    // on the first missed discovery cycle. The timer only runs while detecting (see
+    // startDetecting/stopDetecting) so connected devices are not expired after discovery stops.
+    connect(&_availabilityTimer, &QTimer::timeout, this, &DeviceManager::expireStaleConnections);
 }
 
 void DeviceManager::append(const LinkConfiguration& linkConf, const QString& deviceName, const QString& detectorName)
@@ -34,6 +40,9 @@ void DeviceManager::append(const LinkConfiguration& linkConf, const QString& dev
             qCDebug(DEVICEMANAGER) << "Connection configuration already exist for:" << _sensors[Name][i] << linkConf
                                    << linkConf.argsAsConst();
             _sensors[Available][i] = true;
+            if (i < _lastSeenMs.size()) {
+                _lastSeenMs[i] = QDateTime::currentMSecsSinceEpoch();
+            }
             const auto indexRow = index(i);
             emit dataChanged(indexRow, indexRow, _roles);
             return;
@@ -50,6 +59,7 @@ void DeviceManager::append(const LinkConfiguration& linkConf, const QString& dev
     _sensors[Connected].append(false);
     _sensors[DetectorName].append(detectorName);
     _sensors[Name].append(deviceName);
+    _lastSeenMs.append(QDateTime::currentMSecsSinceEpoch());
 
     const auto& indexRow = index(line);
     endInsertRows();
@@ -62,6 +72,7 @@ void DeviceManager::startDetecting()
     qCDebug(DEVICEMANAGER) << "Start protocol detector service.";
     _detectorThread.start();
     Ping360HelperService::self()->startBroadcastService();
+    _availabilityTimer.start(1000);
 }
 
 void DeviceManager::stopDetecting()
@@ -70,6 +81,7 @@ void DeviceManager::stopDetecting()
     Ping360HelperService::self()->stopBroadcastService();
     _detector->stop();
     _detectorThread.quit();
+    _availabilityTimer.stop();
 }
 
 void DeviceManager::connectLink(LinkConfiguration* linkConf)
@@ -151,19 +163,42 @@ void DeviceManager::updateAvailableConnections(
     const QVector<LinkConfiguration>& availableLinkConfigurations, const QString& detector)
 {
     qCDebug(DEVICEMANAGER) << "Available devices:" << availableLinkConfigurations;
-    // Make all connections unavailable by default
-    for (int i {0}; i < _sensors[Available].size(); i++) {
-        auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
-        if (linkConf->isSimulation() || _sensors[DetectorName][i] != detector) {
-            continue;
-        }
-        _sensors[Available][i] = false;
-        const auto indexRow = index(i);
-        emit dataChanged(indexRow, indexRow, _roles);
-    }
 
+    // Refresh availability using a last-seen timestamp (updated by append) instead of flipping
+    // every entry for this detector to unavailable on each cycle. That previous approach made the
+    // list flicker whenever a single discovery cycle missed a reply. Stale entries are dropped by
+    // expireStaleConnections() once they have not been seen for _availabilityTtlMs.
     for (const auto& link : availableLinkConfigurations) {
         append(link, PingHelper::nameFromDeviceType(link.deviceType()), detector);
+    }
+}
+
+void DeviceManager::expireStaleConnections()
+{
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+    for (int i {0}; i < _sensors[Available].size(); i++) {
+        if (!_sensors[Available][i].toBool() || i >= _lastSeenMs.size()) {
+            continue;
+        }
+
+        // Never expire a device we are actively connected to. Discovery is stopped while
+        // connected, so its last-seen timestamp would otherwise always go stale.
+        if (_sensors[Connected][i].toBool()) {
+            continue;
+        }
+
+        // Keep simulations and directly-connected (non-detected) entries available; only devices
+        // reported by a detector are subject to the last-seen TTL.
+        auto linkConf = _sensors[Connection][i].value<QSharedPointer<LinkConfiguration>>();
+        if (linkConf->isSimulation() || _sensors[DetectorName][i].toString() == QStringLiteral("None")) {
+            continue;
+        }
+
+        if (now - _lastSeenMs[i] > _availabilityTtlMs) {
+            _sensors[Available][i] = false;
+            const auto indexRow = index(i);
+            emit dataChanged(indexRow, indexRow, _roles);
+        }
     }
 }
 
@@ -173,6 +208,7 @@ void DeviceManager::clear()
     for (const auto category : _roleNames.keys()) {
         _sensors[category].clear();
     }
+    _lastSeenMs.clear();
     endResetModel();
     emit countChanged();
 }

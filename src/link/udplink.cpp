@@ -3,6 +3,7 @@
 #include <QNetworkDatagram>
 
 #include "logger.h"
+#include "networkmanager.h"
 #include "udplink.h"
 
 PING_LOGGING_CATEGORY(PING_PROTOCOL_UDPLINK, "ping.protocol.udplink")
@@ -17,16 +18,23 @@ UDPLink::UDPLink(QObject* parent)
     connect(_udpSocket, &QAbstractSocket::errorOccurred, this,
         [this](QAbstractSocket::SocketError /*socketError*/) { printErrorMessage(); });
 
+    // Reset the failure counter and backoff once we are actually connected.
+    connect(_udpSocket, &QAbstractSocket::connected, this, [this] { resetConnectionState(); });
+
     // QUdpSocket fail to emit state signal
     // Here we use a timer to check if we are in a connect state, if not we try again
     connect(&_stateTimer, &QTimer::timeout, this, [this] {
         if (_udpSocket->state() == QAbstractSocket::UnconnectedState) {
-            printErrorMessage();
+            handleConnectionFailure();
             qDebug(PING_PROTOCOL_UDPLINK) << "Trying to reconnect with host again.";
             _udpSocket->connectToHost(_hostAddress, _port);
+
+            // Back off the reconnect interval so we stop flooding the log and network while the
+            // target stays unreachable, capping at _maxReconnectIntervalMs.
+            _stateTimer.setInterval(qMin(_stateTimer.interval() * 2, _maxReconnectIntervalMs));
         }
     });
-    _stateTimer.start(1000);
+    _stateTimer.start(_baseReconnectIntervalMs);
 
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) { _udpSocket->write(data); });
 }
@@ -73,8 +81,34 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 void UDPLink::printErrorMessage()
 {
     qCWarning(PING_PROTOCOL_UDPLINK) << "An error has occurred with:" << _linkConfiguration;
-    QString errorMessage = QStringLiteral("Error (%1): %2.").arg(_udpSocket->state()).arg(_udpSocket->errorString());
+    QString errorMessage = QStringLiteral("Error (%1): %2.").arg(_udpSocket->error()).arg(_udpSocket->errorString());
     qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
+}
+
+void UDPLink::handleConnectionFailure()
+{
+    printErrorMessage();
+    _connectionErrorCount++;
+
+    // Escalate only once, with an actionable message, instead of silently retrying forever.
+    if (!_errorEscalated && _connectionErrorCount >= _errorEscalationThreshold) {
+        _errorEscalated = true;
+
+        QString message = QStringLiteral("Unable to reach the device at %1:%2.").arg(_hostAddress).arg(_port);
+        if (!NetworkManager::isAddressInSubnet(_hostAddress)) {
+            message += QStringLiteral(" It is on a different network than your computer. Set the device IP "
+                                      "or your computer's network settings so they share a subnet.");
+        }
+        qCWarning(PING_PROTOCOL_UDPLINK) << message;
+        emit linkError(message);
+    }
+}
+
+void UDPLink::resetConnectionState()
+{
+    _connectionErrorCount = 0;
+    _errorEscalated = false;
+    _stateTimer.setInterval(_baseReconnectIntervalMs);
 }
 
 bool UDPLink::finishConnection()
