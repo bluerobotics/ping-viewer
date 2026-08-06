@@ -7,6 +7,7 @@
 
 class QJSEngine;
 class QQmlEngine;
+class QNetworkInterface;
 
 Q_DECLARE_LOGGING_CATEGORY(NETWORKMANAGER)
 
@@ -47,6 +48,19 @@ public:
      * @return QHostAddress
      */
     static QHostAddress addressToIp(const QString& address);
+
+    /**
+     * @brief Check if a network interface is usable for IPv4 communication
+     *  An interface is considered usable when it is administratively up, operationally running
+     *  (carrier/link present), and is not the loopback interface. Down adapters such as a
+     *  disconnected Wi-Fi or Bluetooth interface (which may still carry stale link-local
+     *  addresses) must be skipped.
+     *
+     * @param interface
+     * @return true
+     * @return false
+     */
+    static bool isInterfaceUsable(const QNetworkInterface& interface);
 
     /**
      * @brief Check if an address is a valid IP of the host network interfaces

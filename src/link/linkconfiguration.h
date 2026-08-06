@@ -246,7 +246,7 @@ public:
      * @return true
      * @return false if IP is not in the same subnet as the computer or is not an ethernet connection
      */
-    bool isInSubnet() const;
+    Q_INVOKABLE bool isInSubnet() const;
 
     /**
      * @brief Check if IP has a valid and accessible broadcast IP.

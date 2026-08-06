@@ -4,6 +4,7 @@
 #include <QUdpSocket>
 
 #include "logger.h"
+#include "networkmanager.h"
 #include "ping360asciiprotocol.h"
 #include "ping360helperservice.h"
 
@@ -20,12 +21,16 @@ Ping360HelperService::Ping360HelperService()
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
     const int randomPort = 0; // Force OS to give a random port
-    _broadcastSocket.bind(QHostAddress::AnyIPv4, randomPort, QAbstractSocket::ReuseAddressHint);
+    _broadcastSocket.bind(
+        QHostAddress::AnyIPv4, randomPort, QUdpSocket::ShareAddress | QAbstractSocket::ReuseAddressHint);
+    _broadcastSocket.setSocketOption(QAbstractSocket::MulticastTtlOption, 1);
 
-    // Bind all available interfaces
+    // Bind all available interfaces that are up, running and can broadcast. Down adapters
+    // (e.g. a disconnected Wi-Fi or Bluetooth interface) are skipped.
     const auto interfaces = QNetworkInterface::allInterfaces();
     for (const QNetworkInterface& networkInterface : interfaces) {
-        if (networkInterface.flags() & QNetworkInterface::CanBroadcast) {
+        if (NetworkManager::isInterfaceUsable(networkInterface)
+            && networkInterface.flags().testFlag(QNetworkInterface::CanBroadcast)) {
             _broadcastSocket.joinMulticastGroup(QHostAddress(QHostAddress::Broadcast), networkInterface);
         }
     }
@@ -55,8 +60,7 @@ void Ping360HelperService::doBroadcast()
     QList<QPair<QHostAddress, QHostAddress>> ipBroadcastAddresses;
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
     for (const QNetworkInterface& interface : interfaces) {
-        if (interface.flags().testFlag(QNetworkInterface::IsUp)
-            && !interface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+        if (NetworkManager::isInterfaceUsable(interface)) {
             QList<QNetworkAddressEntry> entries = interface.addressEntries();
             for (const QNetworkAddressEntry& entry : entries) {
                 if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol) {
@@ -79,33 +83,41 @@ void Ping360HelperService::doBroadcast()
                      << "for IP address:" << ipAddress.toString();
         }
     }
+
+    // Also send to the limited broadcast address (255.255.255.255). A device on a link-local
+    // AutoIP address is not on any of our subnets, so a subnet-directed broadcast may never reach
+    // it; the limited broadcast improves the odds that such a device receives the discovery
+    // request and replies, making detection more reliable.
+    if (_broadcastSocket.writeDatagram(datagram, QHostAddress::Broadcast, Ping360AsciiProtocol::udpPort()) == -1) {
+        qDebug() << "Failed to send datagram to limited broadcast address: 255.255.255.255";
+    }
 }
 
 void Ping360HelperService::processBroadcastResponses()
 {
     while (_broadcastSocket.hasPendingDatagrams()) {
-        QHostAddress sender, destination;
-
         QNetworkDatagram datagram = _broadcastSocket.receiveDatagram();
 
-        // Make sure we have an IPV4 address, and not something like "::ffff:192.168.1.1"
-        sender = QHostAddress(datagram.senderAddress().toIPv4Address());
-
-        // if the sender ip address starts with 169.254.x.x, then the ping360 has not
-        // been assigned an ip address and we will not be able to reach it on this address
-        // we need to broadcast on the destination subnet, where we will be able to communicate
-        if (sender.isLinkLocal()) {
-            sender = QHostAddress(datagram.destinationAddress().toIPv4Address() | 255);
-        }
-
         const Ping360DiscoveryResponse decoded = Ping360AsciiProtocol::decodeDiscoveryResponse(datagram.data());
-        if (decoded.deviceName.contains("PING360")) {
-            emit availableLinkFound(
-                {{LinkType::Udp, {decoded.ipAddress, "12345"}, "Ping360 Port", PingDeviceType::PING360}},
-                QStringLiteral("Ping360 Ethernet Protocol Detector"));
-        } else {
+        if (!decoded.deviceName.contains("PING360")) {
             qCWarning(PING360HELPERSERVICE) << "Invalid message:" << datagram.data();
+            continue;
         }
+
+        // A Ping360 that has not been assigned an IP address falls back to a link-local
+        // (169.254.x.x) AutoIP address. It answers the discovery broadcast, but it cannot be
+        // reached by unicast unless the computer is on the same subnet. Detect that case so the
+        // device is flagged as needing IP configuration instead of being shown as ready to use.
+        const bool reachable = NetworkManager::isAddressInSubnet(decoded.ipAddress);
+        if (!reachable) {
+            qCWarning(PING360HELPERSERVICE)
+                << "Ping360 discovered on unreachable address:" << decoded.ipAddress
+                << "- the device and the computer are on different networks. Set a static IP on the device.";
+        }
+
+        emit availableLinkFound(
+            {{LinkType::Udp, {decoded.ipAddress, "12345"}, "Ping360 Port", PingDeviceType::PING360}},
+            QStringLiteral("Ping360 Ethernet Protocol Detector"));
     }
 }
 
@@ -113,9 +125,13 @@ void Ping360HelperService::setDHCPServer(const QString& ip) { setStaticIP(ip, "0
 
 void Ping360HelperService::setStaticIP(const QString& ip, const QString& staticIp)
 {
+    Q_UNUSED(ip)
     const QByteArray datagram = Ping360AsciiProtocol::staticIpAddressMessage(staticIp);
-    qCDebug(PING360HELPERSERVICE) << "Sending IP configuration message:" << datagram;
-    _broadcastSocket.writeDatagram(datagram, QHostAddress {ip}, Ping360AsciiProtocol::udpPort());
+    const auto port = Ping360AsciiProtocol::udpPort();
+    // Broadcast to the limited broadcast address so the message reaches a device that is currently
+    // on a different subnet (e.g. a link-local AutoIP address), which a unicast to `ip` could not.
+    qCDebug(PING360HELPERSERVICE) << "Broadcasting IP configuration message:" << datagram << "on port" << port;
+    _broadcastSocket.writeDatagram(datagram, QHostAddress::Broadcast, port);
 }
 
 QObject* Ping360HelperService::qmlSingletonRegister(QQmlEngine* engine, QJSEngine* scriptEngine)
