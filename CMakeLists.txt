@@ -31,6 +31,14 @@ add_compile_definitions(
     QT_USE_FAST_OPERATOR_PLUS
 )
 
+# VS2026's MSVC STL removed stdext::make_checked_array_iterator, which Qt 5.15.2's
+# qlist.h still calls unconditionally. Force-include a shim that restores it as a
+# raw-pointer passthrough on new MSVC so QList-using translation units compile.
+# See tools/msvc_stdext_shim.h for details.
+if(MSVC)
+    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:/FI${CMAKE_CURRENT_SOURCE_DIR}/tools/msvc_stdext_shim.h>")
+endif()
+
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
     Charts
     Concurrent
