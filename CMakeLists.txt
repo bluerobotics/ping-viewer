@@ -58,6 +58,11 @@ include_directories(
     lib/ping-cpp/ping-cpp/src/message/
 )
 
+# The bundled fmt/maddy submodules declare cmake_minimum_required(VERSION < 3.5),
+# which CMake >= 4.0 rejects. Allow those older sub-projects to configure until the
+# submodules are bumped. Must be set before add_subdirectory(lib/fmt/fmt).
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 add_subdirectory(lib/fmt/fmt)
 
 add_subdirectory(src)
