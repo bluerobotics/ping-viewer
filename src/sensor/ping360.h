@@ -190,7 +190,7 @@ public:
 
         // reduce _sample period until we are within operational parameters
         // maximize the number of points
-        while (_sensorSettings.sample_period < _firmwareMinSamplePeriod) {
+        while (_sensorSettings.sample_period < _firmwareMinSamplePeriod && _sensorSettings.num_points > 1) {
             _sensorSettings.num_points--;
             _sensorSettings.sample_period = calculateSamplePeriod(newRange);
         }
@@ -254,7 +254,7 @@ public:
 
             // reduce _sample period until we are within operational parameters
             // maximize the number of points
-            while (_sensorSettings.sample_period < _firmwareMinSamplePeriod) {
+            while (_sensorSettings.sample_period < _firmwareMinSamplePeriod && _sensorSettings.num_points > 1) {
                 _sensorSettings.num_points--;
                 _sensorSettings.sample_period = calculateSamplePeriod(desiredRange);
             }
