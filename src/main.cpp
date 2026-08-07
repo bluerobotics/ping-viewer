@@ -146,5 +146,12 @@ int main(int argc, char* argv[])
     KCrash::initialize();
 #endif
 
-    return app.exec();
+    const int result = app.exec();
+
+    // Logger::self() is a function-local static, so it is destroyed during static destruction while
+    // the message handler is still installed. A log line from any later destructor would otherwise
+    // re-enter an already-destroyed Logger.
+    qInstallMessageHandler(nullptr);
+
+    return result;
 }
