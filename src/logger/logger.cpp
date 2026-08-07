@@ -10,7 +10,12 @@
 #include <QString>
 #include <QTime>
 #include <QtConcurrent>
+#include <exception>
 #include <iostream>
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 PING_LOGGING_CATEGORY(logger, "ping.logger")
 
@@ -90,7 +95,31 @@ void Logger::handleMessage(QtMsgType type, const QMessageLogContext& context, co
         style = fmt::emphasis::bold | fg(fmt::color::yellow) | bg(fmt::color::red);
         break;
     }
-    fmt::print(style, "{}\n", qFormatLogMessage(type, context, logMsg).toStdString());
+
+    // Detect once whether stdout can actually be written to. A GUI-subsystem binary launched from
+    // Explorer has no console, so there is nothing to print to.
+    static const bool stdoutUsable = []() {
+#ifdef Q_OS_WIN
+        const HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+        return handle != nullptr && handle != INVALID_HANDLE_VALUE;
+#else
+        return true;
+#endif
+    }();
+
+    if (!stdoutUsable) {
+        return;
+    }
+
+    // fmt >= 10 routes the styled print() through detail::print() -> fwrite_fully(), which throws
+    // std::system_error when the write fails. A Qt message handler must never throw: it is called
+    // from arbitrary contexts (including destructors), and an escaping exception reaches
+    // std::terminate(). A redirected stdout can still fail mid-run, so this stays as a backstop.
+    try {
+        fmt::print(style, "{}\n", qFormatLogMessage(type, context, logMsg).toStdString());
+    } catch (const std::exception&) {
+        // There is no console to report to; dropping the line is the only option.
+    }
 }
 
 void Logger::registerCategory(const char* category)
