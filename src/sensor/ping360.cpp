@@ -737,8 +737,10 @@ void Ping360::resetBaudrate()
 
 void Ping360::setBaudRate(int baudRate)
 {
-    // It's only possible to change baudrates in serial connections
-    if (link()->type() != LinkType::Serial) {
+    // It's only possible to change baudrates in serial connections.
+    // Sensor::link() returns nullptr once the link has been cleared, which happens while the
+    // sensor is being torn down.
+    if (!link() || link()->type() != LinkType::Serial) {
         return;
     }
 
@@ -917,6 +919,12 @@ float Ping360::profileFrequency() const
 Ping360::~Ping360()
 {
     updateSensorConfigurationSettings();
+
+    // The link may already be gone (or not writable) during teardown; the motor-off handshake
+    // below dereferences it, so bail out when there is nothing to talk to.
+    if (!link() || !link()->isOpen() || !link()->isWritable()) {
+        return;
+    }
 
     ping360_motor_off message;
     message.updateChecksum();
