@@ -57,6 +57,9 @@ void Logger::logMessage(const QString& msg, const QtMsgType& type, const QMessag
 
     // Save the message into the file
     _fileStream << QString("%1 %2\n").arg(time, msg);
+    // QTextStream buffers, and nothing else flushes it during a normal run, so an abnormal exit
+    // would discard the buffer and leave a zero-byte Gui_Log.
+    _fileStream.flush();
 
     _logModel.append(time, msg, _colors[type], _categoryIndexer[context.category]);
 }
