@@ -815,6 +815,16 @@ private:
     void requestNextProfile();
 
     /**
+     * @brief Queue a profile request on the event loop
+     *
+     * requestNextProfile() can reach resetBaudrate(), which closes and reopens the serial port.
+     * Message handling runs synchronously inside QSerialPort::readyRead (link -> parser ->
+     * handleMessage are all Qt::DirectConnection), and a QSerialPort must never be closed from
+     * inside its own readyRead emission. Deferring to the event loop avoids that reentrancy.
+     */
+    void requestNextProfileDeferred();
+
+    /**
      * @brief Legacy profile request
      *  Used in firmwares 3.1
      *

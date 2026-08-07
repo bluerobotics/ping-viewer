@@ -274,6 +274,13 @@ void Ping360::requestNextProfile()
     }
 }
 
+void Ping360::requestNextProfileDeferred()
+{
+    // A zero-timer runs on the next event-loop iteration, so the "request next message ASAP"
+    // behaviour is preserved while never reconfiguring the serial port inside its own readyRead.
+    QTimer::singleShot(0, this, [this] { requestNextProfile(); });
+}
+
 void Ping360::legacyProfileRequest()
 {
     // Calculate the next delta step
@@ -369,7 +376,7 @@ void Ping360::handleMessage(const ping_message& msg)
         } else {
             _baudrateConfigurationTimer.stop();
             _timeoutProfileMessage.start();
-            requestNextProfile();
+            requestNextProfileDeferred();
         }
         return;
     }
@@ -382,7 +389,7 @@ void Ping360::handleMessage(const ping_message& msg)
         _angle = deviceData.angle();
 
         // Request next message ASAP
-        requestNextProfile();
+        requestNextProfileDeferred();
 
         // Restart timer, if the channel allows it
         if (link()->isWritable()) {
@@ -486,7 +493,7 @@ void Ping360::handleMessage(const ping_message& msg)
                 // before sending a new request.
                 _waitRetryMessages = 5;
                 qCDebug(PING_PROTOCOL_PING360) << "AUTO_DEVICE_DATA parameters do not match settings (invalid)";
-                requestNextProfile();
+                requestNextProfileDeferred();
             }
         } else {
             _waitRetryMessages = 1;
@@ -510,7 +517,7 @@ void Ping360::handleMessage(const ping_message& msg)
             set_number_of_points(_viewerDefaultNumberOfSamples);
 
             // request another transmission
-            requestNextProfile();
+            requestNextProfileDeferred();
 
             // restart timer
             _timeoutProfileMessage.start();
