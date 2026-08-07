@@ -151,16 +151,11 @@ void Ping360::checkBootloader()
         return;
     }
 
-    // bootloader may only be present on serial links, it does not communicate
-    // by ethernet
-    if (link()->type() != LinkType::Serial) {
+    // The bootloader may only be present on serial links, it does not communicate by ethernet.
+    // When the probe cannot run we must still fall through to the regular configuration path,
+    // otherwise the sensor stays unconfigured and silent.
+    if (link()->type() != LinkType::Serial || !link()->isOpen() || !link()->isWritable()) {
         startPreConfigurationProcess();
-        return;
-    }
-    if (!link()->isOpen()) {
-        return;
-    }
-    if (!link()->isWritable()) {
         return;
     }
 
@@ -184,7 +179,10 @@ void Ping360::checkBootloader()
               }
           });
 
-    QTimer::singleShot(250, [=] {
+    // The context object is mandatory: DeviceManager::connectLink() destroys the current sensor
+    // whenever a new connection is made, and without a receiver Qt cannot cancel this callback.
+    // Firing it on a destroyed Ping360 dereferences a freed QObjectPrivate inside QTimer::stop().
+    QTimer::singleShot(250, this, [=] {
         disconnect(blScanCallback);
         startConfiguration();
     });
@@ -192,6 +190,10 @@ void Ping360::checkBootloader()
 
 void Ping360::startPreConfigurationProcess()
 {
+    if (!link()) {
+        return;
+    }
+
     // Force the default settings
     resetSettings();
 
