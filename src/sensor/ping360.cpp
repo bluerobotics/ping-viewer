@@ -353,8 +353,6 @@ void Ping360::asyncProfileRequest()
 
 void Ping360::handleMessage(const ping_message& msg)
 {
-    static uint8_t _waitRetryMessages = 1;
-
     qCDebug(PING_PROTOCOL_PING360) << QStringLiteral("Handling Message: %1 [%2]")
                                           .arg(PingHelper::nameFromMessageId(
                                               static_cast<PingEnumNamespace::PingMessageId>(msg.message_id())))

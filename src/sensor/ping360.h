@@ -661,7 +661,7 @@ private:
     } _sensorSettings;
 
     // Counter for recieving new messages before retrying a request
-    uint8_t _waitRetryMessages;
+    uint8_t _waitRetryMessages = 1;
 
     // This variables are not user configuration settings
     uint16_t _angle = 200;
