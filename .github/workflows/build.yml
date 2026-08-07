@@ -85,9 +85,41 @@ jobs:
         env
         cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel --target ALL_BUILD --config Release
         cp build/Release/pingviewer.exe deploy/pingviewer.exe
-        if (($env:OPENSSL) -and (Test-Path $env:OPENSSL -pathType container)) {
-          Copy-Item ${env:OPENSSL}\*.dll -Destination deploy -Force
+
+        # Qt 5.15.2 is built against OpenSSL 1.1 and loads libssl-1_1-x64.dll / libcrypto-1_1-x64.dll
+        # at runtime (QSslSocket, used by the firmware-update HTTPS check). The VS2026 runner no
+        # longer ships OpenSSL 1.1 at a predictable location (it has OpenSSL 3.x), so the previous
+        # hardcoded copy silently shipped a build with broken HTTPS. Search common locations, fall
+        # back to a pinned OpenSSL 1.1.1 download, then fail if the DLLs are still missing.
+        $opensslDlls = @('libssl-1_1-x64.dll', 'libcrypto-1_1-x64.dll')
+        $searchRoots = @(
+          $env:OPENSSL,
+          'C:\Program Files\OpenSSL-Win64\bin',
+          'C:\Program Files\OpenSSL\bin',
+          "$env:QT_ROOT_DIR\..\..\Tools\OpenSSL\Win_x64\bin"
+        ) | Where-Object { $_ -and (Test-Path $_) }
+        foreach ($dll in $opensslDlls) {
+          if (Test-Path "deploy\$dll") { continue }
+          foreach ($root in $searchRoots) {
+            $hit = Get-ChildItem -Path $root -Filter $dll -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($hit) { Copy-Item $hit.FullName -Destination deploy -Force; break }
+          }
         }
+        if (-not (Test-Path 'deploy\libssl-1_1-x64.dll') -or -not (Test-Path 'deploy\libcrypto-1_1-x64.dll')) {
+          curl -L https://download.firedaemon.com/FireDaemon-OpenSSL/openssl-1.1.1w.zip -o openssl-1.1.zip
+          Expand-Archive -Path openssl-1.1.zip -DestinationPath openssl-1.1 -Force
+          foreach ($dll in $opensslDlls) {
+            $hit = Get-ChildItem -Path openssl-1.1 -Filter $dll -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($hit) { Copy-Item $hit.FullName -Destination deploy -Force }
+          }
+        }
+        foreach ($dll in $opensslDlls) {
+          if (-not (Test-Path "deploy\$dll")) {
+            Write-Error "Required OpenSSL 1.1 runtime '$dll' is missing from the deploy directory."
+            exit 1
+          }
+        }
+
         curl -L https://github.com/bluerobotics/stm32flash-code/releases/download/continuous/stm32flash.exe -o deploy/stm32flash.exe
         foreach ($I in (${env:SYSTEM32_DLLS} -split ' ')) { copy ${env:SYSTEM32}\$I deploy\ }
         windeployqt --qmldir qml --release deploy/pingviewer.exe --verbose=2
