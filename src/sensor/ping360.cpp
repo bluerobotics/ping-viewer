@@ -94,6 +94,20 @@ Ping360::Ping360()
         checkBaudrateProcess();
     });
 
+    connect(&_deviceInformationTimer, &QTimer::timeout, this, [this] {
+        if (++_deviceInformationRequests >= _deviceInformationMaxRequests) {
+            _deviceInformationTimer.stop();
+            qCWarning(PING_PROTOCOL_PING360) << "Sensor does not answer the device information request.";
+            NotificationManager::self()->create(
+                QStringLiteral("Sensor is not answering, check the network configuration of the device."), "red",
+                StyleManager::reportIcon());
+            return;
+        }
+
+        qCWarning(PING_PROTOCOL_PING360) << "Device information timeout, new request will be done.";
+        requestDeviceInformation();
+    });
+
     // Start timer to calculate frequency for each message type
     _messageFrequencyTimer.setInterval(1000);
     _messageFrequencyTimer.start();
@@ -211,8 +225,17 @@ void Ping360::startPreConfigurationProcess()
         if (_baudrateConfigurationTimer.isActive()) {
             _baudrateConfigurationTimer.stop();
         }
+
+        // Nothing else will ask for the device information in such channels
+        _deviceInformationRequests = 0;
+        _deviceInformationTimer.start(_deviceInformationRequestIntervalMs);
     }
 
+    requestDeviceInformation();
+}
+
+void Ping360::requestDeviceInformation()
+{
     // Fetch sensor configuration to update class variables
     // TODO: Ping base class should abstract the request message to allow version compatibility between protocol
     // versions
@@ -361,6 +384,8 @@ void Ping360::handleMessage(const ping_message& msg)
     switch (msg.message_id()) {
 
     case CommonId::DEVICE_INFORMATION: {
+        _deviceInformationTimer.stop();
+
         // Stop all configuration/message timers if link is not writable
         if (!link()->isWritable()) {
             stopConfiguration();
@@ -845,6 +870,9 @@ void Ping360::stopConfiguration()
     }
     if (_baudrateConfigurationTimer.isActive()) {
         _baudrateConfigurationTimer.stop();
+    }
+    if (_deviceInformationTimer.isActive()) {
+        _deviceInformationTimer.stop();
     }
 }
 

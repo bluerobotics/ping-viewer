@@ -741,6 +741,15 @@ private:
     QTimer _baudrateConfigurationTimer;
     bool _resetBaudRateDetection = true;
 
+    /**
+     * @brief Network links do not run the baudrate detection procedure, so nothing asks for the
+     *  device information again. A single lost datagram would keep the sensor silent forever.
+     */
+    QTimer _deviceInformationTimer;
+    int _deviceInformationRequests = 0;
+    static constexpr int _deviceInformationRequestIntervalMs = 500;
+    static constexpr int _deviceInformationMaxRequests = 10;
+
     // Helper structure to hold frequency information for each message
     struct MessageFrequencyHelper {
         // Hold last frequency
@@ -871,6 +880,12 @@ private:
      *
      */
     void startPreConfigurationProcess();
+
+    /**
+     * @brief Ask the sensor for its device information
+     *
+     */
+    void requestDeviceInformation();
 
     /**
      * @brief Request and calculate the necessary amount of messages to get the best baud rate possible
