@@ -433,8 +433,14 @@ void Ping360::handleMessage(const ping_message& msg)
     }
 
     case Ping360Id::AUTO_DEVICE_DATA: {
-        // Stop profile message timeout, the data will be automatically sent
-        _timeoutProfileMessage.stop();
+        // The data will be automatically sent, but a network link can lose a datagram and
+        // stay silent forever, keep the timeout as a watchdog for it
+        const bool isNetworkLink = link()->type() == LinkType::Udp || link()->type() == LinkType::Tcp;
+        if (isNetworkLink && link()->isWritable()) {
+            _timeoutProfileMessage.start(_sensorTimeout);
+        } else {
+            _timeoutProfileMessage.stop();
+        }
 
         // Parse message
         const ping360_auto_device_data autoDeviceData = *static_cast<const ping360_auto_device_data*>(&msg);
