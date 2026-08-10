@@ -719,17 +719,13 @@ const QVariantList& Ping360::validBaudRatesAsVariantList() const { return _valid
 
 void Ping360::resetBaudrate()
 {
+    // Only serial links have a baudrate to renegotiate
     SerialLink* serialLink = dynamic_cast<SerialLink*>(link());
-    if (serialLink) {
-        setBaudRate(serialLink->getBaudRate());
-    } else {
-        // send an empty datagram on network links to signal
-        // the serial bridge program to send a line break and
-        // perform the auto-baudrate procedure
-        if (link() && link()->isOpen() && link()->isWritable()) {
-            link()->write(nullptr, 0);
-        }
+    if (!serialLink) {
+        return;
     }
+
+    setBaudRate(serialLink->getBaudRate());
     QThread::msleep(200);
 }
 
@@ -932,7 +928,7 @@ Ping360::~Ping360()
     // automatic transmission mode
     // 2: use a low baudrate to decrease chances of corruption in transmission
     setBaudRate(115200);
-    resetBaudrate(); // in case of network connection
+    resetBaudrate();
     QThread::msleep(100);
     // Stop scanning and turn off the stepper motor
     for (int i {0}; i < 10; i++) {
