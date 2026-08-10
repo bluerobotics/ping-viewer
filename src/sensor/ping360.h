@@ -504,8 +504,8 @@ public:
 
     /**
      * @brief Send a line break and renegoatiate the current baudrate
-     * this works for serial and network connections (the bridge program
-     * will renegotiate the baudrate for network connections)
+     * this only happens in serial connections, network links do not have
+     * a baudrate to renegotiate
      *
      */
     void resetBaudrate();
