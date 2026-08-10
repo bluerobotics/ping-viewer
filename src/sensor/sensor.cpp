@@ -4,6 +4,7 @@
 
 #include "filelink.h"
 #include "filemanager.h"
+#include "notificationmanager.h"
 #include "sensor.h"
 
 #include <ping-message-common.h>
@@ -57,6 +58,11 @@ void Sensor::connectLink(const LinkConfiguration conConf, const LinkConfiguratio
     }
 
     emit linkChanged();
+
+    // The link only emits this when the failure is worth the user attention
+    connect(link(), &AbstractLink::linkError, this, [](const QString& errorMessage) {
+        NotificationManager::self()->create(errorMessage, "red", StyleManager::reportIcon());
+    });
 
     if (_parser) {
         _parser->clearBuffer();
