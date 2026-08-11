@@ -36,7 +36,20 @@ UDPLink::UDPLink(QObject* parent)
     });
     _stateTimer.start(_baseReconnectIntervalMs);
 
-    connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) { _udpSocket->write(data); });
+    connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) {
+        if (_udpSocket->write(data) == data.size()) {
+            _writeErrorReported = false;
+            return;
+        }
+
+        // Qt discards the datagram without any error signal when the socket layer is gone, the
+        // message is printed once per failure streak to not flood the log with a single dead link.
+        if (!_writeErrorReported) {
+            _writeErrorReported = true;
+            qCWarning(PING_PROTOCOL_UDPLINK)
+                << "Fail to write" << data.size() << "bytes in" << _linkConfiguration << socketDescription();
+        }
+    });
 }
 
 bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
@@ -82,7 +95,14 @@ void UDPLink::printErrorMessage()
 {
     qCWarning(PING_PROTOCOL_UDPLINK) << "An error has occurred with:" << _linkConfiguration;
     QString errorMessage = QStringLiteral("Error (%1): %2.").arg(_udpSocket->error()).arg(_udpSocket->errorString());
-    qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage;
+    qCWarning(PING_PROTOCOL_UDPLINK) << errorMessage << socketDescription();
+}
+
+QString UDPLink::socketDescription() const
+{
+    return QStringLiteral("Socket state: %1, descriptor: %2")
+        .arg(_udpSocket->state())
+        .arg(_udpSocket->socketDescriptor());
 }
 
 void UDPLink::handleConnectionFailure()

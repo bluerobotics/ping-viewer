@@ -91,6 +91,13 @@ private:
      */
     void resetConnectionState();
 
+    /**
+     * @brief Human friendly description of the socket, used in the error messages
+     *
+     * @return QString
+     */
+    QString socketDescription() const;
+
     QString _hostAddress;
     QTimer _stateTimer;
     QUdpSocket* _udpSocket;
@@ -98,6 +105,7 @@ private:
 
     int _connectionErrorCount {0};
     bool _errorEscalated {false};
+    bool _writeErrorReported {false};
     static constexpr int _baseReconnectIntervalMs {1000};
     static constexpr int _maxReconnectIntervalMs {8000};
     static constexpr int _errorEscalationThreshold {3};
