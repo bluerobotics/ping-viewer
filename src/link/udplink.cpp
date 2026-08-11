@@ -14,30 +14,35 @@ UDPLink::UDPLink(QObject* parent)
 {
     setType(LinkType::Udp);
 
-    connect(_udpSocket, &QIODevice::readyRead, this, [this] { emit newData(_udpSocket->readAll()); });
+    connect(_udpSocket, &QIODevice::readyRead, this, [this] {
+        resetConnectionState();
+        emit newData(_udpSocket->readAll());
+    });
     connect(_udpSocket, &QAbstractSocket::errorOccurred, this,
         [this](QAbstractSocket::SocketError /*socketError*/) { printErrorMessage(); });
 
-    // Reset the failure counter and backoff once we are actually connected.
-    connect(_udpSocket, &QAbstractSocket::connected, this, [this] { resetConnectionState(); });
-
     // QUdpSocket fail to emit state signal
-    // Here we use a timer to check if we are in a connect state, if not we try again
+    // Here we use a timer to check if the socket can still talk with the host, if not we try again
     connect(&_stateTimer, &QTimer::timeout, this, [this] {
-        if (_udpSocket->state() == QAbstractSocket::UnconnectedState) {
-            handleConnectionFailure();
-            qDebug(PING_PROTOCOL_UDPLINK) << "Trying to reconnect with host again.";
-            _udpSocket->connectToHost(_hostAddress, _port);
-
-            // Back off the reconnect interval so we stop flooding the log and network while the
-            // target stays unreachable, capping at _maxReconnectIntervalMs.
-            _stateTimer.setInterval(qMin(_stateTimer.interval() * 2, _maxReconnectIntervalMs));
+        // The timer runs from the construction, there is no host to reach before setConfiguration
+        if (_hostAddress.isEmpty() || isSocketUsable()) {
+            return;
         }
+
+        handleConnectionFailure();
+        qCDebug(PING_PROTOCOL_UDPLINK) << "Trying to reconnect with host again.";
+        reconnect();
+
+        // Back off the reconnect interval so we stop flooding the log and network while the
+        // target stays unreachable, capping at _maxReconnectIntervalMs.
+        _stateTimer.setInterval(qMin(_stateTimer.interval() * 2, _maxReconnectIntervalMs));
     });
     _stateTimer.start(_baseReconnectIntervalMs);
 
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) {
         if (_udpSocket->write(data) == data.size()) {
+            // A write that reaches the socket layer says nothing about the other side being there,
+            // only received data does, so the failure counters are not touched here.
             _writeErrorReported = false;
             return;
         }
@@ -83,7 +88,7 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
         socketAttemps++;
     }
 
-    if (_udpSocket->state() != QUdpSocket::ConnectedState) {
+    if (!isSocketUsable()) {
         printErrorMessage();
         return false;
     }
@@ -103,6 +108,22 @@ QString UDPLink::socketDescription() const
     return QStringLiteral("Socket state: %1, descriptor: %2")
         .arg(_udpSocket->state())
         .arg(_udpSocket->socketDescriptor());
+}
+
+bool UDPLink::isSocketUsable() const
+{
+    // A connected UDP socket can lose the descriptor without any state change or error signal, an
+    // ICMP error for a datagram already sent is enough to do it. Checking the state alone reports
+    // such a socket as healthy forever while every write is silently dropped.
+    return _udpSocket->state() == QAbstractSocket::ConnectedState && _udpSocket->socketDescriptor() != -1;
+}
+
+void UDPLink::reconnect()
+{
+    // The socket still describes itself as connected, connectToHost alone would keep the dead
+    // descriptor. abort() drops the socket layer so a new one is created.
+    _udpSocket->abort();
+    _udpSocket->connectToHost(_hostAddress, _port);
 }
 
 void UDPLink::handleConnectionFailure()
@@ -126,8 +147,15 @@ void UDPLink::handleConnectionFailure()
 
 void UDPLink::resetConnectionState()
 {
+    // Called on every datagram, restarting the timer here on a healthy link is pure waste
+    if (_connectionErrorCount == 0 && !_errorEscalated && !_writeErrorReported
+        && _stateTimer.interval() == _baseReconnectIntervalMs) {
+        return;
+    }
+
     _connectionErrorCount = 0;
     _errorEscalated = false;
+    _writeErrorReported = false;
     _stateTimer.setInterval(_baseReconnectIntervalMs);
 }
 

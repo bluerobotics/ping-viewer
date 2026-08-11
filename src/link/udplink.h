@@ -86,10 +86,26 @@ private:
     void handleConnectionFailure();
 
     /**
-     * @brief Reset the failure counter and reconnect backoff after a successful connection.
+     * @brief Reset the failure counter and reconnect backoff after a successful transfer.
      *
      */
     void resetConnectionState();
+
+    /**
+     * @brief Check if the socket is able to transfer data. QAbstractSocket::state() is not enough,
+     *  a connected UDP socket can be left without a valid descriptor while still reporting itself
+     *  as connected, silently dropping everything that is written on it.
+     *
+     * @return true
+     * @return false
+     */
+    bool isSocketUsable() const;
+
+    /**
+     * @brief Drop the current socket layer and connect with the host again
+     *
+     */
+    void reconnect();
 
     /**
      * @brief Human friendly description of the socket, used in the error messages
