@@ -14,24 +14,21 @@ UDPLink::UDPLink(QObject* parent)
 {
     setType(LinkType::Udp);
 
-    connect(_udpSocket, &QIODevice::readyRead, this, [this] {
-        resetConnectionState();
-        emit newData(_udpSocket->readAll());
-    });
+    connect(_udpSocket, &QIODevice::readyRead, this, &UDPLink::readPendingDatagrams);
     connect(_udpSocket, &QAbstractSocket::errorOccurred, this,
         [this](QAbstractSocket::SocketError /*socketError*/) { printErrorMessage(); });
 
     // QUdpSocket fail to emit state signal
-    // Here we use a timer to check if the socket can still talk with the host, if not we try again
+    // Here we use a timer to check if the socket can still be used, if not we bind it again
     connect(&_stateTimer, &QTimer::timeout, this, [this] {
         // The timer runs from the construction, there is no host to reach before setConfiguration
-        if (_hostAddress.isEmpty() || isSocketUsable()) {
+        if (_hostAddress.isNull() || isSocketUsable()) {
             return;
         }
 
         handleConnectionFailure();
-        qCDebug(PING_PROTOCOL_UDPLINK) << "Trying to reconnect with host again.";
-        reconnect();
+        qCDebug(PING_PROTOCOL_UDPLINK) << "Trying to bind the socket again.";
+        bindSocket();
 
         // Back off the reconnect interval so we stop flooding the log and network while the
         // target stays unreachable, capping at _maxReconnectIntervalMs.
@@ -40,7 +37,7 @@ UDPLink::UDPLink(QObject* parent)
     _stateTimer.start(_baseReconnectIntervalMs);
 
     connect(this, &AbstractLink::sendData, this, [this](const QByteArray& data) {
-        if (_udpSocket->write(data) == data.size()) {
+        if (_udpSocket->writeDatagram(data, _hostAddress, _port) == data.size()) {
             // A write that reaches the socket layer says nothing about the other side being there,
             // only received data does, so the failure counters are not touched here.
             _writeErrorReported = false;
@@ -73,27 +70,16 @@ bool UDPLink::setConfiguration(const LinkConfiguration& linkConfiguration)
 
     setName(linkConfiguration.name());
 
-    _hostAddress = linkConfiguration.args()->at(0);
+    // The configuration also takes names, like `localhost` or `raspberrypi`
+    _hostAddress = NetworkManager::addressToIp(linkConfiguration.args()->at(0));
     _port = linkConfiguration.args()->at(1).toInt();
 
-    // Check protocol detector comments and documentation about correct connect procedure
-
-    // Connect with server
-    _udpSocket->connectToHost(_hostAddress, _port);
-
-    // Give the socket a second to connect to the other side otherwise error out
-    int socketAttemps = 0;
-    while (!_udpSocket->waitForConnected(100) && socketAttemps < 10) {
-        // Increases socketAttemps here to avoid empty loop optimization
-        socketAttemps++;
-    }
-
-    if (!isSocketUsable()) {
-        printErrorMessage();
+    if (_hostAddress.isNull()) {
+        qCWarning(PING_PROTOCOL_UDPLINK) << "Fail to resolve host:" << linkConfiguration.args()->at(0);
         return false;
     }
 
-    return true;
+    return bindSocket();
 }
 
 void UDPLink::printErrorMessage()
@@ -112,18 +98,43 @@ QString UDPLink::socketDescription() const
 
 bool UDPLink::isSocketUsable() const
 {
-    // A connected UDP socket can lose the descriptor without any state change or error signal, an
-    // ICMP error for a datagram already sent is enough to do it. Checking the state alone reports
-    // such a socket as healthy forever while every write is silently dropped.
-    return _udpSocket->state() == QAbstractSocket::ConnectedState && _udpSocket->socketDescriptor() != -1;
+    // A UDP socket can lose the descriptor without any state change or error signal, an ICMP error
+    // for a datagram already sent is enough to do it. Checking the state alone reports such a
+    // socket as healthy forever while every write is silently dropped.
+    return _udpSocket->state() == QAbstractSocket::BoundState && _udpSocket->socketDescriptor() != -1;
 }
 
-void UDPLink::reconnect()
+bool UDPLink::bindSocket()
 {
-    // The socket still describes itself as connected, connectToHost alone would keep the dead
-    // descriptor. abort() drops the socket layer so a new one is created.
+    // The sensor is not reached with connectToHost: macOS takes the descriptor of a connected UDP
+    // socket away as soon as the first datagram goes to a local network address, and everything
+    // written after it is dropped inside Qt. A bound socket with an explicit destination in each
+    // datagram does the same job and is the way the Ping360 discovery already talks to the sensor.
     _udpSocket->abort();
-    _udpSocket->connectToHost(_hostAddress, _port);
+
+    const int randomPort = 0; // Force OS to give a random port
+    if (!_udpSocket->bind(QHostAddress::AnyIPv4, randomPort)) {
+        printErrorMessage();
+        return false;
+    }
+
+    return true;
+}
+
+void UDPLink::readPendingDatagrams()
+{
+    while (_udpSocket->hasPendingDatagrams()) {
+        const QNetworkDatagram datagram = _udpSocket->receiveDatagram();
+
+        // Windows reports an ICMP port unreachable as a failed read, there is nothing to deliver and
+        // asking the same socket again would spin forever
+        if (!datagram.isValid()) {
+            break;
+        }
+
+        resetConnectionState();
+        emit newData(datagram.data());
+    }
 }
 
 void UDPLink::handleConnectionFailure()
@@ -135,8 +146,9 @@ void UDPLink::handleConnectionFailure()
     if (!_errorEscalated && _connectionErrorCount >= _errorEscalationThreshold) {
         _errorEscalated = true;
 
-        QString message = QStringLiteral("Unable to reach the device at %1:%2.").arg(_hostAddress).arg(_port);
-        if (!NetworkManager::isAddressInSubnet(_hostAddress)) {
+        QString message
+            = QStringLiteral("Unable to reach the device at %1:%2.").arg(_hostAddress.toString()).arg(_port);
+        if (!NetworkManager::isAddressInSubnet(_hostAddress.toString())) {
             message += QStringLiteral(" It is on a different network than your computer. Set the device IP "
                                       "or your computer's network settings so they share a subnet.");
         }
