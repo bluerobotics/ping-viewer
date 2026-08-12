@@ -32,6 +32,18 @@ set(MACOSX_BUNDLE_ICON_FILE icon.icns)
 set(APP_ICON ${CMAKE_CURRENT_SOURCE_DIR}/../deploy/${MACOSX_BUNDLE_ICON_FILE})
 set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
+# Configure bundle identity for mac build, macOS uses the identifier and the name to ask and to
+# remember permissions, like the local network access necessary to talk with sonars over ethernet
+set(MACOSX_BUNDLE_GUI_IDENTIFIER org.bluerobotics.pingviewer)
+set(MACOSX_BUNDLE_BUNDLE_NAME "Ping Viewer")
+
+# CFBundleVersion and CFBundleShortVersionString only accept numbers separated by dots
+string(REGEX MATCH "[0-9]+(\\.[0-9]+)*" MACOSX_BUNDLE_BUNDLE_VERSION "${GIT_TAG}")
+if(NOT MACOSX_BUNDLE_BUNDLE_VERSION)
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "0.0.0")
+endif()
+set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MACOSX_BUNDLE_BUNDLE_VERSION})
+
 # Configure icon for windows build
 set(WINDOWS_ICO_FILE icon.ico)
 set(WINDOWS_RC_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../deploy/pingviewer.rc)
@@ -51,6 +63,12 @@ set(SOURCES
 
 add_executable(pingviewer
     ${SOURCES}
+)
+
+set_target_properties(
+    pingviewer
+PROPERTIES
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../deploy/MacOSXBundleInfo.plist.in
 )
 
 # Set windows administrator request
