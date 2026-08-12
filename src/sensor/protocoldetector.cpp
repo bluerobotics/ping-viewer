@@ -230,8 +230,9 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
     // The socket is not connected with the host, macOS takes the descriptor of a connected UDP
     // socket away as soon as the first datagram goes to a local network address, and every write
     // after it is dropped inside Qt, so no device is ever found on such a link.
-    const int randomPort = 0; // Force OS to give a random port
-    if (!socket.bind(QHostAddress::AnyIPv4, randomPort)) {
+    // MSVC also reads a SpecialAddress as a port, the explicit types keep the bind overload clear
+    const quint16 randomPort = 0; // Force OS to give a random port
+    if (!socket.bind(QHostAddress(QHostAddress::AnyIPv4), randomPort)) {
         qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to bind socket:" << socket.errorString();
         return _detected;
     }
