@@ -8,6 +8,7 @@
 #include <QtConcurrent>
 
 #include "logger.h"
+#include "networkmanager.h"
 #include "protocoldetector.h"
 #include "settingsmanager.h"
 #include <ping-message-common.h>
@@ -226,49 +227,42 @@ bool ProtocolDetector::checkUdp(LinkConfiguration& linkConf)
 
     qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Probing UDP:" << linkConf;
 
-    // Connect with server
-    socket.connectToHost(linkConf.udpHost(), linkConf.udpPort());
-
-    // Give the socket half second to connect to the other side otherwise error out
-    int socketAttemps = 0;
-    while (!socket.waitForConnected(100) && socketAttemps < 5) {
-        // Increases socketAttemps here to avoid empty loop optimization
-        socketAttemps++;
-    }
-    if (socket.state() != QUdpSocket::ConnectedState) {
-        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in connected state.";
-        QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
-        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
+    // The socket is not connected with the host, macOS takes the descriptor of a connected UDP
+    // socket away as soon as the first datagram goes to a local network address, and every write
+    // after it is dropped inside Qt, so no device is ever found on such a link.
+    const int randomPort = 0; // Force OS to give a random port
+    if (!socket.bind(QHostAddress::AnyIPv4, randomPort)) {
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to bind socket:" << socket.errorString();
         return _detected;
     }
 
     // Send message
-    socket.write(_deviceInformationMessageByteArray);
+    const QHostAddress host = NetworkManager::addressToIp(linkConf.udpHost());
+    if (socket.writeDatagram(_deviceInformationMessageByteArray, host, linkConf.udpPort()) == -1) {
+        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Fail to write in socket:" << socket.errorString();
+        return _detected;
+    }
 
     int attempts = 0;
 
     // Try to get a valid response, timeout after 20 * 50 ms
     while (_active && !_detected && attempts++ < 20) {
         socket.waitForReadyRead(50);
-        /**
-         * The connection state should be checked while looking for new packages
-         */
-        if (socket.state() != QUdpSocket::ConnectedState) {
-            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "Socket is not in connected state.";
-            QString errorMessage = QStringLiteral("Error (%1): %2.").arg(socket.state()).arg(socket.errorString());
-            qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << errorMessage;
-            break;
+
+        while (!_detected && socket.hasPendingDatagrams()) {
+            const QNetworkDatagram datagram = socket.receiveDatagram();
+
+            // Windows reports an ICMP port unreachable as a failed read, there is nothing to check
+            // and asking the same socket again would spin forever
+            if (!datagram.isValid()) {
+                break;
+            }
+
+            _detected = checkBuffer(datagram.data(), linkConf);
         }
-        _detected = checkBuffer(socket.readAll(), linkConf);
     }
 
     socket.close();
-
-    // Close calls `disconnectFromHost`, this function waits until the socket is totally disconnected,
-    // avoiding any future connection problems
-    if (socket.state() == QUdpSocket::UnconnectedState || socket.waitForDisconnected(1000)) {
-        qCDebug(PING_PROTOCOL_PROTOCOLDETECTOR) << "UDP socket disconnected.";
-    }
 
     return _detected;
 }

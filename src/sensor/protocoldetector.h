@@ -103,7 +103,7 @@ protected:
      *
      *  Without ReuseAddressHint, the next connection request will fail if there were connections open.
      *
-     *  Since this uses the connectToHost method, all read and write functions should use the QIODevice primitive
+     *  The socket is not connected with the host, so all transfers are done with the datagram functions
      *
      * @param linkConf
      * @return true
