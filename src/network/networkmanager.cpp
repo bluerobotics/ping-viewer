@@ -87,7 +87,8 @@ QHostAddress NetworkManager::addressToIp(const QString& address)
     }
 
     // This function can freeze the interface if something is wrong with the OS mDNS interface
-    return QHostInfo::fromName(address).addresses().first();
+    const auto addresses = QHostInfo::fromName(address).addresses();
+    return addresses.isEmpty() ? QHostAddress() : addresses.first();
 }
 
 bool NetworkManager::isInterfaceUsable(const QNetworkInterface& interface)
