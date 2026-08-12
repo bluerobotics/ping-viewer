@@ -223,6 +223,10 @@ else
     runstep "unzip /tmp/stm32flash_osx.zip  -d /tmp" "Unzip stm32flash" "Fail to unzip stm32flash"
     runstep "chmod +x /tmp/stm32flash" "Convert stm32flash to executable" "Failed to turn stm32flash in executable"
     runstep "mv /tmp/stm32flash ${deployfolder}" "Move stm32flash to deploy" "Failed to move stm32flash into deploy folder"
-    runstep "macdeployqt ${deployfolder} -qmldir=${projectpath}/qml -dmg" "Use macdeployqt" "Fail to use macdeployqt"
+    # An unsigned bundle has no identity, macOS is not able to remember the permissions given to it,
+    # like the local network access necessary to talk with sonars over ethernet. The ad-hoc signature
+    # changes with each build, a Developer ID one is necessary to keep the permissions between them.
+    runstep "macdeployqt ${deployfolder} -qmldir=${projectpath}/qml -codesign=- -dmg" "Use macdeployqt" "Fail to use macdeployqt"
+    runstep "codesign --verify --deep --strict --verbose=2 ${deployfolder}" "Check signature" "Fail to sign the bundle"
     runstep "mv ${buildfolder}/pingviewer.dmg /tmp/pingviewer-${buildtype}.dmg" "Move .dmg folder to /tmp/" "Faile to move .dmg file"
 fi
