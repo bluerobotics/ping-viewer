@@ -93,17 +93,8 @@ protected:
 
     /**
      * @brief Check if a device is provided by a UDP server
-     *  This functions follows IBM documentation about socket connections for clients
-     *  https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_71/rzab6/howdosockets.htm
-     *  https://www.ibm.com/support/knowledgecenter/en/SSB23S_1.1.0.14/gtpc1/gtpc1mst104.html
-     *      1. create socket
-     *      2. bind (optional, but necessary for QUdpSocket::ReuseAddressHint)
-     *      3. read/write
-     *      4. close
-     *
-     *  Without ReuseAddressHint, the next connection request will fail if there were connections open.
-     *
-     *  The socket is not connected with the host, so all transfers are done with the datagram functions
+     *  The socket is bound to a random port and not connected with the host, so all transfers are
+     *  done with the datagram functions
      *
      * @param linkConf
      * @return true
