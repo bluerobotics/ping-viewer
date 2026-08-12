@@ -112,8 +112,9 @@ bool UDPLink::bindSocket()
     // datagram does the same job and is the way the Ping360 discovery already talks to the sensor.
     _udpSocket->abort();
 
-    const int randomPort = 0; // Force OS to give a random port
-    if (!_udpSocket->bind(QHostAddress::AnyIPv4, randomPort)) {
+    // MSVC also reads a SpecialAddress as a port, the explicit types keep the bind overload clear
+    const quint16 randomPort = 0; // Force OS to give a random port
+    if (!_udpSocket->bind(QHostAddress(QHostAddress::AnyIPv4), randomPort)) {
         printErrorMessage();
         return false;
     }
