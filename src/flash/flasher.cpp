@@ -16,13 +16,7 @@ Flasher::Flasher(QObject* parent, const QList<QVariant> validBaudRates)
     : QObject(parent)
     , _validBaudRates(validBaudRates)
 {
-    _binRelativePath =
-#ifdef Q_OS_OSX
-        // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-        QCoreApplication::applicationDirPath() + "/../..";
-#else
-        QCoreApplication::applicationDirPath();
-#endif
+    _binRelativePath = QCoreApplication::applicationDirPath();
 }
 
 bool Flasher::setBaudRate(int baudRate)
@@ -70,12 +64,7 @@ QString Flasher::stm32flashPath()
         "stm32flash";
 #endif
 
-#ifdef Q_OS_OSX
-    // macdeployqt file do not put stm32flash binary in the same folder of pingviewer
-    static const QString absoluteBinPath = QCoreApplication::applicationDirPath() + "/../..";
-#else
     static const QString absoluteBinPath = QCoreApplication::applicationDirPath();
-#endif
 
     const QString localPathString = absoluteBinPath + "/" + binaryName;
     if (QFile::exists(localPathString)) {
