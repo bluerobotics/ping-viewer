@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QHostAddress>
 #include <QUdpSocket>
 
 #include "abstractlink.h"
@@ -44,7 +45,7 @@ public:
      * @return true
      * @return false
      */
-    bool isOpen() final { return _udpSocket->isWritable() && _udpSocket->isReadable(); };
+    bool isOpen() final { return isSocketUsable(); };
 
     /**
      * @brief Set the configuration object
@@ -61,7 +62,7 @@ public:
      * @return true
      * @return false
      */
-    bool startConnection() final { return _udpSocket->open(QIODevice::ReadWrite); };
+    bool startConnection() final { return isSocketUsable() || bindSocket(); };
 
     /**
      * @brief Return QUdpSocket pointer
@@ -93,8 +94,8 @@ private:
 
     /**
      * @brief Check if the socket is able to transfer data. QAbstractSocket::state() is not enough,
-     *  a connected UDP socket can be left without a valid descriptor while still reporting itself
-     *  as connected, silently dropping everything that is written on it.
+     *  a UDP socket can be left without a valid descriptor while still reporting a valid state,
+     *  silently dropping everything that is written on it.
      *
      * @return true
      * @return false
@@ -102,10 +103,18 @@ private:
     bool isSocketUsable() const;
 
     /**
-     * @brief Drop the current socket layer and connect with the host again
+     * @brief Drop the current socket layer and bind a new one to talk with the host
+     *
+     * @return true
+     * @return false
+     */
+    bool bindSocket();
+
+    /**
+     * @brief Deliver the datagrams available in the socket
      *
      */
-    void reconnect();
+    void readPendingDatagrams();
 
     /**
      * @brief Human friendly description of the socket, used in the error messages
@@ -114,7 +123,7 @@ private:
      */
     QString socketDescription() const;
 
-    QString _hostAddress;
+    QHostAddress _hostAddress;
     QTimer _stateTimer;
     QUdpSocket* _udpSocket;
     uint _port;
